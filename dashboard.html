@@ -1,55 +1,59 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Dashboard UMKM</title>
-
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<section class="affiliate-dashboard">
+<h2>Daftar UMKM</h2>
 
-<h1>Dashboard UMKM</h1>
+<div id="umkmList"></div>
 
-<div class="dashboard-grid">
+<script type="module">
 
-<div class="dashboard-card">
-<h3>Total Produk</h3>
-<h1>12</h1>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952",
+measurementId: "G-Q861Y1J3RJ"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const list = document.getElementById("umkmList");
+
+const querySnapshot = await getDocs(collection(db,"umkm"));
+
+querySnapshot.forEach((doc)=>{
+
+const data = doc.data();
+
+list.innerHTML += `
+<div class="card">
+<h3>${data.namaUmkm}</h3>
+<p>Pemilik : ${data.namaPemilik}</p>
+<p>WA : ${data.whatsapp}</p>
+<p>Kategori : ${data.kategori}</p>
+<p>${data.deskripsi}</p>
 </div>
+`;
 
-<div class="dashboard-card">
-<h3>Total Pesanan</h3>
-<h1>45</h1>
-</div>
+});
 
-<div class="dashboard-card">
-<h3>Total Penjualan</h3>
-<h1>Rp2.500.000</h1>
-</div>
-
-<div class="dashboard-card">
-<h3>Affiliate Aktif</h3>
-<h1>8</h1>
-</div>
-
-</div>
-
-<br>
-
-<a href="produk-saya.html" class="btn-primary">
-Kelola Produk
-</a>
-
-<a href="tambah-produk.html" class="btn-primary">
-Tambah Produk
-</a>
-
-</section>
+</script>
 
 </body>
 </html>
