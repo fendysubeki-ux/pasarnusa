@@ -10,19 +10,78 @@
 
 <h2>Daftar UMKM</h2>
 
-<input type="text" placeholder="Nama UMKM">
+<input type="text" id="namaUmkm" placeholder="Nama UMKM">
 
-<input type="text" placeholder="Nama Pemilik">
+<input type="text" id="namaPemilik" placeholder="Nama Pemilik">
 
-<input type="text" placeholder="WhatsApp">
+<input type="text" id="whatsapp" placeholder="WhatsApp">
 
-<input type="text" placeholder="Kategori">
+<input type="text" id="kategori" placeholder="Kategori">
 
-<textarea placeholder="Deskripsi"></textarea>
+<textarea id="deskripsi" placeholder="Deskripsi"></textarea>
 
-<button>Daftar</button>
+<button id="btnDaftar">Daftar</button>
 
 </div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952",
+measurementId: "G-Q861Y1J3RJ"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+document.getElementById("btnDaftar").addEventListener("click", async () => {
+
+try {
+
+await addDoc(collection(db, "umkm"), {
+
+namaUmkm:
+document.getElementById("namaUmkm").value,
+
+namaPemilik:
+document.getElementById("namaPemilik").value,
+
+whatsapp:
+document.getElementById("whatsapp").value,
+
+kategori:
+document.getElementById("kategori").value,
+
+deskripsi:
+document.getElementById("deskripsi").value
+
+});
+
+alert("UMKM berhasil didaftarkan");
+
+}
+catch(err){
+
+alert(err.message);
+
+}
+
+});
+
+</script>
 
 </body>
 </html>
