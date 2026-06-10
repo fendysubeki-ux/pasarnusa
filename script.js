@@ -163,3 +163,57 @@ previewImage.style.display =
 document.getElementById("simpanProduk").addEventListener("click", function() {
 
 });
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain: "pasarnusa-18aa0.firebaseapp.com",
+  projectId: "pasarnusa-18aa0",
+  storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+document.getElementById("simpanProduk")
+.addEventListener("click", async () => {
+
+  const inputs =
+  document.querySelectorAll(".form-card input");
+
+  const textarea =
+  document.querySelector(".form-card textarea");
+
+  try {
+
+    await addDoc(collection(db,"produk"),{
+
+      namaProduk: inputs[0].value,
+      harga: inputs[1].value,
+      stok: inputs[2].value,
+      kategori: inputs[3].value,
+      deskripsi: textarea.value,
+      createdAt: new Date()
+
+    });
+
+    alert("Produk berhasil disimpan");
+
+  } catch(error){
+
+    alert("Gagal menyimpan produk");
+
+    console.log(error);
+
+  }
+
+});
