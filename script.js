@@ -181,39 +181,3 @@ const firebaseConfig = {
   appId: "1:866998011671:web:5555115feb82741ab55952"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-document.getElementById("simpanProduk")
-.addEventListener("click", async () => {
-
-  const inputs =
-  document.querySelectorAll(".form-card input");
-
-  const textarea =
-  document.querySelector(".form-card textarea");
-
-  try {
-
-    await addDoc(collection(db,"produk"),{
-
-      namaProduk: inputs[0].value,
-      harga: inputs[1].value,
-      stok: inputs[2].value,
-      kategori: inputs[3].value,
-      deskripsi: textarea.value,
-      createdAt: new Date()
-
-    });
-
-    alert("Produk berhasil disimpan");
-
-  } catch(error){
-
-    alert("Gagal menyimpan produk");
-
-    console.log(error);
-
-  }
-
-});
