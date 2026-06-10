@@ -159,3 +159,7 @@ previewImage.style.display =
 });
 
 }
+
+document.getElementById("simpanProduk").addEventListener("click", function() {
+    alert("Tombol berhasil diklik");
+});
