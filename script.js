@@ -159,7 +159,3 @@ previewImage.style.display =
 });
 
 }
-
-document.getElementById("simpanProduk").addEventListener("click", function() {
-
-});
