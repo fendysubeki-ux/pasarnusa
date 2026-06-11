@@ -67,7 +67,9 @@ getFirestore,
 collection,
 addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+import {
+getAuth
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
   authDomain: "pasarnusa-18aa0.firebaseapp.com",
@@ -79,10 +81,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 document.getElementById("simpanProduk")
 .addEventListener("click", async () => {
-
+alert("Tombol Simpan diklik");
   const inputs =
   document.querySelectorAll(".form-card input");
 
@@ -91,16 +92,17 @@ document.getElementById("simpanProduk")
 
   try {
 
-    await addDoc(collection(db,"produk"), {
+await addDoc(collection(db,"produk"), {
 
-      namaProduk: inputs[0].value,
-      harga: inputs[1].value,
-      stok: inputs[2].value,
-      kategori: inputs[3].value,
-      deskripsi: textarea.value,
-      createdAt: new Date()
+namaProduk: inputs[0].value,
+harga: inputs[1].value,
+stok: inputs[2].value,
+kategori: inputs[3].value,
+deskripsi: textarea.value,
 
-    });
+createdAt: new Date()
+
+});
 
     alert("Produk berhasil disimpan");
 
