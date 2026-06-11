@@ -72,6 +72,21 @@ Lihat Riwayat Komisi
 </section>
 
 <script src="script.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
+const firebaseConfig = {
+  apiKey: "API_KEY_KAMU",
+  authDomain: "pasarnusa-18aa0.firebaseapp.com",
+  projectId: "pasarnusa-18aa0",
+  storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId: "APP_ID_KAMU"
+};
+
+const app = initializeApp(firebaseConfig);
+
+console.log("Firebase Connected");
+</script>
 </body>
 </html>
