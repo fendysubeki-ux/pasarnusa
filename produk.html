@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produk PasarNusa</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="products">
+
+<h1>Produk UMKM</h1>
+<input
+type="text"
+id="searchInput"
+placeholder="Cari produk..."
+class="search-box">
+<div class="kategori-filter">
+
+<button onclick="filterProduk('all')" class="btn-primary">
+Semua
+</button>
+
+<button onclick="filterProduk('makanan')" class="btn-secondary">
+Makanan
+</button>
+
+<button onclick="filterProduk('minuman')" class="btn-secondary">
+Minuman
+</button>
+
+<button onclick="filterProduk('snack')" class="btn-secondary">
+Snack
+</button>
+
+</div>
+
+<div class="product-grid">
+
+<div class="product-card searchable"
+data-category="makanan">
+
+<img src="https://picsum.photos/400/300?1">
+
+<div class="product-info">
+
+<span class="category">
+Makanan
+</span>
+
+<h3>
+Keripik Pisang Renyah
+</h3>
+
+<p class="price">
+Rp15.000
+</p>
+
+<a href="produk-detail.html"
+class="btn-primary">
+Lihat Detail
+</a>
+
+</div>
+
+</div>
+
+<div class="product-card searchable"
+data-category="minuman">
+
+<img src="https://picsum.photos/400/300?2">
+
+<div class="product-info">
+
+<span class="category">
+Minuman
+</span>
+
+<h3>
+Kopi Robusta Tulungagung
+</h3>
+
+<p class="price">
+Rp35.000
+</p>
+
+<a href="produk-detail.html"
+class="btn-primary">
+Lihat Detail
+</a>
+
+</div>
+
+</div>
+
+<div class="product-card searchable"
+data-category="snack">
+
+<img src="https://picsum.photos/400/300?3">
+
+<div class="product-info">
+
+<span class="category">
+Snack
+</span>
+
+<h3>
+Kerupuk Udang
+</h3>
+
+<p class="price">
+Rp20.000
+</p>
+
+<a href="produk-detail.html"
+class="btn-primary">
+Lihat Detail
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<script type="module" src="script.js"></script>
+</body>
+</html>
