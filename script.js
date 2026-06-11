@@ -159,3 +159,26 @@ previewImage.style.display =
 });
 
 }
+function filterProduk(kategori){
+
+const products =
+document.querySelectorAll(".searchable");
+
+products.forEach(product=>{
+
+if(
+kategori === "all" ||
+product.dataset.category === kategori
+){
+
+product.style.display = "block";
+
+}else{
+
+product.style.display = "none";
+
+}
+
+});
+
+}
