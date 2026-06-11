@@ -15,7 +15,9 @@
 <input type="text" id="namaPemilik" placeholder="Nama Pemilik">
 
 <input type="text" id="whatsapp" placeholder="WhatsApp">
+<input type="email" id="email" placeholder="Email">
 
+<input type="password" id="password" placeholder="Password">
 <input type="text" id="kategori" placeholder="Kategori">
 
 <textarea id="deskripsi" placeholder="Deskripsi"></textarea>
@@ -33,6 +35,10 @@ getFirestore,
 collection,
 addDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import {
+getAuth,
+createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
@@ -45,13 +51,30 @@ measurementId: "G-Q861Y1J3RJ"
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-document.getElementById("btnDaftar").addEventListener("click", async () => {
+document.getElementById("btnDaftar")
+.addEventListener("click", async ()=>{
 
-try {
+const email =
+document.getElementById("email").value;
 
-await addDoc(collection(db, "umkm"), {
+const password =
+document.getElementById("password").value;
+
+try{
+
+const userCredential =
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+await addDoc(collection(db,"umkm"),{
+
+uid: userCredential.user.uid,
 
 namaUmkm:
 document.getElementById("namaUmkm").value,
@@ -70,12 +93,11 @@ document.getElementById("deskripsi").value
 
 });
 
-alert("UMKM berhasil didaftarkan");
+alert("Akun berhasil dibuat");
 
-}
-catch(err){
+}catch(error){
 
-alert(err.message);
+alert(error.message);
 
 }
 
