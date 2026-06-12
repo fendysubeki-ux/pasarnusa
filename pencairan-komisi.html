@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pencairan Komisi</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<h1>Pencairan Komisi</h1>
+
+<div
+id="pencairanContainer"
+class="dashboard-grid">
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const container =
+document.getElementById(
+"pencairanContainer"
+);
+
+const snapshot =
+await getDocs(
+collection(
+db,
+"pencairan_komisi"
+)
+);
+
+snapshot.forEach((item)=>{
+
+const data = item.data();
+
+container.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+${data.uid}
+</h3>
+
+<p>
+Rp ${Number(
+data.jumlah || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+${data.status}
+</p>
+
+</div>
+
+`;
+
+});
+
+</script>
+
+</body>
+</html>
