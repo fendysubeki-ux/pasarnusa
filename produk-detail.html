@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Detail Produk - PasarNusa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -14,37 +21,92 @@
 
 <div class="detail-image">
 
-<img src="https://picsum.photos/600/400?1">
+<img id="gambarProduk">
 
 </div>
 
 <div class="detail-info">
 
-<span class="category">
-Makanan
+<span class="category" id="kategoriProduk">
+Loading...
 </span>
 
-<h1>
-Keripik Pisang Premium
+<h1 id="namaProduk">
+Loading...
 </h1>
+<p>
 
-<h2>
-Rp15.000
+🏪
+
+<a
+id="linkToko"
+href="#">
+
+Lihat Toko
+
+</a>
+
+</p>
+<h2 id="hargaProduk">
+Loading...
 </h2>
 
-<p>
-⭐⭐⭐⭐⭐ 4.9 (125 ulasan)
+<p id="ratingInfo">
+Loading Rating...
 </p>
 
-<p>
-Keripik pisang premium dengan rasa gurih dan renyah.
-Cocok untuk camilan keluarga.
+<p id="deskripsiProduk">
+Loading...
 </p>
 
 <div class="cart-card">
 
 <h3>Ulasan Pembeli</h3>
+<input
+type="text"
+id="namaReviewer"
+placeholder="Nama Anda">
 
+<textarea
+id="isiReview"
+placeholder="Tulis ulasan">
+</textarea>
+
+<select id="ratingProduk">
+
+<option value="5">
+⭐⭐⭐⭐⭐
+</option>
+
+<option value="4">
+⭐⭐⭐⭐
+</option>
+
+<option value="3">
+⭐⭐⭐
+</option>
+
+<option value="2">
+⭐⭐
+</option>
+
+<option value="1">
+⭐
+</option>
+
+</select>
+
+<button
+id="kirimReview"
+class="btn-primary">
+
+Kirim Ulasan
+
+</button>
+
+<div id="reviewContainer">
+
+</div>
 <p>
 ⭐⭐⭐⭐⭐
 Keripik sangat renyah dan enak.
@@ -56,20 +118,37 @@ Pengiriman cepat dan produk sesuai.
 </p>
 
 </div>
-<button class="btn-secondary">
+<div class="action-buttons">
+
+<button
+id="btnFavorit"
+class="btn-secondary">
+
 ❤️ Simpan ke Favorit
+
 </button>
-<a href="cart.html"
-class="btn-primary">
-Masukkan Keranjang
+<a
+id="chatWA"
+target="_blank"
+class="btn-secondary">
+
+💬 Chat WhatsApp
+
 </a>
+<button
+id="addToCart"
+class="btn-primary">
+
+Masukkan Keranjang
+
+</button>
 
 <button class="btn-secondary"
 onclick="copyAffiliate()">
-
 Salin Link Affiliate
-
 </button>
+
+</div>
 
 </div>
 
@@ -91,6 +170,233 @@ value="https://pasarnusa.id/produk/1?ref=affiliate001">
 </section>
 
 <script src="script.js"></script>
+<script type="module">
 
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+addDoc,
+collection,
+getDocs
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const params =
+new URLSearchParams(window.location.search);
+
+const id = params.get("id");
+const refAffiliate =
+params.get("ref");
+if(refAffiliate){
+
+localStorage.setItem(
+"affiliate",
+refAffiliate
+);
+
+}
+const snap =
+await getDoc(doc(db,"produk",id));
+
+const produk = snap.data();
+document.getElementById(
+"gambarProduk"
+).src =
+produk.gambar?.[0] ||
+"https://picsum.photos/600/400";
+document.getElementById("namaProduk").innerText =
+produk.namaProduk;
+document.getElementById(
+"linkToko"
+).href =
+"toko.html?uid=" +
+produk.uid;
+document.getElementById("hargaProduk").innerText =
+"Rp " + Number(produk.harga).toLocaleString("id-ID");
+
+document.getElementById("kategoriProduk").innerText =
+produk.kategori;
+
+document.getElementById("deskripsiProduk").innerText =
+produk.deskripsi;
+document.getElementById(
+"chatWA"
+).href =
+"https://wa.me/" +
+produk.whatsapp +
+"?text=Saya tertarik dengan produk " +
+produk.namaProduk;
+const reviewData =
+await getDocs(
+collection(db,"review")
+);
+let totalRating = 0;
+let jumlahReview = 0;
+const reviewContainer =
+document.getElementById(
+"reviewContainer"
+);
+
+reviewData.forEach((item)=>{
+
+const review =
+item.data();
+
+if(review.produkId === id){
+totalRating +=
+Number(review.rating || 0);
+
+jumlahReview++;
+reviewContainer.innerHTML += `
+
+<div class="cart-card">
+
+<b>${review.nama}</b>
+
+<p>
+${"⭐".repeat(review.rating)}
+</p>
+
+<p>${review.review}</p>
+
+</div>
+
+`;
+
+}
+
+});
+if(jumlahReview > 0){
+
+const rataRata =
+(
+totalRating /
+jumlahReview
+).toFixed(1);
+
+document.getElementById(
+"ratingInfo"
+).innerText =
+"⭐ " +
+rataRata +
+" (" +
+jumlahReview +
+" ulasan)";
+
+}else{
+
+document.getElementById(
+"ratingInfo"
+).innerText =
+"Belum ada ulasan";
+
+}
+document
+.getElementById("btnFavorit")
+.addEventListener("click",()=>{
+
+let favorit =
+JSON.parse(
+localStorage.getItem("favorit")
+) || [];
+
+favorit.push({
+id:id,
+...produk
+});
+
+let cart =
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
+
+cart.push({
+id:id,
+...produk
+});
+
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
+
+alert("Produk masuk keranjang");
+
+alert(
+"Produk ditambahkan ke favorit"
+);
+
+});
+document
+.getElementById("kirimReview")
+.addEventListener("click", async()=>{
+if(Number(produk.stok) <= 0){
+
+alert("Stok produk habis");
+
+return;
+
+}
+await addDoc(
+collection(db,"review"),
+{
+
+produkId:id,
+
+nama:
+document.getElementById("namaReviewer").value,
+
+review:
+document.getElementById("isiReview").value,
+
+rating:Number(
+document.getElementById("ratingProduk").value
+),
+
+tanggal:new Date()
+
+});
+
+alert("Review berhasil dikirim");
+
+location.reload();
+
+});
+document
+.getElementById("addToCart")
+.addEventListener("click",()=>{
+
+localStorage.setItem(
+"cart",
+JSON.stringify({
+id:id,
+...produk
+})
+);
+
+alert("Produk masuk keranjang");
+
+window.location.href =
+"cart.html";
+
+});
+</script>
 </body>
 </html>
