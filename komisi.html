@@ -1,46 +1,170 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Riwayat Komisi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<section class="affiliate-dashboard">
+<section class="cart-section">
 
 <h1>Riwayat Komisi</h1>
 
-<table class="commission-table">
+<div id="komisiContainer">
 
-<tr>
-<th>Tanggal</th>
-<th>Produk</th>
-<th>Komisi</th>
-<th>Status</th>
-</tr>
+</div>
+<button
+id="tarikKomisi"
+class="btn-primary">
 
-<tr>
-<td>10 Juni 2026</td>
-<td>Keripik Pisang</td>
-<td>Rp5.000</td>
-<td>Dibayar</td>
-</tr>
+Ajukan Pencairan
 
-<tr>
-<td>09 Juni 2026</td>
-<td>Kopi Nusantara</td>
-<td>Rp10.000</td>
-<td>Menunggu</td>
-</tr>
-
-</table>
-
+</button>
 </section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const container =
+document.getElementById("komisiContainer");
+let currentUser = null;
+let totalKomisi = 0;
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user) return;
+currentUser = user;
+const querySnapshot =
+await getDocs(collection(db,"pesanan"));
+
+querySnapshot.forEach((item)=>{
+
+const data = item.data();
+
+if(data.affiliate === user.uid){
+totalKomisi +=
+Number(
+data.komisiAffiliate || 0
+);
+container.innerHTML += `
+
+<div class="cart-card">
+
+<h3>${data.produk}</h3>
+
+<p>
+Komisi:
+Rp ${Number(
+data.komisiAffiliate || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+Status:
+${data.status}
+</p>
+
+</div>
+
+`;
+
+}
+
+});
+
+container.innerHTML = `
+
+<div class="cart-card">
+
+<h2>Total Komisi</h2>
+
+<h1>
+Rp ${totalKomisi
+.toLocaleString("id-ID")}
+</h1>
+
+</div>
+
+` + container.innerHTML;
+
+document
+.getElementById("tarikKomisi")
+.addEventListener("click",
+async()=>{
+
+if(totalKomisi <= 0){
+
+alert(
+"Belum ada komisi yang bisa dicairkan"
+);
+
+return;
+
+}
+
+await addDoc(
+collection(db,"pencairan_komisi"),
+{
+
+uid:currentUser.uid,
+
+jumlah:
+totalKomisi,
+
+status:
+"Menunggu Verifikasi",
+
+createdAt:
+new Date()
+
+}
+);
+
+alert(
+"Pengajuan pencairan berhasil"
+);
+
+document.getElementById(
+"tarikKomisi"
+).disabled = true;
+
+});
+
+});
+</script>
 
 </body>
 </html>
