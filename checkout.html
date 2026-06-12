@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Checkout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="form-card">
+
+<h1>Checkout</h1>
+
+<input
+type="text"
+id="namaPembeli"
+placeholder="Nama Pembeli">
+
+<input
+type="text"
+id="whatsappPembeli"
+placeholder="Nomor WhatsApp">
+
+<textarea
+id="alamatPembeli"
+placeholder="Alamat">
+</textarea>
+<select id="kotaTujuan">
+
+<option value="">
+Pilih Kota
+</option>
+
+<option value="Tulungagung">
+Tulungagung
+</option>
+
+<option value="Blitar">
+Blitar
+</option>
+
+<option value="Kediri">
+Kediri
+</option>
+
+<option value="Trenggalek">
+Trenggalek
+</option>
+
+</select>
+
+<p id="ongkirInfo">
+Ongkir: Rp 0
+</p>
+
+<h3 id="totalBayar">
+Total: Rp 0
+</h3>
+<button id="checkoutBtn">
+Buat Pesanan
+</button>
+
+</div>
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+updateDoc,
+doc,
+increment
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const cart =
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
+let ongkir = 0;
+
+document
+.getElementById("kotaTujuan")
+.addEventListener("change",(e)=>{
+
+const kota = e.target.value;
+
+if(kota === "Tulungagung"){
+
+ongkir = 5000;
+
+}else if(kota === "Blitar"){
+
+ongkir = 10000;
+
+}else if(kota === "Kediri"){
+
+ongkir = 12000;
+
+}else if(kota === "Trenggalek"){
+
+ongkir = 15000;
+
+}else{
+
+ongkir = 0;
+
+}
+
+document.getElementById(
+"ongkirInfo"
+).innerText =
+"Ongkir: Rp " +
+ongkir.toLocaleString("id-ID");
+
+document.getElementById(
+"totalBayar"
+).innerText =
+"Total: Rp " +
+(
+Number(cart.harga) +
+ongkir
+).toLocaleString("id-ID");
+
+});
+document
+.getElementById("checkoutBtn")
+.addEventListener("click", async ()=>{
+if(
+!document.getElementById("namaPembeli").value ||
+!document.getElementById("whatsappPembeli").value ||
+!document.getElementById("alamatPembeli").value
+){
+
+alert("Lengkapi data terlebih dahulu");
+
+return;
+
+}
+await addDoc(
+collection(db,"pesanan"),
+{
+
+uidPembeli:
+auth.currentUser?.uid,
+
+namaPembeli:
+document.getElementById(
+"namaPembeli"
+).value,
+
+whatsapp:
+document.getElementById(
+"whatsappPembeli"
+).value,
+
+alamat:
+document.getElementById(
+"alamatPembeli"
+).value,
+
+produk:
+cart.namaProduk,
+
+uid:
+cart.uid,
+
+whatsappPenjual:
+cart.whatsapp,
+
+harga:
+cart.harga,
+ongkir:
+ongkir,
+
+totalBayar:
+Number(cart.harga) +
+ongkir,
+status:
+"Belum Bayar",
+
+affiliate:
+localStorage.getItem(
+"affiliate"
+),
+
+komisiAffiliate:
+Number(cart.harga) * 0.05,
+
+createdAt:
+new Date()
+
+}
+
+);
+
+await addDoc(
+collection(db,"notifikasi"),
+{
+
+uid:
+cart.uid,
+
+judul:
+"Pesanan Baru",
+
+pesan:
+document.getElementById(
+"namaPembeli"
+).value +
+" memesan " +
+cart.namaProduk,
+
+dibaca:false,
+
+createdAt:
+new Date()
+
+}
+);
+
+await updateDoc(
+doc(
+db,
+"produk",
+cart.id
+),
+{
+stok:
+increment(-1),
+
+terjual:
+increment(1)
+}
+);
+
+alert(
+"Pesanan berhasil dibuat"
+);
+
+localStorage.removeItem(
+"cart"
+);
+
+window.location.href =
+"index.html";
+
+});
+
+</script>
+
+</body>
+</html>
