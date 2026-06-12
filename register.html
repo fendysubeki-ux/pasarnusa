@@ -2,6 +2,14 @@
 <html>
 <head>
 <title>Daftar UMKM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -56,7 +64,7 @@ const db = getFirestore(app);
 
 document.getElementById("btnDaftar")
 .addEventListener("click", async ()=>{
-alert("Tombol berhasil diklik");
+
 const email =
 document.getElementById("email").value;
 
@@ -64,7 +72,17 @@ const password =
 document.getElementById("password").value;
 
 try{
+if(
+!document.getElementById("namaUmkm").value ||
+!email ||
+!password
+){
 
+alert("Lengkapi data terlebih dahulu");
+
+return;
+
+}
 const userCredential =
 await createUserWithEmailAndPassword(
 auth,
@@ -92,8 +110,19 @@ deskripsi:
 document.getElementById("deskripsi").value
 
 });
+localStorage.setItem(
+"namaUmkm",
+document.getElementById("namaUmkm").value
+);
 
+localStorage.setItem(
+"whatsapp",
+document.getElementById("whatsapp").value
+);
 alert("Akun berhasil dibuat");
+
+window.location.href =
+"dashboard.html";
 
 }catch(error){
 
