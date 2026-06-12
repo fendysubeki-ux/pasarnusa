@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Toko UMKM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="shop-header">
+
+<img
+id="logoToko"
+width="120">
+
+<h1 id="namaToko">
+Loading...
+</h1>
+
+<p id="deskripsiToko">
+Loading...
+</p>
+
+<a
+id="waToko"
+class="btn-primary"
+target="_blank">
+
+💬 Chat WhatsApp
+
+</a>
+
+</div>
+
+<section class="products">
+
+<h1>Produk Toko</h1>
+
+<div
+id="tokoContainer"
+class="product-grid">
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const params =
+new URLSearchParams(window.location.search);
+
+const uid =
+params.get("uid");
+if(!uid){
+
+window.location.href =
+"index.html";
+
+}
+const umkmData =
+await getDocs(
+collection(db,"umkm")
+);
+let tokoDitemukan = false;
+umkmData.forEach((item)=>{
+
+const toko = item.data();
+
+if(toko.uid === uid){
+tokoDitemukan = true;
+document.getElementById(
+"namaToko"
+).innerText =
+toko.namaUmkm;
+
+document.getElementById(
+"deskripsiToko"
+).innerText =
+toko.deskripsi;
+
+document.getElementById(
+"logoToko"
+).src =
+toko.logo ||
+"https://picsum.photos/200";
+
+document.getElementById(
+"waToko"
+).href =
+"https://wa.me/" +
+toko.whatsapp;
+
+}
+
+});
+if(!tokoDitemukan){
+
+document.getElementById(
+"namaToko"
+).innerText =
+"Toko tidak ditemukan";
+
+}
+const produkData =
+await getDocs(
+collection(db,"produk")
+);
+
+const container =
+document.getElementById(
+"tokoContainer"
+);
+
+produkData.forEach((item)=>{
+
+const produk =
+item.data();
+
+if(produk.uid === uid){
+
+container.innerHTML += `
+
+<div class="product-card">
+
+<img
+src="${produk.gambar || 'https://picsum.photos/400/300'}">
+
+<div class="product-info">
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p class="price">
+Rp ${Number(produk.harga)
+.toLocaleString("id-ID")}
+</p>
+
+<p>
+${produk.deskripsi}
+</p>
+
+<a
+href="produk-detail.html?id=${item.id}"
+class="btn-primary">
+
+Lihat Detail
+
+</a>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
