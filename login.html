@@ -2,6 +2,14 @@
 <html>
 <head>
 <title>Login PasarNusa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -56,7 +64,13 @@ const password =
 document.getElementById("password").value;
 
 try{
+if(!email || !password){
 
+alert("Email dan password wajib diisi");
+
+return;
+
+}
 await signInWithEmailAndPassword(
 auth,
 email,
@@ -64,6 +78,9 @@ password
 );
 
 alert("Login berhasil");
+
+window.location.href =
+"dashboard.html";
 
 }catch(error){
 
