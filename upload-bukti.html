@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload Bukti Transfer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="product-form">
+
+<h1>Upload Bukti Transfer</h1>
+
+<div class="form-card">
+
+<input
+type="file"
+id="buktiTransfer"
+accept="image/*">
+
+<img
+id="previewBukti"
+style="
+width:100%;
+max-width:300px;
+display:none;
+margin-top:15px;
+border-radius:12px;
+">
+
+<button id="uploadBtn">
+Upload Bukti
+</button>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+updateDoc,
+doc,
+getDoc,
+addDoc,
+collection
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const id =
+params.get("id");
+
+const input =
+document.getElementById(
+"buktiTransfer"
+);
+
+input.addEventListener(
+"change",
+(e)=>{
+
+const file =
+e.target.files[0];
+
+if(file){
+
+const img =
+document.getElementById(
+"previewBukti"
+);
+
+img.src =
+URL.createObjectURL(file);
+
+img.style.display =
+"block";
+
+}
+
+});
+
+document
+.getElementById("uploadBtn")
+.addEventListener(
+"click",
+async()=>{
+
+const file =
+document.getElementById(
+"buktiTransfer"
+).files[0];
+
+if(!file){
+
+alert(
+"Pilih bukti transfer"
+);
+
+return;
+
+}
+
+const storageRef =
+ref(
+storage,
+"bukti-transfer/" +
+Date.now() +
+"_" +
+file.name
+);
+
+await uploadBytes(
+storageRef,
+file
+);
+
+const url =
+await getDownloadURL(
+storageRef
+);
+
+await updateDoc(
+doc(
+db,
+"pesanan",
+id
+),
+{
+buktiTransfer:url,
+status:
+"Menunggu Verifikasi"
+}
+);
+
+const pesananSnap =
+await getDoc(
+doc(db,"pesanan",id)
+);
+
+const pesanan =
+pesananSnap.data();
+
+await addDoc(
+collection(db,"notifikasi"),
+{
+uid:
+pesanan.uid,
+
+judul:
+"Bukti Transfer Baru",
+
+pesan:
+"Pembeli telah mengupload bukti transfer untuk " +
+pesanan.produk,
+
+dibaca:false,
+
+createdAt:
+new Date()
+}
+);
+
+alert(
+"Bukti transfer berhasil dikirim"
+);
+
+window.location.href =
+"pesanan-saya.html";
+
+});
+
+</script>
+
+</body>
+</html>
