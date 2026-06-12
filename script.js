@@ -1,19 +1,12 @@
 // MENU MOBILE
 
-const menuToggle =
-document.querySelector(".menu-toggle");
+const menuToggle = document.querySelector(".menu-toggle");
+const navLinks = document.querySelector(".nav-links");
 
-const navLinks =
-document.querySelector(".nav-links");
-
-if(menuToggle){
-
-menuToggle.addEventListener("click",()=>{
-
-navLinks.classList.toggle("active");
-
-});
-
+if(menuToggle && navLinks){
+    menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+    });
 }
 
 // MODAL LOGIN
@@ -139,22 +132,36 @@ document.getElementById("productImage");
 const previewImage =
 document.getElementById("previewImage");
 
-if(imageInput && previewImage){
+const imageInput =
+document.getElementById("productImage");
+
+const previewContainer =
+document.getElementById("previewContainer");
+
+if(imageInput && previewContainer){
 
 imageInput.addEventListener("change",(e)=>{
 
-const file =
-e.target.files[0];
+previewContainer.innerHTML = "";
 
-if(file){
+Array.from(e.target.files)
+.forEach((file)=>{
 
-previewImage.src =
+const img =
+document.createElement("img");
+
+img.src =
 URL.createObjectURL(file);
 
-previewImage.style.display =
-"block";
+img.style.width = "100px";
+img.style.height = "100px";
+img.style.objectFit = "cover";
+img.style.borderRadius = "12px";
+img.style.margin = "5px";
 
-}
+previewContainer.appendChild(img);
+
+});
 
 });
 
