@@ -1,65 +1,284 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<title>Dashboard UMKM</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Penjual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h2>Daftar UMKM</h2>
+<section class="dashboard">
 
-<div id="umkmList"></div>
+<h1>Dashboard Penjual</h1>
 
-<br>
+<div class="dashboard-grid">
 
-<a href="profil-umkm.html" class="btn-primary">
-Lihat Profil UMKM
+<div class="dashboard-card">
+<h3 id="totalProduk">0</h3>
+<p>Total Produk</p>
+</div>
+<div class="dashboard-card">
+<h3 id="produkTerlaris">-</h3>
+<p>Produk Terlaris</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="rataPesanan">0</h3>
+<p>Rata-rata Pesanan</p>
+</div>
+<div class="dashboard-card">
+<h3 id="totalPesanan">0</h3>
+<p>Total Pesanan</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalOmzet">Rp 0</h3>
+<p>Total Omzet</p>
+</div>
+
+</div>
+
+<div class="dashboard-grid">
+
+<a href="profil-umkm.html" class="dashboard-card">
+  
+<h3>Profil UMKM</h3>
+<p>Kelola data toko</p>
 </a>
 
+<a href="tambah-produk.html" class="dashboard-card">
+<h3>Tambah Produk</h3>
+<p>Tambah produk baru</p>
+</a>
+
+<a href="dashboard-produk.html" class="dashboard-card">
+<h3>Produk Saya</h3>
+<p>Lihat semua produk</p>
+</a>
+
+<a href="dashboard-pesanan.html" class="dashboard-card">
+<h3>Pesanan Masuk</h3>
+<p>Lihat pesanan pelanggan</p>
+</a>
+<a href="riwayat-transaksi.html"
+class="dashboard-card">
+
+<h3>Transaksi</h3>
+
+<p>Riwayat Penjualan</p>
+
+</a>
+<a href="notifikasi.html" class="dashboard-card">
+
+<h3 id="jumlahNotifikasi">0</h3>
+
+<p>Notifikasi Baru</p>
+
+</a>
+<a href="index.html" class="dashboard-card">
+<h3>Beranda</h3>
+<p>Kembali ke website</p>
+</a>
+<a href="dashboard-affiliate.html" class="dashboard-card">
+
+<h3>Affiliate</h3>
+
+<p>Komisi & Referral</p>
+
+</a>
+<a href="#" id="logoutBtn" class="dashboard-card">
+<h3>Logout</h3>
+<p>Keluar dari akun</p>
+</a>
+</div>
+
+</section>
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 getFirestore,
 collection,
 getDocs
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+import {
+getAuth,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+query,
+where
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = {
 apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
 authDomain: "pasarnusa-18aa0.firebaseapp.com",
 projectId: "pasarnusa-18aa0",
 storageBucket: "pasarnusa-18aa0.firebasestorage.app",
 messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952",
-measurementId: "G-Q861Y1J3RJ"
+appId: "1:866998011671:web:5555115feb82741ab55952"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+await auth.authStateReady();
 
-const list = document.getElementById("umkmList");
+if(!auth.currentUser){
 
-const querySnapshot = await getDocs(collection(db,"umkm"));
+window.location.href =
+"login.html";
 
-querySnapshot.forEach((doc)=>{
+throw new Error("Belum login");
 
-const data = doc.data();
+}
 
-list.innerHTML += `
-<div class="card">
-<h3>${data.namaUmkm}</h3>
-<p>Pemilik : ${data.namaPemilik}</p>
-<p>WA : ${data.whatsapp}</p>
-<p>Kategori : ${data.kategori}</p>
-<p>${data.deskripsi}</p>
-</div>
-`;
+const produk =
+await getDocs(
+query(
+collection(db,"produk"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+)
+)
+);
+document.getElementById(
+"totalProduk"
+).innerText =
+produk.size;
+
+const pesanan =
+await getDocs(
+query(
+collection(db,"pesanan"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+)
+)
+);
+
+document.getElementById(
+"totalPesanan"
+).innerText =
+pesanan.size;
+
+let omzet = 0;
+
+pesanan.forEach((item)=>{
+
+const data = item.data();
+
+omzet +=
+Number(data.harga || 0);
 
 });
 
-</script>
+document.getElementById(
+"totalOmzet"
+).innerText =
+"Rp " +
+omzet.toLocaleString("id-ID");
+const notif =
+await getDocs(
+collection(db,"notifikasi")
+);
 
+let totalNotif = 0;
+
+notif.forEach((item)=>{
+
+const data = item.data();
+
+if(
+auth.currentUser &&
+data.uid === auth.currentUser.uid &&
+!data.dibaca
+){
+
+totalNotif++;
+
+}
+
+});
+
+document.getElementById(
+"jumlahNotifikasi"
+).innerText =
+totalNotif;
+let produkTerlaris = "-";
+let jumlahTerjual = 0;
+
+produk.forEach((item)=>{
+
+const data = item.data();
+
+if(
+Number(data.terjual || 0)
+>
+jumlahTerjual
+){
+
+jumlahTerjual =
+Number(data.terjual || 0);
+
+produkTerlaris =
+data.namaProduk;
+
+}
+
+});
+
+document.getElementById(
+"produkTerlaris"
+).innerText =
+produkTerlaris;
+
+document.getElementById(
+"rataPesanan"
+).innerText =
+pesanan.size > 0
+?
+Math.round(
+omzet / pesanan.size
+).toLocaleString("id-ID")
+:
+0;
+document
+.getElementById("logoutBtn")
+.addEventListener("click", async(e)=>{
+
+e.preventDefault();
+
+await signOut(auth);
+
+localStorage.clear();
+
+alert("Logout berhasil");
+
+window.location.href =
+"login.html";
+
+});
+</script>
 </body>
 </html>
