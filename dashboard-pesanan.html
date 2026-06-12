@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Pesanan</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<h1>Pesanan Masuk</h1>
+
+<div
+id="pesananContainer"
+class="dashboard-grid">
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+updateDoc,
+doc,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+const user =
+auth.currentUser;
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+}
+const container =
+document.getElementById("pesananContainer");
+
+const querySnapshot =
+await getDocs(
+collection(db,"pesanan")
+);
+
+querySnapshot.forEach((doc)=>{
+
+const pesanan =
+doc.data();
+if(
+pesanan.uid !== user.uid
+) return;
+container.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+${pesanan.namaPembeli}
+</h3>
+
+<p>
+📦 ${pesanan.produk}
+</p>
+
+<p>
+💰 Rp ${Number(
+pesanan.harga
+).toLocaleString("id-ID")}
+</p>
+<p>
+🚚 Ongkir:
+Rp ${Number(
+pesanan.ongkir || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+💳 Total:
+Rp ${Number(
+pesanan.totalBayar || 0
+).toLocaleString("id-ID")}
+</p>
+<p>
+📱 ${pesanan.whatsapp}
+</p>
+
+<p>
+📍 ${pesanan.alamat}
+</p>
+${pesanan.buktiTransfer ?
+
+`
+<p>
+Bukti Transfer:
+</p>
+
+<img
+src="${pesanan.buktiTransfer}"
+style="
+width:100%;
+max-width:250px;
+border-radius:12px;
+margin-top:10px;
+">
+`
+
+:
+
+`
+<p>
+Belum upload bukti transfer
+</p>
+`
+}
+${pesanan.status === "Menunggu Verifikasi" ?
+
+`
+<button
+onclick="ubahStatus(
+'${doc.id}',
+'Diproses'
+)"
+class="btn-primary">
+
+Verifikasi Pembayaran
+
+</button>
+`
+
+: ""
+}
+<span class="status ${
+pesanan.status === "Menunggu Konfirmasi"
+? "menunggu"
+: pesanan.status === "Diproses"
+? "diproses"
+: pesanan.status === "Dikirim"
+? "dikirim"
+: "selesai"
+}">
+${pesanan.status}
+</span>
+
+<br><br>
+
+<select
+onchange="ubahStatus('${doc.id}',this.value)">
+
+<option value="">
+Ubah Status
+</option>
+
+<option value="Diproses">
+Diproses
+</option>
+
+<option value="Dikirim">
+Dikirim
+</option>
+
+<option value="Selesai">
+Selesai
+</option>
+
+</select>
+
+</div>
+
+`;
+
+});
+
+window.ubahStatus =
+async(id,status)=>{
+
+const pesanan =
+querySnapshot.docs.find(
+(item)=> item.id === id
+);
+
+const data =
+pesanan.data();
+
+await updateDoc(
+doc(db,"pesanan",id),
+{
+status: status
+}
+);
+if(status === "Selesai"){
+
+await addDoc(
+collection(db,"notifikasi"),
+{
+
+uid:
+data.uidPembeli,
+
+judul:
+"Pesanan Selesai",
+
+pesan:
+"Silakan beri rating untuk produk " +
+data.produk,
+
+dibaca:false,
+
+createdAt:
+new Date()
+
+}
+);
+
+}
+if(data.uidPembeli){
+
+await addDoc(
+collection(db,"notifikasi"),
+{
+
+uid:
+data.uidPembeli,
+
+judul:
+"Update Pesanan",
+
+pesan:
+"Pesanan " +
+data.produk +
+" sekarang " +
+status,
+
+dibaca:false,
+
+createdAt:
+new Date()
+
+}
+);
+
+}
+
+alert(
+"Status berhasil diubah"
+);
+
+location.reload();
+
+};
+
+</script>
+
+</body>
+</html>
