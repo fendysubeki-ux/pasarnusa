@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Produk Favorit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="products">
+
+<h1>Produk Favorit</h1>
+
+<div
+id="favoritContainer"
+class="product-grid">
+
+</div>
+
+</section>
+
+<script>
+
+const favorit =
+JSON.parse(
+localStorage.getItem("favorit")
+) || [];
+
+const container =
+document.getElementById(
+"favoritContainer"
+);
+
+if(favorit.length === 0){
+
+container.innerHTML = `
+
+<div class="cart-card">
+
+<h2>
+❤️ Belum ada produk favorit
+</h2>
+
+<p>
+Simpan produk favorit terlebih dahulu.
+</p>
+
+<a
+href="index.html"
+class="btn-primary">
+
+Cari Produk
+
+</a>
+
+</div>
+
+`;
+
+}else{
+
+favorit.forEach((produk)=>{
+
+container.innerHTML += `
+
+<div class="product-card">
+
+<img
+src="${
+produk.gambar?.[0] ||
+produk.gambar ||
+'https://picsum.photos/400/300'
+}">
+
+<div class="product-info">
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p class="price">
+Rp ${Number(produk.harga)
+.toLocaleString("id-ID")}
+</p>
+
+<p>
+${produk.deskripsi}
+</p>
+
+<div class="action-buttons">
+
+<a
+href="produk-detail.html?id=${produk.id}"
+class="btn-primary">
+
+Lihat Detail
+
+</a>
+
+<button
+onclick="hapusFavorit('${produk.id}')"
+class="delete-btn">
+
+Hapus
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+function hapusFavorit(id){
+
+let favorit =
+JSON.parse(
+localStorage.getItem("favorit")
+) || [];
+
+favorit =
+favorit.filter(
+(item)=> item.id !== id
+);
+
+localStorage.setItem(
+"favorit",
+JSON.stringify(favorit)
+);
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
