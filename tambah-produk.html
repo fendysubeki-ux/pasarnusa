@@ -5,7 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Tambah Produk - PasarNusa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -19,36 +26,34 @@
 
 <input
 type="text"
+id="namaProduk"
 placeholder="Nama Produk">
 
 <input
 type="number"
+id="hargaProduk"
 placeholder="Harga Produk">
 
 <input
 type="number"
+id="stokProduk"
 placeholder="Stok Produk">
 
 <input
 type="text"
+id="kategoriProduk"
 placeholder="Kategori">
 
-<label>Upload Foto Produk</label>
-
-<input
-type="file"
-accept="image/*"
-id="productImage">
-
-<img
-id="previewImage"
-src=""
-alt="Preview Produk"
-style="display:none;">
-
 <textarea
+id="deskripsiProduk"
 placeholder="Deskripsi Produk">
 </textarea>
+<input
+type="file"
+id="productImage"
+accept="image/*"
+multiple>
+<div id="previewContainer"></div>
 
 <button id="simpanProduk">
 Simpan Produk
@@ -67,9 +72,18 @@ getFirestore,
 collection,
 addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 import {
 getAuth
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
   authDomain: "pasarnusa-18aa0.firebaseapp.com",
@@ -81,37 +95,122 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-document.getElementById("simpanProduk")
-.addEventListener("click", async () => {
-alert("Tombol Simpan diklik");
-  const inputs =
-  document.querySelectorAll(".form-card input");
+const auth = getAuth(app);
+const storage = getStorage(app);
+const imageInput =
+document.getElementById("productImage");
 
-  const textarea =
-  document.querySelector(".form-card textarea");
+const previewContainer =
+document.getElementById("previewContainer");
 
-  try {
+if(imageInput && previewContainer){
 
-await addDoc(collection(db,"produk"), {
+imageInput.addEventListener("change",(e)=>{
 
-namaProduk: inputs[0].value,
-harga: inputs[1].value,
-stok: inputs[2].value,
-kategori: inputs[3].value,
-deskripsi: textarea.value,
+previewContainer.innerHTML = "";
 
-createdAt: new Date()
+Array.from(e.target.files)
+.forEach((file)=>{
+
+const img =
+document.createElement("img");
+
+img.src =
+URL.createObjectURL(file);
+
+img.style.width = "100px";
+img.style.height = "100px";
+img.style.objectFit = "cover";
+img.style.borderRadius = "12px";
+img.style.margin = "5px";
+
+previewContainer.appendChild(img);
 
 });
 
-    alert("Produk berhasil disimpan");
+});
 
-  } catch(error){
+}
+document.getElementById("simpanProduk")
+.addEventListener("click", async () => {
 
-    alert(error.message);
-    console.log(error);
+try {
 
-  }
+const files =
+document.getElementById(
+"productImage"
+).files;
+
+if(files.length === 0){
+
+alert("Pilih gambar produk");
+
+return;
+
+}
+let imageUrls = [];
+
+for(const file of files){
+
+const storageRef =
+ref(
+storage,
+"produk/" +
+Date.now() +
+"_" +
+file.name
+);
+
+await uploadBytes(
+storageRef,
+file
+);
+
+const url =
+await getDownloadURL(
+storageRef
+);
+
+imageUrls.push(url);
+
+}
+
+await addDoc(collection(db,"produk"), {
+whatsapp:
+localStorage.getItem("whatsapp"),
+namaToko:
+localStorage.getItem("namaUmkm"),
+uid: auth.currentUser?.uid,
+namaProduk:
+document.getElementById("namaProduk").value,
+
+harga:
+document.getElementById("hargaProduk").value,
+
+stok:
+document.getElementById("stokProduk").value,
+
+kategori:
+document.getElementById("kategoriProduk").value,
+
+deskripsi:
+document.getElementById("deskripsiProduk").value,
+gambar: imageUrls,
+createdAt: new Date(),
+terjual: 0
+
+});
+
+alert("Produk berhasil disimpan");
+
+window.location.href =
+"dashboard-produk.html";
+
+} catch(error){
+
+alert(error.message);
+
+}
 
 });
 
