@@ -174,7 +174,13 @@ storageRef
 imageUrls.push(url);
 
 }
+if(!auth.currentUser){
 
+alert("Silakan login terlebih dahulu");
+
+return;
+
+}
 await addDoc(collection(db,"produk"), {
 whatsapp:
 localStorage.getItem("whatsapp"),
@@ -185,10 +191,14 @@ namaProduk:
 document.getElementById("namaProduk").value,
 
 harga:
-document.getElementById("hargaProduk").value,
+Number(
+document.getElementById("hargaProduk").value
+),
 
 stok:
-document.getElementById("stokProduk").value,
+Number(
+document.getElementById("stokProduk").value
+),
 
 kategori:
 document.getElementById("kategoriProduk").value,
