@@ -84,7 +84,21 @@ window.location.href =
 
 }catch(error){
 
-alert(error.message);
+if(
+error.code === "auth/invalid-credential"
+){
+
+alert(
+"Email atau password salah"
+);
+
+}else{
+
+alert(
+"Gagal login"
+);
+
+}
 
 }
 
