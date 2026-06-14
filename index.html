@@ -938,5 +938,48 @@ card.dataset.category === kategori
 };
 
 </script>
+<script>
+const menuToggle =
+document.querySelector(".menu-toggle");
+
+const navLinks =
+document.querySelector(".nav-links");
+
+menuToggle.addEventListener(
+"click",
+()=>{
+navLinks.classList.toggle("active");
+});
+</script>
+const revealElements =
+document.querySelectorAll(
+'.product-card,.feature-card,.dashboard-card,.stat'
+);
+
+const observer =
+new IntersectionObserver(
+(entries)=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add('active');
+
+}
+
+});
+
+}
+);
+
+revealElements.forEach(el=>{
+
+el.classList.add('reveal');
+
+observer.observe(el);
+
+});
+</script>
 </body>
 </html>
