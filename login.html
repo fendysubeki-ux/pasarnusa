@@ -1,15 +1,40 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Login PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="auth-section"><div class="register-card"><h1>🔐 Login PasarNusa</h1><p style="text-align:center;margin-bottom:25px;">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="auth-section">
+
+<div class="register-card">
+
+<h1>🔐 Login PasarNusa</h1>
+
+<p style="text-align:center;margin-bottom:25px;">
 Masuk untuk mengakses akun Anda
-</p><input
+</p>
+
+<input
 type="email"
 id="email"
 placeholder="Email"
 autocomplete="email">
 
-<div style="position:relative;"><input
+<div style="position:relative;">
+
+<input
 type="password"
 id="password"
 placeholder="Password"
@@ -23,34 +48,51 @@ position:absolute;
 right:10px;
 top:50%;
 transform:translateY(-50%);
-border:none;
 background:none;
+border:none;
 cursor:pointer;
+font-size:18px;
 ">
-
 👁️
+</button>
 
-</button></div><button
+</div>
+
+<button
 id="btnLogin"
 class="btn-primary">
-
 Masuk
+</button>
 
-</button><div style="
+<div
+style="
 text-align:center;
 margin-top:20px;
-"><a href="register.html">
+">
+
+<a href="register.html">
 Daftar UMKM
-</a>|
+</a>
+
+|
 
 <a href="register-affiliate.html">
 Daftar Affiliate
-</a>|
+</a>
+
+|
 
 <a href="reset-password.html">
 Lupa Password
-</a></div></div></section><script type="module">
+</a>
 
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
@@ -70,30 +112,43 @@ from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_PROJECT.appspot.com",
-messagingSenderId:"YOUR_SENDER_ID",
-appId:"YOUR_APP_ID"
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+
+authDomain:
+"pasarnusa-18aa0.firebaseapp.com",
+
+projectId:
+"pasarnusa-18aa0",
+
+storageBucket:
+"pasarnusa-18aa0.firebasestorage.app",
+
+messagingSenderId:
+"866998011671",
+
+appId:
+"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+getAuth(app);
 
-const db = getFirestore(app);
+const db =
+getFirestore(app);
 
 document
 .getElementById("togglePassword")
 .addEventListener("click",()=>{
 
-const password =
+const input =
 document.getElementById("password");
 
-password.type =
-password.type === "password"
+input.type =
+input.type === "password"
 ? "text"
 : "password";
 
@@ -136,19 +191,15 @@ email,
 password
 );
 
-if(
-!userCredential.user.emailVerified
-){
-
-await signOut(auth);
-
-alert(
-"Silakan verifikasi email terlebih dahulu"
+console.log(
+"UID:",
+userCredential.user.uid
 );
 
-return;
-
-}
+console.log(
+"EMAIL:",
+userCredential.user.email
+);
 
 const userDoc =
 await getDoc(
@@ -162,7 +213,7 @@ userCredential.user.uid
 if(!userDoc.exists()){
 
 alert(
-"Data akun tidak ditemukan"
+"Data akun tidak ditemukan di Firestore"
 );
 
 return;
@@ -197,13 +248,17 @@ window.location.href =
 "admin.html";
 
 }
-else if(user.role === "affiliate"){
+else if(
+user.role === "affiliate"
+){
 
 window.location.href =
 "dashboard-affiliate.html";
 
 }
-else if(user.role === "umkm"){
+else if(
+user.role === "umkm"
+){
 
 window.location.href =
 "dashboard.html";
@@ -219,33 +274,17 @@ window.location.href =
 }
 catch(error){
 
-if(
-error.code ===
-"auth/invalid-credential"
-){
-
-alert(
-"Email atau password salah"
+console.error(
+"ERROR LOGIN:",
+error
 );
 
-}
-else if(
-error.code ===
-"auth/too-many-requests"
-){
-
 alert(
-"Terlalu banyak percobaan login"
+"Kode Error:\n" +
+error.code +
+"\n\nPesan:\n" +
+error.message
 );
-
-}
-else{
-
-alert(
-"Terjadi kesalahan saat login"
-);
-
-}
 
 }
 finally{
@@ -280,5 +319,7 @@ login();
 }
 );
 
-</script></body>
+</script>
+
+</body>
 </html>
