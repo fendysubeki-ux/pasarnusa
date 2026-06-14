@@ -1,41 +1,71 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Profil UMKM - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
+<body><section class="store-header"><div class="store-cover"><img
+id="coverToko"
+src="https://picsum.photos/1200/400"
+alt="Cover Toko">
 
-<title>Profil UMKM</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+</div><div class="store-profile"><img
+id="logoToko"
+class="store-logo"
+src="https://picsum.photos/200"
+alt="Logo Toko">
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<div><h1 id="namaToko">
+Memuat...
+</h1><p id="deskripsiToko">
+Memuat informasi toko...
+</p><div class="store-badge"><span id="ratingToko">
+⭐ 0
+</span><span id="reviewToko">
+0 Ulasan
+</span></div></div></div></section><section class="dashboard"><div class="dashboard-grid"><div class="dashboard-card">
+<h3 id="totalProduk">0</h3>
+<p>Total Produk</p>
+</div><div class="dashboard-card">
+<h3 id="totalTerjual">0</h3>
+<p>Total Terjual</p>
+</div><div class="dashboard-card">
+<h3 id="ratingStat">0</h3>
+<p>Rating Toko</p>
+</div><div class="dashboard-card">
+<h3 id="totalReview">0</h3>
+<p>Total Review</p>
+</div></div><div class="dashboard-card"><h2>Informasi Toko</h2><p id="alamatToko">
+📍 -
+</p><p id="whatsappToko">
+📱 -
+</p><p id="jamOperasional">
+🕒 -
+</p><br><a
+id="chatWA"
+target="_blank"
+class="btn-primary">
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+Chat WhatsApp
 
-<section class="product-detail">
+</a></div></section><section class="products"><div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+"><h2>Produk Toko</h2><input
+type="text"
+id="searchProduk"
+placeholder="Cari produk..."
+class="search-box">
 
-<div id="profilToko"></div>
-
-<div
+</div><div
 id="produkToko"
-class="dashboard-grid">
-</div>
-
-</section>
-<script type="module">
+class="product-grid"></div></section><script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 getFirestore,
-doc,
-getDoc,
 collection,
 getDocs,
 query,
@@ -44,12 +74,14 @@ where
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_AUTH_DOMAIN",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_STORAGE_BUCKET",
+messagingSenderId:"YOUR_SENDER_ID",
+appId:"YOUR_APP_ID"
+
 };
 
 const app = initializeApp(firebaseConfig);
@@ -63,100 +95,160 @@ window.location.search
 const uid =
 params.get("uid");
 
-const tokoSnap =
-await getDoc(
-doc(db,"umkm",uid)
+if(!uid){
+
+window.location.href =
+"index.html";
+
+}
+
+const tokoSnapshot =
+await getDocs(
+query(
+collection(db,"umkm"),
+where("uid","==",uid)
+)
 );
 
-const toko =
-tokoSnap.data();
+if(tokoSnapshot.empty){
 
-document.getElementById(
-"profilToko"
-).innerHTML = `
-
-<img
-src="${
-toko.logo ||
-'https://picsum.photos/600/400'
-}"
-class="detail-image">
-
-<div class="detail-info">
-
-<h1>
-${toko.namaUmkm}
+document.body.innerHTML = `
+<h1 style="text-align:center;">
+Toko Tidak Ditemukan
 </h1>
-
-<p>
-${toko.deskripsi}
-</p>
-
-<p>
-📱 ${toko.whatsapp}
-</p>
-
-</div>
-
 `;
 
-const produkSnap =
+throw new Error(
+"Toko tidak ditemukan"
+);
+
+}
+
+const toko =
+tokoSnapshot.docs[0].data();
+
+document.getElementById("namaToko").innerText =
+toko.namaUmkm || "UMKM";
+
+document.getElementById("deskripsiToko").innerText =
+toko.deskripsi || "-";
+
+document.getElementById("ratingToko").innerText =
+"⭐ " + (toko.ratingToko || 0);
+
+document.getElementById("reviewToko").innerText =
+(toko.totalReviewToko || 0) + " Ulasan";
+
+document.getElementById("ratingStat").innerText =
+toko.ratingToko || 0;
+
+document.getElementById("totalReview").innerText =
+toko.totalReviewToko || 0;
+
+document.getElementById("alamatToko").innerText =
+"📍 " + (toko.alamat || "-");
+
+document.getElementById("whatsappToko").innerText =
+"📱 " + (toko.whatsapp || "-");
+
+document.getElementById("jamOperasional").innerText =
+"🕒 " + (toko.jamOperasional || "-");
+
+document.getElementById("chatWA").href =
+"https://wa.me/" + (toko.whatsapp || "");
+
+if(toko.logo){
+
+document.getElementById("logoToko").src =
+toko.logo;
+
+}
+
+if(toko.cover){
+
+document.getElementById("coverToko").src =
+toko.cover;
+
+}
+
+const produkSnapshot =
 await getDocs(
 query(
 collection(db,"produk"),
-where(
-"uid",
-"==",
-uid
-)
+where("uid","==",uid)
 )
 );
-document.getElementById(
-"profilToko"
-).innerHTML += `
 
-<div class="dashboard-grid">
+document.getElementById("totalProduk").innerText =
+produkSnapshot.size;
 
-<div class="dashboard-card">
+let totalTerjual = 0;
 
-<h3>Produk</h3>
+const produkData = [];
 
-<h1>
-${produkSnap.size}
-</h1>
+produkSnapshot.forEach((doc)=>{
 
-</div>
+const produk = doc.data();
 
-</div>
+produkData.push({
+id:doc.id,
+...produk
+});
 
-`;
-produkSnap.forEach((item)=>{
+totalTerjual +=
+Number(produk.terjual || 0);
 
-const produk =
-item.data();
+});
 
-document.getElementById(
-"produkToko"
-).innerHTML += `
+document.getElementById("totalTerjual").innerText =
+totalTerjual;
+
+const container =
+document.getElementById("produkToko");
+
+function tampilkanProduk(data){
+
+container.innerHTML = "";
+
+data.forEach((produk)=>{
+
+container.innerHTML += `
 
 <div class="product-card">
 
 <img
-src="${produk.foto}"
-class="product-image">
+src="${
+produk.gambar?.[0] ||
+'https://picsum.photos/400/300'
+}">
+
+<div class="product-info">
+
+<span class="category">
+${produk.kategori || "Produk"}
+</span>
 
 <h3>
 ${produk.namaProduk}
 </h3>
 
-<p>
+<p class="price">
 Rp ${Number(
-produk.harga
+produk.harga || 0
 ).toLocaleString("id-ID")}
 </p>
 
+<p>
+⭐ ${produk.rating || 0}
+</p>
+
+<p>
+🔥 Terjual:
+${produk.terjual || 0}
+</p>
+
 <a
-href="detail-produk.html?id=${item.id}"
+href="produk-detail.html?id=${produk.id}"
 class="btn-primary">
 
 Lihat Detail
@@ -165,10 +257,38 @@ Lihat Detail
 
 </div>
 
+</div>
+
 `;
 
 });
 
-</script>
-</body>
+}
+
+tampilkanProduk(produkData);
+
+document
+.getElementById("searchProduk")
+.addEventListener(
+"input",
+(e)=>{
+
+const keyword =
+e.target.value.toLowerCase();
+
+tampilkanProduk(
+
+produkData.filter(
+item =>
+item.namaProduk
+.toLowerCase()
+.includes(keyword)
+)
+
+);
+
+}
+);
+
+</script></body>
 </html>
