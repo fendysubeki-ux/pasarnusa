@@ -1,0 +1,318 @@
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard Affiliate - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
+<body><section class="dashboard"><div class="dashboard-header"><div><h1>💰 Dashboard Affiliate</h1><p>
+Kelola komisi dan referral Anda.
+</p></div><a href="index.html" class="btn-secondary">
+🏠 Beranda
+</a></div><div class="dashboard-grid"><div class="dashboard-card">
+<h3 id="totalKomisi">Rp 0</h3>
+<p>Total Komisi</p>
+</div><div class="dashboard-card">
+<h3 id="komisiPending">Rp 0</h3>
+<p>Komisi Pending</p>
+</div><div class="dashboard-card">
+<h3 id="jumlahReferral">0</h3>
+<p>Total Referral</p>
+</div><div class="dashboard-card">
+<h3 id="pesananSelesai">0</h3>
+<p>Pesanan Selesai</p>
+</div></div><div class="dashboard-card"><h3>🔗 Link Referral Anda</h3><input
+type="text"
+id="linkReferral"
+readonly>
+
+<br><br>
+
+<button
+id="copyLink"
+class="btn-primary">
+
+Salin Link
+
+</button></div><div class="dashboard-card"><h3>💸 Pencairan Komisi</h3><p>
+Saldo Tersedia:
+<b id="saldoTersedia">
+Rp 0
+</b>
+</p><button
+id="btnPencairan"
+class="btn-primary">
+
+Ajukan Pencairan
+
+</button></div><h2>📋 Riwayat Referral</h2><input
+type="text"
+id="searchReferral"
+class="search-box"
+placeholder="Cari pesanan...">
+
+<div
+id="riwayatAffiliate"
+class="dashboard-grid"><div class="dashboard-card">
+<p>Memuat data...</p>
+</div></div></section><script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+query,
+where,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_PROJECT.appspot.com",
+messagingSenderId:"YOUR_SENDER_ID",
+appId:"YOUR_APP_ID"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+const container =
+document.getElementById(
+"riwayatAffiliate"
+);
+
+onAuthStateChanged(
+auth,
+async(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+const referralLink =
+window.location.origin +
+"/index.html?ref=" +
+user.uid;
+
+document.getElementById(
+"linkReferral"
+).value =
+referralLink;
+
+const snapshot =
+await getDocs(
+query(
+collection(db,"pesanan"),
+where(
+"affiliate",
+"==",
+user.uid
+)
+)
+);
+
+container.innerHTML = "";
+
+let totalKomisi = 0;
+let pendingKomisi = 0;
+let referral = 0;
+let selesai = 0;
+
+snapshot.forEach((item)=>{
+
+const data = item.data();
+
+referral++;
+
+if(data.status === "Selesai"){
+
+selesai++;
+
+totalKomisi += Number(
+data.komisiAffiliate || 0
+);
+
+}else{
+
+pendingKomisi += Number(
+data.komisiAffiliate || 0
+);
+
+}
+
+container.innerHTML += `
+
+<div class="dashboard-card referral-item">
+
+<h3>
+Order #${item.id.slice(0,8)}
+</h3>
+
+<p>
+Status:
+<b>
+${data.status || "-"}
+</b>
+</p>
+
+<p>
+Total Belanja:
+Rp ${Number(
+data.totalBayar || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+Komisi:
+Rp ${Number(
+data.komisiAffiliate || 0
+).toLocaleString("id-ID")}
+</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"jumlahReferral"
+).innerText =
+referral;
+
+document.getElementById(
+"pesananSelesai"
+).innerText =
+selesai;
+
+document.getElementById(
+"totalKomisi"
+).innerText =
+"Rp " +
+totalKomisi.toLocaleString("id-ID");
+
+document.getElementById(
+"komisiPending"
+).innerText =
+"Rp " +
+pendingKomisi.toLocaleString("id-ID");
+
+document.getElementById(
+"saldoTersedia"
+).innerText =
+"Rp " +
+totalKomisi.toLocaleString("id-ID");
+
+document
+.getElementById(
+"btnPencairan"
+)
+.addEventListener(
+"click",
+async()=>{
+
+if(totalKomisi <= 0){
+
+alert(
+"Tidak ada komisi yang dapat dicairkan"
+);
+
+return;
+
+}
+
+await addDoc(
+collection(
+db,
+"pencairan_komisi"
+),
+{
+uid:user.uid,
+jumlah:totalKomisi,
+status:"Menunggu Persetujuan",
+createdAt:new Date()
+}
+);
+
+alert(
+"Pengajuan pencairan berhasil dikirim"
+);
+
+}
+);
+
+});
+
+document
+.getElementById(
+"copyLink"
+)
+.addEventListener(
+"click",
+()=>{
+
+navigator.clipboard.writeText(
+document.getElementById(
+"linkReferral"
+).value
+);
+
+alert(
+"Link referral berhasil disalin"
+);
+
+}
+);
+
+document
+.getElementById(
+"searchReferral"
+)
+.addEventListener(
+"input",
+(e)=>{
+
+const keyword =
+e.target.value.toLowerCase();
+
+document
+.querySelectorAll(
+".referral-item"
+)
+.forEach((item)=>{
+
+item.style.display =
+item.innerText
+.toLowerCase()
+.includes(keyword)
+?
+"block"
+:
+"none";
+
+});
+
+}
+);
+
+</script></body>
+</html>
