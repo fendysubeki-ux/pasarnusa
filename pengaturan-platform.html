@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pengaturan Platform PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.setting-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+margin-bottom:25px;
+}
+
+.setting-card{
+background:#fff;
+padding:25px;
+border-radius:18px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.setting-card h3{
+margin-bottom:15px;
+}
+
+.setting-card input{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+margin-bottom:12px;
+font-size:14px;
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.stat-card{
+background:#fff;
+padding:25px;
+border-radius:18px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.stat-card h2{
+margin-top:10px;
+color:#22c55e;
+}
+
+.total-persen{
+margin-top:10px;
+font-weight:700;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<h1>⚙️ Pengaturan Platform PasarNusa</h1>
+
+<p style="margin-bottom:25px;">
+Kelola seluruh konfigurasi marketplace dari satu halaman.
+</p>
+
+<!-- Statistik -->
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<p>Total UMKM</p>
+<h2 id="totalUmkm">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Total Affiliate</p>
+<h2 id="totalAffiliate">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Total Produk</p>
+<h2 id="totalProduk">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Total Pesanan</p>
+<h2 id="totalPesanan">0</h2>
+</div>
+
+</div>
+
+<div class="setting-grid">
+
+<!-- Komisi Marketplace -->
+
+<div class="setting-card">
+
+<h3>💰 Pembagian Komisi</h3>
+
+<input
+type="number"
+id="persenUmkm"
+placeholder="Persentase UMKM">
+
+<input
+type="number"
+id="persenAffiliate"
+placeholder="Persentase Affiliate">
+
+<input
+type="number"
+id="persenSubsidi"
+placeholder="Persentase Subsidi Ongkir">
+
+<input
+type="number"
+id="persenPlatform"
+placeholder="Persentase Platform">
+
+<div
+id="totalPersen"
+class="total-persen">
+
+Total: 0%
+
+</div>
+
+</div>
+
+<!-- Affiliate -->
+
+<div class="setting-card">
+
+<h3>👥 Affiliate</h3>
+
+<input
+type="number"
+id="minimalPencairan"
+placeholder="Minimal Pencairan">
+
+<input
+type="number"
+id="komisiDefault"
+placeholder="Komisi Default (%)">
+
+<input
+type="number"
+id="cookieAffiliate"
+placeholder="Durasi Cookie (Hari)">
+
+</div>
+
+<!-- Marketplace -->
+
+<div class="setting-card">
+
+<h3>🛒 Marketplace</h3>
+
+<input
+type="number"
+id="minimalBelanja"
+placeholder="Minimal Belanja">
+
+<input
+type="number"
+id="voucherBaru"
+placeholder="Voucher Pengguna Baru">
+
+<input
+type="number"
+id="maksProdukUmkm"
+placeholder="Maksimal Produk per UMKM">
+
+</div>
+
+<!-- Ongkir -->
+
+<div class="setting-card">
+
+<h3>🚚 Ongkir</h3>
+
+<input
+type="number"
+id="ongkirTulungagung"
+placeholder="Ongkir Tulungagung">
+
+<input
+type="number"
+id="ongkirBlitar"
+placeholder="Ongkir Blitar">
+
+<input
+type="number"
+id="ongkirKediri"
+placeholder="Ongkir Kediri">
+
+<input
+type="number"
+id="ongkirTrenggalek"
+placeholder="Ongkir Trenggalek">
+
+</div>
+
+</div>
+
+<div class="setting-card">
+
+<h3>📋 Informasi Perubahan</h3>
+
+<p>
+Terakhir diperbarui:
+<span id="updatedAt">-</span>
+</p>
+
+<p>
+Diperbarui oleh:
+<span id="updatedBy">-</span>
+</p>
+
+</div>
+
+<br>
+
+<button
+id="btnSimpan"
+class="btn-primary">
+
+💾 Simpan Pengaturan
+
+</button>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href = "login.html";
+
+throw new Error("Belum login");
+
+}
+
+const userRef =
+doc(
+db,
+"users",
+auth.currentUser.uid
+);
+
+const userSnap =
+await getDoc(userRef);
+
+if(
+!userSnap.exists() ||
+userSnap.data().role !== "admin"
+){
+
+alert(
+"Akses khusus admin"
+);
+
+window.location.href =
+"index.html";
+
+throw new Error(
+"Bukan admin"
+);
+
+}
+
+/* =========================
+   STATISTIK MARKETPLACE
+========================= */
+
+const umkmSnap =
+await getDocs(
+collection(db,"umkm")
+);
+
+const affiliateSnap =
+await getDocs(
+collection(db,"affiliate")
+);
+
+const produkSnap =
+await getDocs(
+collection(db,"produk")
+);
+
+const pesananSnap =
+await getDocs(
+collection(db,"pesanan")
+);
+
+document.getElementById(
+"totalUmkm"
+).innerText =
+umkmSnap.size;
+
+document.getElementById(
+"totalAffiliate"
+).innerText =
+affiliateSnap.size;
+
+document.getElementById(
+"totalProduk"
+).innerText =
+produkSnap.size;
+
+document.getElementById(
+"totalPesanan"
+).innerText =
+pesananSnap.size;
+
+/* =========================
+   LOAD PENGATURAN
+========================= */
+
+const settingSnap =
+await getDoc(settingRef);
+
+if(settingSnap.exists()){
+
+const data =
+settingSnap.data();
+
+document.getElementById(
+"persenUmkm"
+).value =
+data.persenUmkm || 90;
+
+document.getElementById(
+"persenAffiliate"
+).value =
+data.persenAffiliate || 5;
+
+document.getElementById(
+"persenSubsidi"
+).value =
+data.persenSubsidi || 3;
+
+document.getElementById(
+"persenPlatform"
+).value =
+data.persenPlatform || 2;
+
+document.getElementById(
+"minimalPencairan"
+).value =
+data.minimalPencairan || 50000;
+
+document.getElementById(
+"komisiDefault"
+).value =
+data.komisiDefault || 5;
+
+document.getElementById(
+"cookieAffiliate"
+).value =
+data.cookieAffiliate || 30;
+
+document.getElementById(
+"minimalBelanja"
+).value =
+data.minimalBelanja || 0;
+
+document.getElementById(
+"voucherBaru"
+).value =
+data.voucherBaru || 10000;
+
+document.getElementById(
+"maksProdukUmkm"
+).value =
+data.maksProdukUmkm || 100;
+
+document.getElementById(
+"ongkirTulungagung"
+).value =
+data.ongkirTulungagung || 5000;
+
+document.getElementById(
+"ongkirBlitar"
+).value =
+data.ongkirBlitar || 10000;
+
+document.getElementById(
+"ongkirKediri"
+).value =
+data.ongkirKediri || 12000;
+
+document.getElementById(
+"ongkirTrenggalek"
+).value =
+data.ongkirTrenggalek || 15000;
+
+document.getElementById(
+"updatedBy"
+).innerText =
+data.updatedBy || "-";
+
+document.getElementById(
+"updatedAt"
+).innerText =
+data.updatedAt?.seconds
+?
+new Date(
+data.updatedAt.seconds * 1000
+).toLocaleString("id-ID")
+:
+"-";
+
+}
+
+/* =========================
+   TOTAL PERSEN REALTIME
+========================= */
+
+function updateTotalPersen(){
+
+const total =
+
+Number(
+document.getElementById(
+"persenUmkm"
+).value || 0
+)
+
++
+
+Number(
+document.getElementById(
+"persenAffiliate"
+).value || 0
+)
+
++
+
+Number(
+document.getElementById(
+"persenSubsidi"
+).value || 0
+)
+
++
+
+Number(
+document.getElementById(
+"persenPlatform"
+).value || 0
+);
+
+const target =
+document.getElementById(
+"totalPersen"
+);
+
+target.innerText =
+"Total: " + total + "%";
+
+if(total === 100){
+
+target.style.color =
+"#22c55e";
+
+}else{
+
+target.style.color =
+"#ef4444";
+
+}
+
+}
+
+[
+"persenUmkm",
+"persenAffiliate",
+"persenSubsidi",
+"persenPlatform"
+]
+.forEach((id)=>{
+
+document
+.getElementById(id)
+.addEventListener(
+"input",
+updateTotalPersen
+);
+
+});
+
+updateTotalPersen();
+
+/* =========================
+   SIMPAN
+========================= */
+
+document
+.getElementById(
+"btnSimpan"
+)
+.addEventListener(
+"click",
+async()=>{
+
+const btn =
+document.getElementById(
+"btnSimpan"
+);
+
+const persenUmkm =
+Number(
+document.getElementById(
+"persenUmkm"
+).value
+);
+
+const persenAffiliate =
+Number(
+document.getElementById(
+"persenAffiliate"
+).value
+);
+
+const persenSubsidi =
+Number(
+document.getElementById(
+"persenSubsidi"
+).value
+);
+
+const persenPlatform =
+Number(
+document.getElementById(
+"persenPlatform"
+).value
+);
+
+const totalPersen =
+
+persenUmkm +
+persenAffiliate +
+persenSubsidi +
+persenPlatform;
+
+if(totalPersen !== 100){
+
+alert(
+"Total persentase harus tepat 100%"
+);
+
+return;
+
+}
+
+try{
+
+btn.disabled = true;
+
+btn.innerText =
+"Menyimpan...";
+
+await setDoc(
+settingRef,
+{
+
+persenUmkm,
+persenAffiliate,
+persenSubsidi,
+persenPlatform,
+
+minimalPencairan:
+Number(
+document.getElementById(
+"minimalPencairan"
+).value
+),
+
+komisiDefault:
+Number(
+document.getElementById(
+"komisiDefault"
+).value
+),
+
+cookieAffiliate:
+Number(
+document.getElementById(
+"cookieAffiliate"
+).value
+),
+
+minimalBelanja:
+Number(
+document.getElementById(
+"minimalBelanja"
+).value
+),
+
+voucherBaru:
+Number(
+document.getElementById(
+"voucherBaru"
+).value
+),
+
+maksProdukUmkm:
+Number(
+document.getElementById(
+"maksProdukUmkm"
+).value
+),
+
+ongkirTulungagung:
+Number(
+document.getElementById(
+"ongkirTulungagung"
+).value
+),
+
+ongkirBlitar:
+Number(
+document.getElementById(
+"ongkirBlitar"
+).value
+),
+
+ongkirKediri:
+Number(
+document.getElementById(
+"ongkirKediri"
+).value
+),
+
+ongkirTrenggalek:
+Number(
+document.getElementById(
+"ongkirTrenggalek"
+).value
+),
+
+updatedBy:
+auth.currentUser.email,
+
+updatedAt:
+new Date()
+
+},
+{
+merge:true
+}
+);
+
+alert(
+"Pengaturan berhasil disimpan"
+);
+
+location.reload();
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"Gagal menyimpan pengaturan"
+);
+
+}
+finally{
+
+btn.disabled = false;
+
+btn.innerText =
+"💾 Simpan Pengaturan";
+
+}
+
+}
+);
+
+</script>
+
+</body>
+</html>
