@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Tambah Produk - PasarNusa</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -20,7 +18,7 @@ rel="stylesheet">
 
 <section class="product-form">
 
-<h1>Tambah Produk</h1>
+<h1>➕ Tambah Produk</h1>
 
 <div class="form-card">
 
@@ -37,45 +35,80 @@ placeholder="Harga Produk">
 <input
 type="number"
 id="stokProduk"
-placeholder="Stok Produk">
+placeholder="Jumlah Stok">
 
-<input
-type="text"
-id="kategoriProduk"
-placeholder="Kategori">
+<select id="kategoriProduk">
+
+<option value="">
+Pilih Kategori
+</option>
+
+<option value="Makanan">
+Makanan
+</option>
+
+<option value="Minuman">
+Minuman
+</option>
+
+<option value="Kerajinan">
+Kerajinan
+</option>
+
+<option value="Fashion">
+Fashion
+</option>
+
+<option value="Lainnya">
+Lainnya
+</option>
+
+</select>
 
 <textarea
 id="deskripsiProduk"
 placeholder="Deskripsi Produk">
 </textarea>
+
 <input
 type="file"
 id="productImage"
 accept="image/*"
 multiple>
+
 <div id="previewContainer"></div>
 
-<button id="simpanProduk">
+<button
+id="simpanProduk"
+class="btn-primary">
+
 Simpan Produk
+
 </button>
 
 </div>
 
 </section>
-<script type="module" src="script.js"></script>
+
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 getFirestore,
 collection,
-addDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+addDoc,
+doc,
+getDoc,
+serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
 getAuth
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
 getStorage,
@@ -84,28 +117,44 @@ uploadBytes,
 getDownloadURL
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-  authDomain: "pasarnusa-18aa0.firebaseapp.com",
-  projectId: "pasarnusa-18aa0",
-  storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-  messagingSenderId: "866998011671",
-  appId: "1:866998011671:web:5555115feb82741ab55952"
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_AUTH_DOMAIN",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_STORAGE_BUCKET",
+messagingSenderId:"YOUR_SENDER_ID",
+appId:"YOUR_APP_ID"
+
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
+
 const auth = getAuth(app);
+
 const storage = getStorage(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
 const imageInput =
 document.getElementById("productImage");
 
 const previewContainer =
 document.getElementById("previewContainer");
 
-if(imageInput && previewContainer){
-
-imageInput.addEventListener("change",(e)=>{
+imageInput.addEventListener(
+"change",
+(e)=>{
 
 previewContainer.innerHTML = "";
 
@@ -130,24 +179,129 @@ previewContainer.appendChild(img);
 
 });
 
-}
-document.getElementById("simpanProduk")
-.addEventListener("click", async () => {
+document
+.getElementById("simpanProduk")
+.addEventListener(
+"click",
+async()=>{
 
-try {
-
-const files =
+const btn =
 document.getElementById(
-"productImage"
-).files;
+"simpanProduk"
+);
 
-if(files.length === 0){
+try{
 
-alert("Pilih gambar produk");
+const nama =
+document.getElementById(
+"namaProduk"
+).value.trim();
+
+const harga =
+document.getElementById(
+"hargaProduk"
+).value;
+
+const stok =
+document.getElementById(
+"stokProduk"
+).value;
+
+const kategori =
+document.getElementById(
+"kategoriProduk"
+).value;
+
+const deskripsi =
+document.getElementById(
+"deskripsiProduk"
+).value.trim();
+
+if(
+!nama ||
+!harga ||
+!stok ||
+!kategori ||
+!deskripsi
+){
+
+alert(
+"Lengkapi semua data"
+);
 
 return;
 
 }
+
+const files =
+imageInput.files;
+
+if(files.length === 0){
+
+alert(
+"Pilih minimal 1 foto"
+);
+
+return;
+
+}
+
+if(files.length > 5){
+
+alert(
+"Maksimal 5 foto"
+);
+
+return;
+
+}
+
+for(const file of files){
+
+if(
+!file.type.startsWith(
+"image/"
+)
+){
+
+alert(
+"File harus berupa gambar"
+);
+
+return;
+
+}
+
+if(
+file.size >
+2 * 1024 * 1024
+){
+
+alert(
+"Ukuran foto maksimal 2 MB"
+);
+
+return;
+
+}
+
+}
+
+btn.disabled = true;
+btn.innerText = "Mengupload...";
+
+const userDoc =
+await getDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+)
+);
+
+const userData =
+userDoc.data();
+
 let imageUrls = [];
 
 for(const file of files){
@@ -174,56 +328,76 @@ storageRef
 imageUrls.push(url);
 
 }
-if(!auth.currentUser){
 
-alert("Silakan login terlebih dahulu");
+await addDoc(
+collection(
+db,
+"produk"
+),
+{
 
-return;
+uid:
+auth.currentUser.uid,
+
+namaToko:
+userData.namaUmkm,
+
+whatsapp:
+userData.whatsapp,
+
+namaProduk:nama,
+
+harga:Number(harga),
+
+stok:Number(stok),
+
+kategori:kategori,
+
+deskripsi:deskripsi,
+
+gambar:imageUrls,
+
+rating:0,
+
+totalReview:0,
+
+terjual:0,
+
+status:"Aktif",
+
+createdAt:
+serverTimestamp()
 
 }
-await addDoc(collection(db,"produk"), {
-whatsapp:
-localStorage.getItem("whatsapp"),
-namaToko:
-localStorage.getItem("namaUmkm"),
-uid: auth.currentUser?.uid,
-namaProduk:
-document.getElementById("namaProduk").value,
+);
 
-harga:
-Number(
-document.getElementById("hargaProduk").value
-),
-
-stok:
-Number(
-document.getElementById("stokProduk").value
-),
-
-kategori:
-document.getElementById("kategoriProduk").value,
-
-deskripsi:
-document.getElementById("deskripsiProduk").value,
-gambar: imageUrls,
-createdAt: new Date(),
-terjual: 0
-
-});
-
-alert("Produk berhasil disimpan");
+alert(
+"Produk berhasil ditambahkan"
+);
 
 window.location.href =
 "dashboard-produk.html";
 
-} catch(error){
+}
+catch(error){
 
-alert(error.message);
+console.error(error);
+
+alert(
+"Gagal menambahkan produk"
+);
+
+}
+finally{
+
+btn.disabled = false;
+btn.innerText = "Simpan Produk";
 
 }
 
 });
 
 </script>
+
 </body>
 </html>
