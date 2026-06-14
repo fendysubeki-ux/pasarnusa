@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Beri Ulasan - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><h1>⭐ Beri Ulasan</h1><p style="text-align:center;margin-bottom:30px;">
+Bagikan pengalaman Anda setelah menerima pesanan.
+</p><div class="form-card"><div class="dashboard-card"><div style="
+display:flex;
+gap:15px;
+align-items:center;
+"><img
+id="gambarProduk"
+src="https://picsum.photos/200"
+style="
+width:90px;
+height:90px;
+border-radius:16px;
+object-fit:cover;
+">
+
+<div><h3 id="namaProduk">
+Memuat Produk...
+</h3><p id="namaToko">
+PasarNusa Store
+</p><p id="hargaProduk">
+Rp 0
+</p></div></div></div><label>Rating Produk</label>
+
+<div class="rating-container"><button class="rating-btn" data-rating="1">⭐</button>
+<button class="rating-btn" data-rating="2">⭐</button>
+<button class="rating-btn" data-rating="3">⭐</button>
+<button class="rating-btn" data-rating="4">⭐</button>
+<button class="rating-btn" data-rating="5">⭐</button>
+
+</div><p id="ratingText">
+Pilih rating
+</p><input
+type="hidden"
+id="rating"
+value="5">
+
+<label>Judul Ulasan</label>
+
+<input
+type="text"
+id="judulUlasan"
+placeholder="Contoh: Produk sangat bagus">
+
+<label>Ulasan Anda</label>
+
+<textarea
+id="ulasan"
+maxlength="500"
+placeholder="Ceritakan pengalaman Anda menggunakan produk ini...">
+</textarea><div style="
+display:flex;
+justify-content:space-between;
+margin-top:8px;
+"><small>
+Minimal 20 karakter
+</small><small id="counter">
+0 / 500
+</small></div><label>Foto Ulasan (Opsional)</label>
+
+<input
+type="file"
+id="fotoReview"
+accept="image/*">
+
+<img
+id="previewReview"
+style="
+display:none;
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:12px;
+margin-top:10px;
+">
+
+<div class="dashboard-card"><h3>Pesanan</h3><p>
+No Pesanan:
+<b id="nomorPesanan">
+-
+</b>
+</p><p>
+Status:
+<b>
+Selesai
+</b>
+</p></div><button
+id="kirimReview"
+class="btn-primary">
+
+⭐ Kirim Ulasan
+
+</button><a
+href="pesanan-saya.html"
+class="btn-secondary">
+
+Kembali
+
+</a></div></section><script>
+
+let rating = 5;
+
+document
+.querySelectorAll(".rating-btn")
+.forEach((btn)=>{
+
+btn.addEventListener(
+"click",
+()=>{
+
+rating =
+Number(
+btn.dataset.rating
+);
+
+document.getElementById(
+"rating"
+).value =
+rating;
+
+const teks = [
+"",
+"Sangat Buruk",
+"Kurang Puas",
+"Cukup",
+"Puas",
+"Sangat Puas"
+];
+
+document.getElementById(
+"ratingText"
+).innerText =
+teks[rating];
+
+});
+
+});
+
+document
+.getElementById("ulasan")
+.addEventListener(
+"input",
+(e)=>{
+
+document.getElementById(
+"counter"
+).innerText =
+e.target.value.length +
+" / 500";
+
+}
+);
+
+document
+.getElementById("fotoReview")
+.addEventListener(
+"change",
+(e)=>{
+
+const file =
+e.target.files[0];
+
+if(!file) return;
+
+const preview =
+document.getElementById(
+"previewReview"
+);
+
+preview.src =
+URL.createObjectURL(file);
+
+preview.style.display =
+"block";
+
+}
+);
+
+</script></body>
+</html>
