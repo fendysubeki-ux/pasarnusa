@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Chat PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="chat-page"><!-- Header Chat --><div class="chat-header"><div class="chat-user"><img
+id="fotoToko"
+src="https://picsum.photos/100"
+class="chat-avatar">
+
+<div><h3 id="namaToko">
+Toko PasarNusa
+</h3><p id="statusOnline">
+🟢 Online
+</p></div></div><a
+href="index.html"
+class="btn-secondary">
+
+Kembali
+
+</a></div><!-- Produk yang dibahas --><div class="chat-product-card"><img
+id="gambarProduk"
+src="https://picsum.photos/150">
+
+<div><h4 id="namaProduk">
+Produk UMKM
+</h4><p id="hargaProduk">
+Rp 0
+</p><a
+id="detailProduk"
+href="#">
+
+Lihat Produk
+
+</a></div></div><!-- Area Chat --><div
+id="chatContainer"
+class="chat-container"><div class="chat-system">
+Mulai percakapan dengan penjual
+</div></div><!-- Input --><div class="chat-input-area"><input
+type="text"
+id="pesanInput"
+placeholder="Tulis pesan...">
+
+<button
+id="kirimPesan"
+class="btn-primary">
+
+Kirim
+
+</button></div></section><script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+query,
+orderBy,
+onSnapshot,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_PROJECT.appspot.com",
+messagingSenderId:"YOUR_SENDER_ID",
+appId:"YOUR_APP_ID"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const roomId =
+params.get("room");
+
+const produkId =
+params.get("produk");
+
+if(!roomId){
+
+alert(
+"Room chat tidak ditemukan"
+);
+
+window.location.href =
+"index.html";
+
+}
+
+/* Ambil Produk */
+
+if(produkId){
+
+const produkSnap =
+await getDoc(
+doc(db,"produk",produkId)
+);
+
+if(produkSnap.exists()){
+
+const produk =
+produkSnap.data();
+
+document.getElementById(
+"namaProduk"
+).innerText =
+produk.namaProduk;
+
+document.getElementById(
+"hargaProduk"
+).innerText =
+"Rp " +
+Number(
+produk.harga
+).toLocaleString("id-ID");
+
+document.getElementById(
+"gambarProduk"
+).src =
+produk.gambar?.[0] ||
+"https://picsum.photos/150";
+
+document.getElementById(
+"detailProduk"
+).href =
+"produk-detail.html?id=" +
+produkId;
+
+}
+
+}
+
+/* Chat */
+
+const container =
+document.getElementById(
+"chatContainer"
+);
+
+const q =
+query(
+collection(
+db,
+"chat_rooms",
+roomId,
+"messages"
+),
+orderBy(
+"createdAt"
+)
+);
+
+onSnapshot(q,(snapshot)=>{
+
+container.innerHTML = "";
+
+snapshot.forEach((item)=>{
+
+const data =
+item.data();
+
+const saya =
+data.uid ===
+auth.currentUser.uid;
+
+container.innerHTML += `
+
+<div class="
+${saya ? "chat-right" : "chat-left"}
+">
+
+<div class="chat-bubble">
+
+${data.pesan}
+
+</div>
+
+<div class="chat-time">
+
+${
+data.createdAt?.seconds
+?
+new Date(
+data.createdAt.seconds * 1000
+).toLocaleTimeString("id-ID")
+:
+""
+}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+container.scrollTop =
+container.scrollHeight;
+
+});
+
+async function kirimPesan(){
+
+const input =
+document.getElementById(
+"pesanInput"
+);
+
+const pesan =
+input.value.trim();
+
+if(!pesan) return;
+
+await addDoc(
+collection(
+db,
+"chat_rooms",
+roomId,
+"messages"
+),
+{
+uid:
+auth.currentUser.uid,
+
+nama:
+auth.currentUser.email,
+
+pesan:
+pesan,
+
+createdAt:
+new Date()
+}
+);
+
+input.value = "";
+
+}
+
+document
+.getElementById(
+"kirimPesan"
+)
+.addEventListener(
+"click",
+kirimPesan
+);
+
+document
+.getElementById(
+"pesanInput"
+)
+.addEventListener(
+"keydown",
+(e)=>{
+
+if(e.key === "Enter"){
+
+kirimPesan();
+
+}
+
+}
+);
+
+</script></body></html>
