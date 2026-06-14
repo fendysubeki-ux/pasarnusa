@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Riwayat Toko</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.riwayat-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:15px;
+margin-bottom:25px;
+}
+
+.store-card{
+background:#fff;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.05);
+text-align:center;
+}
+
+.store-logo{
+width:90px;
+height:90px;
+border-radius:50%;
+object-fit:cover;
+margin:auto;
+display:block;
+margin-bottom:15px;
+}
+
+.store-actions{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+.store-actions a,
+.store-actions button{
+flex:1;
+}
+
+.search-box{
+width:100%;
+padding:14px;
+border:1px solid #e5e7eb;
+border-radius:14px;
+margin-bottom:20px;
+}
+
+.empty-state{
+text-align:center;
+padding:50px 20px;
+}
+
+</style>
+
+</head>
+<body>
+
+<section class="dashboard">
+
+<div class="riwayat-header">
+
+<div>
+
+<h1>🕒 Riwayat Toko</h1>
+
+<p>
+Toko yang pernah Anda kunjungi
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="jumlahRiwayat">
+0
+</h3>
+
+<p>Total Riwayat</p>
+
+</div>
+
+</div>
+
+<input
+type="text"
+id="searchInput"
+class="search-box"
+placeholder="Cari toko...">
+
+<button
+id="hapusSemua"
+class="btn-secondary">
+
+🗑 Hapus Semua Riwayat
+
+</button>
+
+<br><br>
+
+<div
+id="riwayatContainer"
+class="dashboard-grid">
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const container =
+document.getElementById(
+"riwayatContainer"
+);
+
+let riwayat =
+JSON.parse(
+localStorage.getItem(
+"riwayatToko"
+)
+) || [];
+
+let semuaToko = [];
+
+document.getElementById(
+"jumlahRiwayat"
+).innerText =
+riwayat.length;
+
+async function loadData(){
+
+if(riwayat.length === 0){
+
+container.innerHTML = `
+
+<div class="empty-state">
+
+<h2>
+Belum Ada Riwayat
+</h2>
+
+<p>
+Anda belum pernah membuka toko.
+</p>
+
+<a
+href="index.html"
+class="btn-primary">
+
+Jelajahi Marketplace
+
+</a>
+
+</div>
+
+`;
+
+return;
+
+}
+
+const snapshot =
+await getDocs(
+collection(db,"umkm")
+);
+
+snapshot.forEach((doc)=>{
+
+const toko = doc.data();
+
+if(
+riwayat.includes(
+toko.uid
+)
+){
+
+semuaToko.push(toko);
+
+}
+
+});
+
+renderData();
+
+}
+
+function renderData(){
+
+const keyword =
+document
+.getElementById(
+"searchInput"
+)
+.value
+.toLowerCase();
+
+container.innerHTML = "";
+
+const hasil =
+semuaToko.filter((toko)=>{
+
+return (
+toko.namaUmkm || ""
+)
+.toLowerCase()
+.includes(keyword);
+
+});
+
+if(hasil.length === 0){
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+Toko Tidak Ditemukan
+</h3>
+
+</div>
+
+`;
+
+return;
+
+}
+
+hasil.forEach((toko)=>{
+
+container.innerHTML += `
+
+<div
+class="store-card">
+
+<img
+src="${
+toko.logo ||
+'https://picsum.photos/300'
+}"
+class="store-logo">
+
+<h3>
+${toko.namaUmkm}
+</h3>
+
+<p>
+${toko.deskripsi || ''}
+</p>
+
+<p>
+⭐ ${toko.ratingToko || 0}
+</p>
+
+<div class="store-actions">
+
+<a
+href="toko.html?uid=${toko.uid}"
+class="btn-primary">
+
+Kunjungi
+
+</a>
+
+<button
+onclick="hapusRiwayat('${toko.uid}')"
+class="btn-secondary">
+
+Hapus
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+window.hapusRiwayat =
+function(uid){
+
+riwayat =
+riwayat.filter(
+item => item !== uid
+);
+
+localStorage.setItem(
+"riwayatToko",
+JSON.stringify(riwayat)
+);
+
+semuaToko =
+semuaToko.filter(
+item => item.uid !== uid
+);
+
+document.getElementById(
+"jumlahRiwayat"
+).innerText =
+riwayat.length;
+
+renderData();
+
+};
+
+document
+.getElementById(
+"hapusSemua"
+)
+.addEventListener(
+"click",
+()=>{
+
+if(
+!confirm(
+"Hapus semua riwayat?"
+)
+){
+return;
+}
+
+localStorage.removeItem(
+"riwayatToko"
+);
+
+location.reload();
+
+}
+);
+
+document
+.getElementById(
+"searchInput"
+)
+.addEventListener(
+"input",
+renderData
+);
+
+loadData();
+
+</script>
+
+</body>
+</html>
