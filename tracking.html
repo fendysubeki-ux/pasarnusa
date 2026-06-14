@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tracking Pesanan - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+font-family:'Plus Jakarta Sans',sans-serif;
+background:#f8fafc;
+margin:0;
+}
+
+.tracking-section{
+max-width:900px;
+margin:auto;
+padding:30px 20px;
+}
+
+.page-title{
+font-size:32px;
+font-weight:800;
+margin-bottom:25px;
+}
+
+.card{
+background:white;
+border-radius:20px;
+padding:25px;
+margin-bottom:20px;
+box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.status-badge{
+display:inline-block;
+padding:8px 15px;
+border-radius:999px;
+background:#dcfce7;
+color:#166534;
+font-weight:700;
+}
+
+.timeline{
+position:relative;
+margin-top:20px;
+}
+
+.timeline::before{
+content:"";
+position:absolute;
+left:21px;
+top:0;
+bottom:0;
+width:3px;
+background:#e5e7eb;
+}
+
+.step{
+position:relative;
+padding-left:60px;
+margin-bottom:25px;
+}
+
+.step-circle{
+position:absolute;
+left:0;
+top:0;
+width:45px;
+height:45px;
+border-radius:50%;
+background:#d1d5db;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+}
+
+.step.active .step-circle{
+background:#22c55e;
+color:white;
+}
+
+.step h3{
+margin:0 0 5px;
+}
+
+.action-group{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:20px;
+}
+
+.btn{
+padding:12px 18px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:700;
+text-decoration:none;
+}
+
+.btn-primary{
+background:#22c55e;
+color:white;
+}
+
+.btn-secondary{
+background:#e5e7eb;
+color:#111827;
+}
+
+</style>
+</head>
+<body>
+
+<section class="tracking-section">
+
+<h1 class="page-title">
+📦 Tracking Pesanan
+</h1>
+
+<div id="trackingContainer">
+
+<div class="card">
+Memuat data pesanan...
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"API_KEY",
+authDomain:"PROJECT.firebaseapp.com",
+projectId:"PROJECT_ID",
+storageBucket:"PROJECT.appspot.com",
+messagingSenderId:"SENDER_ID",
+appId:"APP_ID"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const params =
+new URLSearchParams(window.location.search);
+
+const pesananId =
+params.get("id");
+
+const container =
+document.getElementById("trackingContainer");
+
+const statusList = [
+"Belum Bayar",
+"Menunggu Verifikasi",
+"Diproses",
+"Dikirim",
+"Selesai"
+];
+
+const iconList = [
+"💳",
+"🧾",
+"📦",
+"🚚",
+"✅"
+];
+
+async function loadTracking(){
+
+try{
+
+const snap =
+await getDoc(
+doc(db,"pesanan",pesananId)
+);
+
+if(!snap.exists()){
+
+container.innerHTML = `
+<div class="card">
+Pesanan tidak ditemukan
+</div>
+`;
+
+return;
+
+}
+
+const data =
+snap.data();
+
+const current =
+statusList.indexOf(
+data.status
+);
+
+let timeline = "";
+
+statusList.forEach((status,index)=>{
+
+timeline += `
+
+<div class="step ${
+index <= current
+? "active"
+: ""
+}">
+
+<div class="step-circle">
+${iconList[index]}
+</div>
+
+<h3>${status}</h3>
+
+<p>Status pesanan</p>
+
+</div>
+
+`;
+
+});
+
+container.innerHTML = `
+
+<div class="card">
+
+<h2>
+Pesanan #${pesananId.slice(0,8)}
+</h2>
+
+<p>
+Status:
+<span class="status-badge">
+${data.status}
+</span>
+</p>
+
+<p>
+🚚 Kurir:
+<b>${data.kurir || "-"}</b>
+</p>
+
+<p>
+📦 Resi:
+<b>${data.resi || "-"}</b>
+</p>
+
+<p>
+💰 Total:
+Rp ${Number(
+data.totalBayar || 0
+).toLocaleString("id-ID")}
+</p>
+
+<div class="action-group">
+
+<button
+class="btn btn-secondary"
+onclick="navigator.clipboard.writeText('${data.resi || ""}')">
+
+Salin Resi
+
+</button>
+
+<a
+href="https://wa.me/${data.whatsappPenjual || ''}"
+target="_blank"
+class="btn btn-primary">
+
+Hubungi Penjual
+
+</a>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Riwayat Pengiriman</h2>
+
+<div class="timeline">
+
+${timeline}
+
+</div>
+
+</div>
+
+`;
+
+}catch(error){
+
+container.innerHTML = `
+<div class="card">
+Gagal memuat data tracking
+</div>
+`;
+
+console.error(error);
+
+}
+
+}
+
+loadTracking();
+
+</script>
+
+</body>
+</html>
