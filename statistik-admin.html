@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Statistik Admin - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.filter-bar{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+.filter-bar select,
+.filter-bar button{
+padding:12px;
+border-radius:12px;
+border:1px solid #ddd;
+}
+
+.rank-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 0;
+border-bottom:1px solid #eee;
+}
+
+.rank-item:last-child{
+border-bottom:none;
+}
+
+</style>
+
+</head>
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+<h1>📊 Statistik Marketplace</h1>
+<p>Analitik dan performa PasarNusa</p>
+</div>
+
+<a href="admin.html" class="btn-secondary">
+⬅ Dashboard Admin
+</a>
+
+</div>
+
+<div class="filter-bar">
+
+<select id="filterPeriode">
+
+<option value="all">Semua Data</option>
+<option value="today">Hari Ini</option>
+<option value="month">Bulan Ini</option>
+<option value="year">Tahun Ini</option>
+
+</select>
+
+<button onclick="location.reload()">
+🔄 Refresh
+</button>
+
+</div>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+<h3 id="totalUmkm">0</h3>
+<p>Total UMKM</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalProduk">0</h3>
+<p>Total Produk</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalPesanan">0</h3>
+<p>Total Pesanan</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalAffiliate">0</h3>
+<p>Total Affiliate</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalOmzet">Rp 0</h3>
+<p>Total Omzet</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalPlatform">Rp 0</h3>
+<p>Pendapatan Platform</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalKomisi">Rp 0</h3>
+<p>Komisi Affiliate</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalSubsidi">Rp 0</h3>
+<p>Subsidi Ongkir</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalPendapatanUmkm">Rp 0</h3>
+<p>Pendapatan UMKM</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="rataTransaksi">Rp 0</h3>
+<p>Rata-rata Transaksi</p>
+</div>
+
+</div>
+
+<h2 style="margin-top:30px;">
+📦 Status Pesanan
+</h2>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+<h3 id="belumBayar">0</h3>
+<p>Belum Bayar</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="menunggu">0</h3>
+<p>Verifikasi</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="diproses">0</h3>
+<p>Diproses</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="dikirim">0</h3>
+<p>Dikirim</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="selesai">0</h3>
+<p>Selesai</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="ditolak">0</h3>
+<p>Ditolak</p>
+</div>
+
+</div>
+
+<h2 style="margin-top:30px;">
+🏪 Top UMKM
+</h2>
+
+<div class="dashboard-card">
+
+<div id="topUmkm">
+
+<p>Memuat data...</p>
+
+</div>
+
+</div>
+
+<h2 style="margin-top:30px;">
+🔥 Produk Terlaris
+</h2>
+
+<div class="dashboard-card">
+
+<div id="topProduk">
+
+<p>Memuat data...</p>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const umkmSnap =
+await getDocs(collection(db,"umkm"));
+
+const produkSnap =
+await getDocs(collection(db,"produk"));
+
+const pesananSnap =
+await getDocs(collection(db,"pesanan"));
+
+const affiliateSnap =
+await getDocs(collection(db,"users"));
+
+let omzet = 0;
+let komisi = 0;
+let platform = 0;
+let subsidi = 0;
+let umkmPendapatan = 0;
+
+let belumBayar = 0;
+let menunggu = 0;
+let diproses = 0;
+let dikirim = 0;
+let selesai = 0;
+let ditolak = 0;
+
+const umkmMap = {};
+
+pesananSnap.forEach((doc)=>{
+
+const data = doc.data();
+
+omzet += Number(data.totalBayar || 0);
+komisi += Number(data.komisiAffiliate || 0);
+platform += Number(data.pendapatanPlatform || 0);
+subsidi += Number(data.subsidiOngkir || 0);
+umkmPendapatan += Number(data.bagianUmkm || 0);
+
+switch(data.status){
+
+case "Belum Bayar":
+belumBayar++;
+break;
+
+case "Menunggu Verifikasi":
+menunggu++;
+break;
+
+case "Diproses":
+diproses++;
+break;
+
+case "Dikirim":
+dikirim++;
+break;
+
+case "Selesai":
+selesai++;
+break;
+
+case "Ditolak":
+ditolak++;
+break;
+
+}
+
+if(data.uid){
+
+if(!umkmMap[data.uid]){
+umkmMap[data.uid] = 0;
+}
+
+umkmMap[data.uid] +=
+Number(data.totalBayar || 0);
+
+}
+
+});
+
+document.getElementById("totalUmkm").innerText =
+umkmSnap.size;
+
+document.getElementById("totalProduk").innerText =
+produkSnap.size;
+
+document.getElementById("totalPesanan").innerText =
+pesananSnap.size;
+
+document.getElementById("totalAffiliate").innerText =
+affiliateSnap.size;
+
+document.getElementById("totalOmzet").innerText =
+"Rp " + omzet.toLocaleString("id-ID");
+
+document.getElementById("totalPlatform").innerText =
+"Rp " + platform.toLocaleString("id-ID");
+
+document.getElementById("totalKomisi").innerText =
+"Rp " + komisi.toLocaleString("id-ID");
+
+document.getElementById("totalSubsidi").innerText =
+"Rp " + subsidi.toLocaleString("id-ID");
+
+document.getElementById("totalPendapatanUmkm").innerText =
+"Rp " + umkmPendapatan.toLocaleString("id-ID");
+
+document.getElementById("rataTransaksi").innerText =
+"Rp " +
+Math.round(
+omzet / Math.max(1,pesananSnap.size)
+).toLocaleString("id-ID");
+
+document.getElementById("belumBayar").innerText =
+belumBayar;
+
+document.getElementById("menunggu").innerText =
+menunggu;
+
+document.getElementById("diproses").innerText =
+diproses;
+
+document.getElementById("dikirim").innerText =
+dikirim;
+
+document.getElementById("selesai").innerText =
+selesai;
+
+document.getElementById("ditolak").innerText =
+ditolak;
+
+/* Top Produk */
+
+let produkArray = [];
+
+produkSnap.forEach((doc)=>{
+
+const data = doc.data();
+
+produkArray.push({
+nama:data.namaProduk,
+terjual:Number(data.terjual || 0)
+});
+
+});
+
+produkArray.sort(
+(a,b)=>b.terjual-a.terjual
+);
+
+const topProduk =
+document.getElementById("topProduk");
+
+topProduk.innerHTML = "";
+
+produkArray.slice(0,5)
+.forEach((item,index)=>{
+
+topProduk.innerHTML += `
+<div class="rank-item">
+<span>
+${index+1}. ${item.nama}
+</span>
+<b>${item.terjual}</b>
+</div>
+`;
+
+});
+
+/* Top UMKM */
+
+const topUmkm =
+document.getElementById("topUmkm");
+
+topUmkm.innerHTML = "";
+
+Object.entries(umkmMap)
+.sort((a,b)=>b[1]-a[1])
+.slice(0,5)
+.forEach((item,index)=>{
+
+topUmkm.innerHTML += `
+<div class="rank-item">
+<span>
+UMKM ${index+1}
+</span>
+<b>
+Rp ${item[1].toLocaleString("id-ID")}
+</b>
+</div>
+`;
+
+});
+
+</script>
+
+</body>
+</html>
