@@ -20,7 +20,9 @@ rel="stylesheet">
 
 <section class="dashboard">
 
-<h1>Dashboard Penjual</h1>
+<h1 id="judulDashboard">
+Dashboard Penjual
+</h1>
 
 <div class="dashboard-grid">
 
@@ -56,7 +58,10 @@ rel="stylesheet">
 <h3>Profil UMKM</h3>
 <p>Kelola data toko</p>
 </a>
-
+<a href="pengaturan-toko.html" class="dashboard-card">
+<h3>⚙️ Pengaturan Toko</h3>
+<p>Profil, QRIS & Rekening</p>
+</a>
 <a href="tambah-produk.html" class="dashboard-card">
 <h3>Tambah Produk</h3>
 <p>Tambah produk baru</p>
@@ -112,7 +117,9 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 collection,
-getDocs
+getDocs,
+doc,
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -142,13 +149,58 @@ await auth.authStateReady();
 
 if(!auth.currentUser){
 
-window.location.href =
-"login.html";
+window.location.href = "login.html";
 
 throw new Error("Belum login");
 
 }
 
+if(!auth.currentUser.emailVerified){
+
+alert("Silakan verifikasi email terlebih dahulu");
+
+await signOut(auth);
+
+window.location.href = "login.html";
+
+throw new Error("Email belum diverifikasi");
+
+}
+
+const userDoc =
+await getDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+)
+);
+
+if(
+!userDoc.exists() ||
+userDoc.data().role !== "umkm"
+){
+
+alert(
+"Akses khusus UMKM"
+);
+
+window.location.href =
+"index.html";
+
+throw new Error(
+"Bukan UMKM"
+);
+
+}
+document.getElementById(
+"judulDashboard"
+).innerText =
+"Dashboard " +
+(
+userDoc.data().namaUmkm ||
+"UMKM"
+);
 const produk =
 await getDocs(
 query(
@@ -188,8 +240,13 @@ pesanan.forEach((item)=>{
 
 const data = item.data();
 
+if(data.status === "selesai"){
+
 omzet +=
-Number(data.harga || 0);
+(Number(data.harga) || 0) *
+(Number(data.qty) || 1);
+
+}
 
 });
 
@@ -200,20 +257,21 @@ document.getElementById(
 omzet.toLocaleString("id-ID");
 const notif =
 await getDocs(
-collection(db,"notifikasi")
+query(
+collection(db,"notifikasi"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+)
+)
 );
 
 let totalNotif = 0;
 
 notif.forEach((item)=>{
 
-const data = item.data();
-
-if(
-auth.currentUser &&
-data.uid === auth.currentUser.uid &&
-!data.dibaca
-){
+if(!item.data().dibaca){
 
 totalNotif++;
 
@@ -251,15 +309,29 @@ data.namaProduk;
 document.getElementById(
 "produkTerlaris"
 ).innerText =
-produkTerlaris;
+produkTerlaris || "-";
+
+let pesananSelesai = 0;
+
+pesanan.forEach((item)=>{
+
+const data = item.data();
+
+if(data.status === "selesai"){
+
+pesananSelesai++;
+
+}
+
+});
 
 document.getElementById(
 "rataPesanan"
 ).innerText =
-pesanan.size > 0
+pesananSelesai > 0
 ?
 Math.round(
-omzet / pesanan.size
+omzet / pesananSelesai
 ).toLocaleString("id-ID")
 :
 0;
