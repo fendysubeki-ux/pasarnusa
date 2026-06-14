@@ -1,123 +1,111 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notifikasi</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pusat Notifikasi - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
+<body><!-- HEADER --><section class="dashboard"><h1>🔔 Pusat Notifikasi</h1><p>
+Semua aktivitas akun, toko, pesanan, affiliate, dan sistem PasarNusa.
+</p></section><!-- STATISTIK --><section class="dashboard"><div class="dashboard-grid"><div class="dashboard-card"><h2 id="totalNotif">
+0
+</h2><p>Total Notifikasi</p></div><div class="dashboard-card"><h2 id="notifBaru">
+0
+</h2><p>Belum Dibaca</p></div><div class="dashboard-card"><h2 id="notifPesanan">
+0
+</h2><p>Pesanan</p></div><div class="dashboard-card"><h2 id="notifAffiliate">
+0
+</h2><p>Affiliate</p></div><div class="dashboard-card"><h2 id="notifSistem">
+0
+</h2><p>Sistem</p></div></div></section><!-- FILTER --><section class="dashboard"><div style="
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-bottom:20px;
+"><input
+type="text"
+id="searchNotif"
+placeholder="Cari notifikasi..."
+class="search-box">
 
-<section class="dashboard">
+<select id="filterKategori"><option value="all">
+Semua Kategori
+</option><option value="Pesanan">
+Pesanan
+</option><option value="Affiliate">
+Affiliate
+</option><option value="UMKM">
+UMKM
+</option><option value="Sistem">
+Sistem
+</option></select><select id="filterStatus"><option value="all">
+Semua Status
+</option><option value="unread">
+Belum Dibaca
+</option><option value="read">
+Sudah Dibaca
+</option></select><button
+id="btnBacaSemua"
+class="btn-primary">
 
-<h1>Notifikasi</h1>
+✓ Tandai Semua Dibaca
 
-<div id="notifikasiContainer"
-class="dashboard-grid">
-</div>
+</button></div></section><!-- DAFTAR NOTIFIKASI --><section class="dashboard"><div
+id="notifikasiContainer"
+class="dashboard-grid"><p>Memuat notifikasi...</p></div></section><!-- CONTOH KARTU --><section class="dashboard"><h2>📌 Contoh Tampilan</h2><div class="dashboard-grid"><div class="dashboard-card notif-baru"><h3>
+📦 Pesanan Baru
+</h3><p>
+Anda menerima pesanan baru dari pelanggan.
+</p><small>
+10 Juni 2026 • 14:20 WIB
+</small><br><br>
 
-</section>
+<span class="status-badge">
+Belum Dibaca
+</span></div><div class="dashboard-card"><h3>
+🚚 Pesanan Dikirim
+</h3><p>
+Pesanan pelanggan berhasil dikirim.
+</p><small>
+09 Juni 2026 • 18:10 WIB
+</small><br><br>
 
-<script type="module">
+<span class="status-badge status-selesai">
+Sudah Dibaca
+</span></div><div class="dashboard-card"><h3>
+💰 Komisi Affiliate
+</h3><p>
+Komisi affiliate Rp25.000 berhasil masuk.
+</p><small>
+08 Juni 2026 • 09:00 WIB
+</small><br><br>
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+<span class="status-badge status-selesai">
+Sudah Dibaca
+</span></div></div></section><!-- EMPTY STATE --><section class="dashboard"><div class="dashboard-card"><h2>
+📭 Tidak Ada Notifikasi
+</h2><p>
+Saat ini belum ada pemberitahuan baru.
+</p></div></section><!-- JENIS NOTIFIKASI --><section class="dashboard"><h2>⚡ Kategori Notifikasi</h2><div class="dashboard-grid"><div class="dashboard-card"><h3>📦 Pesanan</h3><p>
+Pesanan baru, pembayaran, pengiriman, dan pesanan selesai.
+</p></div><div class="dashboard-card"><h3>💰 Affiliate</h3><p>
+Komisi masuk, pencairan komisi, dan referral.
+</p></div><div class="dashboard-card"><h3>🏪 UMKM</h3><p>
+Update produk, stok habis, dan performa toko.
+</p></div><div class="dashboard-card"><h3>⚙ Sistem</h3><p>
+Pengumuman, maintenance, promo, dan pembaruan platform.
+</p></div></div></section><!-- AKSI CEPAT --><section class="dashboard"><h2>⚡ Menu Cepat</h2><div class="dashboard-grid"><a
+href="dashboard.html"
+class="dashboard-card">
 
-import {
-getFirestore,
-collection,
-getDocs,
-updateDoc,
-doc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<h3>📊 Dashboard</h3><p>Lihat ringkasan akun</p></a><a
+href="pesanan-saya.html"
+class="dashboard-card">
 
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<h3>📦 Pesanan</h3><p>Lihat seluruh pesanan</p></a><a
+href="produk-saya.html"
+class="dashboard-card">
 
-const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
-};
+<h3>🛍 Produk</h3><p>Kelola produk UMKM</p></a><a
+href="dashboard-affiliate.html"
+class="dashboard-card">
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href =
-"login.html";
-
-}
-
-const container =
-document.getElementById(
-"notifikasiContainer"
-);
-
-const snapshot =
-await getDocs(
-collection(db,"notifikasi")
-);
-
-for(const item of snapshot.docs){
-
-const data = item.data();
-
-if(
-data.uid === auth.currentUser.uid
-){
-
-container.innerHTML += `
-
-<div class="dashboard-card ${
-data.dibaca ? "" : "notif-baru"
-}">
-
-<h3>${data.judul}</h3>
-
-<p>${data.pesan}</p>
-<p style="font-size:12px;opacity:.7;">
-${data.createdAt?.seconds
-? new Date(
-data.createdAt.seconds * 1000
-).toLocaleString("id-ID")
-: "-"
-}
-</p>
-</div>
-
-`;
-
-if(!data.dibaca){
-
-await updateDoc(
-doc(
-db,
-"notifikasi",
-item.id
-),
-{
-dibaca:true
-}
-);
-
-}
-
-}
-
-}
-
-</script>
-
-</body>
+<h3>💰 Affiliate</h3><p>Lihat komisi affiliate</p></a></div></section></body>
 </html>
