@@ -1,226 +1,104 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Edit Produk</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<section class="product-form">
-
-<h1>Edit Produk</h1>
-
-<div class="form-card">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Edit Produk - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
+</head><body><section class="dashboard"><h1>✏️ Edit Produk</h1><p style="margin-bottom:30px;">
+Perbarui informasi produk UMKM Anda.
+</p><div class="dashboard-grid"><div class="dashboard-card">
+<h3 id="ratingProduk">0</h3>
+<p>Rating Produk</p>
+</div><div class="dashboard-card">
+<h3 id="totalReview">0</h3>
+<p>Total Review</p>
+</div><div class="dashboard-card">
+<h3 id="produkTerjual">0</h3>
+<p>Total Terjual</p>
+</div><div class="dashboard-card">
+<h3 id="statusInfo">Aktif</h3>
+<p>Status Produk</p>
+</div></div><div class="form-card"><h2>Informasi Produk</h2><label>Nama Produk</label>
 
 <input
 type="text"
 id="namaProduk"
 placeholder="Nama Produk">
 
+<label>Harga Produk</label>
+
 <input
 type="number"
 id="hargaProduk"
 placeholder="Harga Produk">
 
+<label>Stok Produk</label>
+
 <input
 type="number"
 id="stokProduk"
-placeholder="Stok Produk">
+placeholder="Jumlah Stok">
 
-<input
-type="text"
-id="kategoriProduk"
-placeholder="Kategori">
+<label>Kategori Produk</label>
+
+<select id="kategoriProduk"><option value="Makanan">Makanan</option>
+<option value="Minuman">Minuman</option>
+<option value="Snack">Snack</option>
+<option value="Kerajinan">Kerajinan</option>
+<option value="Fashion">Fashion</option>
+<option value="Lainnya">Lainnya</option></select><label>Status Produk</label>
+
+<select id="statusProduk"><option value="Aktif">
+Aktif
+</option><option value="Nonaktif">
+Nonaktif
+</option><option value="Stok Habis">
+Stok Habis
+</option></select><label>Deskripsi Produk</label>
 
 <textarea
 id="deskripsiProduk"
-placeholder="Deskripsi Produk">
-</textarea>
-<img
-id="previewGambar"
-style="
-width:100%;
-max-width:300px;
-border-radius:15px;
-margin:auto;
-display:block;
-box-shadow:0 10px 25px rgba(0,0,0,.1);
-">
-
-<input
+rows="6"
+placeholder="Deskripsi lengkap produk">
+</textarea><h3>📸 Foto Produk</h3><div
+id="previewContainer"
+class="product-grid">
+</div><input
 type="file"
 id="gambarProduk"
 accept="image/*"
 multiple>
-<button id="updateProduk">
-Update Produk
-</button>
 
-</div>
+<br><br>
 
-</section>
+<div
+style="
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+"><button
+id="updateProduk"
+class="btn-primary">
 
-<script type="module">
+💾 Simpan Perubahan
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+</button><button
+id="hapusProduk"
+class="btn-secondary">
 
-import {
-getFirestore,
-doc,
-getDoc,
-updateDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+🗑️ Hapus Produk
 
-import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+</button><a
+href="dashboard-produk.html"
+class="btn-secondary">
 
-const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
-};
+⬅️ Kembali
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage =
-getStorage(app);
-const params =
-new URLSearchParams(window.location.search);
-
-const id = params.get("id");
-
-const snap =
-await getDoc(doc(db,"produk",id));
-
-const produk = snap.data();
-document
-.getElementById("gambarProduk")
-.addEventListener("change",(e)=>{
-
-const file =
-e.target.files[0];
-
-if(file){
-
-document.getElementById(
-"previewGambar"
-).src =
-URL.createObjectURL(file);
-
-}
-
-});
-document.getElementById(
-"previewGambar"
-).src =
-produk.gambar?.[0] ||
-produk.gambar ||
-"https://picsum.photos/300";
-document.getElementById("namaProduk").value =
-produk.namaProduk;
-
-document.getElementById("hargaProduk").value =
-produk.harga;
-
-document.getElementById("stokProduk").value =
-produk.stok;
-
-document.getElementById("kategoriProduk").value =
-produk.kategori;
-
-document.getElementById("deskripsiProduk").value =
-produk.deskripsi;
-
-document.getElementById("updateProduk")
-.addEventListener("click", async()=>{
-
-let imageUrl =
-produk.gambar?.[0] ||
-produk.gambar ||
-"";
-
-const file =
-document.getElementById(
-"gambarProduk"
-).files[0];
-
-if(file){
-
-const storageRef =
-ref(
-storage,
-"produk/" +
-Date.now() +
-"_" +
-file.name
-);
-
-await uploadBytes(
-storageRef,
-file
-);
-
-imageUrl =
-await getDownloadURL(
-storageRef
-);
-
-}
-
-await updateDoc(
-doc(db,"produk",id),
-{
-
-namaProduk:
-document.getElementById("namaProduk").value,
-
-harga:
-document.getElementById("hargaProduk").value,
-
-stok:
-document.getElementById("stokProduk").value,
-
-kategori:
-document.getElementById("kategoriProduk").value,
-
-deskripsi:
-document.getElementById("deskripsiProduk").value,
-
-gambar:
-[imageUrl]
-
-}
-);
-
-alert("Produk berhasil diupdate");
-
-window.location.href =
-"dashboard-produk.html";
-
-});
-
-</script>
-
-</body>
+</a></div></div><div class="dashboard-grid" style="margin-top:30px;"><div class="dashboard-card"><h3>Tips Produk Laris</h3><p>
+Gunakan foto terang, deskripsi lengkap,
+dan stok selalu diperbarui.
+</p></div><div class="dashboard-card"><h3>Affiliate Aktif</h3><p>
+Produk yang aktif dapat dipromosikan affiliate.
+</p></div><div class="dashboard-card"><h3>Optimasi SEO</h3><p>
+Gunakan nama produk yang mudah dicari pembeli.
+</p></div></div></section></body>
 </html>
