@@ -1,182 +1,133 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard Pesanan</title>
+<title>Dashboard Pesanan UMKM - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
-</head>
 
+</head>
 <body>
+
+<!-- HEADER -->
 
 <section class="dashboard">
 
-<h1>Pesanan Masuk</h1>
+<h1>📦 Dashboard Pesanan</h1>
 
-<div
-id="pesananContainer"
-class="dashboard-grid">
+<p>
+Kelola seluruh pesanan pelanggan dengan mudah.
+</p>
+
+</section>
+
+<!-- STATISTIK -->
+
+<section class="dashboard">
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h2 id="totalPesanan">
+0
+</h2>
+
+<p>Total Pesanan</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h2 id="menungguVerifikasi">
+0
+</h2>
+
+<p>Menunggu Verifikasi</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h2 id="diproses">
+0
+</h2>
+
+<p>Diproses</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h2 id="dikirim">
+0
+</h2>
+
+<p>Dikirim</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h2 id="selesai">
+0
+</h2>
+
+<p>Selesai</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h2 id="totalPendapatan">
+Rp 0
+</h2>
+
+<p>Pendapatan UMKM</p>
+
+</div>
+
 </div>
 
 </section>
 
-<script type="module">
+<!-- FILTER -->
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+<section class="dashboard">
 
-import {
-getFirestore,
-collection,
-getDocs,
-updateDoc,
-doc,
-addDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-await auth.authStateReady();
-
-const user =
-auth.currentUser;
-
-if(!user){
-
-window.location.href =
-"login.html";
-
-}
-const container =
-document.getElementById("pesananContainer");
-
-const querySnapshot =
-await getDocs(
-collection(db,"pesanan")
-);
-
-querySnapshot.forEach((doc)=>{
-
-const pesanan =
-doc.data();
-if(
-pesanan.uid !== user.uid
-) return;
-container.innerHTML += `
-
-<div class="dashboard-card">
-
-<h3>
-${pesanan.namaPembeli}
-</h3>
-
-<p>
-📦 ${pesanan.produk}
-</p>
-
-<p>
-💰 Rp ${Number(
-pesanan.harga
-).toLocaleString("id-ID")}
-</p>
-<p>
-🚚 Ongkir:
-Rp ${Number(
-pesanan.ongkir || 0
-).toLocaleString("id-ID")}
-</p>
-
-<p>
-💳 Total:
-Rp ${Number(
-pesanan.totalBayar || 0
-).toLocaleString("id-ID")}
-</p>
-<p>
-📱 ${pesanan.whatsapp}
-</p>
-
-<p>
-📍 ${pesanan.alamat}
-</p>
-${pesanan.buktiTransfer ?
-
-`
-<p>
-Bukti Transfer:
-</p>
-
-<img
-src="${pesanan.buktiTransfer}"
-style="
-width:100%;
-max-width:250px;
-border-radius:12px;
-margin-top:10px;
+<div style="
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-bottom:20px;
 ">
-`
 
-:
+<input
+type="text"
+id="searchPesanan"
+placeholder="Cari nama pembeli..."
+class="search-box">
 
-`
-<p>
-Belum upload bukti transfer
-</p>
-`
-}
-${pesanan.status === "Menunggu Verifikasi" ?
+<select id="filterStatus">
 
-`
-<button
-onclick="ubahStatus(
-'${doc.id}',
-'Diproses'
-)"
-class="btn-primary">
+<option value="all">
+Semua Status
+</option>
 
-Verifikasi Pembayaran
+<option value="Belum Bayar">
+Belum Bayar
+</option>
 
-</button>
-`
-
-: ""
-}
-<span class="status ${
-pesanan.status === "Menunggu Konfirmasi"
-? "menunggu"
-: pesanan.status === "Diproses"
-? "diproses"
-: pesanan.status === "Dikirim"
-? "dikirim"
-: "selesai"
-}">
-${pesanan.status}
-</span>
-
-<br><br>
-
-<select
-onchange="ubahStatus('${doc.id}',this.value)">
-
-<option value="">
-Ubah Status
+<option value="Menunggu Verifikasi">
+Menunggu Verifikasi
 </option>
 
 <option value="Diproses">
@@ -195,89 +146,231 @@ Selesai
 
 </div>
 
-`;
+</section>
 
-});
+<!-- DAFTAR PESANAN -->
 
-window.ubahStatus =
-async(id,status)=>{
+<section class="dashboard">
 
-const pesanan =
-querySnapshot.docs.find(
-(item)=> item.id === id
-);
+<div
+id="pesananContainer"
+class="dashboard-grid">
 
-const data =
-pesanan.data();
+<p>Memuat pesanan...</p>
 
-await updateDoc(
-doc(db,"pesanan",id),
-{
-status: status
-}
-);
-if(status === "Selesai"){
+</div>
 
-await addDoc(
-collection(db,"notifikasi"),
-{
+</section>
 
-uid:
-data.uidPembeli,
+<!-- TEMPLATE CARD -->
 
-judul:
-"Pesanan Selesai",
+<div style="display:none;">
 
-pesan:
-"Silakan beri rating untuk produk " +
-data.produk,
+<div class="dashboard-card">
 
-dibaca:false,
+<h3>
+👤 Nama Pembeli
+</h3>
 
-createdAt:
-new Date()
+<p>
+📱 08123456789
+</p>
 
-}
-);
+<p>
+📍 Alamat Pembeli
+</p>
 
-}
-if(data.uidPembeli){
+<hr>
 
-await addDoc(
-collection(db,"notifikasi"),
-{
+<h4>Produk Dibeli</h4>
 
-uid:
-data.uidPembeli,
+<ul>
 
-judul:
-"Update Pesanan",
+<li>
+Keripik Pisang x2
+</li>
 
-pesan:
-"Pesanan " +
-data.produk +
-" sekarang " +
-status,
+<li>
+Kopi Bubuk x1
+</li>
 
-dibaca:false,
+</ul>
 
-createdAt:
-new Date()
+<hr>
 
-}
-);
+<p>
+💰 Total Bayar:
+<b>Rp 150.000</b>
+</p>
 
-}
+<p>
+🏪 Pendapatan UMKM:
+<b>Rp 135.000</b>
+</p>
 
-alert(
-"Status berhasil diubah"
-);
+<p>
+🤝 Komisi Affiliate:
+<b>Rp 7.500</b>
+</p>
 
-location.reload();
+<p>
+🚚 Ongkir:
+<b>Rp 10.000</b>
+</p>
 
-};
+<p>
+📦 Resi:
+<b>JNT123456789</b>
+</p>
 
-</script>
+<p>
+🚛 Kurir:
+<b>J&T Express</b>
+</p>
+
+<p>
+📅 10 Juni 2026
+</p>
+
+<span class="status-badge status-dikirim">
+Dikirim
+</span>
+
+<br><br>
+
+<a
+href="#"
+class="btn-secondary">
+
+💬 Chat Pembeli
+
+</a>
+
+<button class="btn-primary">
+
+Verifikasi
+
+</button>
+
+<button class="btn-secondary">
+
+Input Resi
+
+</button>
+
+<button class="btn-primary">
+
+Selesai
+
+</button>
+
+</div>
+
+</div>
+
+<!-- RINGKASAN PENJUALAN -->
+
+<section class="dashboard">
+
+<h2>📊 Ringkasan Penjualan</h2>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3 id="produkTerjual">
+0
+</h3>
+
+<p>Total Produk Terjual</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="totalOngkir">
+Rp 0
+</h3>
+
+<p>Total Ongkir</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="totalAffiliate">
+Rp 0
+</h3>
+
+<p>Komisi Affiliate</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="pendapatanBersih">
+Rp 0
+</h3>
+
+<p>Pendapatan Bersih</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- QUICK MENU -->
+
+<section class="dashboard">
+
+<h2>⚙ Menu Cepat</h2>
+
+<div class="dashboard-grid">
+
+<a
+href="produk-saya.html"
+class="dashboard-card">
+
+<h3>🛍 Produk Saya</h3>
+
+<p>Kelola produk toko</p>
+
+</a>
+
+<a
+href="dashboard.html"
+class="dashboard-card">
+
+<h3>📈 Dashboard</h3>
+
+<p>Lihat statistik toko</p>
+
+</a>
+
+<a
+href="notifikasi.html"
+class="dashboard-card">
+
+<h3>🔔 Notifikasi</h3>
+
+<p>Lihat pemberitahuan</p>
+
+</a>
+
+<a
+href="pengaturan.html"
+class="dashboard-card">
+
+<h3>⚙ Pengaturan</h3>
+
+<p>Atur toko UMKM</p>
+
+</a>
+
+</div>
+
+</section>
 
 </body>
 </html>
