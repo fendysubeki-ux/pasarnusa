@@ -33,11 +33,28 @@ PASAR<span>NUSA</span>
 <a href="#">Beranda</a>
 
 <a href="#produk">Produk</a>
-<a href="cart.html">
 
+<a href="cart.html">
 🛒 Keranjang
 (<span id="cartCount">0</span>)
+</a>
 
+<a href="favorit.html">
+❤️ Favorit
+</a>
+
+<a href="toko-favorit.html">
+⭐ Toko Favorit
+</a>
+<a href="riwayat-toko.html">
+🕒 Riwayat Toko
+</a>
+<a href="riwayat-produk.html">
+🛍 Riwayat Produk
+</a>
+<a href="notifikasi.html">
+🔔 Notifikasi
+(<span id="notifCount">0</span>)
 </a>
 <a href="#umkm">UMKM</a>
 
@@ -47,12 +64,10 @@ PASAR<span>NUSA</span>
 Dashboard UMKM
 </a>
 
-<a href="tentang.html">
-Tentang
-</a>
 <a href="pesanan-saya.html">
 Pesanan Saya
 </a>
+
 </nav>
 
 <div class="nav-btn">
@@ -297,7 +312,25 @@ type="text"
 id="searchInput"
 placeholder="Cari produk...">
 </div>
+<div style="margin:20px 0">
 
+<button onclick="filterProduk('all')">
+Semua
+</button>
+
+<button onclick="filterProduk('Makanan')">
+Makanan
+</button>
+
+<button onclick="filterProduk('Minuman')">
+Minuman
+</button>
+
+<button onclick="filterProduk('Kerajinan')">
+Kerajinan
+</button>
+
+</div>
 <div
 id="produkContainer"
 class="product-grid">
@@ -422,7 +455,7 @@ Daftarkan usaha Anda dan mulai menjual di PasarNusa.
 
 <textarea placeholder="Deskripsi Usaha"></textarea>
 
-<button onclick="window.location.href='register.html'">
+<button>
 Daftar Sekarang
 </button>
 
@@ -619,7 +652,8 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 collection,
-addDoc
+addDoc,
+getDocs
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -659,9 +693,95 @@ tanggal: new Date()
 );
 
 }
+const produkContainer =
+document.getElementById("produkContainer");
 
+const snapshot =
+await getDocs(
+collection(db,"produk")
+);
+if(snapshot.empty){
+
+produkContainer.innerHTML = `
+<div class="cart-card">
+
+<h3>
+Belum ada produk tersedia
+</h3>
+
+</div>
+`;
+
+}
+snapshot.forEach((doc)=>{
+
+const data = doc.data();
+
+if(Number(data.stok || 0) <= 0){
+return;
+}
+
+produkContainer.innerHTML += `
+<div
+class="product-card searchable"
+data-category="${data.kategori || ''}">
+
+<img
+src="${data.gambar?.[0] || 'https://picsum.photos/400/300'}">
+
+<div class="product-info">
+
+<span class="category">
+${data.kategori || 'Produk'}
+</span>
+
+<h3>
+${data.namaProduk}
+</h3>
+
+<p>
+⭐ ${data.rating || "5.0"}
+</p>
+
+<p class="price">
+Rp ${Number(data.harga || 0)
+.toLocaleString("id-ID")}
+</p>
+
+<p>
+📦 Stok:
+${data.stok || 0}
+</p>
+
+<a
+href="produk-detail.html?id=${doc.id}"
+class="btn-primary">
+
+Lihat Detail
+
+</a>
+
+</div>
+
+</div>
+`;
+
+});
+if(produkContainer.innerHTML === ""){
+
+produkContainer.innerHTML = `
+<div class="cart-card">
+
+<h3>
+Semua produk sedang habis
+</h3>
+
+</div>
+`;
+
+}
 </script>
-<script src="script.js"></script>
+
 <script>
 
 const cart =
@@ -680,28 +800,142 @@ cart.length;
 }
 
 </script>
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+query,
+where
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(auth.currentUser){
+
+const snapshot =
+await getDocs(
+query(
+collection(db,"notifikasi"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+),
+where(
+"dibaca",
+"==",
+false
+)
+)
+);
+
+const notif =
+document.getElementById(
+"notifCount"
+);
+
+if(notif){
+
+notif.innerText =
+snapshot.size;
+
+}
+
+}
+
+</script>
 <script src="script.js"></script>
 <script>
 
-const menuToggle =
-document.querySelector(
-".menu-toggle"
+const searchInput =
+document.getElementById(
+"searchInput"
 );
 
-const navLinks =
-document.querySelector(
-".nav-links"
-);
+searchInput.addEventListener(
+"input",
+function(){
 
-menuToggle.addEventListener(
-"click",
-()=>{
+const keyword =
+this.value.toLowerCase();
 
-navLinks.classList.toggle(
-"active"
-);
+document
+.querySelectorAll(
+".searchable"
+)
+.forEach((card)=>{
+
+const nama =
+card.innerText
+.toLowerCase();
+
+card.style.display =
+nama.includes(keyword)
+? "block"
+: "none";
 
 });
+
+}
+);
+
+window.filterProduk =
+function(kategori){
+
+document
+.querySelectorAll(
+".searchable"
+)
+.forEach((card)=>{
+
+if(
+kategori === "all"
+){
+
+card.style.display =
+"block";
+
+return;
+
+}
+
+card.style.display =
+card.dataset.category === kategori
+? "block"
+: "none";
+
+});
+
+};
 
 </script>
 </body>
