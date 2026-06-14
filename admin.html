@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Dashboard Admin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<section class="dashboard">
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<h1>🛠 Dashboard Admin PasarNusa</h1>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+<p class="dashboard-subtitle">
+Kelola UMKM, Produk, Pesanan, Affiliate, dan seluruh aktivitas marketplace.
+</p>
 
-<h1>Dashboard Admin PasarNusa</h1>
-
+<!-- Statistik Utama -->
 <div class="dashboard-grid">
 
 <div class="dashboard-card">
@@ -33,131 +24,166 @@ rel="stylesheet">
 <p>Total Pesanan</p>
 </div>
 
+<div class="dashboard-card">
+<h3 id="totalAffiliate">0</h3>
+<p>Total Affiliate</p>
 </div>
-<div class="dashboard-grid"
-id="pencairanContainer">
-</div>
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-updateDoc,
-doc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const umkm =
-await getDocs(collection(db,"umkm"));
-
-const produk =
-await getDocs(collection(db,"produk"));
-
-const pesanan =
-await getDocs(collection(db,"pesanan"));
-
-document.getElementById("totalUmkm").innerText =
-umkm.size;
-
-document.getElementById("totalProduk").innerText =
-produk.size;
-
-document.getElementById("totalPesanan").innerText =
-pesanan.size;
-const pencairan =
-await getDocs(
-collection(
-db,
-"pencairan_komisi"
-)
-);
-
-const container =
-document.getElementById(
-"pencairanContainer"
-);
-
-pencairan.forEach((item)=>{
-
-const data = item.data();
-
-container.innerHTML += `
 
 <div class="dashboard-card">
+<h3 id="totalTransaksi">Rp 0</h3>
+<p>Total Transaksi</p>
+</div>
 
-<h3>
-Pencairan Komisi
-</h3>
+<div class="dashboard-card">
+<h3 id="totalPendapatanPlatform">Rp 0</h3>
+<p>Pendapatan Platform</p>
+</div>
 
-<p>
-UID:
-${data.uid}
-</p>
+<div class="dashboard-card">
+<h3 id="totalKomisiAffiliate">Rp 0</h3>
+<p>Komisi Affiliate</p>
+</div>
 
-<p>
-Rp ${Number(
-data.jumlah || 0
-).toLocaleString("id-ID")}
-</p>
+<div class="dashboard-card">
+<h3 id="totalPendapatanUmkm">Rp 0</h3>
+<p>Pendapatan UMKM</p>
+</div>
 
-<p>
-${data.status}
-</p>
+<div class="dashboard-card">
+<h3 id="totalSubsidiOngkir">Rp 0</h3>
+<p>Subsidi Ongkir</p>
+</div>
 
-<button
-onclick="verifikasiPencairan(
-'${item.id}'
-)"
-class="btn-primary">
+<div class="dashboard-card">
+<h3 id="umkmMenunggu">0</h3>
+<p>UMKM Menunggu Verifikasi</p>
+</div>
 
-Verifikasi
+<div class="dashboard-card">
+<h3 id="pencairanPending">0</h3>
+<p>Pencairan Pending</p>
+</div>
 
-</button>
+<div class="dashboard-card">
+<h3 id="voucherAktif">0</h3>
+<p>Voucher Aktif</p>
+</div>
 
 </div>
 
-`;
+<!-- Menu Admin -->
 
-});
-window.verifikasiPencairan =
-async(id)=>{
+<h2 style="margin-top:40px;">
+⚙️ Menu Admin
+</h2>
 
-await updateDoc(
-doc(
-db,
-"pencairan_komisi",
-id
-),
-{
-status:
-"Disetujui"
-}
-);
+<div class="dashboard-grid">
 
-alert(
-"Pencairan disetujui"
-);
+<a href="dashboard-admin.html" class="dashboard-card">
+<h3>📦 Kelola Pesanan</h3>
+<p>Verifikasi & proses pesanan</p>
+</a>
 
-location.reload();
+<a href="produk-admin.html" class="dashboard-card">
+<h3>🛍 Kelola Produk</h3>
+<p>Semua produk marketplace</p>
+</a>
 
-};
-</script>
+<a href="umkm-admin.html" class="dashboard-card">
+<h3>🏪 Kelola UMKM</h3>
+<p>Data seluruh UMKM</p>
+</a>
 
-</body>
-</html>
+<a href="verifikasi-umkm.html" class="dashboard-card">
+<h3>✅ Verifikasi UMKM</h3>
+<p>Setujui pendaftaran UMKM</p>
+</a>
+
+<a href="affiliate-admin.html" class="dashboard-card">
+<h3>👥 Kelola Affiliate</h3>
+<p>Data affiliate marketplace</p>
+</a>
+
+<a href="admin-pencairan.html" class="dashboard-card">
+<h3>💰 Pencairan Komisi</h3>
+<p>Verifikasi pencairan affiliate</p>
+</a>
+
+<a href="voucher.html" class="dashboard-card">
+<h3>🎟 Kelola Voucher</h3>
+<p>Promo dan diskon marketplace</p>
+</a>
+
+<a href="statistik-admin.html" class="dashboard-card">
+<h3>📈 Statistik</h3>
+<p>Laporan penjualan & trafik</p>
+</a>
+
+<a href="laporan-keuangan.html" class="dashboard-card">
+<h3>💳 Keuangan</h3>
+<p>Pendapatan dan transaksi</p>
+</a>
+
+<a href="notifikasi-admin.html" class="dashboard-card">
+<h3>🔔 Notifikasi</h3>
+<p>Kirim pengumuman sistem</p>
+</a>
+
+<a href="pengaduan-admin.html" class="dashboard-card">
+<h3>📩 Pengaduan</h3>
+<p>Kelola laporan pengguna</p>
+</a>
+
+<a href="backup-data.html" class="dashboard-card">
+<h3>🗄 Backup Data</h3>
+<p>Export database marketplace</p>
+</a>
+
+<a href="pengaturan-platform.html" class="dashboard-card">
+<h3>⚙️ Pengaturan</h3>
+<p>Komisi, ongkir & sistem</p>
+</a>
+
+<a href="index.html" class="dashboard-card">
+<h3>🌐 Beranda</h3>
+<p>Kembali ke marketplace</p>
+</a>
+
+<a href="#" id="logoutAdmin" class="dashboard-card">
+<h3>🚪 Logout</h3>
+<p>Keluar dari akun admin</p>
+</a>
+
+</div>
+
+<!-- Aktivitas Terbaru -->
+
+<h2 style="margin-top:40px;">
+📋 Aktivitas Terbaru
+</h2>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+<h3>Pesanan Baru</h3>
+<p id="pesananBaru">0 Pesanan</p>
+</div>
+
+<div class="dashboard-card">
+<h3>UMKM Baru</h3>
+<p id="umkmBaru">0 Pendaftaran</p>
+</div>
+
+<div class="dashboard-card">
+<h3>Affiliate Baru</h3>
+<p id="affiliateBaru">0 Pendaftaran</p>
+</div>
+
+<div class="dashboard-card">
+<h3>Komplain Baru</h3>
+<p id="komplainBaru">0 Laporan</p>
+</div>
+
+</div>
+
+</section>
