@@ -1,46 +1,70 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Dashboard Affiliate - PasarNusa</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <section class="affiliate-dashboard">
 
-<h1>Dashboard Affiliate</h1>
+<h1 id="judulAffiliate">
+Dashboard Affiliate
+</h1>
+
+<p class="store-name">
+Kelola referral dan komisi affiliate Anda
+</p>
+
+<!-- Statistik -->
 
 <div class="dashboard-grid">
 
 <div class="dashboard-card">
-<h3>Total Penjualan</h3>
-<h1 id="totalPenjualanFirebase">0</h1>
-</div>
-
-<div class="dashboard-card">
-<h3>Total Komisi</h3>
-<h1 id="totalKomisiFirebase">
-Rp 0
-</h1>
-</div>
-
-<div class="dashboard-card">
 <h3>Total Klik</h3>
-<h1 id="totalKlikFirebase">0</h1>
+<h1 id="totalKlik">0</h1>
+</div>
+
+<div class="dashboard-card">
+<h3>Total Penjualan</h3>
+<h1 id="totalPenjualan">0</h1>
+</div>
+
+<div class="dashboard-card">
+<h3>Komisi Pending</h3>
+<h1 id="komisiPending">Rp 0</h1>
+</div>
+
+<div class="dashboard-card">
+<h3>Komisi Cair</h3>
+<h1 id="totalKomisi">Rp 0</h1>
+</div>
+
+<div class="dashboard-card">
+<h3>Konversi</h3>
+<h1 id="konversi">0%</h1>
+</div>
+
+<div class="dashboard-card">
+<h3>Produk Terlaris</h3>
+<h1 id="produkTerlaris">-</h1>
 </div>
 
 </div>
+
+<!-- Link Affiliate -->
 
 <div class="affiliate-link-box">
 
@@ -48,146 +72,197 @@ Rp 0
 
 <input
 type="text"
-id="affiliateLink">
+id="affiliateLink"
+readonly>
 
-<button onclick="copyAffiliate()">
+<div class="action-buttons">
+
+<button
+id="copyAffiliate"
+class="btn-primary">
+
 Salin Link
+
+</button>
+
+<button
+id="shareAffiliate"
+class="btn-secondary">
+
+Bagikan
+
 </button>
 
 </div>
-<div class="affiliate-link-box">
-
-<h2>Statistik Affiliate</h2>
-
-<p>Total Klik Hari Ini: 45</p>
-
-<p>Total Klik Bulan Ini: 1.540</p>
-
-<p>Konversi Penjualan: 5%</p>
 
 </div>
-<a href="komisi.html"
+
+<!-- Menu -->
+
+<div class="dashboard-grid">
+
+<a href="produk-affiliate.html" class="dashboard-card">
+<h3>🛒 Produk Affiliate</h3>
+<p>Pilih produk untuk dipromosikan</p>
+</a>
+
+<a href="komisi.html" class="dashboard-card">
+<h3>💰 Riwayat Komisi</h3>
+<p>Lihat seluruh komisi referral</p>
+</a>
+
+<a href="riwayat-pencairan.html" class="dashboard-card">
+<h3>🏦 Riwayat Pencairan</h3>
+<p>Status pencairan komisi</p>
+</a>
+
+<a href="statistik-affiliate.html" class="dashboard-card">
+<h3>📈 Statistik</h3>
+<p>Lihat performa affiliate</p>
+</a>
+
+</div>
+
+<!-- Pencairan -->
+
+<div class="dashboard-card">
+
+<h2>Pencairan Komisi</h2>
+
+<p>
+Minimal pencairan Rp 50.000
+</p>
+
+<h1 id="saldoAffiliate">
+Rp 0
+</h1>
+
+<button
+id="cairkanKomisi"
 class="btn-primary">
 
-Lihat Riwayat Komisi
+Ajukan Pencairan
 
-</a>
+</button>
+
+</div>
+
+<!-- Komisi Terbaru -->
+
+<div class="dashboard-card">
+
+<h2>Komisi Terbaru</h2>
+
+<div id="komisiTerbaru">
+
+<p>Belum ada data komisi.</p>
+
+</div>
+
+</div>
+
+<!-- Tabel -->
+
+<table class="commission-table">
+
+<thead>
+
+<tr>
+<th>Tanggal</th>
+<th>Produk</th>
+<th>Klik</th>
+<th>Komisi</th>
+<th>Status</th>
+</tr>
+
+</thead>
+
+<tbody id="affiliateTable">
+
+<tr>
+<td colspan="5">
+Belum ada data
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
 </section>
 
-<script src="script.js"></script>
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href =
-"login.html";
-
-}
-
-const affiliateId =
-auth.currentUser.uid;
-
-const klik =
-await getDocs(
-collection(db,"affiliate_clicks")
-);
-
-let totalKlik = 0;
-
-klik.forEach((item)=>{
-
-const data = item.data();
-
-if(
-data.affiliate === affiliateId
-){
-
-totalKlik++;
-
-}
-
-});
+<script>
 
 document.getElementById(
-"totalKlikFirebase"
-).innerText =
-totalKlik;
+"copyAffiliate"
+).addEventListener(
+"click",
+async()=>{
 
-const pesanan =
-await getDocs(
-collection(db,"pesanan")
-);
-
-let totalKomisi = 0;
-let totalPenjualan = 0;
-
-pesanan.forEach((item)=>{
-
-const data = item.data();
-
-if(
-data.affiliate === affiliateId
-){
-
-totalPenjualan++;
-
-totalKomisi +=
-Number(
-data.komisiAffiliate || 0
-);
-
-}
-
-});
-
-document.getElementById(
-"totalKomisiFirebase"
-).innerText =
-"Rp " +
-totalKomisi.toLocaleString("id-ID");
-
-document.getElementById(
-"totalPenjualanFirebase"
-).innerText =
-totalPenjualan;
-
+const link =
 document.getElementById(
 "affiliateLink"
-).value =
-window.location.origin +
-"/index.html?ref=" +
-affiliateId;
+);
+
+try{
+
+await navigator.clipboard
+.writeText(link.value);
+
+alert(
+"Link berhasil disalin"
+);
+
+}catch{
+
+alert(
+"Gagal menyalin link"
+);
+
+}
+
+});
+
+document.getElementById(
+"shareAffiliate"
+).addEventListener(
+"click",
+async()=>{
+
+const link =
+document.getElementById(
+"affiliateLink"
+).value;
+
+try{
+
+if(navigator.share){
+
+await navigator.share({
+title:"Affiliate PasarNusa",
+url:link
+});
+
+}else{
+
+await navigator.clipboard
+.writeText(link);
+
+alert(
+"Link berhasil disalin"
+);
+
+}
+
+}catch(error){
+
+console.log(error);
+
+}
+
+});
 
 </script>
+
 </body>
 </html>
