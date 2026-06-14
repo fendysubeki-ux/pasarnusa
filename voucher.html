@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kelola Voucher PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:25px;
+}
+
+.stat-card{
+background:#fff;
+padding:25px;
+border-radius:18px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.stat-card h2{
+margin-top:10px;
+color:#22c55e;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:15px;
+}
+
+.search-filter{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:15px;
+margin:25px 0;
+}
+
+.search-box,
+.filter-select{
+padding:14px;
+border:1px solid #ddd;
+border-radius:12px;
+font-size:15px;
+}
+
+.status-active{
+color:#22c55e;
+font-weight:700;
+}
+
+.status-inactive{
+color:#ef4444;
+font-weight:700;
+}
+
+</style>
+
+</head>
+<body>
+
+<section class="dashboard">
+
+<h1>🎟 Kelola Voucher PasarNusa</h1>
+
+<p style="margin-bottom:20px;">
+Kelola seluruh voucher promosi marketplace.
+</p>
+
+<!-- Statistik -->
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<p>Total Voucher</p>
+<h2 id="totalVoucher">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Voucher Aktif</p>
+<h2 id="voucherAktif">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Voucher Digunakan</p>
+<h2 id="voucherDigunakan">0</h2>
+</div>
+
+</div>
+
+<!-- Form Voucher -->
+
+<div class="form-card">
+
+<h2>➕ Buat Voucher Baru</h2>
+
+<div class="form-grid">
+
+<input
+type="text"
+id="kodeVoucher"
+placeholder="Kode Voucher">
+
+<input
+type="number"
+id="diskonVoucher"
+placeholder="Diskon (%)">
+
+<input
+type="number"
+id="minimalBelanja"
+placeholder="Minimal Belanja">
+
+<input
+type="number"
+id="maksimalDiskon"
+placeholder="Maksimal Diskon">
+
+<input
+type="number"
+id="kuotaVoucher"
+placeholder="Kuota Voucher">
+
+<input
+type="date"
+id="tanggalMulai">
+
+<input
+type="date"
+id="tanggalBerakhir">
+
+</div>
+
+<br>
+
+<button
+id="buatVoucher"
+class="btn-primary">
+
+➕ Buat Voucher
+
+</button>
+
+</div>
+
+<!-- Search -->
+
+<div class="search-filter">
+
+<input
+type="text"
+id="searchVoucher"
+class="search-box"
+placeholder="Cari voucher...">
+
+<select
+id="filterStatus"
+class="filter-select">
+
+<option value="all">
+Semua Voucher
+</option>
+
+<option value="aktif">
+Aktif
+</option>
+
+<option value="nonaktif">
+Nonaktif
+</option>
+
+</select>
+
+</div>
+
+<!-- Daftar Voucher -->
+
+<div
+id="voucherContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<p>Memuat voucher...</p>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+addDoc,
+updateDoc,
+deleteDoc,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+throw new Error("Belum login");
+
+}
+
+const userSnap =
+await getDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+)
+);
+
+if(
+!userSnap.exists() ||
+userSnap.data().role !== "admin"
+){
+
+alert(
+"Akses khusus admin"
+);
+
+window.location.href =
+"index.html";
+
+throw new Error(
+"Bukan admin"
+);
+
+}
+
+const container =
+document.getElementById(
+"voucherContainer"
+);
+
+let semuaVoucher = [];
+
+async function loadVoucher(){
+
+const snapshot =
+await getDocs(
+collection(db,"voucher")
+);
+
+semuaVoucher = [];
+
+snapshot.forEach((item)=>{
+
+semuaVoucher.push({
+id:item.id,
+...item.data()
+});
+
+});
+
+renderVoucher();
+
+}
+
+function renderVoucher(){
+
+container.innerHTML = "";
+
+const keyword =
+document
+.getElementById(
+"searchVoucher"
+)
+.value
+.toLowerCase();
+
+const filter =
+document
+.getElementById(
+"filterStatus"
+)
+.value;
+
+let totalAktif = 0;
+let totalDigunakan = 0;
+
+const hasil =
+semuaVoucher.filter((voucher)=>{
+
+const cocokCari =
+
+(voucher.kode || "")
+.toLowerCase()
+.includes(keyword);
+
+const cocokFilter =
+
+filter === "all"
+
+||
+
+(
+filter === "aktif"
+&&
+voucher.aktif
+)
+
+||
+
+(
+filter === "nonaktif"
+&&
+!voucher.aktif
+);
+
+return cocokCari &&
+cocokFilter;
+
+});
+
+hasil.forEach((voucher)=>{
+
+if(voucher.aktif){
+totalAktif++;
+}
+
+totalDigunakan +=
+Number(
+voucher.digunakan || 0
+);
+
+const statusClass =
+voucher.aktif
+?
+"status-active"
+:
+"status-inactive";
+
+container.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+${voucher.kode}
+</h3>
+
+<p>
+Diskon:
+<b>
+${voucher.diskon}%
+</b>
+</p>
+
+<p>
+Minimal Belanja:
+Rp ${Number(
+voucher.minimalBelanja || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+Maksimal Diskon:
+Rp ${Number(
+voucher.maksimalDiskon || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+Kuota:
+${voucher.kuota || 0}
+</p>
+
+<p>
+Digunakan:
+${voucher.digunakan || 0}
+</p>
+
+<p>
+Mulai:
+${
+voucher.tanggalMulai
+?
+new Date(
+voucher.tanggalMulai.seconds
+* 1000
+).toLocaleDateString("id-ID")
+:
+"-"
+}
+</p>
+
+<p>
+Berakhir:
+${
+voucher.tanggalBerakhir
+?
+new Date(
+voucher.tanggalBerakhir.seconds
+* 1000
+).toLocaleDateString("id-ID")
+:
+"-"
+}
+</p>
+
+<p>
+Status:
+<span class="${statusClass}">
+${voucher.aktif ? "Aktif" : "Nonaktif"}
+</span>
+</p>
+
+<button
+onclick="toggleVoucher('${voucher.id}',${voucher.aktif})"
+class="btn-secondary">
+
+${voucher.aktif ? "Nonaktifkan" : "Aktifkan"}
+
+</button>
+
+<br><br>
+
+<button
+onclick="hapusVoucher('${voucher.id}')"
+class="btn-danger">
+
+🗑 Hapus
+
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"totalVoucher"
+).innerText =
+semuaVoucher.length;
+
+document.getElementById(
+"voucherAktif"
+).innerText =
+totalAktif;
+
+document.getElementById(
+"voucherDigunakan"
+).innerText =
+totalDigunakan;
+
+if(hasil.length === 0){
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+Tidak ada voucher ditemukan
+</h3>
+
+</div>
+
+`;
+
+}
+
+}
+
+document
+.getElementById(
+"searchVoucher"
+)
+.addEventListener(
+"input",
+renderVoucher
+);
+
+document
+.getElementById(
+"filterStatus"
+)
+.addEventListener(
+"change",
+renderVoucher
+);
+
+document
+.getElementById(
+"buatVoucher"
+)
+.addEventListener(
+"click",
+async()=>{
+
+const kode =
+document.getElementById(
+"kodeVoucher"
+).value.trim();
+
+const diskon =
+Number(
+document.getElementById(
+"diskonVoucher"
+).value
+);
+
+const minimalBelanja =
+Number(
+document.getElementById(
+"minimalBelanja"
+).value
+);
+
+const maksimalDiskon =
+Number(
+document.getElementById(
+"maksimalDiskon"
+).value
+);
+
+const kuota =
+Number(
+document.getElementById(
+"kuotaVoucher"
+).value
+);
+
+const tanggalMulai =
+document.getElementById(
+"tanggalMulai"
+).value;
+
+const tanggalBerakhir =
+document.getElementById(
+"tanggalBerakhir"
+).value;
+
+if(
+!kode ||
+!diskon
+){
+
+alert(
+"Lengkapi data voucher"
+);
+
+return;
+
+}
+
+if(
+diskon > 90
+){
+
+alert(
+"Diskon maksimal 90%"
+);
+
+return;
+
+}
+
+await addDoc(
+collection(
+db,
+"voucher"
+),
+{
+kode:
+kode.toUpperCase(),
+
+diskon,
+
+minimalBelanja,
+
+maksimalDiskon,
+
+kuota,
+
+digunakan:0,
+
+aktif:true,
+
+tanggalMulai:
+tanggalMulai
+?
+new Date(tanggalMulai)
+:
+null,
+
+tanggalBerakhir:
+tanggalBerakhir
+?
+new Date(tanggalBerakhir)
+:
+null,
+
+createdAt:
+new Date()
+}
+);
+
+alert(
+"Voucher berhasil dibuat"
+);
+
+location.reload();
+
+}
+);
+
+window.toggleVoucher =
+async(
+id,
+status
+)=>{
+
+await updateDoc(
+doc(
+db,
+"voucher",
+id
+),
+{
+aktif:
+!status
+}
+);
+
+location.reload();
+
+};
+
+window.hapusVoucher =
+async(id)=>{
+
+if(
+!confirm(
+"Hapus voucher ini?"
+)
+){
+return;
+}
+
+await deleteDoc(
+doc(
+db,
+"voucher",
+id
+)
+);
+
+location.reload();
+
+};
+
+loadVoucher();
+
+</script>
+
+</body>
+</html>
