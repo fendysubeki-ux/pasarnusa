@@ -1,32 +1,38 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pesanan Saya - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
+<body><section class="dashboard"><h1>📦 Pesanan Saya</h1><div class="dashboard-grid"><div class="dashboard-card">
+<h3 id="totalPesanan">0</h3>
+<p>Total Pesanan</p>
+</div><div class="dashboard-card">
+<h3 id="pesananDiproses">0</h3>
+<p>Sedang Diproses</p>
+</div><div class="dashboard-card">
+<h3 id="pesananDikirim">0</h3>
+<p>Sedang Dikirim</p>
+</div><div class="dashboard-card">
+<h3 id="pesananSelesai">0</h3>
+<p>Pesanan Selesai</p>
+</div></div><input
+type="text"
+id="searchPesanan"
+placeholder="Cari pesanan..."
+class="search-box">
 
-<title>Pesanan Saya</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<br><br>
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<section class="cart-section">
-
-<h1>Riwayat Pesanan</h1>
-
-<div id="pesananContainer">
-
-</div>
-
-</section>
-<script type="module">
+<div class="kategori-filter"><button onclick="filterStatus('all')" class="btn-primary">
+Semua
+</button><button onclick="filterStatus('Menunggu')" class="btn-secondary">
+Menunggu
+</button><button onclick="filterStatus('Diproses')" class="btn-secondary">
+Diproses
+</button><button onclick="filterStatus('Dikirim')" class="btn-secondary">
+Dikirim
+</button><button onclick="filterStatus('Selesai')" class="btn-secondary">
+Selesai
+</button></div><br><div id="pesananContainer"></div></section><script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -35,93 +41,213 @@ import {
 getFirestore,
 collection,
 getDocs,
-updateDoc,
-doc
+query,
+where
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href = "login.html";
+
+}
 
 const container =
 document.getElementById("pesananContainer");
 
-const querySnapshot =
-await getDocs(collection(db,"pesanan"));
+let semuaPesanan = [];
 
-querySnapshot.forEach((doc)=>{
+const snapshot =
+await getDocs(
+query(
+collection(db,"pesanan"),
+where(
+"uidPembeli",
+"==",
+auth.currentUser.uid
+)
+)
+);
 
-const pesanan = doc.data();
+let total = 0;
+let diproses = 0;
+let dikirim = 0;
+let selesai = 0;
+
+snapshot.forEach((doc)=>{
+
+const data = doc.data();
+
+semuaPesanan.push({
+id:doc.id,
+...data
+});
+
+total++;
+
+if(data.status === "Diproses") diproses++;
+if(data.status === "Dikirim") dikirim++;
+if(data.status === "Selesai") selesai++;
+
+});
+
+document.getElementById("totalPesanan").innerText = total;
+document.getElementById("pesananDiproses").innerText = diproses;
+document.getElementById("pesananDikirim").innerText = dikirim;
+document.getElementById("pesananSelesai").innerText = selesai;
+
+renderPesanan(semuaPesanan);
+
+function renderPesanan(data){
+
+container.innerHTML = "";
+
+if(data.length === 0){
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>Belum Ada Pesanan</h3>
+
+<p>
+Pesanan Anda akan muncul di sini.
+</p>
+
+<a href="produk.html" class="btn-primary">
+Belanja Sekarang
+</a>
+
+</div>
+
+`;
+
+return;
+
+}
+
+data.forEach((pesanan)=>{
 
 container.innerHTML += `
 
-<div class="cart-card">
+<div class="cart-card searchable"
+data-status="${pesanan.status}">
 
-<h3>${pesanan.produk}</h3>
+<h3>
+${pesanan.produk || "Produk"}
+</h3>
 
-<div class="status diproses">
-${pesanan.status}
-</div>
+<p>
+Nomor Pesanan:
+#${pesanan.id}
+</p>
+
+<p>
+Pembeli:
+${pesanan.namaPembeli || "-"}
+</p>
+
+<p>
+Total:
+Rp ${Number(
+pesanan.harga || 0
+).toLocaleString("id-ID")}
+</p>
 
 <p>
 Status:
 <b>${pesanan.status}</b>
 </p>
 
-<button
-onclick="ubahStatus('${doc.id}','Diproses')"
-class="btn-secondary">
-Diproses
-</button>
+<p>
+Tanggal:
+${pesanan.createdAt ?
+new Date(
+pesanan.createdAt.seconds * 1000
+).toLocaleDateString("id-ID")
+:
+"-"}
+</p>
 
-<button
-onclick="ubahStatus('${doc.id}','Dikirim')"
-class="btn-secondary">
-Dikirim
-</button>
-
-<button
-onclick="ubahStatus('${doc.id}','Selesai')"
+<a
+href="produk-detail.html?id=${pesanan.produkId || ''}"
 class="btn-primary">
-Selesai
-</button>
 
-<p>
-Pembeli:
-${pesanan.namaPembeli}
-</p>
+Lihat Produk
 
-<p>
-Total:
-Rp ${Number(pesanan.harga).toLocaleString("id-ID")}
-</p>
+</a>
 
 </div>
 
 `;
 
 });
-window.ubahStatus = async(id,status)=>{
 
-await updateDoc(
-doc(db,"pesanan",id),
-{
-status: status
+}
+
+window.filterStatus = function(status){
+
+if(status === "all"){
+
+renderPesanan(semuaPesanan);
+
+return;
+
+}
+
+renderPesanan(
+semuaPesanan.filter(
+item => item.status === status
+)
+);
+
+};
+
+document
+.getElementById("searchPesanan")
+.addEventListener(
+"input",
+(e)=>{
+
+const keyword =
+e.target.value.toLowerCase();
+
+renderPesanan(
+
+semuaPesanan.filter(item =>
+
+(item.produk || "")
+.toLowerCase()
+.includes(keyword)
+
+)
+
+);
+
 }
 );
 
-location.reload();
-
-};
-</script>
-</body>
+</script></body>
 </html>
