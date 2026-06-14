@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Riwayat Komisi Affiliate</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+
+<h1>💰 Riwayat Komisi Affiliate</h1>
+
+<p>
+Pantau seluruh komisi dari referral Anda
+</p>
+
+</div>
+
+<a
+href="withdraw-affiliate.html"
+class="btn-primary">
+
+💸 Tarik Komisi
+
+</a>
+
+</div>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3 id="totalKomisi">
+Rp 0
+</h3>
+
+<p>Total Komisi</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="komisiTersedia">
+Rp 0
+</h3>
+
+<p>Komisi Tersedia</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="totalReferral">
+0
+</h3>
+
+<p>Total Referral</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="komisiBulanIni">
+Rp 0
+</h3>
+
+<p>Komisi Bulan Ini</p>
+
+</div>
+
+</div>
+
+<div class="form-card">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Cari produk...">
+
+<select id="filterStatus">
+
+<option value="Semua">
+Semua Status
+</option>
+
+<option value="Selesai">
+Selesai
+</option>
+
+<option value="Diproses">
+Diproses
+</option>
+
+<option value="Dikirim">
+Dikirim
+</option>
+
+<option value="Belum Bayar">
+Belum Bayar
+</option>
+
+</select>
+
+</div>
+
+<div
+id="komisiContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<p>
+Memuat data...
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+query,
+where
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
+const uid =
+auth.currentUser.uid;
+
+const container =
+document.getElementById(
+"komisiContainer"
+);
+
+let semuaData = [];
+
+async function loadKomisi(){
+
+container.innerHTML = "";
+
+const q =
+query(
+collection(db,"pesanan"),
+where(
+"affiliate",
+"==",
+uid
+)
+);
+
+const snapshot =
+await getDocs(q);
+
+let totalKomisi = 0;
+let komisiTersedia = 0;
+let totalReferral = 0;
+let komisiBulanIni = 0;
+
+const bulanIni =
+new Date().getMonth();
+
+snapshot.forEach((doc)=>{
+
+const data =
+doc.data();
+
+totalReferral++;
+
+const komisi =
+Number(
+data.komisiAffiliate || 0
+);
+
+if(data.status === "Selesai"){
+
+totalKomisi += komisi;
+komisiTersedia += komisi;
+
+}
+
+const tanggal =
+data.createdAt?.seconds
+? new Date(
+data.createdAt.seconds * 1000
+)
+: null;
+
+if(
+tanggal &&
+tanggal.getMonth() === bulanIni
+){
+
+komisiBulanIni += komisi;
+
+}
+
+semuaData.push({
+id:doc.id,
+...data
+});
+
+});
+
+document.getElementById(
+"totalKomisi"
+).innerText =
+"Rp " +
+totalKomisi.toLocaleString("id-ID");
+
+document.getElementById(
+"komisiTersedia"
+).innerText =
+"Rp " +
+komisiTersedia.toLocaleString("id-ID");
+
+document.getElementById(
+"totalReferral"
+).innerText =
+totalReferral;
+
+document.getElementById(
+"komisiBulanIni"
+).innerText =
+"Rp " +
+komisiBulanIni.toLocaleString("id-ID");
+
+renderData();
+
+}
+
+function renderData(){
+
+container.innerHTML = "";
+
+const keyword =
+document.getElementById(
+"searchInput"
+).value.toLowerCase();
+
+const statusFilter =
+document.getElementById(
+"filterStatus"
+).value;
+
+const hasil =
+semuaData.filter((item)=>{
+
+const namaProduk =
+item.items?.[0]?.namaProduk
+?.toLowerCase() || "";
+
+const cocokNama =
+namaProduk.includes(keyword);
+
+const cocokStatus =
+statusFilter === "Semua"
+||
+item.status === statusFilter;
+
+return cocokNama && cocokStatus;
+
+});
+
+if(hasil.length === 0){
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+Belum Ada Data
+</h3>
+
+<p>
+Tidak ditemukan komisi affiliate.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+hasil.forEach((data)=>{
+
+container.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+${data.items?.[0]?.namaProduk || "Produk"}
+</h3>
+
+<p>
+💰 Komisi:
+Rp ${Number(
+data.komisiAffiliate || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+📦 Status:
+${data.status}
+</p>
+
+<p>
+🛒 Total Pesanan:
+Rp ${Number(
+data.totalBayar || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+👤 Pembeli:
+${data.namaPembeli || "-"}
+</p>
+
+<p>
+📅 ${
+data.createdAt?.seconds
+?
+new Date(
+data.createdAt.seconds * 1000
+).toLocaleString("id-ID")
+:
+"-"
+}
+</p>
+
+</div>
+
+`;
+
+});
+
+}
+
+document
+.getElementById("searchInput")
+.addEventListener(
+"input",
+renderData
+);
+
+document
+.getElementById("filterStatus")
+.addEventListener(
+"change",
+renderData
+);
+
+loadKomisi();
+
+</script>
+
+</body>
+</html>
