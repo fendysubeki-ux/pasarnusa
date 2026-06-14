@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Produk PasarNusa</title>
+
+<title>Produk UMKM - PasarNusa</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <section class="products">
 
-<h1>Produk UMKM</h1>
+<div style="text-align:center;margin-bottom:30px;">
+
+<h1>🛍️ Produk UMKM Indonesia</h1>
+
+<p>
+Temukan berbagai produk UMKM berkualitas dari seluruh Indonesia.
+</p>
+
+</div>
+
 <input
 type="text"
 id="searchInput"
-placeholder="Cari produk..."
+placeholder="🔍 Cari produk..."
 class="search-box">
+
 <div class="kategori-filter">
 
 <button onclick="filterProduk('all')" class="btn-primary">
@@ -38,27 +49,40 @@ Makanan
 Minuman
 </button>
 
-<button onclick="filterProduk('snack')" class="btn-secondary">
-Snack
+<button onclick="filterProduk('fashion')" class="btn-secondary">
+Fashion
+</button>
+
+<button onclick="filterProduk('kerajinan')" class="btn-secondary">
+Kerajinan
 </button>
 
 </div>
 
-<div class="product-grid" id="productGrid">
+<div
+id="productGrid"
+class="product-grid">
 
-</div>
+<div class="dashboard-card">
 
+<h3>Memuat Produk...</h3>
 
+<p>
+Mohon tunggu sebentar
+</p>
 
 </div>
 
 </div>
 
 </section>
-<script type="module" src="script.js"></script>
+
+<script src="script.js"></script>
+
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 getFirestore,
@@ -68,68 +92,147 @@ getDocs
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
+
+apiKey:
+"YOUR_API_KEY",
+
+authDomain:
+"pasarnusa-18aa0.firebaseapp.com",
+
+projectId:
+"pasarnusa-18aa0",
+
+storageBucket:
+"pasarnusa-18aa0.firebasestorage.app",
+
+messagingSenderId:
+"866998011671",
+
+appId:
+"1:866998011671:web:5555115feb82741ab55952"
+
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
 
 const productGrid =
-document.getElementById("productGrid");
-
-const querySnapshot =
-await getDocs(
-collection(db,"produk")
+document.getElementById(
+"productGrid"
 );
 
-querySnapshot.forEach((doc)=>{
+try{
 
-const produk = doc.data();
+const snapshot =
+await getDocs(
+collection(
+db,
+"produk"
+)
+);
+
+productGrid.innerHTML = "";
+
+if(snapshot.empty){
+
+productGrid.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+Belum Ada Produk
+</h3>
+
+<p>
+Produk UMKM akan tampil di sini.
+</p>
+
+</div>
+
+`;
+
+}
+
+snapshot.forEach((item)=>{
+
+const produk =
+item.data();
 
 productGrid.innerHTML += `
 
-<div class="product-card searchable"
-data-category="${produk.kategori.toLowerCase()}">
+<div
+class="product-card searchable"
+data-category="${
+(produk.kategori || "")
+.toLowerCase()
+}">
 
 <img
-src="${produk.gambar?.[0] || 'https://picsum.photos/400/300'}"
-alt="${produk.namaProduk}">
+src="${
+produk.gambar?.[0] ||
+'https://picsum.photos/400/300'
+}"
+alt="${
+produk.namaProduk || 'Produk'
+}">
 
 <div class="product-info">
 
 <span class="category">
-${produk.kategori}
+${produk.kategori || "UMKM"}
 </span>
 
 <h3>
-${produk.namaProduk}
+${produk.namaProduk || "-"}
 </h3>
 
-${produk.terjual >= 10 ?
-
+${
+Number(produk.terjual || 0) >= 10
+?
 '<span class="category">🔥 Terlaris</span>'
-
-: ''}
+:
+''
+}
 
 <p class="price">
-Rp ${Number(produk.harga).toLocaleString("id-ID")}
+Rp ${Number(
+produk.harga || 0
+).toLocaleString("id-ID")}
 </p>
 
 <p>
-${produk.deskripsi}
+📦 Stok:
+${produk.stok || 0}
 </p>
+
+<p>
+⭐ ${produk.rating || 0}
+</p>
+
+<p>
+🔥 Terjual:
+${produk.terjual || 0}
+</p>
+
+<p>
+${produk.deskripsi || ""}
+</p>
+
 <p class="category">
-🏪 ${produk.namaUmkm}
+🏪 ${produk.namaToko || produk.namaUmkm || "UMKM"}
 </p>
-<a href="produk-detail.html?id=${doc.id}"
+
+<a
+href="produk-detail.html?id=${item.id}"
 class="btn-primary">
+
 Lihat Detail
+
 </a>
+
 <a
 href="toko.html?uid=${produk.uid}"
 class="btn-secondary">
@@ -137,6 +240,7 @@ class="btn-secondary">
 Lihat Toko
 
 </a>
+
 </div>
 
 </div>
@@ -145,6 +249,29 @@ Lihat Toko
 
 });
 
+}catch(error){
+
+console.error(error);
+
+productGrid.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+Gagal Memuat Produk
+</h3>
+
+<p>
+Silakan coba lagi nanti.
+</p>
+
+</div>
+
+`;
+
+}
+
 </script>
+
 </body>
 </html>
