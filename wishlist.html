@@ -3,37 +3,149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wishlist</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<title>Wishlist Saya - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <section class="products">
 
 <h1>❤️ Wishlist Saya</h1>
 
-<div class="cart-card">
+<p style="text-align:center;">
+Produk favorit yang Anda simpan.
+</p>
 
-<h3>Keripik Pisang Renyah</h3>
-
-<p>Rp15.000</p>
-
-<a href="produk-detail.html"
-class="btn-primary">
-Lihat Produk
-</a>
+<div id="wishlistContainer" class="product-grid">
 
 </div>
 
 </section>
+
+<script>
+
+const wishlist =
+JSON.parse(
+localStorage.getItem("favorit")
+) || [];
+
+const container =
+document.getElementById(
+"wishlistContainer"
+);
+
+if(wishlist.length === 0){
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>❤️ Wishlist Kosong</h3>
+
+<p>
+Belum ada produk yang disimpan.
+</p>
+
+<a href="produk.html"
+class="btn-primary">
+
+Cari Produk
+
+</a>
+
+</div>
+
+`;
+
+}else{
+
+wishlist.forEach((produk,index)=>{
+
+container.innerHTML += `
+
+<div class="product-card">
+
+<img
+src="${
+produk.gambar ||
+"https://picsum.photos/400/300"
+}"
+alt="${produk.namaProduk}">
+
+<div class="product-info">
+
+<span class="category">
+Favorit
+</span>
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p class="price">
+Rp ${Number(
+produk.harga || 0
+).toLocaleString("id-ID")}
+</p>
+
+<div style="
+display:flex;
+gap:10px;
+margin-top:15px;
+">
+
+<a
+href="produk-detail.html?id=${produk.id}"
+class="btn-primary">
+
+Lihat
+
+</a>
+
+<button
+onclick="hapusWishlist(${index})"
+class="btn-secondary">
+
+Hapus
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+window.hapusWishlist =
+(index)=>{
+
+wishlist.splice(index,1);
+
+localStorage.setItem(
+"favorit",
+JSON.stringify(wishlist)
+);
+
+location.reload();
+
+};
+
+</script>
 
 </body>
 </html>
