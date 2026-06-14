@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pengaturan Toko - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+body{
+background:#f8fafc;
+}
+
+.dashboard{
+max-width:1300px;
+margin:auto;
+padding:30px 20px;
+}
+
+.page-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.page-header h1{
+font-size:32px;
+font-weight:800;
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.stat-card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.stat-card h2{
+font-size:28px;
+margin-top:10px;
+color:#16a34a;
+}
+
+.form-card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,.05);
+margin-bottom:25px;
+}
+
+.form-card h2{
+margin-bottom:20px;
+font-size:22px;
+}
+
+.grid-2{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+.input-group{
+display:flex;
+flex-direction:column;
+margin-bottom:18px;
+}
+
+.input-group label{
+font-weight:600;
+margin-bottom:8px;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select{
+padding:14px;
+border:1px solid #e2e8f0;
+border-radius:12px;
+font-size:15px;
+outline:none;
+}
+
+.input-group textarea{
+resize:vertical;
+min-height:120px;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus{
+border-color:#22c55e;
+}
+
+.preview-image{
+width:100%;
+max-height:250px;
+object-fit:cover;
+border-radius:15px;
+border:1px solid #e2e8f0;
+margin-top:10px;
+}
+
+.logo-preview{
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:15px;
+border:1px solid #e2e8f0;
+margin-top:10px;
+}
+
+.status-box{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.status-item{
+padding:12px 18px;
+border-radius:12px;
+cursor:pointer;
+border:1px solid #ddd;
+}
+
+.status-item.active{
+background:#22c55e;
+color:white;
+border:none;
+}
+
+.action-buttons{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-top:20px;
+}
+
+.btn-primary{
+background:#22c55e;
+color:white;
+border:none;
+padding:14px 25px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer;
+}
+
+.btn-secondary{
+background:#e2e8f0;
+border:none;
+padding:14px 25px;
+border-radius:12px;
+cursor:pointer;
+}
+
+.preview-store{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,.05);
+margin-top:30px;
+}
+
+.preview-banner{
+width:100%;
+height:250px;
+object-fit:cover;
+border-radius:20px;
+}
+
+.preview-header{
+display:flex;
+align-items:center;
+gap:20px;
+margin-top:-50px;
+padding-left:30px;
+}
+
+.preview-header img{
+width:100px;
+height:100px;
+border-radius:50%;
+border:5px solid white;
+object-fit:cover;
+background:white;
+}
+
+.preview-content{
+padding:20px 30px;
+}
+
+.loading{
+display:none;
+margin-top:15px;
+font-weight:600;
+color:#16a34a;
+}
+
+@media(max-width:768px){
+
+.page-header{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.preview-header{
+flex-direction:column;
+align-items:flex-start;
+margin-top:20px;
+padding-left:20px;
+}
+
+}
+
+</style>
+
+</head>
+
+<
+>
+
+<section class="dashboard">
+
+<div class="page-header">
+
+<div>
+<h1>⚙️ Pengaturan Toko</h1>
+<p>Kelola profil dan pengaturan UMKM Anda</p>
+</div>
+
+<button class="btn-secondary">
+👁️ Preview Toko
+</button>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<p>Total Produk</p>
+<h2 id="totalProduk">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Total Pesanan</p>
+<h2 id="totalPesanan">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Total Review</p>
+<h2 id="totalReview">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Rating Toko</p>
+<h2 id="ratingToko">0.0</h2>
+</div>
+
+</div>
+
+<div class="form-card">
+
+<h2>🏪 Informasi Toko</h2>
+
+<div class="grid-2">
+
+<div>
+
+<div class="input-group">
+<label>Nama UMKM</label>
+<input type="text" id="namaUmkm">
+</div>
+
+<div class="input-group">
+<label>Nama Pemilik</label>
+<input type="text" id="namaPemilik">
+</div>
+
+<div class="input-group">
+<label>WhatsApp</label>
+<input type="text" id="whatsapp">
+</div>
+
+<div class="input-group">
+<label>Kategori</label>
+<input type="text" id="kategori">
+</div>
+
+<div class="input-group">
+<label>Alamat</label>
+<textarea id="alamat"></textarea>
+</div>
+
+</div>
+
+<div>
+
+<div class="input-group">
+<label>Jam Operasional</label>
+<input type="text" id="jamOperasional">
+</div>
+
+<div class="input-group">
+<label>Status Toko</label>
+
+<div class="status-box">
+
+<div class="status-item active" id="statusBuka">
+🟢 Buka
+</div>
+
+<div class="status-item" id="statusTutup">
+🔴 Tutup
+</div>
+
+</div>
+
+</div>
+
+<div class="input-group">
+<label>Deskripsi Toko</label>
+<textarea id="deskripsi"></textarea>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="form-card">
+
+<h2>🖼️ Branding Toko</h2>
+
+<div class="grid-2">
+
+<div>
+
+<div class="input-group">
+<label>Logo Toko</label>
+<input type="file" id="logoFile" accept="image/*">
+<img id="previewLogo" class="logo-preview">
+</div>
+
+</div>
+
+<div>
+
+<div class="input-group">
+<label>Banner Toko</label>
+<input type="file" id="bannerFile" accept="image/*">
+<img id="previewBanner" class="preview-image">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="form-card">
+
+<h2>💳 Pengaturan Pembayaran</h2>
+
+<div class="grid-2">
+
+<div class="input-group">
+<label>Nama Bank</label>
+<input type="text" id="namaBank">
+</div>
+
+<div class="input-group">
+<label>Nama Rekening</label>
+<input type="text" id="namaRekening">
+</div>
+
+<div class="input-group">
+<label>Nomor Rekening</label>
+<input type="text" id="nomorRekening">
+</div>
+
+<div class="input-group">
+<label>QRIS</label>
+<input type="file" id="qrisFile" accept="image/*">
+<img id="previewQris" class="preview-image">
+</div>
+
+</div>
+
+</div>
+
+<div class="form-card">
+
+<h2>🚚 Pengaturan Pengiriman</h2>
+
+<div class="grid-2">
+
+<div class="input-group">
+<label>Ongkir Dasar (Rp)</label>
+<input type="number" id="ongkirDasar">
+</div>
+
+<div class="input-group">
+<label>Kurir Aktif</label>
+
+<div style="display:flex;gap:15px;flex-wrap:wrap;">
+
+<label>
+<input type="checkbox" id="jne">
+JNE
+</label>
+
+<label>
+<input type="checkbox" id="jnt">
+J&T
+</label>
+
+<label>
+<input type="checkbox" id="sicepat">
+SiCepat
+</label>
+
+<label>
+<input type="checkbox" id="pos">
+POS
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="form-card">
+
+<h2>🌐 Media Sosial</h2>
+
+<div class="grid-2">
+
+<div class="input-group">
+<label>Instagram</label>
+<input type="text" id="instagram">
+</div>
+
+<div class="input-group">
+<label>Facebook</label>
+<input type="text" id="facebook">
+</div>
+
+<div class="input-group">
+<label>TikTok</label>
+<input type="text" id="tiktok">
+</div>
+
+<div class="input-group">
+<label>Website</label>
+<input type="text" id="website">
+</div>
+
+</div>
+
+</div>
+
+<div class="form-card">
+
+<h2>📍 Lokasi Toko</h2>
+
+<div class="input-group">
+
+<label>Link Google Maps</label>
+
+<input
+type="text"
+id="maps"
+placeholder="https://maps.google.com/...">
+
+</div>
+
+</div>
+
+<div class="action-buttons">
+
+<button
+id="simpanBtn"
+class="btn-primary">
+
+💾 Simpan Perubahan
+
+</button>
+
+<button
+id="resetBtn"
+class="btn-secondary">
+
+↺ Reset Form
+
+</button>
+
+</div>
+
+<div
+id="loading"
+class="loading">
+
+Menyimpan data toko...
+
+</div>
+
+<div class="preview-store">
+
+<h2>👁️ Preview Toko</h2>
+
+<img
+id="previewBannerStore"
+class="preview-banner"
+src="https://picsum.photos/1200/400">
+
+<div class="preview-header">
+
+<img
+id="previewLogoStore"
+src="https://picsum.photos/200">
+
+<div>
+
+<h2 id="previewNama">
+Nama Toko
+</h2>
+
+<p id="previewKategori">
+Kategori
+</p>
+
+</div>
+
+</div>
+
+<div class="preview-content">
+
+<p id="previewDeskripsi">
+Deskripsi toko akan tampil di sini.
+</p>
+
+<br>
+
+<p>
+📍 <span id="previewAlamat">Alamat</span>
+</p>
+
+<p>
+📞 <span id="previewWhatsapp">WhatsApp</span>
+</p>
+
+<p>
+🕒 <span id="previewJam">Jam Operasional</span>
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+query,
+where,
+getDocs,
+updateDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+const storage =
+getStorage(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
+const snapshot =
+await getDocs(
+query(
+collection(db,"umkm"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+)
+)
+);
+
+if(snapshot.empty){
+
+alert(
+"Data toko tidak ditemukan"
+);
+
+throw new Error();
+
+}
+
+const tokoDoc =
+snapshot.docs[0];
+
+const toko =
+tokoDoc.data();
+
+document.getElementById("namaUmkm").value =
+toko.namaUmkm || "";
+
+document.getElementById("namaPemilik").value =
+toko.namaPemilik || "";
+
+document.getElementById("whatsapp").value =
+toko.whatsapp || "";
+
+document.getElementById("kategori").value =
+toko.kategori || "";
+
+document.getElementById("alamat").value =
+toko.alamat || "";
+
+document.getElementById("jamOperasional").value =
+toko.jamOperasional || "";
+
+document.getElementById("deskripsi").value =
+toko.deskripsi || "";
+
+document.getElementById("namaBank").value =
+toko.namaBank || "";
+
+document.getElementById("namaRekening").value =
+toko.namaRekening || "";
+
+document.getElementById("nomorRekening").value =
+toko.nomorRekening || "";
+
+document.getElementById("instagram").value =
+toko.instagram || "";
+
+document.getElementById("facebook").value =
+toko.facebook || "";
+
+document.getElementById("tiktok").value =
+toko.tiktok || "";
+
+document.getElementById("website").value =
+toko.website || "";
+
+document.getElementById("maps").value =
+toko.maps || "";
+
+document.getElementById("ongkirDasar").value =
+toko.ongkirDasar || 0;
+
+document.getElementById("previewLogo").src =
+toko.logo || "https://picsum.photos/200";
+
+document.getElementById("previewBanner").src =
+toko.banner || "https://picsum.photos/1200/400";
+
+document.getElementById("previewQris").src =
+toko.qris || "https://picsum.photos/300";
+
+document.getElementById("previewLogoStore").src =
+toko.logo || "https://picsum.photos/200";
+
+document.getElementById("previewBannerStore").src =
+toko.banner || "https://picsum.photos/1200/400";
+
+function updatePreview(){
+
+document.getElementById(
+"previewNama"
+).innerText =
+document.getElementById(
+"namaUmkm"
+).value;
+
+document.getElementById(
+"previewKategori"
+).innerText =
+document.getElementById(
+"kategori"
+).value;
+
+document.getElementById(
+"previewDeskripsi"
+).innerText =
+document.getElementById(
+"deskripsi"
+).value;
+
+document.getElementById(
+"previewAlamat"
+).innerText =
+document.getElementById(
+"alamat"
+).value;
+
+document.getElementById(
+"previewWhatsapp"
+).innerText =
+document.getElementById(
+"whatsapp"
+).value;
+
+document.getElementById(
+"previewJam"
+).innerText =
+document.getElementById(
+"jamOperasional"
+).value;
+
+}
+
+document.querySelectorAll(
+"input,textarea"
+).forEach((el)=>{
+
+el.addEventListener(
+"input",
+updatePreview
+);
+
+});
+
+document.getElementById(
+"logoFile"
+).addEventListener(
+"change",
+(e)=>{
+
+const file =
+e.target.files[0];
+
+if(file){
+
+const url =
+URL.createObjectURL(file);
+
+document.getElementById(
+"previewLogo"
+).src = url;
+
+document.getElementById(
+"previewLogoStore"
+).src = url;
+
+}
+
+}
+);
+
+document.getElementById(
+"bannerFile"
+).addEventListener(
+"change",
+(e)=>{
+
+const file =
+e.target.files[0];
+
+if(file){
+
+const url =
+URL.createObjectURL(file);
+
+document.getElementById(
+"previewBanner"
+).src = url;
+
+document.getElementById(
+"previewBannerStore"
+).src = url;
+
+}
+
+}
+);
+
+updatePreview();
+
+async function uploadFile(path,file){
+
+if(!file) return null;
+
+const storageRef =
+ref(storage,path);
+
+await uploadBytes(
+storageRef,
+file
+);
+
+return await getDownloadURL(
+storageRef
+);
+
+}
+
+async function hitungStatistik(){
+
+const produkSnap =
+await getDocs(
+query(
+collection(db,"produk"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+)
+)
+);
+
+const pesananSnap =
+await getDocs(
+query(
+collection(db,"pesanan"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+)
+)
+);
+
+const reviewSnap =
+await getDocs(
+collection(db,"review")
+);
+
+let ratingTotal = 0;
+let totalReview = 0;
+
+reviewSnap.forEach((item)=>{
+
+const data =
+item.data();
+
+if(
+data.uidUmkm ===
+auth.currentUser.uid
+){
+
+ratingTotal +=
+Number(
+data.rating || 0
+);
+
+totalReview++;
+
+}
+
+});
+
+document.getElementById(
+"totalProduk"
+).innerText =
+produkSnap.size;
+
+document.getElementById(
+"totalPesanan"
+).innerText =
+pesananSnap.size;
+
+document.getElementById(
+"totalReview"
+).innerText =
+totalReview;
+
+document.getElementById(
+"ratingToko"
+).innerText =
+totalReview > 0
+?
+(
+ratingTotal /
+totalReview
+).toFixed(1)
+:
+"0.0";
+
+}
+
+await hitungStatistik();
+
+document
+.getElementById("resetBtn")
+.addEventListener(
+"click",
+()=>{
+
+if(
+confirm(
+"Reset semua perubahan?"
+)
+){
+
+location.reload();
+
+}
+
+}
+);
+
+document
+.getElementById("statusBuka")
+.addEventListener(
+"click",
+()=>{
+
+document
+.getElementById(
+"statusBuka"
+)
+.classList.add(
+"active"
+);
+
+document
+.getElementById(
+"statusTutup"
+)
+.classList.remove(
+"active"
+);
+
+}
+);
+
+document
+.getElementById("statusTutup")
+.addEventListener(
+"click",
+()=>{
+
+document
+.getElementById(
+"statusTutup"
+)
+.classList.add(
+"active"
+);
+
+document
+.getElementById(
+"statusBuka"
+)
+.classList.remove(
+"active"
+);
+
+}
+);
+
+document
+.getElementById("simpanBtn")
+.addEventListener(
+"click",
+async()=>{
+
+try{
+
+const btn =
+document.getElementById(
+"simpanBtn"
+);
+
+const loading =
+document.getElementById(
+"loading"
+);
+
+btn.disabled = true;
+
+loading.style.display =
+"block";
+
+const namaUmkm =
+document
+.getElementById(
+"namaUmkm"
+)
+.value.trim();
+
+const whatsapp =
+document
+.getElementById(
+"whatsapp"
+)
+.value.trim();
+
+if(!namaUmkm){
+
+alert(
+"Nama UMKM wajib diisi"
+);
+
+return;
+
+}
+
+if(
+!whatsapp.startsWith(
+"08"
+)
+){
+
+alert(
+"Nomor WhatsApp harus diawali 08"
+);
+
+return;
+
+}
+
+let logoUrl =
+toko.logo || "";
+
+let bannerUrl =
+toko.banner || "";
+
+let qrisUrl =
+toko.qris || "";
+
+const logoFile =
+document
+.getElementById(
+"logoFile"
+)
+.files[0];
+
+const bannerFile =
+document
+.getElementById(
+"bannerFile"
+)
+.files[0];
+
+const qrisFile =
+document
+.getElementById(
+"qrisFile"
+)
+.files[0];
+
+if(logoFile){
+
+logoUrl =
+await uploadFile(
+"logo/" +
+auth.currentUser.uid,
+logoFile
+);
+
+}
+
+if(bannerFile){
+
+bannerUrl =
+await uploadFile(
+"banner/" +
+auth.currentUser.uid,
+bannerFile
+);
+
+}
+
+if(qrisFile){
+
+qrisUrl =
+await uploadFile(
+"qris/" +
+auth.currentUser.uid,
+qrisFile
+);
+
+}
+
+const kurirAktif = [];
+
+if(
+document
+.getElementById(
+"jne"
+)
+.checked
+){
+
+kurirAktif.push(
+"JNE"
+);
+
+}
+
+if(
+document
+.getElementById(
+"jnt"
+)
+.checked
+){
+
+kurirAktif.push(
+"J&T"
+);
+
+}
+
+if(
+document
+.getElementById(
+"sicepat"
+)
+.checked
+){
+
+kurirAktif.push(
+"SiCepat"
+);
+
+}
+
+if(
+document
+.getElementById(
+"pos"
+)
+.checked
+){
+
+kurirAktif.push(
+"POS"
+);
+
+}
+
+await updateDoc(
+doc(
+db,
+"umkm",
+tokoDoc.id
+),
+{
+
+namaUmkm:
+document
+.getElementById(
+"namaUmkm"
+)
+.value,
+
+namaPemilik:
+document
+.getElementById(
+"namaPemilik"
+)
+.value,
+
+whatsapp:
+document
+.getElementById(
+"whatsapp"
+)
+.value,
+
+kategori:
+document
+.getElementById(
+"kategori"
+)
+.value,
+
+alamat:
+document
+.getElementById(
+"alamat"
+)
+.value,
+
+jamOperasional:
+document
+.getElementById(
+"jamOperasional"
+)
+.value,
+
+deskripsi:
+document
+.getElementById(
+"deskripsi"
+)
+.value,
+
+statusToko:
+document
+.getElementById(
+"statusBuka"
+)
+.classList.contains(
+"active"
+)
+?
+"Buka"
+:
+"Tutup",
+
+logo:
+logoUrl,
+
+banner:
+bannerUrl,
+
+namaBank:
+document
+.getElementById(
+"namaBank"
+)
+.value,
+
+namaRekening:
+document
+.getElementById(
+"namaRekening"
+)
+.value,
+
+nomorRekening:
+document
+.getElementById(
+"nomorRekening"
+)
+.value,
+
+qris:
+qrisUrl,
+
+instagram:
+document
+.getElementById(
+"instagram"
+)
+.value,
+
+facebook:
+document
+.getElementById(
+"facebook"
+)
+.value,
+
+tiktok:
+document
+.getElementById(
+"tiktok"
+)
+.value,
+
+website:
+document
+.getElementById(
+"website"
+)
+.value,
+
+maps:
+document
+.getElementById(
+"maps"
+)
+.value,
+
+ongkirDasar:
+Number(
+document
+.getElementById(
+"ongkirDasar"
+)
+.value || 0
+),
+
+kurirAktif:
+kurirAktif,
+
+updatedAt:
+new Date()
+
+}
+);
+
+alert(
+"Pengaturan toko berhasil disimpan"
+);
+
+location.reload();
+
+}
+catch(error){
+
+console.error(
+error
+);
+
+alert(
+"Gagal menyimpan data"
+);
+
+}
+finally{
+
+document
+.getElementById(
+"simpanBtn"
+)
+.disabled = false;
+
+document
+.getElementById(
+"loading"
+)
+.style.display =
+"none";
+
+}
+
+}
+);
+</script>
+
+</body>
+</html>
