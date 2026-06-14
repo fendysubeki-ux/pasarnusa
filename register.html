@@ -303,19 +303,23 @@ createdAt:serverTimestamp()
 alert(
 "Akun berhasil dibuat.\n\nSilakan cek email untuk verifikasi akun."
 );
+
 await signOut(auth);
+
 window.location.href =
 "login.html";
 
 }
 catch(error){
 
-if(error.code==="auth/email-already-in-use"){
-alert("Email sudah digunakan");
-}
-else{
-alert("Terjadi kesalahan");
-}
+console.error(error);
+
+alert(
+"Kode Error:\n" +
+error.code +
+"\n\nPesan:\n" +
+error.message
+);
 
 }
 finally{
