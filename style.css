@@ -325,15 +325,6 @@ transparent 30%
     -webkit-text-fill-color:transparent;
 }
 
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-
-}
-
 .stats{
     padding:50px 8%;
     display:grid;
@@ -1027,13 +1018,14 @@ background:#dcfce7;
 .menunggu{
 background:#fee2e2;
 }
-.search-box{
+.search-input{
 width:100%;
-padding:15px;
+padding:14px;
+border-radius:12px;
 border:1px solid #ddd;
-border-radius:10px;
-margin:20px 0;
-font-size:16px;
+margin-bottom:20px;
+font-size:15px;
+font-family:'Plus Jakarta Sans',sans-serif;
 }
 .stats-grid{
 display:grid;
@@ -1164,26 +1156,6 @@ transform:scale(1.05);
 
 /* Buttons */
 
-.btn-primary{
-background:linear-gradient(
-135deg,
-#10b981,
-#34d399
-);
-
-box-shadow:0 10px 25px rgba(249,115,22,.35);
-transition:.3s;
-}
-
-.btn-primary:hover{
-
-transform:translateY(-3px);
-
-box-shadow:
-0 15px 35px rgba(249,115,22,.45);
-
-}
-
 .btn-secondary{
 
 background:white;
@@ -1220,11 +1192,11 @@ select:focus{
 
 outline:none;
 
-border-color:#f97316;
+border-color:#10b981;
 
 box-shadow:
 0 0 0 4px
-rgba(249,115,22,.15);
+rgba(16,185,129,.15);
 
 }
 
@@ -1286,8 +1258,7 @@ width:8px;
 }
 
 ::-webkit-scrollbar-thumb{
-background:#f97316;
-border-radius:20px;
+background:#10b981;
 }
 
 ::-webkit-scrollbar-track{
@@ -1340,7 +1311,7 @@ background:
 linear-gradient(
 90deg,
 #10b981,
-#ffb347
+#34d399
 );
 
 }
@@ -1430,30 +1401,24 @@ rgba(0,0,0,.15);
 /* BUTTON UPGRADE */
 
 .btn-primary{
-
-background:
-linear-gradient(
+background:linear-gradient(
 135deg,
 #10b981,
-#ff8c42
+#34d399
 );
 
 box-shadow:
-0 10px 25px
-rgba(255,107,0,.3);
+0 10px 25px rgba(16,185,129,.3);
 
 transition:.3s;
-
 }
 
 .btn-primary:hover{
 
-transform:
-translateY(-3px);
+transform:translateY(-3px);
 
 box-shadow:
-0 15px 35px
-rgba(255,107,0,.4);
+0 15px 35px rgba(16,185,129,.45);
 
 }
 .feature-card h3{
@@ -1623,34 +1588,30 @@ text-decoration:none;
 .product-card:hover{
 border-color:#10b981;
 }
-.nav-links{
-    display:flex;
-    gap:20px;
-}
 
 @media (max-width:900px){
 
-    .menu-toggle{
-        display:block;
-    }
+.menu-toggle{
+display:block;
+}
 
-    .nav-links{
-        display:none;
-        flex-direction:column;
-        position:absolute;
-        top:80px;
-        left:0;
-        width:100%;
-        background:#fff;
-        padding:20px;
-        gap:15px;
-        box-shadow:0 10px 30px rgba(0,0,0,.1);
-        z-index:999;
-    }
+.nav-links{
+display:none;
+flex-direction:column;
+position:absolute;
+top:80px;
+left:0;
+width:100%;
+background:#fff;
+padding:20px;
+gap:15px;
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+z-index:999;
+}
 
-    .nav-links.active{
-        display:flex;
-    }
+.nav-links.active{
+display:flex;
+}
 
 }
 .nav-links a{
@@ -1672,7 +1633,7 @@ body{
     max-width:100%;
 }
 #cartCount{
-background:#ff5722;
+background:#10b981;
 color:white;
 padding:2px 8px;
 border-radius:20px;
@@ -1721,37 +1682,209 @@ display:none;
 }
 
 }
-.menu-toggle{
-display:none;
-font-size:35px;
-cursor:pointer;
+#chatContainer{
+height:60vh;
+overflow-y:auto;
+padding:15px;
+background:#f5f7fb;
+border-radius:16px;
+margin-bottom:15px;
 }
 
-@media(max-width:768px){
-
-.menu-toggle{
-display:block;
-}
-
-.nav-links{
-display:none;
-position:absolute;
-top:80px;
-left:0;
-width:100%;
+.chat-bubble{
 background:white;
-flex-direction:column;
-padding:20px;
-box-shadow:0 10px 20px rgba(0,0,0,.1);
-z-index:999;
+padding:12px;
+margin-bottom:10px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-.nav-links.active{
+.chat-name{
+font-weight:700;
+font-size:14px;
+color:#16c79a;
+margin-bottom:5px;
+}
+
+.chat-input{
 display:flex;
+gap:10px;
 }
 
-.nav-btn{
-display:none;
+.chat-input input{
+flex:1;
 }
 
+.chat-input button{
+width:100px;
+}
+
+.tracking-container{
+display:flex;
+justify-content:space-between;
+margin-top:30px;
+gap:10px;
+}
+
+.tracking-step{
+text-align:center;
+flex:1;
+opacity:.4;
+}
+
+.tracking-circle{
+width:50px;
+height:50px;
+border-radius:50%;
+background:#ddd;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:auto;
+font-weight:700;
+}
+
+.tracking-step.active{
+opacity:1;
+}
+
+.tracking-step.active .tracking-circle{
+background:#16a34a;
+color:white;
+}
+#notifCount{
+background:#ef4444;
+color:white;
+padding:2px 8px;
+border-radius:999px;
+font-size:12px;
+font-weight:700;
+}
+.status-badge{
+display:inline-block;
+padding:8px 14px;
+border-radius:20px;
+font-size:14px;
+font-weight:700;
+background:#e8f5e9;
+color:#2e7d32;
+}
+.btn-primary:active,
+.btn-secondary:active{
+transform:scale(.97);
+}
+.loading{
+background:#e5e7eb;
+height:20px;
+border-radius:8px;
+animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:.5;}
+50%{opacity:1;}
+100%{opacity:.5;}
+}
+.dashboard-card,
+.product-card,
+.feature-card{
+animation:fadeUp .5s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+.table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:20px;
+overflow:hidden;
+}
+
+.table th{
+background:#10b981;
+color:white;
+padding:15px;
+}
+
+.table td{
+padding:15px;
+border-bottom:1px solid #eee;
+}
+.status-belum{
+background:#fee2e2;
+color:#dc2626;
+}
+
+.status-proses{
+background:#fef3c7;
+color:#d97706;
+}
+
+.status-kirim{
+background:#dbeafe;
+color:#2563eb;
+}
+
+.status-selesai{
+background:#dcfce7;
+color:#16a34a;
+}
+.page-loading{
+opacity:0;
+animation:pageLoad .5s forwards;
+}
+
+@keyframes pageLoad{
+to{
+opacity:1;
+}
+}
+.rating-badge{
+display:inline-block;
+background:#fef3c7;
+color:#d97706;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:700;
+}
+.status-affiliate{
+background:#ede9fe;
+color:#7c3aed;
+padding:8px 14px;
+border-radius:20px;
+font-weight:700;
+display:inline-block;
+}
+.voucher-card{
+background:#ecfdf5;
+border:1px dashed #10b981;
+padding:20px;
+border-radius:20px;
+}
+
+.voucher-code{
+font-size:22px;
+font-weight:800;
+color:#10b981;
+}
+.notifikasi-card{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.notifikasi-baru{
+border-left:5px solid #10b981;
 }
