@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Statistik Marketplace - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><div class="dashboard-header"><div><h1>📈 Statistik Marketplace</h1><p>
+Laporan dan performa seluruh marketplace PasarNusa.
+</p></div><a href="admin.html" class="btn-secondary">
+Kembali
+</a></div><div class="dashboard-grid"><div class="dashboard-card">
+<h3 id="totalUmkm">0</h3>
+<p>Total UMKM</p>
+</div><div class="dashboard-card">
+<h3 id="totalAffiliate">0</h3>
+<p>Total Affiliate</p>
+</div><div class="dashboard-card">
+<h3 id="totalProduk">0</h3>
+<p>Total Produk</p>
+</div><div class="dashboard-card">
+<h3 id="totalPesanan">0</h3>
+<p>Total Pesanan</p>
+</div><div class="dashboard-card">
+<h3 id="totalTransaksi">Rp 0</h3>
+<p>Total Transaksi</p>
+</div><div class="dashboard-card">
+<h3 id="pendapatanPlatform">Rp 0</h3>
+<p>Pendapatan Platform</p>
+</div><div class="dashboard-card">
+<h3 id="komisiAffiliate">Rp 0</h3>
+<p>Komisi Affiliate</p>
+</div><div class="dashboard-card">
+<h3 id="subsidiOngkir">Rp 0</h3>
+<p>Subsidi Ongkir</p>
+</div></div><h2>🏆 Produk Terlaris Marketplace</h2><div
+id="produkTerlaris"
+class="dashboard-grid"><div class="dashboard-card">
+<p>Memuat data...</p>
+</div></div><h2>🏪 UMKM Terlaris</h2><div
+id="umkmTerlaris"
+class="dashboard-grid"><div class="dashboard-card">
+<p>Memuat data...</p>
+</div></div></section><script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_PROJECT.appspot.com",
+messagingSenderId:"YOUR_SENDER_ID",
+appId:"YOUR_APP_ID"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+async function loadStatistik(){
+
+try{
+
+const umkmSnap =
+await getDocs(
+collection(db,"umkm")
+);
+
+const affiliateSnap =
+await getDocs(
+collection(db,"affiliate")
+);
+
+const produkSnap =
+await getDocs(
+collection(db,"produk")
+);
+
+const pesananSnap =
+await getDocs(
+collection(db,"pesanan")
+);
+
+document.getElementById(
+"totalUmkm"
+).innerText =
+umkmSnap.size;
+
+document.getElementById(
+"totalAffiliate"
+).innerText =
+affiliateSnap.size;
+
+document.getElementById(
+"totalProduk"
+).innerText =
+produkSnap.size;
+
+document.getElementById(
+"totalPesanan"
+).innerText =
+pesananSnap.size;
+
+let totalTransaksi = 0;
+let pendapatanPlatform = 0;
+let komisiAffiliate = 0;
+let subsidiOngkir = 0;
+
+const produkList = [];
+const umkmMap = {};
+
+pesananSnap.forEach((item)=>{
+
+const data = item.data();
+
+totalTransaksi +=
+Number(
+data.totalBayar || 0
+);
+
+pendapatanPlatform +=
+Number(
+data.pendapatanPlatform || 0
+);
+
+komisiAffiliate +=
+Number(
+data.komisiAffiliate || 0
+);
+
+subsidiOngkir +=
+Number(
+data.subsidiOngkir || 0
+);
+
+if(data.uid){
+
+if(!umkmMap[data.uid]){
+
+umkmMap[data.uid] = {
+pesanan:0,
+omzet:0
+};
+
+}
+
+umkmMap[data.uid].pesanan++;
+
+umkmMap[data.uid].omzet +=
+Number(
+data.totalBayar || 0
+);
+
+}
+
+});
+
+document.getElementById(
+"totalTransaksi"
+).innerText =
+"Rp " +
+totalTransaksi.toLocaleString("id-ID");
+
+document.getElementById(
+"pendapatanPlatform"
+).innerText =
+"Rp " +
+pendapatanPlatform.toLocaleString("id-ID");
+
+document.getElementById(
+"komisiAffiliate"
+).innerText =
+"Rp " +
+komisiAffiliate.toLocaleString("id-ID");
+
+document.getElementById(
+"subsidiOngkir"
+).innerText =
+"Rp " +
+subsidiOngkir.toLocaleString("id-ID");
+
+produkSnap.forEach((item)=>{
+
+const data = item.data();
+
+produkList.push({
+nama:data.namaProduk || "-",
+terjual:Number(data.terjual || 0),
+harga:Number(data.harga || 0)
+});
+
+});
+
+produkList.sort(
+(a,b)=>
+b.terjual - a.terjual
+);
+
+const produkContainer =
+document.getElementById(
+"produkTerlaris"
+);
+
+produkContainer.innerHTML = "";
+
+produkList
+.slice(0,10)
+.forEach((produk,index)=>{
+
+produkContainer.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+#${index + 1}
+</h3>
+
+<h4>
+${produk.nama}
+</h4>
+
+<p>
+Terjual:
+${produk.terjual}
+</p>
+
+</div>
+
+`;
+
+});
+
+const umkmContainer =
+document.getElementById(
+"umkmTerlaris"
+);
+
+umkmContainer.innerHTML = "";
+
+const rankingUmkm =
+Object.entries(umkmMap)
+.sort(
+(a,b)=>
+b[1].omzet -
+a[1].omzet
+)
+.slice(0,10);
+
+rankingUmkm.forEach(
+(item,index)=>{
+
+umkmContainer.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+#${index + 1}
+</h3>
+
+<p>
+UID:
+${item[0]}
+</p>
+
+<p>
+Pesanan:
+${item[1].pesanan}
+</p>
+
+<p>
+Omzet:
+Rp ${item[1].omzet.toLocaleString("id-ID")}
+</p>
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Gagal memuat statistik marketplace"
+);
+
+}
+
+}
+
+loadStatistik();
+
+</script></body>
+</html>
