@@ -1,117 +1,62 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Dashboard Penjual</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<section class="dashboard">
-
-<h1 id="judulDashboard">
-Dashboard Penjual
-</h1>
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-<h3 id="totalProduk">0</h3>
-<p>Total Produk</p>
-</div>
-<div class="dashboard-card">
-<h3 id="produkTerlaris">-</h3>
-<p>Produk Terlaris</p>
-</div>
-
-<div class="dashboard-card">
-<h3 id="rataPesanan">0</h3>
-<p>Rata-rata Pesanan</p>
-</div>
-<div class="dashboard-card">
-<h3 id="totalPesanan">0</h3>
-<p>Total Pesanan</p>
-</div>
-
-<div class="dashboard-card">
-<h3 id="totalOmzet">Rp 0</h3>
-<p>Total Omzet</p>
-</div>
-
-</div>
-
-<div class="dashboard-grid">
-
-<a href="profil-umkm.html" class="dashboard-card">
-  
-<h3>Profil UMKM</h3>
-<p>Kelola data toko</p>
-</a>
-<a href="pengaturan-toko.html" class="dashboard-card">
-<h3>⚙️ Pengaturan Toko</h3>
-<p>Profil, QRIS & Rekening</p>
-</a>
-<a href="tambah-produk.html" class="dashboard-card">
-<h3>Tambah Produk</h3>
-<p>Tambah produk baru</p>
-</a>
-
-<a href="dashboard-produk.html" class="dashboard-card">
-<h3>Produk Saya</h3>
-<p>Lihat semua produk</p>
-</a>
-
-<a href="dashboard-pesanan.html" class="dashboard-card">
-<h3>Pesanan Masuk</h3>
-<p>Lihat pesanan pelanggan</p>
-</a>
-<a href="riwayat-transaksi.html"
-class="dashboard-card">
-
-<h3>Transaksi</h3>
-
-<p>Riwayat Penjualan</p>
-
-</a>
-<a href="notifikasi.html" class="dashboard-card">
-
-<h3 id="jumlahNotifikasi">0</h3>
-
-<p>Notifikasi Baru</p>
-
-</a>
-<a href="index.html" class="dashboard-card">
-<h3>Beranda</h3>
-<p>Kembali ke website</p>
-</a>
-<a href="dashboard-affiliate.html" class="dashboard-card">
-
-<h3>Affiliate</h3>
-
-<p>Komisi & Referral</p>
-
-</a>
-<a href="#" id="logoutBtn" class="dashboard-card">
-<h3>Logout</h3>
-<p>Keluar dari akun</p>
-</a>
-</div>
-
-</section>
-<script type="module">
-
-import { initializeApp }
+<!DOCTYPE html>  <html lang="id">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Dashboard Penjual</title>  
+<link rel="preconnect" href="https://fonts.googleapis.com">  <link rel="preconnect"  
+href="https://fonts.gstatic.com"  
+crossorigin>  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"  
+rel="stylesheet">  
+<link rel="stylesheet" href="style.css">  
+</head>  <body>  <section class="dashboard">  <h1 id="judulDashboard">  
+Dashboard Penjual  
+</h1>  <div class="dashboard-grid">  <div class="dashboard-card">  
+<h3 id="totalProduk">0</h3>  
+<p>Total Produk</p>  
+</div>  
+<div class="dashboard-card">  
+<h3 id="produkTerlaris">-</h3>  
+<p>Produk Terlaris</p>  
+</div>  <div class="dashboard-card">  
+<h3 id="rataPesanan">0</h3>  
+<p>Rata-rata Pesanan</p>  
+</div>  
+<div class="dashboard-card">  
+<h3 id="totalPesanan">0</h3>  
+<p>Total Pesanan</p>  
+</div>  <div class="dashboard-card">  
+<h3 id="totalOmzet">Rp 0</h3>  
+<p>Total Omzet</p>  
+</div>  </div>  <div class="dashboard-grid">  <a href="profil-umkm.html" class="dashboard-card">  <h3>Profil UMKM</h3>  
+<p>Kelola data toko</p>  
+</a>  
+<a href="pengaturan-toko.html" class="dashboard-card">  
+<h3>⚙️ Pengaturan Toko</h3>  
+<p>Profil, QRIS & Rekening</p>  
+</a>  
+<a href="tambah-produk.html" class="dashboard-card">  
+<h3>Tambah Produk</h3>  
+<p>Tambah produk baru</p>  
+</a>  <a href="dashboard-produk.html" class="dashboard-card">  
+<h3>Produk Saya</h3>  
+<p>Lihat semua produk</p>  
+</a>  <a href="dashboard-pesanan.html" class="dashboard-card">  
+<h3>Pesanan Masuk</h3>  
+<p>Lihat pesanan pelanggan</p>  
+</a>  
+<a href="riwayat-transaksi.html"  
+class="dashboard-card">  <h3>Transaksi</h3>  <p>Riwayat Penjualan</p>  </a>  
+<a href="notifikasi.html" class="dashboard-card">  <h3 id="jumlahNotifikasi">0</h3>  <p>Notifikasi Baru</p>  </a>  
+<a href="index.html" class="dashboard-card">  
+<h3>Beranda</h3>  
+<p>Kembali ke website</p>  
+</a>  
+<a href="dashboard-affiliate.html" class="dashboard-card">  <h3>Affiliate</h3>  <p>Komisi & Referral</p>  </a>  
+<a href="#" id="logoutBtn" class="dashboard-card">  
+<h3>Logout</h3>  
+<p>Keluar dari akun</p>  
+</a>  
+</div>  </section>  
+<script type="module">  import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
@@ -125,7 +70,8 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
 getAuth,
-signOut
+signOut,
+onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -145,25 +91,13 @@ appId: "1:866998011671:web:5555115feb82741ab55952"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-await auth.authStateReady();
 
-if(!auth.currentUser){
+onAuthStateChanged(auth, async(user)=>{
 
-window.location.href = "login.html";
-
-throw new Error("Belum login");
-
-}
-
-if(!auth.currentUser.emailVerified){
-
-alert("Silakan verifikasi email terlebih dahulu");
-
-await signOut(auth);
+if(!user){
 
 window.location.href = "login.html";
-
-throw new Error("Email belum diverifikasi");
+return;
 
 }
 
@@ -292,7 +226,9 @@ const data = item.data();
 
 if(
 Number(data.terjual || 0)
->
+
+> 
+
 jumlahTerjual
 ){
 
@@ -349,8 +285,9 @@ alert("Logout berhasil");
 
 window.location.href =
 "login.html";
-
+});
 });
 </script>
-</body>
+
+</body>  
 </html>
