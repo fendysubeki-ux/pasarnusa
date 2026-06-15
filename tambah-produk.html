@@ -72,9 +72,7 @@ placeholder="Deskripsi Produk">
 
 <input
 type="file"
-id="productImage"
-accept="image/*"
-multiple>
+id="productImage">
 
 <div id="previewContainer"></div>
 
@@ -110,23 +108,13 @@ getAuth
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
 const firebaseConfig = {
-
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_AUTH_DOMAIN",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_STORAGE_BUCKET",
-messagingSenderId:"YOUR_SENDER_ID",
-appId:"YOUR_APP_ID"
-
+apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain: "pasarnusa-18aa0.firebaseapp.com",
+projectId: "pasarnusa-18aa0",
+storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId: "866998011671",
+appId: "1:866998011671:web:5555115feb82741ab55952"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -134,17 +122,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const auth = getAuth(app);
-
-const storage = getStorage(app);
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href =
-"login.html";
-
-}
 
 const imageInput =
 document.getElementById("productImage");
@@ -299,6 +276,13 @@ auth.currentUser.uid
 )
 );
 
+if(!userDoc.exists()){
+
+alert("Data UMKM tidak ditemukan");
+return;
+
+}
+
 const userData =
 userDoc.data();
 
@@ -306,26 +290,43 @@ let imageUrls = [];
 
 for(const file of files){
 
-const storageRef =
-ref(
-storage,
-"produk/" +
-Date.now() +
-"_" +
-file.name
-);
+const formData =
+new FormData();
 
-await uploadBytes(
-storageRef,
+formData.append(
+"file",
 file
 );
 
-const url =
-await getDownloadURL(
-storageRef
+formData.append(
+"upload_preset",
+"pasarnusa"
 );
 
-imageUrls.push(url);
+const response =
+await fetch(
+"https://api.cloudinary.com/v1_1/dq8gha9lv/image/upload",
+{
+method:"POST",
+body:formData
+}
+);
+
+const data =
+await response.json();
+
+if(!data.secure_url){
+
+throw new Error(
+data.error?.message ||
+"Gagal upload gambar"
+);
+
+}
+
+imageUrls.push(
+data.secure_url
+);
 
 }
 
@@ -335,7 +336,6 @@ db,
 "produk"
 ),
 {
-
 uid:
 auth.currentUser.uid,
 
@@ -367,7 +367,6 @@ status:"Aktif",
 
 createdAt:
 serverTimestamp()
-
 }
 );
 
@@ -379,15 +378,17 @@ window.location.href =
 "dashboard-produk.html";
 
 }
+
 catch(error){
 
 console.error(error);
 
 alert(
-"Gagal menambahkan produk"
+error.message
 );
 
 }
+
 finally{
 
 btn.disabled = false;
