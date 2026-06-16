@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Profil Saya - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
+<body><div class="register-card"><h1>👤 Profil Saya</h1><p><b>Nama:</b></p>
+<p id="nama">Loading...</p><p><b>Email:</b></p>
+<p id="email">Loading...</p><p><b>Role:</b></p>
+<p id="role">Loading...</p><br><button
+id="btnLogout"
+class="btn-primary">
+🚪 Logout
+</button>
+
+<br><br>
+
+<a
+href="index.html"
+class="btn-secondary">
+🏠 Kembali ke Beranda
+</a>
+
+</div><script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+
+projectId:"pasarnusa-18aa0",
+
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+
+messagingSenderId:"866998011671",
+
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+const uid =
+localStorage.getItem("uid");
+
+if(!uid){
+
+alert("Silakan login terlebih dahulu");
+
+window.location.href =
+"login.html";
+
+}
+
+try{
+
+const userDoc =
+await getDoc(
+doc(db,"users",uid)
+);
+
+if(userDoc.exists()){
+
+const user =
+userDoc.data();
+
+document.getElementById("nama").innerText =
+user.nama || "-";
+
+document.getElementById("email").innerText =
+user.email || "-";
+
+document.getElementById("role").innerText =
+user.role || "user";
+
+}else{
+
+alert("Data user tidak ditemukan");
+
+}
+
+}catch(error){
+
+console.error(error);
+
+alert("Gagal memuat profil");
+
+}
+
+document
+.getElementById("btnLogout")
+.addEventListener(
+"click",
+async()=>{
+
+if(
+confirm("Yakin ingin logout?")
+){
+
+await signOut(auth);
+
+localStorage.clear();
+
+window.location.href =
+"login.html";
+
+}
+
+}
+);
+
+</script></body>
+</html>
