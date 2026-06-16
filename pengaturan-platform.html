@@ -223,7 +223,6 @@ placeholder="Ongkir Trenggalek">
 </div>
 
 <div class="setting-card">
-
 <h3>📋 Informasi Perubahan</h3>
 
 <p>
@@ -235,6 +234,34 @@ Terakhir diperbarui:
 Diperbarui oleh:
 <span id="updatedBy">-</span>
 </p>
+
+</div>
+
+<br>
+
+<div class="setting-card">
+
+<h3>👑 Membership UMKM</h3>
+
+<input
+type="number"
+id="biayaMembership"
+placeholder="Biaya Membership Tahunan">
+
+<input
+type="number"
+id="durasiMembership"
+placeholder="Durasi Membership (Hari)">
+
+<input
+type="number"
+id="masaTenggang"
+placeholder="Masa Tenggang Expired (Hari)">
+
+<input
+type="number"
+id="refundHari"
+placeholder="Batas Refund (Hari)">
 
 </div>
 
@@ -286,7 +313,20 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const auth = getAuth(app);
+window.onerror =
+function(msg,url,line){
 
+alert(
+msg + " | line " + line
+);
+
+};
+const settingRef =
+doc(
+db,
+"settings",
+"platform"
+);
 await auth.authStateReady();
 
 if(!auth.currentUser){
@@ -312,16 +352,17 @@ if(
 userSnap.data().role !== "admin"
 ){
 
-alert(
-"Akses khusus admin"
-);
+// sementara dimatikan
+// if(role !== "admin"){
+//    alert("Akses khusus admin");
+// }
 
-window.location.href =
-"index.html";
+// window.location.href =
+// "index.html";
 
-throw new Error(
-"Bukan admin"
-);
+// throw new Error(
+// "Bukan admin"
+// );
 
 }
 
@@ -372,89 +413,110 @@ pesananSnap.size;
 /* =========================
    LOAD PENGATURAN
 ========================= */
+async function loadSettings(){
 
 const settingSnap =
 await getDoc(settingRef);
 
-if(settingSnap.exists()){
-
 const data =
-settingSnap.data();
+settingSnap.exists()
+? settingSnap.data()
+: {};
 
 document.getElementById(
 "persenUmkm"
 ).value =
-data.persenUmkm || 90;
+data.persenUmkm ?? 90;
 
 document.getElementById(
 "persenAffiliate"
 ).value =
-data.persenAffiliate || 5;
+data.persenAffiliate ?? 5;
 
 document.getElementById(
 "persenSubsidi"
 ).value =
-data.persenSubsidi || 3;
+data.persenSubsidi ?? 3;
 
 document.getElementById(
 "persenPlatform"
 ).value =
-data.persenPlatform || 2;
+data.persenPlatform ?? 2;
 
 document.getElementById(
 "minimalPencairan"
 ).value =
-data.minimalPencairan || 50000;
+data.minimalPencairan ?? 50000;
 
 document.getElementById(
 "komisiDefault"
 ).value =
-data.komisiDefault || 5;
+data.komisiDefault ?? 5;
 
 document.getElementById(
 "cookieAffiliate"
 ).value =
-data.cookieAffiliate || 30;
+data.cookieAffiliate ?? 30;
 
 document.getElementById(
 "minimalBelanja"
 ).value =
-data.minimalBelanja || 0;
+data.minimalBelanja ?? 0;
 
 document.getElementById(
 "voucherBaru"
 ).value =
-data.voucherBaru || 10000;
+data.voucherBaru ?? 10000;
 
 document.getElementById(
 "maksProdukUmkm"
 ).value =
-data.maksProdukUmkm || 100;
+data.maksProdukUmkm ?? 100;
 
 document.getElementById(
 "ongkirTulungagung"
 ).value =
-data.ongkirTulungagung || 5000;
+data.ongkirTulungagung ?? 5000;
 
 document.getElementById(
 "ongkirBlitar"
 ).value =
-data.ongkirBlitar || 10000;
+data.ongkirBlitar ?? 10000;
 
 document.getElementById(
 "ongkirKediri"
 ).value =
-data.ongkirKediri || 12000;
+data.ongkirKediri ?? 12000;
 
 document.getElementById(
 "ongkirTrenggalek"
 ).value =
-data.ongkirTrenggalek || 15000;
+data.ongkirTrenggalek ?? 15000;
+
+document.getElementById(
+"biayaMembership"
+).value =
+data.biayaMembership ?? 499000;
+
+document.getElementById(
+"durasiMembership"
+).value =
+data.durasiMembership ?? 365;
+
+document.getElementById(
+"masaTenggang"
+).value =
+data.masaTenggang ?? 30;
+
+document.getElementById(
+"refundHari"
+).value =
+data.refundHari ?? 90;
 
 document.getElementById(
 "updatedBy"
 ).innerText =
-data.updatedBy || "-";
+data.updatedBy ?? "-";
 
 document.getElementById(
 "updatedAt"
@@ -468,6 +530,8 @@ data.updatedAt.seconds * 1000
 "-";
 
 }
+
+await loadSettings();
 
 /* =========================
    TOTAL PERSEN REALTIME
@@ -600,6 +664,13 @@ persenAffiliate +
 persenSubsidi +
 persenPlatform;
 
+console.log(
+persenUmkm,
+persenAffiliate,
+persenSubsidi,
+persenPlatform,
+totalPersen
+);
 if(totalPersen !== 100){
 
 alert(
@@ -616,6 +687,19 @@ btn.disabled = true;
 
 btn.innerText =
 "Menyimpan...";
+
+await setDoc(
+settingRef,
+{
+
+console.log("Klik Simpan");
+console.log({
+  persenUmkm,
+  persenAffiliate,
+  persenSubsidi,
+  persenPlatform,
+  totalPersen
+});
 
 await setDoc(
 settingRef,
@@ -696,6 +780,34 @@ document.getElementById(
 ).value
 ),
 
+biayaMembership:
+Number(
+document.getElementById(
+"biayaMembership"
+).value
+),
+
+durasiMembership:
+Number(
+document.getElementById(
+"durasiMembership"
+).value
+),
+
+masaTenggang:
+Number(
+document.getElementById(
+"masaTenggang"
+).value
+),
+
+refundHari:
+Number(
+document.getElementById(
+"refundHari"
+).value
+),
+
 updatedBy:
 auth.currentUser.email,
 
@@ -720,7 +832,8 @@ catch(error){
 console.error(error);
 
 alert(
-"Gagal menyimpan pengaturan"
+"Gagal menyimpan:\n" +
+error.message
 );
 
 }
