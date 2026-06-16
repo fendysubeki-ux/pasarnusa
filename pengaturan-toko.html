@@ -611,14 +611,6 @@ getAuth
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
 const firebaseConfig = {
 
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
@@ -638,9 +630,6 @@ getFirestore(app);
 
 const auth =
 getAuth(app);
-
-const storage =
-getStorage(app);
 
 await auth.authStateReady();
 
@@ -855,21 +844,30 @@ document.getElementById(
 
 updatePreview();
 
-async function uploadFile(path,file){
+async function uploadFile(file){
 
 if(!file) return null;
 
-const storageRef =
-ref(storage,path);
+const formData = new FormData();
 
-await uploadBytes(
-storageRef,
-file
+formData.append("file", file);
+formData.append("upload_preset", "pasarnusa");
+
+const response = await fetch(
+"https://api.cloudinary.com/v1_1/dq8gha9lv/image/upload",
+{
+method: "POST",
+body: formData
+}
 );
 
-return await getDownloadURL(
-storageRef
-);
+const data = await response.json();
+
+if(!data.secure_url){
+throw new Error(data.error?.message || "Upload gagal");
+}
+
+return data.secure_url;
 
 }
 
@@ -1122,33 +1120,21 @@ document
 if(logoFile){
 
 logoUrl =
-await uploadFile(
-"logo/" +
-auth.currentUser.uid,
-logoFile
-);
+await uploadFile(logoFile);
 
 }
 
 if(bannerFile){
 
 bannerUrl =
-await uploadFile(
-"banner/" +
-auth.currentUser.uid,
-bannerFile
-);
+await uploadFile(bannerFile);
 
 }
 
 if(qrisFile){
 
 qrisUrl =
-await uploadFile(
-"qris/" +
-auth.currentUser.uid,
-qrisFile
-);
+await uploadFile(qrisFile);
 
 }
 
