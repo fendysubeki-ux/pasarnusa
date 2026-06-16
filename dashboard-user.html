@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard User - PasarNusa</title><link rel="preconnect"
+href="https://fonts.googleapis.com"><link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet"><link rel="stylesheet"
+href="style.css"></head><body><div class="register-card"><h1>👤 Dashboard User</h1><p id="welcomeUser">
+Selamat datang
+</p><br><a href="profil.html"
+class="btn-primary">
+👤 Profil Saya
+</a>
+
+<br><br>
+
+<a href="pesanan-saya.html"
+class="btn-secondary">
+📦 Pesanan Saya
+</a>
+
+<br><br>
+
+<a href="favorit.html"
+class="btn-secondary">
+❤️ Produk Favorit
+</a>
+
+<br><br>
+
+<a href="toko-favorit.html"
+class="btn-secondary">
+⭐ Toko Favorit
+</a>
+
+<br><br>
+
+<a href="riwayat-produk.html"
+class="btn-secondary">
+🕒 Riwayat Produk
+</a>
+
+<br><br>
+
+<a href="riwayat-toko.html"
+class="btn-secondary">
+🏪 Riwayat Toko
+</a>
+
+<br><br>
+
+<a href="index.html"
+class="btn-secondary">
+🏠 Beranda
+</a>
+
+</div><script>
+
+const uid =
+localStorage.getItem("uid");
+
+const role =
+localStorage.getItem("role");
+
+const nama =
+localStorage.getItem("nama");
+
+if(!uid){
+
+alert("Silakan login");
+
+window.location.href =
+"login.html";
+
+}
+
+if(role !== "user"){
+
+alert("Halaman khusus user");
+
+window.location.href =
+"index.html";
+
+}
+
+document.getElementById(
+"welcomeUser"
+).innerText =
+"Selamat datang, " + nama;
+
+</script></body>
+</html>
