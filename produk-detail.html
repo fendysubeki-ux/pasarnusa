@@ -21,8 +21,10 @@ rel="stylesheet">
 
 <div class="detail-image">
 
-<img id="gambarProduk">
-
+<img
+id="gambarProduk"
+src=""
+alt="Produk">
 <div id="galleryProduk"
 class="gallery-produk">
 </div>
@@ -206,554 +208,75 @@ class="product-grid">
 <script src="script.js"></script>
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-getFirestore,
-doc,
-getDoc,
-collection,
-getDocs,
-query,
-where,
-addDoc,
-updateDoc,
-orderBy
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
+  apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain: "pasarnusa-18aa0.firebaseapp.com",
+  projectId: "pasarnusa-18aa0",
+  storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId: "1:866998011671:web:5555115feb82741ab55952"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-await auth.authStateReady();
-const params =
-new URLSearchParams(window.location.search);
-const id =
-params.get("id");
-let riwayatProduk =
-JSON.parse(
-localStorage.getItem(
-"riwayatProduk"
-)
-) || [];
+try {
 
-riwayatProduk =
-riwayatProduk.filter(
-(item)=>item !== id
-);
+  alert("MODULE BERHASIL");
 
-riwayatProduk.unshift(id);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+alert(window.location.href);
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-riwayatProduk =
-riwayatProduk.slice(0,30);
+  alert("ID = " + id);
 
-localStorage.setItem(
-"riwayatProduk",
-JSON.stringify(
-riwayatProduk
-)
-);
-if(!id){
+  const snap = await getDoc(doc(db,"produk",id));
 
-window.location.href =
-"index.html";
+  if(!snap.exists()){
+    alert("PRODUK TIDAK DITEMUKAN");
+    throw new Error("Produk tidak ditemukan");
+  }
 
-return;
+  const produk = snap.data();
 
-}
-const refAffiliate =
-params.get("ref");
-const snap =
-await getDoc(doc(db,"produk",id));
+  alert("PRODUK DITEMUKAN");
+  alert(produk.namaProduk);
 
-if(!snap.exists()){
+  document.getElementById("namaProduk").innerText =
+    produk.namaProduk || "-";
 
-alert("Produk tidak ditemukan");
+  document.getElementById("hargaProduk").innerText =
+    "Rp " + Number(produk.harga || 0)
+      .toLocaleString("id-ID");
 
-window.location.href =
-"index.html";
+  document.getElementById("kategoriProduk").innerText =
+    produk.kategori || "-";
 
-return;
-}
+  document.getElementById("deskripsiProduk").innerText =
+    produk.deskripsi || "-";
 
-const produk = snap.data();
-if(!produk.namaProduk){
+  document.getElementById("stokProduk").innerText =
+    "📦 Stok: " + (produk.stok || 0);
 
-alert("Data produk rusak");
-
-window.location.href =
-"index.html";
-
-return;
-
-}
-if(
-  refAffiliate &&
-  refAffiliate !== produk.uid &&
-  !localStorage.getItem("affiliate")
-){
-  localStorage.setItem(
-    "affiliate",
-    refAffiliate
-  );
-}
-
-document.getElementById(
-"affiliateLink"
-).value =
-window.location.origin +
-window.location.pathname +
-"?id=" +
-id +
-"&ref=" +
-encodeURIComponent(
-produk.uid || "affiliate"
-);
-document.getElementById(
-"gambarProduk"
-).src =
-produk.gambar?.[0] ||
-"https://picsum.photos/600/400";
-const gallery =
-document.getElementById(
-"galleryProduk"
-);
-
-(produk.gambar || [])
-.forEach((img)=>{
-
-gallery.innerHTML += `
-
-<img
-src="${img}"
-style="
-width:80px;
-height:80px;
-object-fit:cover;
-border-radius:10px;
-cursor:pointer;
-margin:5px;
-"
-
-onclick="
-document.getElementById('gambarProduk').src='${img}'
-">
-
-`;
-
-});
-document.getElementById(
-"gambarProduk"
-).onerror = () => {
-
-document.getElementById(
-"gambarProduk"
-).src =
-"https://picsum.photos/600/400";
-
-};
-document.getElementById("namaProduk").innerText =
-produk.namaProduk;
-document.getElementById(
-"linkToko"
-).href =
-"toko.html?uid=" +
-produk.uid;
-document.getElementById("hargaProduk").innerText =
-"Rp " + Number(produk.harga).toLocaleString("id-ID");
-document.getElementById(
-"stokProduk"
-).innerText =
-Number(produk.stok) > 0
-? "📦 Stok tersedia: " + produk.stok
-: "❌ Stok Habis";
-if(
-Number(produk.stok) > 0 &&
-Number(produk.stok) <= 5
-){
-document.getElementById(
-"stokProduk"
-).innerText +=
-" 🔥 Hampir Habis";
-}
-let bolehReview = false;
-
-if(auth.currentUser){
-
-const cekPesanan =
-await getDocs(
-query(
-collection(db,"pesanan"),
-where(
-"uidPembeli",
-"==",
-auth.currentUser.uid
-)
-)
-);
-
-cekPesanan.forEach((item)=>{
-
-const data = item.data();
-
-if(
-String(data.status).toLowerCase()
-=== "selesai"
-){
-
-(data.items || []).forEach((produkPesanan)=>{
-
-if(produkPesanan.id === id){
-
-bolehReview = true;
-
-}
-
-});
-
-}
-
-});
-
-}
-
-if(!bolehReview){
-
-document.getElementById(
-"kirimReview"
-).disabled = true;
-
-document.getElementById(
-"kirimReview"
-).innerText =
-"Belum Bisa Review";
-
-}
-if(Number(produk.stok) <= 0){
-
-document.getElementById(
-"addToCart"
-).disabled = true;
-
-}
-document.getElementById("kategoriProduk").innerText =
-produk.kategori;
-
-document.getElementById("deskripsiProduk").innerText =
-produk.deskripsi;
-document.getElementById(
-"terjualProduk"
-).innerText =
-produk.terjual || 0;
-document.getElementById(
-"chatWA"
-).href =
-"https://wa.me/" +
-produk.whatsapp +
-"?text=" +
-encodeURIComponent(
-"Saya tertarik dengan produk " +
-produk.namaProduk
-);
-document.getElementById(
-"chatFirebase"
-).href =
-"chat.html?room=" +
-produk.uid +
-"_" +
-id;
-const reviewData = await getDocs(
-query(
-collection(db,"review"),
-where("produkId","==",id),
-orderBy("tanggal","desc")
-)
-);
-document.getElementById(
-"ratingInfo"
-).innerText =
-"⭐ " +
-(produk.rating || 0) +
-" (" +
-(produk.totalReview || 0) +
-" ulasan)";
-
-const reviewContainer =
-document.getElementById(
-"reviewContainer"
-);
-
-if(reviewData.empty){
-
-reviewContainer.innerHTML =
-"<p>Belum ada ulasan.</p>";
-
-}else{
-
-reviewContainer.innerHTML = "";
-
-}
-function escapeHtml(text){
-
-const div =
-document.createElement("div");
-
-div.innerText = text;
-
-return div.innerHTML;
-
-}
-reviewData.forEach((item)=>{
-
-const review =
-item.data();
-
-reviewContainer.innerHTML += `
-
-<div class="cart-card">
-
-<b>${review.nama || "Pembeli"}</b>
-<p>
-${"⭐".repeat(review.rating)}
-</p>
-
-<p>
-${escapeHtml(
-review.review || ""
-)}
-</p>
-
-<small>
-${review.tanggal ?
-new Date(review.tanggal.seconds * 1000)
-.toLocaleDateString("id-ID")
-: ""}
-</small>
-
-</div>
-
-`;
-
-});
-
-document
-.getElementById("btnFavorit")
-.addEventListener("click",()=>{
-
-let favorit =
-JSON.parse(
-localStorage.getItem("favorit")
-) || [];
-
-if(
-!favorit.some(item => item.id === id)
-){
-
-favorit.push({
-id:id,
-namaProduk: produk.namaProduk,
-harga: produk.harga,
-gambar: produk.gambar?.[0]
-});
-
-}
-
-localStorage.setItem(
-"favorit",
-JSON.stringify(favorit)
-);
-
-alert(
-"Produk ditambahkan ke favorit"
-);
-
-});
-document
-.getElementById("kirimReview")
-.addEventListener("click", async()=>{
-
-if(!auth.currentUser){
-
-alert("Silakan login terlebih dahulu");
-
-return;
-
-}
-
-if(Number(produk.stok) <= 0){
-
-alert("Stok produk habis");
-
-return;
-
-}
-
-if(
-document.getElementById("namaReviewer")
-.value.trim() === ""
-){
-
-alert("Nama tidak boleh kosong");
-
-return;
-
-}
-
-if(
-document.getElementById("isiReview")
-.value.trim() === ""
-){
-
-alert("Ulasan tidak boleh kosong");
-
-return;
-
-}
-
-const cekReview = await getDocs(
-query(
-collection(db,"review"),
-where("produkId","==",id),
-where(
-"uidPembeli",
-"==",
-auth.currentUser.uid
-)
-)
-)
-);
-
-if(!cekReview.empty){
-
-alert("Anda sudah memberikan ulasan");
-
-return;
-
-}
-if(
-document.getElementById("isiReview")
-.value.length > 500
-){
-
-alert(
-"Maksimal 500 karakter"
-);
-
-return;
-
-}
-try{
-
-document.getElementById(
-"kirimReview"
-).disabled = true;
-
-document.getElementById(
-"kirimReview"
-).innerText =
-"Mengirim...";
-
-await addDoc(
-collection(db,"review"),
-{
-produkId:id,
-
-uidPembeli:
-auth.currentUser.uid,
-
-nama:
-document.getElementById("namaReviewer")
-.value.trim(),
-
-review:
-document.getElementById("isiReview")
-.value.trim(),
-
-rating:Number(
-document.getElementById("ratingProduk").value
-),
-
-tanggal:new Date()
-}
-);
-
-const produkRef =
-doc(db,"produk",id);
-
-const totalReview =
-Number(produk.totalReview || 0);
-
-const ratingLama =
-Number(produk.rating || 0);
-
-const ratingBaru =
-Number(
-document.getElementById("ratingProduk").value
-);
-
-const rataRating =
-(
-(ratingLama * totalReview)
-+
-ratingBaru
-)
-/
-(totalReview + 1);
-
-await updateDoc(
-produkRef,
-{
-rating:Number(
-rataRating.toFixed(1)
-),
-
-totalReview:
-totalReview + 1
-}
-);
-
-alert(
-"Review berhasil dikirim"
-);
-
-location.reload();
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"Gagal mengirim review"
-);
-
-}finally{
-
-document.getElementById(
-"kirimReview"
-).disabled = false;
-
-document.getElementById(
-"kirimReview"
-).innerText =
-"Kirim Ulasan";
-
-}
-});
-document
-.getElementById("addToCart")
+  document.getElementById("terjualProduk").innerText =
+    produk.terjual || 0;
+document.getElementById("ratingInfo").innerText =
+  "⭐ " +
+  (produk.rating || 0) +
+  " (" +
+  (produk.totalReview || 0) +
+  " ulasan)";
+  document.getElementById("gambarProduk").src =
+    produk.gambar?.[0] ||
+    "https://picsum.photos/600/400";
+document.getElementById("addToCart")
 .addEventListener("click",()=>{
 
 let cart =
@@ -766,37 +289,16 @@ cart.find(item => item.id === id);
 
 if(existing){
 
-if(existing.qty >= produk.stok){
-
-alert("Jumlah melebihi stok");
-
-return;
-
-}
-
-existing.qty =
-Math.min(
-existing.qty + 1,
-produk.stok
-);
+existing.qty++;
 
 }else{
-if(produk.stok <= 0){
 
-alert("Stok habis");
-
-return;
-
-}
 cart.push({
 id:id,
-uid: produk.uid,
-whatsapp: produk.whatsapp,
-qty:1,
 namaProduk:produk.namaProduk,
 harga:produk.harga,
 gambar:produk.gambar?.[0],
-stok:produk.stok
+qty:1
 });
 
 }
@@ -812,8 +314,8 @@ window.location.href =
 "cart.html";
 
 });
-document
-.getElementById("buyNow")
+
+document.getElementById("buyNow")
 .addEventListener("click",()=>{
 
 localStorage.setItem(
@@ -821,12 +323,10 @@ localStorage.setItem(
 JSON.stringify([
 {
 id:id,
-uid: produk.uid,
-whatsapp: produk.whatsapp,
-namaProduk: produk.namaProduk,
-harga: produk.harga,
-qty:1,
-gambar: produk.gambar?.[0]
+namaProduk:produk.namaProduk,
+harga:produk.harga,
+gambar:produk.gambar?.[0],
+qty:1
 }
 ])
 );
@@ -835,121 +335,15 @@ window.location.href =
 "checkout.html";
 
 });
-document
-.getElementById("shareProduk")
-.addEventListener(
-"click",
-async()=>{
+}
+catch(err){
 
-try{
-
-if(navigator.share){
-
-await navigator.share({
-title: produk.namaProduk,
-url: window.location.href
-});
-
-}else{
-
-await navigator.clipboard.writeText(
-window.location.href
-);
-
-alert("Link disalin");
+  alert("ERROR : " + err.message);
+  console.error(err);
 
 }
 
-}catch(error){
-
-console.error(error);
-
-}
-
-});
-const terkait =
-await getDocs(
-query(
-collection(db,"produk"),
-where(
-"kategori",
-"==",
-produk.kategori
-)
-)
-);
-
-const terkaitContainer =
-document.getElementById(
-"produkTerkait"
-);
-
-terkait.forEach((item)=>{
-
-if(item.id === id) return;
-
-const data = item.data();
-
-terkaitContainer.innerHTML += `
-
-<div class="product-card">
-
-<img
-src="${
-data.gambar?.[0] ||
-'https://picsum.photos/400/300'
-}">
-
-<div class="product-info">
-
-<h3>
-${data.namaProduk}
-</h3>
-
-<p class="price">
-Rp ${Number(
-data.harga || 0
-).toLocaleString("id-ID")}
-</p>
-
-<a
-href="produk-detail.html?id=${item.id}"
-class="btn-primary">
-
-Lihat Detail
-
-</a>
-
-</div>
-
-</div>
-
-`;
-
-});
-window.copyAffiliate = async function(){
-
-const link =
-document.getElementById("affiliateLink");
-
-try{
-
-await navigator.clipboard.writeText(
-link.value
-);
-
-alert(
-"Link affiliate berhasil disalin"
-);
-
-}catch{
-
-alert(
-"Gagal menyalin link"
-);
-
-}
-};
 </script>
+
 </body>
 </html>
