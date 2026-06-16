@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Daftar Pembeli - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="register-card">
+
+<h2>Daftar Pembeli</h2>
+
+<input
+type="text"
+id="nama"
+placeholder="Nama Lengkap"
+required>
+
+<input
+type="email"
+id="email"
+placeholder="Email"
+required>
+
+<input
+type="tel"
+id="whatsapp"
+placeholder="Nomor WhatsApp"
+required>
+
+<input
+type="password"
+id="password"
+placeholder="Password"
+required>
+
+<button id="btnDaftar">
+Daftar
+</button>
+
+<p style="text-align:center;margin-top:20px;">
+Sudah punya akun?
+<a href="login.html">Login</a>
+</p>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+  apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:"pasarnusa-18aa0.firebaseapp.com",
+  projectId:"pasarnusa-18aa0",
+  storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId:"866998011671",
+  appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+document
+.getElementById("btnDaftar")
+.addEventListener("click", async()=>{
+
+const nama =
+document.getElementById("nama")
+.value.trim();
+
+const email =
+document.getElementById("email")
+.value.trim();
+
+const whatsapp =
+document.getElementById("whatsapp")
+.value.trim();
+
+const password =
+document.getElementById("password")
+.value;
+
+const btn =
+document.getElementById("btnDaftar");
+
+try{
+
+if(
+!nama ||
+!email ||
+!whatsapp ||
+!password
+){
+
+alert("Lengkapi semua data");
+
+return;
+
+}
+
+if(password.length < 6){
+
+alert(
+"Password minimal 6 karakter"
+);
+
+return;
+
+}
+
+btn.disabled = true;
+btn.innerText = "Mendaftarkan...";
+
+const userCredential =
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+await setDoc(
+doc(
+db,
+"users",
+userCredential.user.uid
+),
+{
+uid:
+userCredential.user.uid,
+
+nama:
+nama,
+
+email:
+email,
+
+whatsapp:
+whatsapp,
+
+role:
+"user",
+
+status:
+"aktif",
+
+createdAt:
+serverTimestamp()
+}
+);
+
+alert(
+"Pendaftaran berhasil"
+);
+
+await signOut(auth);
+
+window.location.href =
+"login.html";
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"Error:\n" +
+error.message
+);
+
+}
+finally{
+
+btn.disabled = false;
+btn.innerText = "Daftar";
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
