@@ -67,7 +67,9 @@ Dashboard UMKM
 <a href="pesanan-saya.html">
 Pesanan Saya
 </a>
-
+<a href="profil.html">
+👤 Profil
+</a>
 </nav>
 
 <div class="nav-btn">
@@ -740,58 +742,24 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const usersSnapshot =
-await getDocs(
-collection(db,"users")
-);
+document.getElementById("totalUmkm").innerText = "-";
+document.getElementById("jumlahUmkm").innerText = "-";
+document.getElementById("footerUmkm").innerText = "- UMKM";
 
-let totalUmkm = 0;
-let totalAffiliate = 0;
-
-usersSnapshot.forEach((doc)=>{
-
-const data = doc.data();
-
-if(data.role === "umkm"){
-totalUmkm++;
-}
-
-if(data.role === "affiliate"){
-totalAffiliate++;
-}
-
-});
-
-document.getElementById("totalUmkm")?.innerText =
-totalUmkm;
-
-document.getElementById("jumlahUmkm")?.innerText =
-totalUmkm;
-
-document.getElementById("footerUmkm")?.innerText =
-totalUmkm + " UMKM";
-
-document.getElementById("totalAffiliate")?.innerText =
-totalAffiliate;
-
-document.getElementById("jumlahAffiliate")?.innerText =
-totalAffiliate;
-
-document.getElementById("footerAffiliate")?.innerText =
-totalAffiliate + " Affiliate";
-const produkSnapshot =
-await getDocs(
-collection(db,"produk")
-);
+document.getElementById("totalAffiliate").innerText = "-";
+document.getElementById("jumlahAffiliate").innerText = "-";
+document.getElementById("footerAffiliate").innerText = "- Affiliate";
+const totalProduk =
+document.querySelectorAll(".searchable").length;
 
 document.getElementById("totalProduk")?.innerText =
-produkSnapshot.size;
+totalProduk;
 
 document.getElementById("jumlahProduk")?.innerText =
-produkSnapshot.size;
+totalProduk;
 
 document.getElementById("footerProduk")?.innerText =
-produkSnapshot.size + " Produk";
+totalProduk + " Produk";
 
 const auth = getAuth(app);
 
