@@ -1,100 +1,82 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Daftar Pembeli - PasarNusa</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
-</head>
-
-<body>
-
-<div class="register-card">
-
-<h2>Daftar Pembeli</h2>
-
-<input
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Daftar Pembeli - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><meta name="description" content="Daftar akun pembeli PasarNusa">
+<meta name="theme-color" content="#16a34a"></head><body><div class="register-card"><h1>🛒 Daftar Pembeli</h1><p style="text-align:center;margin-bottom:20px;">
+Buat akun pembeli untuk mulai berbelanja produk UMKM Indonesia.
+</p><input
 type="text"
 id="nama"
-placeholder="Nama Lengkap"
-required>
+placeholder="Nama Lengkap">
 
 <input
 type="email"
 id="email"
-placeholder="Email"
-required>
+placeholder="Email">
 
 <input
 type="tel"
 id="whatsapp"
-placeholder="Nomor WhatsApp"
-required>
+placeholder="Nomor WhatsApp">
 
 <input
 type="password"
 id="password"
-placeholder="Password"
-required>
+placeholder="Password (Minimal 6 Karakter)">
 
-<button id="btnDaftar">
+<button
+id="btnDaftar"
+class="btn-primary">
+
 Daftar
-</button>
 
-<p style="text-align:center;margin-top:20px;">
-Sudah punya akun?
-<a href="login.html">Login</a>
-</p>
+</button><p style="text-align:center;margin-top:20px;">Sudah punya akun?
 
-</div>
-
-<script type="module">
+<a href="login.html">
+Login
+</a></p><p style="text-align:center;margin-top:10px;"><a href="index.html">
+⬅ Kembali ke Beranda
+</a></p></div><script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
-  getFirestore,
-  doc,
-  setDoc,
-  serverTimestamp
+getFirestore,
+doc,
+setDoc,
+serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signOut
+getAuth,
+createUserWithEmailAndPassword,
+signOut
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
-  apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-  authDomain:"pasarnusa-18aa0.firebaseapp.com",
-  projectId:"pasarnusa-18aa0",
-  storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-  messagingSenderId:"866998011671",
-  appId:"1:866998011671:web:5555115feb82741ab55952"
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const db = getFirestore(app);
 
-document
-.getElementById("btnDaftar")
-.addEventListener("click", async()=>{
+async function daftar(){
+
+const btn =
+document.getElementById("btnDaftar");
 
 const nama =
 document.getElementById("nama")
@@ -112,11 +94,6 @@ const password =
 document.getElementById("password")
 .value;
 
-const btn =
-document.getElementById("btnDaftar");
-
-try{
-
 if(
 !nama ||
 !email ||
@@ -124,7 +101,9 @@ if(
 !password
 ){
 
-alert("Lengkapi semua data");
+alert(
+"Lengkapi semua data terlebih dahulu"
+);
 
 return;
 
@@ -140,8 +119,24 @@ return;
 
 }
 
+if(
+!whatsapp.startsWith("08")
+){
+
+alert(
+"Nomor WhatsApp harus diawali 08"
+);
+
+return;
+
+}
+
+try{
+
 btn.disabled = true;
-btn.innerText = "Mendaftarkan...";
+
+btn.innerText =
+"Mendaftarkan...";
 
 const userCredential =
 await createUserWithEmailAndPassword(
@@ -194,22 +189,73 @@ catch(error){
 
 console.error(error);
 
-alert(
-"Error:\n" +
-error.message
-);
+let pesan =
+"Pendaftaran gagal";
+
+if(
+error.code ===
+"auth/email-already-in-use"
+){
+
+pesan =
+"Email sudah digunakan";
+
+}
+
+if(
+error.code ===
+"auth/invalid-email"
+){
+
+pesan =
+"Format email tidak valid";
+
+}
+
+if(
+error.code ===
+"auth/weak-password"
+){
+
+pesan =
+"Password terlalu lemah";
+
+}
+
+alert(pesan);
 
 }
 finally{
 
 btn.disabled = false;
-btn.innerText = "Daftar";
+
+btn.innerText =
+"Daftar";
 
 }
 
-});
+}
 
-</script>
+document
+.getElementById("btnDaftar")
+.addEventListener(
+"click",
+daftar
+);
 
-</body>
+document
+.addEventListener(
+"keypress",
+(e)=>{
+
+if(e.key === "Enter"){
+
+daftar();
+
+}
+
+}
+);
+
+</script></body>
 </html>
