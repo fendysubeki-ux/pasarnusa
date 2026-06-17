@@ -1,20 +1,60 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Verifikasi Pembayaran - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><div class="dashboard-header"><div><h1>💳 Verifikasi Pembayaran</h1><p>
-Periksa bukti transfer dari pembeli.
-</p></div><a href="dashboard.html" class="btn-secondary">
-Kembali
-</a></div><div class="dashboard-grid"><div class="dashboard-card">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Verifikasi Pembayaran - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+<h1>💳 Verifikasi Pembayaran</h1>
+<p>Periksa dan verifikasi pembayaran pelanggan</p>
+</div>
+
+<a
+href="dashboard-umkm.html"
+class="btn-secondary">
+← Dashboard
+</a>
+
+</div>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
 <h3 id="totalMenunggu">0</h3>
 <p>Menunggu Verifikasi</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="totalDiproses">0</h3>
 <p>Sedang Diproses</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="totalDikirim">0</h3>
 <p>Sudah Dikirim</p>
-</div></div><input
+</div>
+
+</div>
+
+<input
 type="text"
 id="searchPesanan"
 class="search-box"
@@ -22,12 +62,20 @@ placeholder="Cari nama pembeli...">
 
 <div
 id="pesananContainer"
-class="dashboard-grid"><div class="dashboard-card">
-<p>Memuat data...</p>
-</div></div></section><script type="module">
+class="dashboard-grid">
+
+<div class="dashboard-card">
+<p>Memuat data pembayaran...</p>
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
 
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
 getFirestore,
@@ -37,28 +85,26 @@ doc,
 updateDoc,
 addDoc
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 import {
 getAuth
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_PROJECT.appspot.com",
-messagingSenderId:"YOUR_SENDER_ID",
-appId:"YOUR_APP_ID"
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
-
 const auth = getAuth(app);
 
 await auth.authStateReady();
@@ -70,10 +116,25 @@ window.location.href =
 
 }
 
+const role =
+localStorage.getItem("role");
+
+if(role !== "umkm"){
+
+window.location.href =
+"index.html";
+
+}
+
+const uid =
+auth.currentUser.uid;
+
 const container =
 document.getElementById(
 "pesananContainer"
 );
+
+try{
 
 const snapshot =
 await getDocs(
@@ -86,28 +147,48 @@ let totalMenunggu = 0;
 let totalDiproses = 0;
 let totalDikirim = 0;
 
-snapshot.forEach((item)=>{
+snapshot.forEach((docSnap)=>{
 
-const data = item.data();
+const data =
+docSnap.data();
 
-if(data.uid !== auth.currentUser.uid){
+const adaProdukSaya =
+(data.items || [])
+.some(
+item => item.uid === uid
+);
+
+if(!adaProdukSaya){
 
 return;
 
 }
 
-if(data.status === "Menunggu Verifikasi")
+if(
+data.status ===
+"Menunggu Verifikasi"
+){
 totalMenunggu++;
+}
 
-if(data.status === "Diproses")
+if(
+data.status ===
+"Diproses"
+){
 totalDiproses++;
+}
 
-if(data.status === "Dikirim")
+if(
+data.status ===
+"Dikirim"
+){
 totalDikirim++;
+}
 
 container.innerHTML += `
 
-<div class="dashboard-card pesanan-item">
+<div
+class="dashboard-card pembayaran-item">
 
 <h3>
 ${data.namaPembeli || "-"}
@@ -142,6 +223,7 @@ ${data.status || "-"}
 ${
 data.buktiTransfer
 ?
+
 `
 <img
 src="${data.buktiTransfer}"
@@ -162,18 +244,21 @@ Lihat Full
 
 </a>
 `
+
 :
+
 `
 <p>
-Belum ada bukti transfer
+Belum upload bukti transfer
 </p>
 `
+
 }
 
 <br><br>
 
 <button
-onclick="verifikasiPesanan('${item.id}','${data.uidPembeli}')"
+onclick="verifikasiPesanan('${docSnap.id}','${data.uidPembeli}')"
 class="btn-primary">
 
 ✅ Verifikasi
@@ -181,7 +266,7 @@ class="btn-primary">
 </button>
 
 <button
-onclick="ubahStatus('${item.id}','Dikirim')"
+onclick="ubahStatus('${docSnap.id}','${data.uidPembeli}','Dikirim')"
 class="btn-secondary">
 
 🚚 Dikirim
@@ -189,7 +274,7 @@ class="btn-secondary">
 </button>
 
 <button
-onclick="ubahStatus('${item.id}','Selesai')"
+onclick="ubahStatus('${docSnap.id}','${data.uidPembeli}','Selesai')"
 class="btn-secondary">
 
 ✔️ Selesai
@@ -217,13 +302,26 @@ document.getElementById(
 ).innerText =
 totalDikirim;
 
+}catch(error){
+
+console.error(error);
+
+container.innerHTML = `
+<div class="dashboard-card">
+Gagal memuat data pembayaran
+</div>
+`;
+
+}
+
 window.verifikasiPesanan =
 async(id,pembeli)=>{
 
 await updateDoc(
 doc(db,"pesanan",id),
 {
-status:"Diproses"
+status:"Diproses",
+verifiedAt:new Date()
 }
 );
 
@@ -247,12 +345,25 @@ location.reload();
 };
 
 window.ubahStatus =
-async(id,status)=>{
+async(id,pembeli,status)=>{
 
 await updateDoc(
 doc(db,"pesanan",id),
 {
 status:status
+}
+);
+
+await addDoc(
+collection(db,"notifikasi"),
+{
+uid:pembeli,
+judul:"Status Pesanan",
+pesan:
+"Status pesanan berubah menjadi " +
+status,
+dibaca:false,
+createdAt:new Date()
 }
 );
 
@@ -265,9 +376,7 @@ location.reload();
 };
 
 document
-.getElementById(
-"searchPesanan"
-)
+.getElementById("searchPesanan")
 .addEventListener(
 "input",
 (e)=>{
@@ -277,23 +386,25 @@ e.target.value.toLowerCase();
 
 document
 .querySelectorAll(
-".pesanan-item"
+".pembayaran-item"
 )
 .forEach((item)=>{
 
 item.style.display =
+
 item.innerText
 .toLowerCase()
 .includes(keyword)
-?
-"block"
-:
-"none";
+
+? "block"
+: "none";
 
 });
 
 }
 );
 
-</script></body>
+</script>
+
+</body>
 </html>
