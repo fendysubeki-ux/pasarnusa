@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>PasarNusa | Marketplace & Affiliate UMKM Indonesia</title>
+<meta name="description"
+content="Marketplace dan Affiliate UMKM Indonesia. Jual beli produk lokal, dukung UMKM, dan dapatkan komisi affiliate.">
+
+<meta name="keywords"
+content="UMKM, Marketplace Indonesia, Affiliate Marketing, PasarNusa">
+
+<meta name="author"
+content="PasarNusa">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link rel="preconnect"
@@ -60,7 +68,7 @@ PASAR<span>NUSA</span>
 
 <a href="#affiliate">Affiliate</a>
 
-<a href="dashboard.html">
+<a href="dashboard-umkm.html">
 Dashboard UMKM
 </a>
 
@@ -537,8 +545,13 @@ Siap Menjadi Mitra PasarNusa?
 Bersama membangun ekosistem UMKM Indonesia yang lebih kuat.
 </p>
 
-<a href="#" class="btn-primary">
+<a
+href="https://wa.me/6285854910306"
+target="_blank"
+class="btn-primary">
+
 Hubungi Kami
+
 </a>
 
 </section>
@@ -683,7 +696,7 @@ Rp ${Number(data.harga || 0).toLocaleString("id-ID")}
 <p>📦 Stok: ${data.stok || 0}</p>
 
 <a
-href="produk-detail.html?id=${item.id}"
+href="detail-produk.html?id=${item.id}"
 class="btn-primary">
 Lihat Detail
 </a>
@@ -841,7 +854,8 @@ card.dataset.category === kategori
 });
 
 };
-function calculateCommission(){
+window.calculateCommission =
+function(){
 
 const sales =
 Number(
@@ -909,5 +923,13 @@ observer.observe(el);
 </script>
 
 <script src="script.js"></script>
+<a
+href="https://wa.me/6285854910306"
+target="_blank"
+class="wa-float">
+
+💬
+
+</a>
 </body>
 </html>
