@@ -1,0 +1,35 @@
+<div class="dashboard-header"><div><h1>💳 Verifikasi Pembayaran</h1><p>
+Kelola bukti transfer dan verifikasi pembayaran pembeli.
+</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><a
+href="dashboard-admin.html"
+class="btn-secondary">
+
+⬅ Dashboard
+
+</a><button
+onclick="location.reload()"
+class="btn-primary">
+
+🔄 Refresh
+
+</button></div></div><div class="dashboard-grid"><div class="dashboard-card"><h3 id="totalVerifikasi">0</h3><p>
+Menunggu Verifikasi
+</p></div><div class="dashboard-card"><h3 id="totalDiproses">0</h3><p>
+Diproses
+</p></div><div class="dashboard-card"><h3 id="totalDikirim">0</h3><p>
+Dikirim
+</p></div><div class="dashboard-card"><h3 id="totalSelesai">0</h3><p>
+Selesai
+</p></div></div><br>
+<a
+href="detail-pesanan-admin.html?id=${data.id}"
+class="btn-secondary"
+style="
+display:block;
+text-align:center;
+margin-bottom:10px;
+">
+
+📋 Detail Pesanan
+
+</a>
