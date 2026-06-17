@@ -45,7 +45,7 @@ Ongkir : Rp 0
 Diskon : Rp 0
 </p><hr><h2 id="totalBayar">
 Total : Rp 0
-</h2></div><div class="dashboard-card"><h3>Pembagian Pendapatan</h3><p>
+</h2></div><div class="dashboard-card"><h3>💰 Pembagian Pendapatan</h3><p>
 UMKM :
 <b id="pendapatanUmkm">
 Rp 0
@@ -66,7 +66,17 @@ class="btn-primary">
 
 Buat Pesanan
 
-</button></section><script type="module">
+</button><br><br>
+
+<a
+href="cart.html"
+class="btn-secondary">
+
+⬅ Kembali ke Keranjang
+
+</a>
+
+<script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -75,10 +85,6 @@ import {
 getFirestore,
 collection,
 addDoc,
-doc,
-getDoc,
-updateDoc,
-increment,
 getDocs,
 query,
 where
@@ -91,12 +97,14 @@ getAuth
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
+
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
 projectId:"pasarnusa-18aa0",
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
 messagingSenderId:"866998011671",
 appId:"1:866998011671:web:5555115feb82741ab55952"
+
 };
 
 const app = initializeApp(firebaseConfig);
@@ -129,70 +137,48 @@ const subtotal =
 cart.reduce(
 (total,item)=>
 total +
-(item.harga * item.qty),
+(Number(item.harga || 0) *
+Number(item.qty || 1)),
 0
 );
 
-const persenUmkm = 90;
-const persenAffiliate = 5;
-const persenPlatform = 5;
-
 function updateTotal(){
 
-document.getElementById(
-"subtotalInfo"
-).innerText =
+const total =
+subtotal +
+ongkir -
+diskon;
+
+document.getElementById("subtotalInfo").innerText =
 "Subtotal : Rp " +
 subtotal.toLocaleString("id-ID");
 
-document.getElementById(
-"ongkirInfo"
-).innerText =
+document.getElementById("ongkirInfo").innerText =
 "Ongkir : Rp " +
 ongkir.toLocaleString("id-ID");
 
-document.getElementById(
-"diskonInfo"
-).innerText =
+document.getElementById("diskonInfo").innerText =
 "Diskon : Rp " +
 diskon.toLocaleString("id-ID");
 
-document.getElementById(
-"totalBayar"
-).innerText =
+document.getElementById("totalBayar").innerText =
 "Total : Rp " +
-(
-subtotal +
-ongkir -
-diskon
-).toLocaleString("id-ID");
+total.toLocaleString("id-ID");
 
-document.getElementById(
-"pendapatanUmkm"
-).innerText =
+document.getElementById("pendapatanUmkm").innerText =
 "Rp " +
-Math.round(
-subtotal *
-(persenUmkm/100)
-).toLocaleString("id-ID");
+Math.round(subtotal * 0.90)
+.toLocaleString("id-ID");
 
-document.getElementById(
-"komisiAffiliate"
-).innerText =
+document.getElementById("komisiAffiliate").innerText =
 "Rp " +
-Math.round(
-subtotal *
-(persenAffiliate/100)
-).toLocaleString("id-ID");
+Math.round(subtotal * 0.05)
+.toLocaleString("id-ID");
 
-document.getElementById(
-"pendapatanPlatform"
-).innerText =
+document.getElementById("pendapatanPlatform").innerText =
 "Rp " +
-Math.round(
-subtotal *
-(persenPlatform/100)
-).toLocaleString("id-ID");
+Math.round(subtotal * 0.05)
+.toLocaleString("id-ID");
 
 }
 
@@ -257,7 +243,6 @@ where("aktif","==",true)
 if(voucher.empty){
 
 alert("Voucher tidak ditemukan");
-
 return;
 
 }
@@ -300,29 +285,43 @@ return;
 
 }
 
-const btn =
-document.getElementById(
-"checkoutBtn"
-);
-
-btn.disabled = true;
-btn.innerText = "Memproses...";
-
-try{
 if(
 !document.getElementById("namaPembeli").value ||
 !document.getElementById("whatsappPembeli").value ||
 !document.getElementById("alamatPembeli").value
 ){
+
 alert("Lengkapi data pembeli");
+
 return;
+
 }
+
+if(
+!document.getElementById("kotaTujuan").value
+){
+
+alert("Pilih kota tujuan");
+
+return;
+
+}
+
+const total =
+subtotal +
+ongkir -
+diskon;
+
+const docRef =
 await addDoc(
 collection(db,"pesanan"),
 {
 
 uidPembeli:
 auth.currentUser.uid,
+
+uidUmkm:
+cart[0]?.uid || "",
 
 namaPembeli:
 document.getElementById("namaPembeli").value,
@@ -333,28 +332,37 @@ document.getElementById("whatsappPembeli").value,
 alamat:
 document.getElementById("alamatPembeli").value,
 
+kota:
+document.getElementById("kotaTujuan").value,
+
 items:cart,
 
-subtotal:subtotal,
-
-ongkir:ongkir,
-
-diskon:diskon,
-
-voucher:voucherDipakai,
-
-total:
-subtotal + ongkir - diskon,
-
-totalBayar:
-subtotal + ongkir - diskon,
-
-affiliate:
-localStorage.getItem(
-"affiliate"
+jumlahItem:
+cart.reduce(
+(total,item)=>
+total +
+Number(item.qty || 1),
+0
 ),
 
-status:"menunggu",
+subtotal,
+ongkir,
+diskon,
+
+voucher:
+voucherDipakai,
+
+affiliate:
+localStorage.getItem("affiliate"),
+
+status:
+"Belum Bayar",
+
+statusPembayaran:
+"Belum Bayar",
+
+total,
+totalBayar:total,
 
 createdAt:
 new Date()
@@ -369,27 +377,11 @@ alert(
 );
 
 window.location.href =
-"pesanan-saya.html";
-
-}
-catch(error){
-
-console.error(error);
-
-alert(
-"Gagal membuat pesanan"
-);
-
-}
-finally{
-
-btn.disabled = false;
-btn.innerText = "Buat Pesanan";
-
-}
+"upload-bukti-pembayaran.html?id=" +
+docRef.id;
 
 }
 );
 
-</script></body>
+</script></section></body>
 </html>
