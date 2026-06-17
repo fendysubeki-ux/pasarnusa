@@ -1,102 +1,63 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Daftar UMKM - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><meta name="description" content="Daftar UMKM PasarNusa">
+<meta name="theme-color" content="#16a34a"></head><body><div class="register-card"><h1>🏪 Daftar UMKM</h1><p style="text-align:center;margin-bottom:20px;">
+Daftarkan usaha Anda dan mulai berjualan di PasarNusa.
+</p><input
+type="text"
+id="namaUmkm"
+placeholder="Nama UMKM">
 
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Daftar UMKM - PasarNusa</title>
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link rel="stylesheet"
-href="style.css">
-
-</head>
-
-<body>
-
-<div class="register-card">
-
-<h2>Daftar UMKM</h2>
-
-<input type="text" id="namaUmkm" placeholder="Nama UMKM" required>
-
-<input type="text" id="namaPemilik" placeholder="Nama Pemilik" required>
+<input
+type="text"
+id="namaPemilik"
+placeholder="Nama Pemilik">
 
 <input
 type="tel"
 id="whatsapp"
-placeholder="Nomor WhatsApp"
-required>
+placeholder="Nomor WhatsApp">
 
 <input
 type="email"
 id="email"
-placeholder="Email"
-autocomplete="email"
-required>
+placeholder="Email">
 
 <input
 type="password"
 id="password"
-placeholder="Password"
-autocomplete="new-password"
-required>
+placeholder="Password (Minimal 6 Karakter)">
 
-<input type="text" id="kategori" placeholder="Kategori UMKM" required>
-
+<input
+type="text"
+id="kategori"
+placeholder="Kategori UMKM">
 
 <textarea
 id="deskripsi"
 placeholder="Deskripsi UMKM">
-</textarea>
+</textarea><button
+id="btnDaftar"
+class="btn-primary">
 
-<button id="btnDaftar">
+Daftar UMKM
 
-Daftar
-
-</button>
-
-<p
-style="
-text-align:center;
-margin-top:20px;
-">
-
-Sudah punya akun?
+</button><p style="text-align:center;margin-top:20px;">Sudah punya akun?
 
 <a href="login.html">
-
 Login
-
-</a>
-
-</p>
-
-</div>
-
-<script type="module">
+</a></p><p style="text-align:center;margin-top:10px;"><a href="index.html">
+⬅ Kembali ke Beranda
+</a></p></div><script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
 getFirestore,
-collection,
-addDoc,
-setDoc,
 doc,
+setDoc,
 serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
@@ -110,40 +71,25 @@ from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
-apiKey:
-"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:
-"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:
-"pasarnusa-18aa0",
-
-storageBucket:
-"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:
-"866998011671",
-
-appId:
-"1:866998011671:web:5555115feb82741ab55952"
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-getAuth(app);
+const auth = getAuth(app);
 
-const db =
-getFirestore(app);
+const db = getFirestore(app);
 
-document
-.getElementById("btnDaftar")
-.addEventListener(
-"click",
-async()=>{
+async function daftarUMKM(){
+
+const btn =
+document.getElementById("btnDaftar");
 
 const namaUmkm =
 document.getElementById("namaUmkm")
@@ -173,21 +119,17 @@ const deskripsi =
 document.getElementById("deskripsi")
 .value.trim();
 
-const btn =
-document.getElementById("btnDaftar");
-
-try{
-
 if(
 !namaUmkm ||
 !namaPemilik ||
 !whatsapp ||
 !email ||
-!password
+!password ||
+!kategori
 ){
 
 alert(
-"Lengkapi data terlebih dahulu"
+"Lengkapi semua data terlebih dahulu"
 );
 
 return;
@@ -204,7 +146,9 @@ return;
 
 }
 
-if(!/^08[0-9]{8,13}$/.test(whatsapp)){
+if(
+!/^08[0-9]{8,13}$/.test(whatsapp)
+){
 
 alert(
 "Nomor WhatsApp harus diawali 08"
@@ -214,8 +158,10 @@ return;
 
 }
 
-if(btn.disabled) return;
+try{
+
 btn.disabled = true;
+
 btn.innerText =
 "Mendaftarkan...";
 
@@ -226,54 +172,34 @@ email,
 password
 );
 
+const uid =
+userCredential.user.uid;
+
 await setDoc(
-doc(
-db,
-"users",
-userCredential.user.uid
-),
+doc(db,"users",uid),
 {
-uid:
-userCredential.user.uid,
-
-nama:
+uid,
+nama:namaUmkm,
 namaUmkm,
-
-namaUmkm:
-namaUmkm,
-
-namaPemilik:
 namaPemilik,
-
-email:
 email,
-
-whatsapp:
 whatsapp,
-
-kategori:
 kategori,
-
-deskripsi:
 deskripsi,
 
-role:
-"umkm",
+role:"umkm",
 
-status:"menunggu_verifikasi",
+status:"aktif",
 
-createdAt:serverTimestamp()
+createdAt:
+serverTimestamp()
 }
 );
 
 await setDoc(
-doc(
-db,
-"umkm",
-userCredential.user.uid
-),
+doc(db,"umkm",uid),
 {
-uid:userCredential.user.uid,
+uid,
 
 namaUmkm,
 namaPemilik,
@@ -281,19 +207,25 @@ whatsapp,
 kategori,
 deskripsi,
 
+status:"aktif",
+
+membership:"free",
+
+membershipExpired:null,
+
 ratingToko:0,
+
 totalReviewToko:0,
 
-status:"menunggu_verifikasi",
-membership:"free",
-membershipExpired:null,
-isVerified:false,
-createdAt:serverTimestamp()
+isVerified:true,
+
+createdAt:
+serverTimestamp()
 }
 );
 
 alert(
-"Akun berhasil dibuat."
+"Pendaftaran UMKM berhasil"
 );
 
 await signOut(auth);
@@ -306,12 +238,40 @@ catch(error){
 
 console.error(error);
 
-alert(
-"Kode Error:\n" +
-error.code +
-"\n\nPesan:\n" +
-error.message
-);
+let pesan =
+"Pendaftaran gagal";
+
+if(
+error.code ===
+"auth/email-already-in-use"
+){
+
+pesan =
+"Email sudah digunakan";
+
+}
+
+if(
+error.code ===
+"auth/invalid-email"
+){
+
+pesan =
+"Format email tidak valid";
+
+}
+
+if(
+error.code ===
+"auth/weak-password"
+){
+
+pesan =
+"Password terlalu lemah";
+
+}
+
+alert(pesan);
 
 }
 finally{
@@ -319,14 +279,32 @@ finally{
 btn.disabled = false;
 
 btn.innerText =
-"Daftar";
+"Daftar UMKM";
+
+}
+
+}
+
+document
+.getElementById("btnDaftar")
+.addEventListener(
+"click",
+daftarUMKM
+);
+
+document
+.addEventListener(
+"keypress",
+(e)=>{
+
+if(e.key === "Enter"){
+
+daftarUMKM();
 
 }
 
 }
 );
 
-</script>
-
-</body>
+</script></body>
 </html>
