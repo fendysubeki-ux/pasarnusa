@@ -79,14 +79,12 @@ getDownloadURL
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
-
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_PROJECT.appspot.com",
-messagingSenderId:"YOUR_SENDER_ID",
-appId:"YOUR_APP_ID"
-
+  apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain: "pasarnusa-18aa0.firebaseapp.com",
+  projectId: "pasarnusa-18aa0",
+  storageBucket:"pasarnusa-18aa0.appspot.com"
+  messagingSenderId: "866998011671",
+  appId: "1:866998011671:web:5555115feb82741ab55952"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -102,13 +100,15 @@ window.location.search
 
 const pesananId =
 params.get("id");
-
 if(!pesananId){
 
 alert("Pesanan tidak ditemukan");
 
-window.location.href =
-"pesanan-saya.html";
+window.location.replace(
+"pesanan-saya.html"
+);
+
+throw new Error("ID kosong");
 
 }
 
@@ -193,7 +193,17 @@ alert(
 return;
 
 }
+if(
+!file.type.includes("image")
+){
 
+alert(
+"File harus berupa gambar"
+);
+
+return;
+
+}
 if(file.size > 3000000){
 
 alert(
@@ -246,18 +256,20 @@ status:"Menunggu Verifikasi"
 await addDoc(
 collection(db,"notifikasi"),
 {
-uid:pesanan.uid,
+if(pesanan.uidPembeli){
 
+await addDoc(
+collection(db,"notifikasi"),
+{
+uid:pesanan.uidPembeli,
 judul:"Bukti Transfer Baru",
-
-pesan:
-"Pembeli telah mengupload bukti transfer.",
-
+pesan:"Bukti transfer berhasil dikirim.",
 dibaca:false,
-
 createdAt:new Date()
 }
 );
+
+}
 
 alert(
 "Bukti transfer berhasil dikirim"
