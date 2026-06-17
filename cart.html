@@ -1,9 +1,17 @@
 <!DOCTYPE html><html lang="id">
-<head>
-<meta charset="UTF-8">
+<head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Keranjang Belanja - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
-<body><section class="cart-section"><h1>🛒 Keranjang Belanja</h1><div id="cartContainer"></div></section><script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><header class="navbar"><div class="logo">
+PASAR<span>NUSA</span>
+</div><a
+href="index.html"
+class="btn-secondary">
+
+🏠 Beranda
+
+</a></header><section class="cart-section"><h1>🛒 Keranjang Belanja</h1><p>
+Periksa kembali produk sebelum checkout.
+</p><div id="cartContainer"></div></section><script>
 
 let cart =
 JSON.parse(
@@ -11,7 +19,9 @@ localStorage.getItem("cart")
 ) || [];
 
 const cartContainer =
-document.getElementById("cartContainer");
+document.getElementById(
+"cartContainer"
+);
 
 renderCart();
 
@@ -33,8 +43,12 @@ Belum ada produk di keranjang.
 
 <br>
 
-<a href="produk.html" class="btn-primary">
+<a
+href="index.html#produk"
+class="btn-primary">
+
 Mulai Belanja
+
 </a>
 
 </div>
@@ -50,10 +64,12 @@ let totalItem = 0;
 
 cart.forEach((produk,index)=>{
 
-const qty = Number(produk.qty || 1);
+const qty =
+Number(produk.qty || 1);
 
 const subtotal =
-Number(produk.harga || 0) * qty;
+Number(produk.harga || 0)
+* qty;
 
 totalBelanja += subtotal;
 totalItem += qty;
@@ -72,7 +88,7 @@ alt="${produk.namaProduk}">
 <div class="product-info">
 
 <span class="category">
-${produk.kategori || 'Produk'}
+${produk.kategori || "Produk"}
 </span>
 
 <h3>
@@ -86,35 +102,47 @@ produk.harga || 0
 </p>
 
 <p>
-Jumlah:
+Jumlah :
 <b>${qty}</b>
 </p>
 
 <p>
-Subtotal:
+Subtotal :
 <b>
 Rp ${subtotal.toLocaleString("id-ID")}
 </b>
 </p>
 
-<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+<div
+style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:10px;
+">
 
 <button
 onclick="kurangiQty(${index})"
 class="btn-secondary">
+
 ➖
+
 </button>
 
 <button
 onclick="tambahQty(${index})"
 class="btn-primary">
+
 ➕
+
 </button>
 
 <button
 onclick="hapusItem(${index})"
 class="btn-secondary">
+
 🗑 Hapus
+
 </button>
 
 </div>
@@ -127,25 +155,47 @@ class="btn-secondary">
 
 });
 
+const ongkir = 10000;
+
 cartContainer.innerHTML += `
 
 <div class="cart-card">
 
 <h3>
-Total Item: ${totalItem}
+Total Produk : ${cart.length}
 </h3>
 
-<h2>
-Total Belanja
-</h2>
+<h3>
+Total Item : ${totalItem}
+</h3>
+
+<p>
+Subtotal :
+Rp ${totalBelanja.toLocaleString("id-ID")}
+</p>
+
+<p>
+Estimasi Ongkir :
+Rp ${ongkir.toLocaleString("id-ID")}
+</p>
+
+<hr>
+
+<h2>Total Bayar</h2>
 
 <h1>
-Rp ${totalBelanja.toLocaleString("id-ID")}
+Rp ${(totalBelanja + ongkir)
+.toLocaleString("id-ID")}
 </h1>
+
+<p>
+Termasuk estimasi ongkir
+</p>
 
 <br>
 
-<div style="
+<div
+style="
 display:flex;
 gap:10px;
 flex-wrap:wrap;
@@ -153,10 +203,10 @@ justify-content:center;
 ">
 
 <a
-href="produk.html"
+href="index.html#produk"
 class="btn-secondary">
 
-Lanjut Belanja
+🛍 Lanjut Belanja
 
 </a>
 
@@ -164,17 +214,17 @@ Lanjut Belanja
 onclick="kosongkanKeranjang()"
 class="btn-secondary">
 
-Kosongkan Keranjang
+🗑 Kosongkan
 
 </button>
 
-<a
-href="checkout.html"
+<button
+onclick="cekCheckout()"
 class="btn-primary">
 
-Checkout
+💳 Checkout
 
-</a>
+</button>
 
 </div>
 
@@ -200,7 +250,9 @@ renderCart();
 
 window.kurangiQty = function(index){
 
-if((cart[index].qty || 1) > 1){
+if(
+(cart[index].qty || 1) > 1
+){
 
 cart[index].qty--;
 
@@ -221,7 +273,11 @@ renderCart();
 
 window.hapusItem = function(index){
 
-if(confirm("Hapus produk ini?")){
+if(
+confirm(
+"Hapus produk ini?"
+)
+){
 
 cart.splice(index,1);
 
@@ -236,17 +292,48 @@ renderCart();
 
 };
 
-window.kosongkanKeranjang = function(){
+window.kosongkanKeranjang =
+function(){
 
-if(confirm("Kosongkan seluruh keranjang?")){
+if(
+confirm(
+"Kosongkan seluruh keranjang?"
+)
+){
 
-localStorage.removeItem("cart");
+localStorage.removeItem(
+"cart"
+);
 
 cart = [];
 
 renderCart();
 
 }
+
+};
+
+window.cekCheckout =
+function(){
+
+const uid =
+localStorage.getItem("uid");
+
+if(!uid){
+
+alert(
+"Silakan login terlebih dahulu"
+);
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+window.location.href =
+"checkout.html";
 
 };
 
