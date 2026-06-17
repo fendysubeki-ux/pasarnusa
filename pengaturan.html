@@ -1,0 +1,280 @@
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pengaturan Toko - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
+<body><section class="dashboard"><div class="dashboard-header"><div>
+<h1>⚙️ Pengaturan Toko</h1>
+<p>Kelola profil dan pengaturan akun UMKM</p>
+</div><a href="dashboard-umkm.html"
+class="btn-secondary">
+⬅️ Dashboard
+</a>
+
+</div><div class="form-card"><h2>🏪 Informasi Toko</h2><label>Nama Toko</label>
+
+<input
+type="text"
+id="namaUmkm"
+placeholder="Nama Toko">
+
+<label>Deskripsi</label>
+
+<textarea
+id="deskripsi"
+rows="5"
+placeholder="Deskripsi toko">
+</textarea><label>WhatsApp</label>
+
+<input
+type="text"
+id="whatsapp"
+placeholder="08123456789">
+
+<label>Logo Toko</label>
+
+<input
+type="text"
+id="logo"
+placeholder="URL Logo">
+
+<label>Banner Toko</label>
+
+<input
+type="text"
+id="banner"
+placeholder="URL Banner">
+
+<br><br>
+
+<button
+id="simpanBtn"
+class="btn-primary">
+
+💾 Simpan Perubahan
+
+</button></div><br><div class="dashboard-grid"><div class="dashboard-card"><h3>🔐 Keamanan</h3><p>
+Keluar dari akun PasarNusa.
+</p><br><button
+id="logoutBtn"
+class="btn-secondary">
+
+🚪 Logout
+
+</button></div><div class="dashboard-card"><h3>🗑 Reset Data Lokal</h3><p>
+Menghapus cache browser.
+</p><br><button
+id="resetBtn"
+class="btn-secondary">
+
+Hapus Cache
+
+</button></div></div></section><script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
+const uid =
+auth.currentUser.uid;
+
+try{
+
+const snap =
+await getDoc(
+doc(db,"umkm",uid)
+);
+
+if(snap.exists()){
+
+const toko =
+snap.data();
+
+document.getElementById(
+"namaUmkm"
+).value =
+toko.namaUmkm || "";
+
+document.getElementById(
+"deskripsi"
+).value =
+toko.deskripsi || "";
+
+document.getElementById(
+"whatsapp"
+).value =
+toko.whatsapp || "";
+
+document.getElementById(
+"logo"
+).value =
+toko.logo || "";
+
+document.getElementById(
+"banner"
+).value =
+toko.banner || "";
+
+}
+
+}catch(error){
+
+console.error(error);
+
+}
+
+document
+.getElementById(
+"simpanBtn"
+)
+.addEventListener(
+"click",
+async()=>{
+
+try{
+
+await updateDoc(
+doc(db,"umkm",uid),
+{
+
+namaUmkm:
+document.getElementById(
+"namaUmkm"
+).value,
+
+deskripsi:
+document.getElementById(
+"deskripsi"
+).value,
+
+whatsapp:
+document.getElementById(
+"whatsapp"
+).value,
+
+logo:
+document.getElementById(
+"logo"
+).value,
+
+banner:
+document.getElementById(
+"banner"
+).value
+
+}
+);
+
+alert(
+"Pengaturan berhasil disimpan"
+);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Gagal menyimpan"
+);
+
+}
+
+}
+);
+
+document
+.getElementById(
+"logoutBtn"
+)
+.addEventListener(
+"click",
+async()=>{
+
+if(
+confirm(
+"Yakin logout?"
+)
+){
+
+await signOut(auth);
+
+localStorage.clear();
+
+window.location.href =
+"login.html";
+
+}
+
+}
+);
+
+document
+.getElementById(
+"resetBtn"
+)
+.addEventListener(
+"click",
+()=>{
+
+if(
+confirm(
+"Hapus semua cache lokal?"
+)
+){
+
+localStorage.clear();
+
+alert(
+"Cache berhasil dihapus"
+);
+
+location.reload();
+
+}
+
+}
+);
+
+</script></body>
+</html>
