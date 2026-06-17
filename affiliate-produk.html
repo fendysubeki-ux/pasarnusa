@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Produk Affiliate - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+<h1>🤝 Produk Affiliate</h1>
+<p>Pilih produk UMKM yang ingin Anda promosikan</p>
+</div>
+
+<a
+href="affiliate-dashboard.html"
+class="btn-secondary">
+⬅️ Dashboard Affiliate
+</a>
+
+</div>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+<h3 id="totalProduk">0</h3>
+<p>Total Produk</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalKategori">0</h3>
+<p>Kategori</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="produkTerjual">0</h3>
+<p>Total Terjual</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="ratingRata">0</h3>
+<p>⭐ Rating Rata-rata</p>
+</div>
+
+</div>
+
+<div style="margin:20px 0;">
+
+<input
+type="text"
+id="searchProduk"
+class="search-box"
+placeholder="Cari produk affiliate...">
+
+<br><br>
+
+<select
+id="filterKategori"
+class="search-box">
+
+<option value="">
+Semua Kategori
+</option>
+
+<option value="Makanan">
+Makanan
+</option>
+
+<option value="Minuman">
+Minuman
+</option>
+
+<option value="Fashion">
+Fashion
+</option>
+
+<option value="Kerajinan">
+Kerajinan
+</option>
+
+<option value="Lainnya">
+Lainnya
+</option>
+
+</select>
+
+</div>
+
+<div
+id="produkContainer"
+class="product-grid">
+
+<div class="dashboard-card">
+
+<p>Memuat produk...</p>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+
+projectId:"pasarnusa-18aa0",
+
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+
+messagingSenderId:"866998011671",
+
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
+const uid =
+auth.currentUser.uid;
+
+const container =
+document.getElementById(
+"produkContainer"
+);
+
+let semuaProduk = [];
+
+async function loadProduk(){
+
+container.innerHTML = "";
+
+const snapshot =
+await getDocs(
+collection(db,"produk")
+);
+
+let totalTerjual = 0;
+let totalRating = 0;
+let kategoriSet = new Set();
+
+semuaProduk = [];
+
+snapshot.forEach((doc)=>{
+
+const produk = {
+
+id:doc.id,
+...doc.data()
+
+};
+
+semuaProduk.push(produk);
+
+totalTerjual +=
+Number(produk.terjual || 0);
+
+totalRating +=
+Number(produk.rating || 0);
+
+kategoriSet.add(
+produk.kategori || "-"
+);
+
+});
+
+document.getElementById(
+"totalProduk"
+).innerText =
+semuaProduk.length;
+
+document.getElementById(
+"totalKategori"
+).innerText =
+kategoriSet.size;
+
+document.getElementById(
+"produkTerjual"
+).innerText =
+totalTerjual;
+
+document.getElementById(
+"ratingRata"
+).innerText =
+semuaProduk.length
+?
+(
+totalRating /
+semuaProduk.length
+).toFixed(1)
+:
+0;
+
+renderProduk();
+
+}
+
+function renderProduk(){
+
+const keyword =
+document.getElementById(
+"searchProduk"
+).value.toLowerCase();
+
+const kategori =
+document.getElementById(
+"filterKategori"
+).value;
+
+container.innerHTML = "";
+
+const hasil =
+semuaProduk.filter((produk)=>{
+
+const cocokNama =
+
+(produk.namaProduk || "")
+.toLowerCase()
+.includes(keyword);
+
+const cocokKategori =
+
+kategori === ""
+||
+produk.kategori === kategori;
+
+return cocokNama &&
+cocokKategori;
+
+});
+
+if(hasil.length === 0){
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+Produk Tidak Ditemukan
+</h3>
+
+</div>
+
+`;
+
+return;
+
+}
+
+hasil.forEach((produk)=>{
+
+const linkAffiliate =
+
+window.location.origin +
+window.location.pathname
+.replace(
+"affiliate-produk.html",
+"produk-detail.html"
+)
++
+"?id=" +
+produk.id +
+"&ref=" +
+uid;
+
+container.innerHTML += `
+
+<div class="product-card searchable">
+
+<img
+src="${
+produk.gambar?.[0]
+||
+'https://picsum.photos/400'
+}"
+alt="${produk.namaProduk}">
+
+<div class="product-info">
+
+<span class="category">
+${produk.kategori || "-"}
+</span>
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p class="price">
+Rp ${Number(
+produk.harga || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+⭐ ${produk.rating || 0}
+(${produk.totalReview || 0} ulasan)
+</p>
+
+<p>
+🔥 Terjual:
+${produk.terjual || 0}
+</p>
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:15px;
+">
+
+<button
+onclick="copyAffiliate('${linkAffiliate}')"
+class="btn-primary">
+
+🔗 Salin Link
+
+</button>
+
+<a
+href="${linkAffiliate}"
+target="_blank"
+class="btn-secondary">
+
+👀 Lihat
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+window.copyAffiliate =
+async(link)=>{
+
+await navigator.clipboard.writeText(
+link
+);
+
+alert(
+"Link affiliate berhasil disalin"
+);
+
+};
+
+document
+.getElementById(
+"searchProduk"
+)
+.addEventListener(
+"input",
+renderProduk
+);
+
+document
+.getElementById(
+"filterKategori"
+)
+.addEventListener(
+"change",
+renderProduk
+);
+
+loadProduk();
+
+</script>
+
+</body>
+</html>
