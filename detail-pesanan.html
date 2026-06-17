@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Detail Pesanan - PasarNusa</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+<h1>📦 Detail Pesanan</h1>
+<p>Lihat detail transaksi Anda</p>
+</div>
+
+<a href="pesanan-saya.html" class="btn-secondary">
+⬅ Kembali
+</a>
+
+</div>
+
+<div id="detailContainer">
+
+<div class="dashboard-card">
+Loading...
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const container =
+document.getElementById("detailContainer");
+
+const params =
+new URLSearchParams(window.location.search);
+
+const id =
+params.get("id");
+
+if(!id){
+
+container.innerHTML = `
+<div class="dashboard-card">
+<h3>Pesanan Tidak Ditemukan</h3>
+</div>
+`;
+
+throw new Error("ID kosong");
+
+}
+
+loadPesanan();
+
+async function loadPesanan(){
+
+try{
+
+const snap =
+await getDoc(
+doc(db,"pesanan",id)
+);
+
+if(!snap.exists()){
+
+container.innerHTML = `
+<div class="dashboard-card">
+<h3>Pesanan Tidak Ditemukan</h3>
+</div>
+`;
+
+return;
+
+}
+
+const data = snap.data();
+
+const tanggal =
+data.createdAt?.toDate
+? data.createdAt.toDate().toLocaleString("id-ID")
+: "-";
+
+let statusColor = "#f59e0b";
+
+if(data.status === "Diproses")
+statusColor = "#3b82f6";
+
+if(data.status === "Dikirim")
+statusColor = "#8b5cf6";
+
+if(data.status === "Selesai")
+statusColor = "#22c55e";
+
+if(data.status === "Dibatalkan")
+statusColor = "#ef4444";
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h2>
+Pesanan #${id.substring(0,8)}
+</h2>
+
+<p>
+<b>Status :</b>
+
+<span
+style="
+color:${statusColor};
+font-weight:bold;
+">
+
+${data.status === "menunggu"
+? "Belum Bayar"
+: (data.status || "Belum Bayar")}
+
+</span>
+
+</p>
+
+<p>
+<b>Tanggal :</b>
+${tanggal}
+</p>
+
+<p>
+<b>Nama :</b>
+${data.namaPembeli || "-"}
+</p>
+
+<p>
+<b>WhatsApp :</b>
+${data.whatsapp || "-"}
+</p>
+
+<p>
+<b>Alamat :</b>
+${data.alamat || "-"}
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>💰 Ringkasan Pembayaran</h3>
+
+<p>
+Subtotal :
+Rp ${Number(
+data.subtotal || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+Ongkir :
+Rp ${Number(
+data.ongkir || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+Diskon :
+Rp ${Number(
+data.diskon || 0
+).toLocaleString("id-ID")}
+</p>
+
+<hr>
+
+<h2>
+Rp ${Number(
+data.totalBayar || 0
+).toLocaleString("id-ID")}
+</h2>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>🛍 Produk Dibeli</h3>
+
+${
+(data.items || []).map(item => `
+
+<div
+style="
+padding:10px;
+border:1px solid #eee;
+border-radius:12px;
+margin-top:10px;
+">
+
+${item.gambar
+? `
+<img
+src="${item.gambar}"
+style="
+width:100%;
+border-radius:12px;
+margin-bottom:10px;
+">
+`
+: ""}
+
+<p>
+<b>${item.namaProduk}</b>
+</p>
+
+<p>
+Qty : ${item.qty || 1}
+</p>
+
+<p>
+Rp ${Number(
+item.harga || 0
+).toLocaleString("id-ID")}
+</p>
+
+</div>
+
+`).join("")
+}
+
+</div>
+
+${data.buktiTransfer ? `
+
+<div class="dashboard-card">
+
+<h3>💳 Bukti Transfer</h3>
+
+<img
+src="${data.buktiTransfer}"
+style="
+width:100%;
+border-radius:16px;
+">
+<br><br>
+
+<a
+href="${data.buktiTransfer}"
+target="_blank"
+class="btn-secondary"
+style="display:block;text-align:center;">
+
+🔍 Lihat Full Gambar
+
+</a>
+</div>
+
+` : ""}
+
+<div class="dashboard-card">
+
+<h3>⚡ Aksi Cepat</h3>
+
+${
+data.status === "Belum Bayar" ||
+data.status === "menunggu"
+? `
+<a
+href="upload-bukti.html?id=${id}"
+class="btn-primary"
+style="
+display:block;
+text-align:center;
+margin-bottom:10px;
+">
+
+💳 Upload Bukti Transfer
+
+</a>
+
+` : ""}
+
+<a
+href="https://wa.me/6281234567890"
+target="_blank"
+class="btn-secondary"
+style="
+display:block;
+text-align:center;
+">
+
+💬 Hubungi Admin
+
+</a>
+
+</div>
+
+`;
+
+}
+catch(error){
+
+console.error(error);
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>Error</h3>
+
+<p>${error.message}</p>
+
+</div>
+
+`;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
