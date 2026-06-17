@@ -1,234 +1,258 @@
 <!DOCTYPE html><html lang="id">
 <head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Statistik Marketplace - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><div class="dashboard-header"><div><h1>📈 Statistik Marketplace</h1><p>
-Laporan dan performa seluruh marketplace PasarNusa.
-</p></div><a href="admin.html" class="btn-secondary">
-Kembali
-</a></div><div class="dashboard-grid"><div class="dashboard-card">
-<h3 id="totalUmkm">0</h3>
-<p>Total UMKM</p>
-</div><div class="dashboard-card">
-<h3 id="totalAffiliate">0</h3>
-<p>Total Affiliate</p>
-</div><div class="dashboard-card">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Statistik UMKM - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
+<body><section class="dashboard"><div class="dashboard-header"><div>
+<h1>📈 Statistik UMKM</h1>
+<p>Analisis performa toko Anda</p>
+</div><a href="dashboard-umkm.html"
+class="btn-secondary">
+⬅️ Dashboard
+</a>
+
+</div><div class="dashboard-grid"><div class="dashboard-card">
 <h3 id="totalProduk">0</h3>
 <p>Total Produk</p>
+</div><div class="dashboard-card">
+<h3 id="totalTerjual">0</h3>
+<p>Total Terjual</p>
 </div><div class="dashboard-card">
 <h3 id="totalPesanan">0</h3>
 <p>Total Pesanan</p>
 </div><div class="dashboard-card">
-<h3 id="totalTransaksi">Rp 0</h3>
-<p>Total Transaksi</p>
+<h3 id="pendapatan">Rp 0</h3>
+<p>Total Pendapatan</p>
 </div><div class="dashboard-card">
-<h3 id="pendapatanPlatform">Rp 0</h3>
-<p>Pendapatan Platform</p>
+<h3 id="ratingToko">0</h3>
+<p>⭐ Rating Toko</p>
 </div><div class="dashboard-card">
-<h3 id="komisiAffiliate">Rp 0</h3>
-<p>Komisi Affiliate</p>
-</div><div class="dashboard-card">
-<h3 id="subsidiOngkir">Rp 0</h3>
-<p>Subsidi Ongkir</p>
-</div></div><h2>🏆 Produk Terlaris Marketplace</h2><div
+<h3 id="followers">0</h3>
+<p>Followers</p>
+</div></div><h2>🏆 Produk Terlaris</h2><div
 id="produkTerlaris"
 class="dashboard-grid"><div class="dashboard-card">
-<p>Memuat data...</p>
-</div></div><h2>🏪 UMKM Terlaris</h2><div
-id="umkmTerlaris"
+Memuat data...
+</div></div><h2>⚠️ Produk Stok Menipis</h2><div
+id="stokMenipis"
 class="dashboard-grid"><div class="dashboard-card">
-<p>Memuat data...</p>
+Memuat data...
+</div></div><h2>📊 Ringkasan Toko</h2><div
+id="ringkasan"
+class="dashboard-grid"><div class="dashboard-card">
+Memuat data...
 </div></div></section><script type="module">
 
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
 getFirestore,
 collection,
-getDocs
+query,
+where,
+getDocs,
+doc,
+getDoc
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_PROJECT.appspot.com",
-messagingSenderId:"YOUR_SENDER_ID",
-appId:"YOUR_APP_ID"
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+const db =
+getFirestore(app);
 
-async function loadStatistik(){
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
+const uid =
+auth.currentUser.uid;
 
 try{
 
-const umkmSnap =
-await getDocs(
-collection(db,"umkm")
+const tokoSnap =
+await getDoc(
+doc(db,"umkm",uid)
 );
 
-const affiliateSnap =
-await getDocs(
-collection(db,"affiliate")
-);
+if(tokoSnap.exists()){
 
-const produkSnap =
-await getDocs(
-collection(db,"produk")
-);
-
-const pesananSnap =
-await getDocs(
-collection(db,"pesanan")
-);
+const toko =
+tokoSnap.data();
 
 document.getElementById(
-"totalUmkm"
+"ratingToko"
 ).innerText =
-umkmSnap.size;
+toko.ratingToko || 0;
 
 document.getElementById(
-"totalAffiliate"
+"followers"
 ).innerText =
-affiliateSnap.size;
+toko.followers || 0;
+
+}
+
+const produkSnapshot =
+await getDocs(
+query(
+collection(db,"produk"),
+where("uid","==",uid)
+)
+);
+
+let totalProduk = 0;
+let totalTerjual = 0;
+
+let produkList = [];
+
+let stokHTML = "";
+
+produkSnapshot.forEach((item)=>{
+
+const produk =
+item.data();
+
+totalProduk++;
+
+totalTerjual +=
+Number(
+produk.terjual || 0
+);
+
+produkList.push(produk);
+
+if(
+Number(produk.stok || 0)
+<= 5
+){
+
+stokHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p>
+Stok:
+${produk.stok}
+</p>
+
+</div>
+
+`;
+
+}
+
+});
 
 document.getElementById(
 "totalProduk"
 ).innerText =
-produkSnap.size;
+totalProduk;
+
+document.getElementById(
+"totalTerjual"
+).innerText =
+totalTerjual;
+
+const pesananSnapshot =
+await getDocs(
+collection(db,"pesanan")
+);
+
+let totalPesanan = 0;
+let pendapatan = 0;
+
+pesananSnapshot.forEach((item)=>{
+
+const pesanan =
+item.data();
+
+const adaProdukSaya =
+(pesanan.items || [])
+.some(
+(i)=>i.uid === uid
+);
+
+if(!adaProdukSaya)
+return;
+
+totalPesanan++;
+
+pendapatan +=
+Number(
+pesanan.totalBayar || 0
+);
+
+});
 
 document.getElementById(
 "totalPesanan"
 ).innerText =
-pesananSnap.size;
-
-let totalTransaksi = 0;
-let pendapatanPlatform = 0;
-let komisiAffiliate = 0;
-let subsidiOngkir = 0;
-
-const produkList = [];
-const umkmMap = {};
-
-pesananSnap.forEach((item)=>{
-
-const data = item.data();
-
-totalTransaksi +=
-Number(
-data.totalBayar || 0
-);
-
-pendapatanPlatform +=
-Number(
-data.pendapatanPlatform || 0
-);
-
-komisiAffiliate +=
-Number(
-data.komisiAffiliate || 0
-);
-
-subsidiOngkir +=
-Number(
-data.subsidiOngkir || 0
-);
-
-if(data.uid){
-
-if(!umkmMap[data.uid]){
-
-umkmMap[data.uid] = {
-pesanan:0,
-omzet:0
-};
-
-}
-
-umkmMap[data.uid].pesanan++;
-
-umkmMap[data.uid].omzet +=
-Number(
-data.totalBayar || 0
-);
-
-}
-
-});
+totalPesanan;
 
 document.getElementById(
-"totalTransaksi"
+"pendapatan"
 ).innerText =
 "Rp " +
-totalTransaksi.toLocaleString("id-ID");
-
-document.getElementById(
-"pendapatanPlatform"
-).innerText =
-"Rp " +
-pendapatanPlatform.toLocaleString("id-ID");
-
-document.getElementById(
-"komisiAffiliate"
-).innerText =
-"Rp " +
-komisiAffiliate.toLocaleString("id-ID");
-
-document.getElementById(
-"subsidiOngkir"
-).innerText =
-"Rp " +
-subsidiOngkir.toLocaleString("id-ID");
-
-produkSnap.forEach((item)=>{
-
-const data = item.data();
-
-produkList.push({
-nama:data.namaProduk || "-",
-terjual:Number(data.terjual || 0),
-harga:Number(data.harga || 0)
-});
-
-});
+pendapatan.toLocaleString(
+"id-ID"
+);
 
 produkList.sort(
 (a,b)=>
-b.terjual - a.terjual
+Number(b.terjual || 0)
+-
+Number(a.terjual || 0)
 );
 
-const produkContainer =
-document.getElementById(
-"produkTerlaris"
-);
-
-produkContainer.innerHTML = "";
+let terlarisHTML = "";
 
 produkList
-.slice(0,10)
+.slice(0,5)
 .forEach((produk,index)=>{
 
-produkContainer.innerHTML += `
+terlarisHTML += `
 
 <div class="dashboard-card">
 
 <h3>
-#${index + 1}
+#${index+1}
 </h3>
 
-<h4>
-${produk.nama}
-</h4>
+<p>
+${produk.namaProduk}
+</p>
 
 <p>
-Terjual:
-${produk.terjual}
+🔥 ${produk.terjual || 0}
 </p>
 
 </div>
@@ -237,67 +261,58 @@ ${produk.terjual}
 
 });
 
-const umkmContainer =
 document.getElementById(
-"umkmTerlaris"
-);
+"produkTerlaris"
+).innerHTML =
+terlarisHTML ||
+`
+<div class="dashboard-card">
+Belum ada penjualan
+</div>
+`;
 
-umkmContainer.innerHTML = "";
+document.getElementById(
+"stokMenipis"
+).innerHTML =
+stokHTML ||
+`
+<div class="dashboard-card">
+Semua stok aman
+</div>
+`;
 
-const rankingUmkm =
-Object.entries(umkmMap)
-.sort(
-(a,b)=>
-b[1].omzet -
-a[1].omzet
-)
-.slice(0,10);
-
-rankingUmkm.forEach(
-(item,index)=>{
-
-umkmContainer.innerHTML += `
+document.getElementById(
+"ringkasan"
+).innerHTML = `
 
 <div class="dashboard-card">
+<h3>📦 Pesanan</h3>
+<p>${totalPesanan}</p>
+</div>
 
-<h3>
-#${index + 1}
-</h3>
+<div class="dashboard-card">
+<h3>🛍 Produk</h3>
+<p>${totalProduk}</p>
+</div>
 
+<div class="dashboard-card">
+<h3>💰 Pendapatan</h3>
 <p>
-UID:
-${item[0]}
+Rp ${pendapatan.toLocaleString("id-ID")}
 </p>
-
-<p>
-Pesanan:
-${item[1].pesanan}
-</p>
-
-<p>
-Omzet:
-Rp ${item[1].omzet.toLocaleString("id-ID")}
-</p>
-
 </div>
 
 `;
-
-});
 
 }catch(error){
 
 console.error(error);
 
 alert(
-"Gagal memuat statistik marketplace"
+"Gagal memuat statistik"
 );
 
 }
-
-}
-
-loadStatistik();
 
 </script></body>
 </html>
