@@ -91,14 +91,12 @@ getAuth
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
-
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_PROJECT.appspot.com",
-messagingSenderId:"YOUR_SENDER_ID",
-appId:"YOUR_APP_ID"
-
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -311,7 +309,14 @@ btn.disabled = true;
 btn.innerText = "Memproses...";
 
 try{
-
+if(
+!document.getElementById("namaPembeli").value ||
+!document.getElementById("whatsappPembeli").value ||
+!document.getElementById("alamatPembeli").value
+){
+alert("Lengkapi data pembeli");
+return;
+}
 await addDoc(
 collection(db,"pesanan"),
 {
@@ -338,18 +343,18 @@ diskon:diskon,
 
 voucher:voucherDipakai,
 
+total:
+subtotal + ongkir - diskon,
+
 totalBayar:
-subtotal +
-ongkir -
-diskon,
+subtotal + ongkir - diskon,
 
 affiliate:
 localStorage.getItem(
 "affiliate"
 ),
 
-status:
-"Belum Bayar",
+status:"menunggu",
 
 createdAt:
 new Date()
