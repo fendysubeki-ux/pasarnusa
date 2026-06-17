@@ -31,24 +31,17 @@ placeholder="Nama Produk">
 type="number"
 id="hargaProduk"
 placeholder="Harga Produk">
-
+<input
+type="number"
+id="stokProduk"
+placeholder="Jumlah Stok">
 <input
 type="number"
 id="beratProduk"
 placeholder="Berat Produk (gram)">
 
 <select id="kategoriProduk">
-<select id="statusProduk">
 
-<option value="Aktif">
-Aktif
-</option>
-
-<option value="Nonaktif">
-Nonaktif
-</option>
-
-</select>
 <option value="">
 Pilih Kategori
 </option>
@@ -71,6 +64,18 @@ Fashion
 
 <option value="Lainnya">
 Lainnya
+</option>
+
+</select>
+
+<select id="statusProduk">
+
+<option value="Aktif">
+Aktif
+</option>
+
+<option value="Nonaktif">
+Nonaktif
 </option>
 
 </select>
@@ -312,11 +317,9 @@ return;
 btn.disabled = true;
 btn.innerText = "Mengupload...";
 
-const userDoc =
-await getDoc(
 doc(
 db,
-"users",
+"umkm",
 auth.currentUser.uid
 )
 );
