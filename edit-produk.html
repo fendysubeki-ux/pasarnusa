@@ -37,7 +37,12 @@ placeholder="Harga Produk">
 type="number"
 id="stokProduk"
 placeholder="Jumlah Stok">
+<label>Berat Produk (gram)</label>
 
+<input
+type="number"
+id="beratProduk"
+placeholder="Berat Produk">
 <label>Kategori Produk</label>
 
 <select id="kategoriProduk"><option value="Makanan">Makanan</option>
@@ -88,7 +93,7 @@ class="btn-secondary">
 🗑️ Hapus Produk
 
 </button><a
-href="dashboard-produk.html"
+href="produk-saya.html"
 class="btn-secondary">
 
 ⬅️ Kembali
@@ -100,5 +105,258 @@ dan stok selalu diperbarui.
 Produk yang aktif dapat dipromosikan affiliate.
 </p></div><div class="dashboard-card"><h3>Optimasi SEO</h3><p>
 Gunakan nama produk yang mudah dicari pembeli.
-</p></div></div></section></body>
+</p></div></div></section>
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc,
+deleteDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
+const id =
+new URLSearchParams(
+window.location.search
+).get("id");
+
+if(!id){
+
+window.location.href =
+"produk-saya.html";
+
+}
+
+try{
+
+const snap =
+await getDoc(
+doc(db,"produk",id)
+);
+
+if(!snap.exists()){
+
+throw new Error(
+"Produk tidak ditemukan"
+);
+
+}
+
+const produk =
+snap.data();
+
+document.getElementById(
+"namaProduk"
+).value =
+produk.namaProduk || "";
+
+document.getElementById(
+"hargaProduk"
+).value =
+produk.harga || 0;
+
+document.getElementById(
+"stokProduk"
+).value =
+produk.stok || 0;
+
+document.getElementById(
+"beratProduk"
+).value =
+produk.berat || 0;
+
+document.getElementById(
+"kategoriProduk"
+).value =
+produk.kategori || "";
+
+document.getElementById(
+"statusProduk"
+).value =
+produk.status || "Aktif";
+
+document.getElementById(
+"deskripsiProduk"
+).value =
+produk.deskripsi || "";
+
+document.getElementById(
+"ratingProduk"
+).innerText =
+produk.rating || 0;
+
+document.getElementById(
+"totalReview"
+).innerText =
+produk.totalReview || 0;
+
+document.getElementById(
+"produkTerjual"
+).innerText =
+produk.terjual || 0;
+
+document.getElementById(
+"statusInfo"
+).innerText =
+produk.status || "Aktif";
+
+const preview =
+document.getElementById(
+"previewContainer"
+);
+
+(produk.gambar || [])
+.forEach((img)=>{
+
+preview.innerHTML += `
+
+<img
+src="${img}"
+style="
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:12px;
+">
+
+`;
+
+});
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+document
+.getElementById("updateProduk")
+.addEventListener(
+"click",
+async()=>{
+
+await updateDoc(
+doc(db,"produk",id),
+{
+
+namaProduk:
+document.getElementById(
+"namaProduk"
+).value,
+
+harga:Number(
+document.getElementById(
+"hargaProduk"
+).value
+),
+
+stok:Number(
+document.getElementById(
+"stokProduk"
+).value
+),
+
+berat:Number(
+document.getElementById(
+"beratProduk"
+).value
+),
+
+kategori:
+document.getElementById(
+"kategoriProduk"
+).value,
+
+status:
+document.getElementById(
+"statusProduk"
+).value,
+
+deskripsi:
+document.getElementById(
+"deskripsiProduk"
+).value
+
+}
+);
+
+alert(
+"Produk berhasil diperbarui"
+);
+
+window.location.href =
+"produk-saya.html";
+
+}
+);
+
+document
+.getElementById("hapusProduk")
+.addEventListener(
+"click",
+async()=>{
+
+if(
+!confirm(
+"Hapus produk ini?"
+)
+){
+return;
+}
+
+await deleteDoc(
+doc(db,"produk",id)
+);
+
+alert(
+"Produk berhasil dihapus"
+);
+
+window.location.href =
+"produk-saya.html";
+
+}
+);
+
+</script>
+</body>
 </html>
