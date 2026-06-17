@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profil Toko - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+<h1>🏪 Profil Toko</h1>
+<p>Kelola informasi toko Anda</p>
+</div>
+
+<a
+href="dashboard-umkm.html"
+class="btn-secondary">
+
+← Dashboard
+
+</a>
+
+</div>
+
+<div class="register-card">
+
+<h2>Informasi Toko</h2>
+
+<img
+id="previewLogo"
+src="https://picsum.photos/200"
+style="
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+margin:auto;
+display:block;
+">
+
+<br>
+
+<input
+type="file"
+id="logo">
+
+<br>
+
+<img
+id="previewBanner"
+src="https://picsum.photos/1200/300"
+style="
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:15px;
+">
+
+<br><br>
+
+<input
+type="file"
+id="banner">
+
+<input
+type="text"
+id="namaUmkm"
+placeholder="Nama Toko">
+
+<textarea
+id="deskripsi"
+placeholder="Deskripsi Toko">
+</textarea>
+
+<input
+type="tel"
+id="whatsapp"
+placeholder="WhatsApp">
+
+<textarea
+id="alamat"
+placeholder="Alamat Lengkap">
+</textarea>
+
+<h3>💳 Rekening Pencairan</h3>
+
+<input
+type="text"
+id="bank"
+placeholder="Nama Bank">
+
+<input
+type="text"
+id="rekening"
+placeholder="Nomor Rekening">
+
+<input
+type="text"
+id="atasNama"
+placeholder="Atas Nama">
+
+<h3>📱 QRIS</h3>
+
+<input
+type="file"
+id="qris">
+
+<p>
+Status Verifikasi :
+<b id="statusVerifikasi">
+Memuat...
+</b>
+</p>
+
+<p>
+Membership :
+<b id="membership">
+Free
+</b>
+</p>
+
+<button
+id="btnSimpan"
+class="btn-primary">
+
+💾 Simpan Perubahan
+
+</button>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+}
+
+const uid =
+auth.currentUser.uid;
+
+const tokoRef =
+doc(db,"umkm",uid);
+
+const tokoSnap =
+await getDoc(tokoRef);
+
+if(tokoSnap.exists()){
+
+const toko =
+tokoSnap.data();
+
+document.getElementById(
+"namaUmkm"
+).value =
+toko.namaUmkm || "";
+
+document.getElementById(
+"deskripsi"
+).value =
+toko.deskripsi || "";
+
+document.getElementById(
+"whatsapp"
+).value =
+toko.whatsapp || "";
+
+document.getElementById(
+"alamat"
+).value =
+toko.alamat || "";
+
+document.getElementById(
+"bank"
+).value =
+toko.bank || "";
+
+document.getElementById(
+"rekening"
+).value =
+toko.rekening || "";
+
+document.getElementById(
+"atasNama"
+).value =
+toko.atasNama || "";
+
+document.getElementById(
+"statusVerifikasi"
+).innerText =
+toko.status || "Belum Verifikasi";
+
+document.getElementById(
+"membership"
+).innerText =
+toko.membership || "Free";
+
+if(toko.logo){
+
+document.getElementById(
+"previewLogo"
+).src =
+toko.logo;
+
+}
+
+if(toko.banner){
+
+document.getElementById(
+"previewBanner"
+).src =
+toko.banner;
+
+}
+
+}
+
+document
+.getElementById("btnSimpan")
+.addEventListener(
+"click",
+async()=>{
+
+const btn =
+document.getElementById(
+"btnSimpan"
+);
+
+btn.disabled = true;
+btn.innerText =
+"Menyimpan...";
+
+try{
+
+await updateDoc(
+tokoRef,
+{
+
+namaUmkm:
+document.getElementById(
+"namaUmkm"
+).value,
+
+deskripsi:
+document.getElementById(
+"deskripsi"
+).value,
+
+whatsapp:
+document.getElementById(
+"whatsapp"
+).value,
+
+alamat:
+document.getElementById(
+"alamat"
+).value,
+
+bank:
+document.getElementById(
+"bank"
+).value,
+
+rekening:
+document.getElementById(
+"rekening"
+).value,
+
+atasNama:
+document.getElementById(
+"atasNama"
+).value
+
+}
+);
+
+alert(
+"Profil toko berhasil disimpan"
+);
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"Gagal menyimpan profil"
+);
+
+}
+
+btn.disabled = false;
+btn.innerText =
+"💾 Simpan Perubahan";
+
+}
+);
+
+</script>
+
+</body>
+</html>
