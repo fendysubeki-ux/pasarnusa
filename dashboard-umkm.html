@@ -1,111 +1,439 @@
-<section class="dashboard">
-
-<div class="dashboard-header">
-
-<div>
+<!DOCTYPE html><html lang="id">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Tarik Komisi Affiliate - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<section class="dashboard"><div class="dashboard-header"><div>
 <h1>📊 Dashboard UMKM</h1>
 <p id="namaToko">Memuat data toko...</p>
-</div>
-
-<a href="tambah-produk.html"
-class="btn-primary">
+</div><div style="display:flex;gap:10px;flex-wrap:wrap;">
+<a href="tambah-produk.html" class="btn-primary">
 ➕ Tambah Produk
+</a><a href="profil-toko.html" class="btn-secondary">
+🏪 Profil Toko
 </a>
-
-</div>
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
+</div></div><div class="dashboard-grid"><div class="dashboard-card">
 <h3 id="totalProduk">0</h3>
 <p>Total Produk</p>
-</div>
-
-<div class="dashboard-card">
+</div><div class="dashboard-card">
 <h3 id="produkAktif">0</h3>
 <p>Produk Aktif</p>
-</div>
-
-<div class="dashboard-card">
+</div><div class="dashboard-card">
+<h3 id="produkHabis">0</h3>
+<p>Produk Habis</p>
+</div><div class="dashboard-card">
 <h3 id="totalPesanan">0</h3>
 <p>Total Pesanan</p>
-</div>
-
-<div class="dashboard-card">
+</div><div class="dashboard-card">
 <h3 id="pesananBaru">0</h3>
 <p>Pesanan Baru</p>
-</div>
-
-<div class="dashboard-card">
+</div><div class="dashboard-card">
+<h3 id="pesananDikirim">0</h3>
+<p>Sedang Dikirim</p>
+</div><div class="dashboard-card">
 <h3 id="totalTerjual">0</h3>
 <p>Total Terjual</p>
-</div>
-
-<div class="dashboard-card">
+</div><div class="dashboard-card">
 <h3 id="ratingToko">0</h3>
-<p>Rating Toko</p>
-</div>
-
-<div class="dashboard-card">
+<p>⭐ Rating Toko</p>
+</div><div class="dashboard-card">
 <h3 id="totalReview">0</h3>
 <p>Total Review</p>
-</div>
-
-<div class="dashboard-card">
+</div><div class="dashboard-card">
+<h3 id="followersToko">0</h3>
+<p>Followers</p>
+</div><div class="dashboard-card">
+<h3 id="menungguVerifikasi">0</h3>
+<p>Menunggu Verifikasi</p>
+</div><div class="dashboard-card">
 <h3 id="totalPendapatan">Rp 0</h3>
 <p>Total Pendapatan</p>
-</div>
-
-</div>
-
-<h2>⚡ Menu Cepat</h2>
-
-<div class="dashboard-grid">
-
-<a href="tambah-produk.html" class="dashboard-card">
+</div></div><h2>⚡ Menu Cepat</h2><div class="dashboard-grid"><a href="tambah-produk.html" class="dashboard-card">
 <h3>➕ Tambah Produk</h3>
-</a>
-
-<a href="produk-saya.html" class="dashboard-card">
+</a><a href="produk-saya.html" class="dashboard-card">
 <h3>🛍 Produk Saya</h3>
-</a>
-
-<a href="pesanan-masuk.html" class="dashboard-card">
-<h3>📦 Pesanan</h3>
-</a>
-
-<a href="verifikasi-pembayaran.html" class="dashboard-card">
-<h3>💳 Pembayaran</h3>
-</a>
-
-<a href="statistik.html" class="dashboard-card">
+</a><a href="pesanan-masuk.html" class="dashboard-card">
+<h3>📦 Pesanan Masuk</h3>
+</a><a href="verifikasi-pembayaran.html" class="dashboard-card">
+<h3>💳 Verifikasi Pembayaran</h3>
+</a><a href="voucher.html" class="dashboard-card">
+<h3>🎟 Voucher</h3>
+</a><a href="affiliate-produk.html" class="dashboard-card">
+<h3>🤝 Affiliate Produk</h3>
+</a><a href="statistik.html" class="dashboard-card">
 <h3>📈 Statistik</h3>
-</a>
-
-<a href="profil-toko.html" class="dashboard-card">
-<h3>🏪 Profil Toko</h3>
-</a>
-
-<a href="pesan-masuk.html" class="dashboard-card">
-<h3>💬 Chat</h3>
-</a>
-
-<a href="notifikasi.html" class="dashboard-card">
+</a><a href="pengaturan.html" class="dashboard-card">
+<h3>⚙️ Pengaturan</h3>
+</a><a href="notifikasi.html" class="dashboard-card">
 <h3>🔔 Notifikasi</h3>
 </a>
 
+<a href="pesan-masuk.html" class="dashboard-card">
+<h3>💬 Chat Pelanggan</h3>
+</a>
+
+<a href="#" id="logoutBtn" class="dashboard-card">
+<h3>🚪 Logout</h3>
+</a>
+</div><h2>🏆 Produk Terlaris</h2><div id="produkTerlaris" class="dashboard-grid"><div class="dashboard-card">
+<h3>Memuat Data...</h3>
+<p>Produk terlaris akan tampil di sini</p>
+</div></div><h2>⚠️ Stok Menipis</h2><div id="stokMenipis" class="dashboard-grid"><div class="dashboard-card">
+<h3>Memuat Data...</h3>
+<p>Produk dengan stok rendah akan tampil di sini</p>
+</div></div><h2>⭐ Review Terbaru</h2><div id="reviewTerbaru" class="dashboard-grid"><div class="dashboard-card">
+<h3>Memuat Data...</h3>
+<p>Review pelanggan terbaru akan tampil di sini</p>
+</div></div><h2>🔔 Aktivitas Terbaru</h2><div id="aktivitasTerbaru" class="dashboard-grid"><div class="dashboard-card">
+<h3>Memuat Data...</h3>
+<p>Aktivitas toko terbaru akan tampil di sini</p>
+</div></div><h2>🚀 Tips Bisnis Hari Ini</h2><div class="dashboard-card"><h3>Tingkatkan Penjualan UMKM</h3><p>
+Produk dengan foto yang jelas,
+deskripsi lengkap,
+stok selalu tersedia,
+dan respon chat cepat
+lebih sering dibeli pelanggan.
+</p></div></section>
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+query,
+where,
+getDocs,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href = "login.html";
+
+}
+
+const uid = auth.currentUser.uid;
+
+try{
+
+const tokoSnap =
+await getDoc(
+doc(db,"umkm",uid)
+);
+
+if(tokoSnap.exists()){
+
+const toko =
+tokoSnap.data();
+
+document.getElementById(
+"namaToko"
+).innerText =
+toko.namaUmkm || "Dashboard UMKM";
+
+document.getElementById(
+"ratingToko"
+).innerText =
+toko.ratingToko || 0;
+
+document.getElementById(
+"totalReview"
+).innerText =
+toko.totalReviewToko || 0;
+
+document.getElementById(
+"followersToko"
+).innerText =
+toko.followers || 0;
+
+}
+
+let totalProduk = 0;
+let produkAktif = 0;
+let produkHabis = 0;
+let totalTerjual = 0;
+
+let produkTerlarisHTML = "";
+let stokMenipisHTML = "";
+
+const produkSnapshot =
+await getDocs(
+query(
+collection(db,"produk"),
+where("uid","==",uid)
+)
+);
+
+produkSnapshot.forEach((item)=>{
+
+const produk =
+item.data();
+
+totalProduk++;
+
+totalTerjual +=
+Number(
+produk.terjual || 0
+);
+
+if(
+(produk.status || "Aktif")
+=== "Aktif"
+){
+
+produkAktif++;
+
+}
+
+if(
+Number(produk.stok || 0)
+<= 5
+){
+
+produkHabis++;
+
+stokMenipisHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p>
+Stok:
+${produk.stok}
+</p>
+
 </div>
 
-<h2>🏆 Produk Terlaris</h2>
-<div id="produkTerlaris" class="dashboard-grid"></div>
+`;
 
-<h2>⚠️ Stok Menipis</h2>
-<div id="stokMenipis" class="dashboard-grid"></div>
+}
 
-<h2>⭐ Review Terbaru</h2>
-<div id="reviewTerbaru" class="dashboard-grid"></div>
+if(
+Number(produk.terjual || 0)
+> 0
+){
 
-<h2>🔔 Aktivitas Terbaru</h2>
-<div id="aktivitasTerbaru" class="dashboard-grid"></div>
+produkTerlarisHTML += `
 
-</section>
+<div class="dashboard-card">
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p>
+Terjual:
+${produk.terjual}
+</p>
+
+</div>
+
+`;
+
+}
+
+});
+
+document.getElementById(
+"totalProduk"
+).innerText =
+totalProduk;
+
+document.getElementById(
+"produkAktif"
+).innerText =
+produkAktif;
+
+document.getElementById(
+"produkHabis"
+).innerText =
+produkHabis;
+
+document.getElementById(
+"totalTerjual"
+).innerText =
+totalTerjual;
+
+document.getElementById(
+"produkTerlaris"
+).innerHTML =
+produkTerlarisHTML ||
+`
+<div class="dashboard-card">
+Belum ada penjualan
+</div>
+`;
+
+document.getElementById(
+"stokMenipis"
+).innerHTML =
+stokMenipisHTML ||
+`
+<div class="dashboard-card">
+Semua stok aman
+</div>
+`;
+
+let totalPesanan = 0;
+let pesananBaru = 0;
+let pesananDikirim = 0;
+let menungguVerifikasi = 0;
+let totalPendapatan = 0;
+
+const pesananSnapshot =
+await getDocs(
+collection(db,"pesanan")
+);
+
+pesananSnapshot.forEach((item)=>{
+
+const pesanan =
+item.data();
+
+const adaProdukSaya =
+(pesanan.items || [])
+.some(
+(i)=>i.uid === uid
+);
+
+if(!adaProdukSaya) return;
+
+totalPesanan++;
+
+totalPendapatan +=
+Number(
+pesanan.totalBayar || 0
+);
+
+if(
+pesanan.status === "menunggu"
+){
+
+pesananBaru++;
+
+}
+if(
+pesanan.status === "dikirim"
+){
+
+pesananDikirim++;
+
+}
+if(
+pesanan.status ===
+"Menunggu Verifikasi"
+){
+
+menungguVerifikasi++;
+
+}
+
+});
+
+document.getElementById(
+"totalPesanan"
+).innerText =
+totalPesanan;
+
+document.getElementById(
+"pesananBaru"
+).innerText =
+pesananBaru;
+document.getElementById(
+"pesananDikirim"
+).innerText =
+pesananDikirim;
+document.getElementById(
+"menungguVerifikasi"
+).innerText =
+menungguVerifikasi;
+
+document.getElementById(
+"totalPendapatan"
+).innerText =
+"Rp " +
+totalPendapatan.toLocaleString(
+"id-ID"
+);
+document
+.getElementById("logoutBtn")
+.addEventListener(
+"click",
+async()=>{
+
+if(confirm("Yakin logout?")){
+
+await signOut(auth);
+
+localStorage.clear();
+
+window.location.href =
+"login.html";
+
+}
+
+}
+);
+
+document.getElementById(
+"aktivitasTerbaru"
+).innerHTML = `
+
+<div class="dashboard-card">
+<h3>📦 Pesanan</h3>
+<p>${totalPesanan} pesanan masuk</p>
+</div>
+
+<div class="dashboard-card">
+<h3>🛍 Produk</h3>
+<p>${totalProduk} produk aktif</p>
+</div>
+
+<div class="dashboard-card">
+<h3>💰 Pendapatan</h3>
+<p>
+Rp ${totalPendapatan.toLocaleString("id-ID")}
+</p>
+</div>
+
+`;
+}catch(error){
+
+console.error(error);
+
+alert(
+"Gagal memuat dashboard"
+);
+
+}
+
+</script>
