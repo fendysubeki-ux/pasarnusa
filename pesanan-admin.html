@@ -1,31 +1,62 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Pesanan Admin - PasarNusa</title>
-
-<link rel="stylesheet" href="style.css">
-
-</head>
-<body>
-
-<section class="dashboard">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pesanan Admin - PasarNusa</title><link rel="stylesheet" href="style.css"></head>
+<body><section class="dashboard"><div class="dashboard-header"><div>
 <h1>📦 Kelola Pesanan</h1>
+<p>Kelola seluruh transaksi marketplace PasarNusa</p>
+</div><div style="display:flex;gap:10px;flex-wrap:wrap;"><a
+href="dashboard-admin.html"
+class="btn-secondary">
 
-<div id="pesananContainer" class="dashboard-grid">
+⬅ Dashboard
 
-<div class="dashboard-card">
-Loading...
-</div>
+</a><button
+onclick="location.reload()"
+class="btn-primary">
 
-</div>
+🔄 Refresh
 
-</section>
+</button></div></div><div class="dashboard-grid"><div class="dashboard-card">
+<h3 id="totalPesanan">0</h3>
+<p>Total Pesanan</p>
+</div><div class="dashboard-card">
+<h3 id="pesananBelumBayar">0</h3>
+<p>Belum Bayar</p>
+</div><div class="dashboard-card">
+<h3 id="pesananDiproses">0</h3>
+<p>Diproses</p>
+</div><div class="dashboard-card">
+<h3 id="pesananDikirim">0</h3>
+<p>Dikirim</p>
+</div><div class="dashboard-card">
+<h3 id="pesananSelesai">0</h3>
+<p>Selesai</p>
+</div><div class="dashboard-card">
+<h3 id="totalOmset">Rp 0</h3>
+<p>Total Omset</p>
+</div></div><br><div class="form-card"><input
+type="text"
+id="searchPesanan"
+placeholder="Cari nama pembeli atau ID pesanan...">
 
-<script type="module">
+<select id="filterStatus"><option value="Semua">
+Semua Status
+</option><option value="Belum Bayar">
+Belum Bayar
+</option><option value="Menunggu Verifikasi">
+Menunggu Verifikasi
+</option><option value="Diproses">
+Diproses
+</option><option value="Dikirim">
+Dikirim
+</option><option value="Selesai">
+Selesai
+</option><option value="Dibatalkan">
+Dibatalkan
+</option></select></div><br><div
+id="pesananContainer"
+class="dashboard-grid"><div class="dashboard-card"><h3>Loading...</h3><p>Memuat data pesanan</p></div></div></section><script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -38,12 +69,14 @@ getDocs
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
+
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
 projectId:"pasarnusa-18aa0",
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
 messagingSenderId:"866998011671",
 appId:"1:866998011671:web:5555115feb82741ab55952"
+
 };
 
 const app = initializeApp(firebaseConfig);
@@ -51,6 +84,8 @@ const db = getFirestore(app);
 
 const container =
 document.getElementById("pesananContainer");
+
+let semuaPesanan = [];
 
 async function loadPesanan(){
 
@@ -61,52 +96,73 @@ await getDocs(
 collection(db,"pesanan")
 );
 
-container.innerHTML = "";
+semuaPesanan = [];
 
-if(snapshot.empty){
-
-container.innerHTML = `
-<div class="dashboard-card">
-<h3>Belum ada pesanan</h3>
-<p>Belum ada transaksi masuk.</p>
-</div>
-`;
-
-return;
-
-}
+let total = 0;
+let belumBayar = 0;
+let diproses = 0;
+let dikirim = 0;
+let selesai = 0;
+let omset = 0;
 
 snapshot.forEach((item)=>{
 
 const data = item.data();
 
-container.innerHTML += `
+semuaPesanan.push({
+id:item.id,
+...data
+});
 
-<a href="detail-pesanan-admin.html?id=${item.id}"
-class="dashboard-card">
+total++;
 
-<h3>
-Pesanan #${item.id.substring(0,8)}
-</h3>
+omset += Number(
+data.totalBayar || 0
+);
 
-<p>
-Status:
-${data.status || "menunggu"}
-</p>
+if(data.status === "Belum Bayar")
+belumBayar++;
 
-<p>
-Rp ${Number(
-data.total ||
-data.totalBayar ||
-0
-).toLocaleString("id-ID")}
-</p>
+if(data.status === "Diproses")
+diproses++;
 
-</a>
+if(data.status === "Dikirim")
+dikirim++;
 
-`;
+if(data.status === "Selesai")
+selesai++;
 
 });
+
+semuaPesanan.reverse();
+
+document.getElementById(
+"totalPesanan"
+).innerText = total;
+
+document.getElementById(
+"pesananBelumBayar"
+).innerText = belumBayar;
+
+document.getElementById(
+"pesananDiproses"
+).innerText = diproses;
+
+document.getElementById(
+"pesananDikirim"
+).innerText = dikirim;
+
+document.getElementById(
+"pesananSelesai"
+).innerText = selesai;
+
+document.getElementById(
+"totalOmset"
+).innerText =
+"Rp " +
+omset.toLocaleString("id-ID");
+
+renderPesanan();
 
 }
 catch(error){
@@ -124,9 +180,124 @@ container.innerHTML = `
 
 }
 
+function renderPesanan(){
+
+const keyword =
+document.getElementById(
+"searchPesanan"
+).value.toLowerCase();
+
+const filter =
+document.getElementById(
+"filterStatus"
+).value;
+
+container.innerHTML = "";
+
+const hasil =
+semuaPesanan.filter((pesanan)=>{
+
+const cocokNama =
+(pesanan.namaPembeli || "")
+.toLowerCase()
+.includes(keyword);
+
+const cocokId =
+pesanan.id
+.toLowerCase()
+.includes(keyword);
+
+const cocokStatus =
+filter === "Semua"
+||
+(pesanan.status || "")
+=== filter;
+
+return (
+(cocokNama || cocokId)
+&& cocokStatus
+);
+
+});
+
+if(hasil.length === 0){
+
+container.innerHTML = `
+<div class="dashboard-card">
+<h3>Tidak Ada Pesanan</h3>
+<p>Pesanan tidak ditemukan.</p>
+</div>
+`;
+
+return;
+
+}
+
+hasil.forEach((pesanan)=>{
+
+container.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+Pesanan #${pesanan.id.substring(0,8)}
+</h3>
+
+<p>
+👤 ${pesanan.namaPembeli || "-"}
+</p>
+
+<p>
+📱 ${pesanan.whatsapp || "-"}
+</p>
+
+<p>
+📦 Status:
+<b>${pesanan.status || "Belum Bayar"}</b>
+</p>
+
+<p>
+💰 Rp ${Number(
+pesanan.totalBayar || 0
+).toLocaleString("id-ID")}
+</p>
+
+<a
+href="detail-pesanan-admin.html?id=${pesanan.id}"
+class="btn-primary"
+style="
+display:block;
+text-align:center;
+margin-top:10px;
+">
+
+Lihat Detail
+
+</a>
+
+</div>
+
+`;
+
+});
+
+}
+
+document
+.getElementById("searchPesanan")
+.addEventListener(
+"input",
+renderPesanan
+);
+
+document
+.getElementById("filterStatus")
+.addEventListener(
+"change",
+renderPesanan
+);
+
 loadPesanan();
 
-</script>
-
-</body>
+</script></body>
 </html>
