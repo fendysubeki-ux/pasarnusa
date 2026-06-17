@@ -2,18 +2,38 @@
 <head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Kelola UMKM - Admin PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
-<body><section class="dashboard"><div class="dashboard-header"><div><h1>🏪 Kelola UMKM</h1><p>
-Verifikasi dan kelola seluruh UMKM PasarNusa
-</p></div><a
-href="admin.html"
+<body>
+<section class="dashboard"><div class="dashboard-header"><div>
+<h1>🏪 Kelola UMKM</h1>
+<p>Verifikasi dan kelola seluruh UMKM PasarNusa</p>
+</div><div style="display:flex;gap:10px;flex-wrap:wrap;"><a
+href="dashboard-admin.html"
 class="btn-secondary">
 
-⬅ Dashboard Admin
+⬅ Dashboard
 
-</a></div><div class="dashboard-grid"><div class="dashboard-card"><h3 id="totalUmkm">0</h3><p>Total UMKM</p></div><div class="dashboard-card"><h3 id="umkmAktif">0</h3><p>UMKM Aktif</p></div><div class="dashboard-card"><h3 id="umkmMenunggu">0</h3><p>Menunggu Verifikasi</p></div><div class="dashboard-card"><h3 id="umkmNonaktif">0</h3><p>UMKM Nonaktif</p></div></div><div class="form-card"><input
+</a><button
+onclick="location.reload()"
+class="btn-primary">
+
+🔄 Refresh
+
+</button></div></div><div class="dashboard-grid"><div class="dashboard-card">
+<h3 id="totalUmkm">0</h3>
+<p>Total UMKM</p>
+</div><div class="dashboard-card">
+<h3 id="umkmAktif">0</h3>
+<p>UMKM Aktif</p>
+</div><div class="dashboard-card">
+<h3 id="umkmMenunggu">0</h3>
+<p>Menunggu Verifikasi</p>
+</div><div class="dashboard-card">
+<h3 id="umkmNonaktif">0</h3>
+<p>UMKM Nonaktif</p>
+</div></div><br><div class="form-card"><input
 type="text"
 id="searchUmkm"
-placeholder="Cari UMKM, pemilik atau nomor WhatsApp...">
+placeholder="Cari UMKM, pemilik atau WhatsApp...">
 
 <select id="filterStatus"><option value="Semua">
 Semua Status
@@ -23,326 +43,9 @@ Aktif
 Menunggu
 </option><option value="Nonaktif">
 Nonaktif
-</option></select></div><div
+</option></select></div><br><div
 id="umkmContainer"
-class="dashboard-grid"><div class="dashboard-card"><p>Memuat data UMKM...</p></div></div></section><script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-doc,
-updateDoc,
-deleteDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-const container =
-document.getElementById("umkmContainer");
-
-let semuaUmkm = [];
-
-async function loadUmkm(){
-
-const snapshot =
-await getDocs(
-collection(db,"umkm")
-);
-
-semuaUmkm = [];
-
-let aktif = 0;
-let menunggu = 0;
-let nonaktif = 0;
-
-snapshot.forEach((item)=>{
-
-const data = item.data();
-
-semuaUmkm.push({
-id:item.id,
-...data
-});
-
-const status =
-data.status || "Menunggu";
-
-if(status === "Aktif") aktif++;
-if(status === "Menunggu") menunggu++;
-if(status === "Nonaktif") nonaktif++;
-
-});
-
-document.getElementById("totalUmkm").innerText =
-semuaUmkm.length;
-
-document.getElementById("umkmAktif").innerText =
-aktif;
-
-document.getElementById("umkmMenunggu").innerText =
-menunggu;
-
-document.getElementById("umkmNonaktif").innerText =
-nonaktif;
-
-renderUmkm();
-
-}
-
-function renderUmkm(){
-
-const keyword =
-document.getElementById("searchUmkm")
-.value.toLowerCase();
-
-const filter =
-document.getElementById("filterStatus")
-.value;
-
-container.innerHTML = "";
-
-const hasil =
-semuaUmkm.filter((umkm)=>{
-
-const cocokCari =
-
-(umkm.namaUmkm || "")
-.toLowerCase()
-.includes(keyword)
-
-||
-
-(umkm.nama || "")
-.toLowerCase()
-.includes(keyword)
-
-||
-
-(umkm.whatsapp || "")
-.toLowerCase()
-.includes(keyword);
-
-const cocokStatus =
-
-filter === "Semua"
-
-||
-
-(umkm.status || "Menunggu")
-=== filter;
-
-return cocokCari && cocokStatus;
-
-});
-
-if(hasil.length === 0){
-
-container.innerHTML = `
-
-<div class="dashboard-card">
-
-<h3>Tidak Ada Data</h3>
-
-<p>UMKM tidak ditemukan</p>
-
-</div>
-
-`;
-
-return;
-
-}
-
-hasil.forEach((umkm)=>{
-
-let warna = "#ff9800";
-
-if(umkm.status === "Aktif")
-warna = "#22c55e";
-
-if(umkm.status === "Nonaktif")
-warna = "#ef4444";
-
-container.innerHTML += `
-
-<div class="dashboard-card">
-
-<img
-src="${umkm.logo || 'https://picsum.photos/200'}"
-style="
-width:100px;
-height:100px;
-border-radius:50%;
-object-fit:cover;
-margin:auto;
-display:block;
-">
-
-<h3>
-${umkm.namaUmkm || "UMKM"}
-</h3>
-
-<p>
-👤 ${umkm.nama || "-"}
-</p>
-
-<p>
-📱 ${umkm.whatsapp || "-"}
-</p>
-
-<p>
-📍 ${umkm.alamat || "-"}
-</p>
-
-<p>
-🏷 ${umkm.kategori || "-"}
-</p>
-
-<p>
-
-Status:
-
-<b style="color:${warna}">
-
-${umkm.status || "Menunggu"}
-
-</b>
-
-</p>
-
-<div class="action-buttons">
-
-<a
-href="toko.html?uid=${umkm.uid}"
-class="btn-primary">
-
-Lihat Toko
-
-</a>
-
-<button
-onclick="verifikasiUmkm('${umkm.id}')"
-class="btn-primary">
-
-Verifikasi
-
-</button>
-
-<button
-onclick="toggleStatus('${umkm.id}')"
-class="btn-secondary">
-
-${umkm.status === "Nonaktif"
-? "Aktifkan"
-: "Nonaktifkan"}
-
-</button>
-
-<button
-onclick="hapusUmkm('${umkm.id}')"
-class="delete-btn">
-
-Hapus
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-
-window.verifikasiUmkm =
-async(id)=>{
-
-await updateDoc(
-doc(db,"umkm",id),
-{
-status:"Aktif"
-}
-);
-
-loadUmkm();
-
-};
-
-window.toggleStatus =
-async(id)=>{
-
-const data =
-semuaUmkm.find(
-(item)=>item.id===id
-);
-
-await updateDoc(
-doc(db,"umkm",id),
-{
-status:
-data.status === "Nonaktif"
-? "Aktif"
-: "Nonaktif"
-}
-);
-
-loadUmkm();
-
-};
-
-window.hapusUmkm =
-async(id)=>{
-
-const yakin =
-confirm(
-"Yakin menghapus UMKM ini?"
-);
-
-if(!yakin) return;
-
-await deleteDoc(
-doc(db,"umkm",id)
-);
-
-loadUmkm();
-
-};
-
-document
-.getElementById("searchUmkm")
-.addEventListener(
-"input",
-renderUmkm
-);
-
-document
-.getElementById("filterStatus")
-.addEventListener(
-"change",
-renderUmkm
-);
-
-loadUmkm();
+class="dashboard-grid"><div class="dashboard-card"><h3>Loading...</h3><p>Memuat data UMKM</p></div></div></section>
 
 </script></body>
 </html>
