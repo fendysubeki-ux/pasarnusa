@@ -1,62 +1,43 @@
 <!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Dashboard User - PasarNusa</title><link rel="preconnect"
-href="https://fonts.googleapis.com"><link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet"><link rel="stylesheet"
-href="style.css"></head><body><div class="register-card"><h1>👤 Dashboard User</h1><p id="welcomeUser">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard User - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><div class="dashboard-header"><div><h1>👤 Dashboard Pembeli</h1><p id="welcomeUser">
 Selamat datang
-</p><br><a href="profil.html"
+</p></div><a
+href="logout.html"
 class="btn-primary">
-👤 Profil Saya
-</a>
 
-<br><br>
+🚪 Logout
 
-<a href="pesanan-saya.html"
-class="btn-secondary">
-📦 Pesanan Saya
-</a>
-
-<br><br>
-
-<a href="favorit.html"
-class="btn-secondary">
-❤️ Produk Favorit
-</a>
-
-<br><br>
-
-<a href="toko-favorit.html"
-class="btn-secondary">
-⭐ Toko Favorit
-</a>
-
-<br><br>
-
-<a href="riwayat-produk.html"
-class="btn-secondary">
-🕒 Riwayat Produk
-</a>
-
-<br><br>
-
-<a href="riwayat-toko.html"
-class="btn-secondary">
-🏪 Riwayat Toko
-</a>
-
-<br><br>
-
-<a href="index.html"
-class="btn-secondary">
-🏠 Beranda
-</a>
-
-</div><script>
+</a></div><div class="dashboard-grid"><div class="dashboard-card"><h3 id="namaUser">
+-
+</h3><p>Nama Pengguna</p></div><div class="dashboard-card"><h3>
+🛍
+</h3><p>Akun Pembeli Aktif</p></div></div><h2>⚡ Menu Utama</h2><div class="dashboard-grid"><a href="profil.html" class="dashboard-card">
+<h3>👤 Profil Saya</h3>
+<p>Kelola data akun</p>
+</a><a href="pesanan-saya.html" class="dashboard-card">
+<h3>📦 Pesanan Saya</h3>
+<p>Lihat seluruh transaksi</p>
+</a><a href="favorit.html" class="dashboard-card">
+<h3>❤️ Produk Favorit</h3>
+<p>Produk yang disimpan</p>
+</a><a href="toko-favorit.html" class="dashboard-card">
+<h3>⭐ Toko Favorit</h3>
+<p>Daftar toko favorit</p>
+</a><a href="riwayat-produk.html" class="dashboard-card">
+<h3>🕒 Riwayat Produk</h3>
+<p>Produk yang pernah dilihat</p>
+</a><a href="riwayat-toko.html" class="dashboard-card">
+<h3>🏪 Riwayat Toko</h3>
+<p>Toko yang pernah dikunjungi</p>
+</a><a href="cart.html" class="dashboard-card">
+<h3>🛒 Keranjang</h3>
+<p>Lanjutkan belanja</p>
+</a><a href="index.html" class="dashboard-card">
+<h3>🏠 Beranda</h3>
+<p>Kembali ke marketplace</p>
+</a></div></section><script>
 
 const uid =
 localStorage.getItem("uid");
@@ -78,8 +59,6 @@ window.location.href =
 
 if(role !== "user"){
 
-alert("Halaman khusus user");
-
 window.location.href =
 "index.html";
 
@@ -88,7 +67,13 @@ window.location.href =
 document.getElementById(
 "welcomeUser"
 ).innerText =
-"Selamat datang, " + nama;
+"Selamat datang, " +
+(nama || "Pengguna");
+
+document.getElementById(
+"namaUser"
+).innerText =
+nama || "-";
 
 </script></body>
 </html>
