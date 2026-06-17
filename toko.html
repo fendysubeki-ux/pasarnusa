@@ -1,9 +1,28 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Toko UMKM - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
-</head><body><section class="shop-header"><div class="shop-banner"><img
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Toko UMKM - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<section class="shop-header">
+
+<div class="shop-banner">
+
+<img
 id="bannerToko"
 src="https://picsum.photos/1200/350"
 style="
@@ -13,13 +32,13 @@ object-fit:cover;
 border-radius:20px;
 ">
 
-</div><div style="
-text-align:center;
-margin-top:-60px;
-"><img
+</div>
+
+<div style="text-align:center;margin-top:-60px;">
+
+<img
 id="logoToko"
 src="https://picsum.photos/200"
-class="shop-logo"
 style="
 width:120px;
 height:120px;
@@ -29,71 +48,574 @@ object-fit:cover;
 ">
 
 <h1 id="namaToko">
-Memuat Toko...
-</h1><p id="deskripsiToko">
+Memuat toko...
+</h1>
+
+<p id="deskripsiToko">
 Memuat informasi toko...
-</p><div style="
+</p>
+<div
+style="
+display:flex;
+justify-content:center;
+gap:10px;
+margin-top:10px;
+flex-wrap:wrap;
+">
+
+<span class="category">
+⭐ <span id="ratingMini">0</span>
+</span>
+
+<span class="category">
+👥 <span id="followersMini">0</span>
+</span>
+
+</div>
+<div style="
 display:flex;
 gap:10px;
 justify-content:center;
 flex-wrap:wrap;
 margin-top:20px;
-"><a
+">
+
+<a
 id="waToko"
 target="_blank"
 class="btn-primary">
 
 💬 Chat WhatsApp
 
-</a><button
+</a>
+
+<button
 id="followToko"
 class="btn-secondary">
 
-⭐ Follow Toko
+⭐ Follow
 
-</button><button
+</button>
+
+<button
 id="shareToko"
 class="btn-secondary">
 
 📤 Bagikan
 
-</button></div></div></section><section class="dashboard"><div class="dashboard-grid"><div class="dashboard-card">
+</button>
+
+<a
+href="index.html"
+class="btn-secondary">
+
+🏠 Beranda
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
 <h3 id="totalProduk">0</h3>
 <p>Total Produk</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="produkAktif">0</h3>
 <p>Produk Aktif</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="totalTerjual">0</h3>
 <p>Total Terjual</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="ratingToko">0</h3>
-<p>⭐ Rating Toko</p>
-</div><div class="dashboard-card">
+<p>⭐ Rating</p>
+</div>
+
+<div class="dashboard-card">
 <h3 id="followersToko">0</h3>
 <p>Followers</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="totalReviewToko">0</h3>
 <p>Total Review</p>
-</div></div></section><section class="products"><div style="
+</div>
+
+</div>
+
+</section>
+
+<section class="products">
+
+<div style="
 display:flex;
 justify-content:space-between;
 align-items:center;
+gap:10px;
 flex-wrap:wrap;
 margin-bottom:20px;
-"><h2>🛍 Produk Toko</h2><input
+">
+
+<h2>🛍 Produk Toko</h2>
+
+<input
 type="text"
 id="searchProduk"
 placeholder="Cari produk..."
 class="search-box">
 
-</div><div
+</div>
+
+<div
 id="tokoContainer"
-class="product-grid"><p>Memuat produk...</p></div></section><section class="dashboard"><h2>📊 Informasi Toko</h2><div class="dashboard-grid"><div class="dashboard-card"><h3>🚚 Pengiriman</h3><p>
-Melayani pengiriman ke seluruh Indonesia.
-</p></div><div class="dashboard-card"><h3>🛡 Produk Terjamin</h3><p>
-Produk berasal langsung dari UMKM terverifikasi.
-</p></div><div class="dashboard-card"><h3>💳 Pembayaran Aman</h3><p>
-Pembayaran melalui sistem PasarNusa.
-</p></div></div></section></body>
+class="product-grid">
+
+<div class="dashboard-card">
+Memuat produk...
+</div>
+
+</div>
+
+</section>
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+collection,
+getDocs,
+query,
+where
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const params =
+new URLSearchParams(window.location.search);
+
+const uid =
+params.get("uid");
+const btnFollow =
+document.getElementById(
+"followToko"
+);
+
+let favorit =
+JSON.parse(
+localStorage.getItem(
+"tokoFavorit"
+)
+) || [];
+
+if(favorit.includes(uid)){
+
+btnFollow.innerHTML =
+"✅ Diikuti";
+
+}
+if(!uid){
+
+window.location.href =
+"index.html";
+
+}
+
+try{
+
+const tokoSnap =
+await getDoc(
+doc(db,"umkm",uid)
+);
+
+if(!tokoSnap.exists()){
+
+throw new Error(
+"Toko tidak ditemukan"
+);
+
+}
+
+const toko =
+tokoSnap.data();
+
+document.getElementById(
+"namaToko"
+).innerText =
+toko.namaUmkm || "Toko UMKM";
+
+document.getElementById(
+"deskripsiToko"
+).innerText =
+toko.deskripsi || "-";
+
+document.getElementById(
+"ratingToko"
+).innerText =
+toko.ratingToko || 0;
+
+document.getElementById(
+"ratingMini"
+).innerText =
+toko.ratingToko || 0;
+
+document.getElementById(
+"followersMini"
+).innerText =
+toko.followers || 0;
+
+document.getElementById(
+"totalReviewToko"
+).innerText =
+toko.totalReviewToko || 0;
+
+const logo =
+toko.logo ||
+"https://picsum.photos/200";
+
+document.getElementById(
+"logoToko"
+).src = logo;
+
+document.getElementById(
+"logoToko"
+).onerror = function(){
+
+this.src =
+"https://picsum.photos/200";
+
+};
+
+const banner =
+toko.banner ||
+"https://picsum.photos/1200/350";
+
+document.getElementById(
+"bannerToko"
+).src = banner;
+
+const wa =
+(toko.whatsapp || "")
+.replace(/\D/g,"")
+.replace(/^0/,"62");
+
+document.getElementById(
+"waToko"
+).href =
+"https://wa.me/" + wa;
+
+document
+.getElementById("shareToko")
+.addEventListener(
+"click",
+()=>{
+
+navigator.clipboard.writeText(
+window.location.href
+);
+
+alert(
+"Link toko berhasil disalin"
+);
+
+}
+);
+
+document
+.getElementById("followToko")
+.addEventListener(
+"click",
+()=>{
+
+let favorit =
+JSON.parse(
+localStorage.getItem(
+"tokoFavorit"
+)
+) || [];
+btnFollow.innerText =
+"✅ Diikuti";
+if(!favorit.includes(uid)){
+
+favorit.push(uid);
+
+localStorage.setItem(
+"tokoFavorit",
+JSON.stringify(favorit)
+);
+
+alert(
+"Toko berhasil diikuti"
+);
+
+}else{
+
+alert(
+"Toko sudah diikuti"
+);
+
+}
+
+}
+);
+
+const container =
+document.getElementById(
+"tokoContainer"
+);
+
+container.innerHTML = "";
+
+let totalProduk = 0;
+let totalTerjual = 0;
+let produkAktif = 0;
+
+const produkSnapshot =
+await getDocs(
+query(
+collection(db,"produk"),
+where("uid","==",uid)
+)
+);
+
+if(produkSnapshot.empty){
+
+container.innerHTML = `
+<div class="dashboard-card">
+
+<h3>
+🛍 Belum Ada Produk
+</h3>
+
+<p>
+Toko ini belum menambahkan produk.
+</p>
+
+</div>
+`;
+
+}
+
+produkSnapshot.forEach((item)=>{
+
+const produk =
+item.data();
+
+if(
+(produk.status || "Aktif")
+=== "Aktif"
+){
+produkAktif++;
+}
+
+totalProduk++;
+
+totalTerjual +=
+Number(
+produk.terjual || 0
+);
+
+container.innerHTML += `
+
+<div class="product-card searchable">
+
+<img
+src="${
+produk.gambar?.[0] ||
+'https://picsum.photos/400'
+}">
+
+<div class="product-info">
+
+<span class="category">
+${produk.kategori || "Produk"}
+</span>
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p class="price">
+Rp ${Number(
+produk.harga || 0
+).toLocaleString("id-ID")}
+</p>
+
+<a
+href="produk-detail.html?id=${item.id}"
+class="btn-primary">
+
+Lihat Detail
+
+</a>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"totalProduk"
+).innerText =
+totalProduk;
+
+document.getElementById(
+"produkAktif"
+).innerText =
+produkAktif;
+document.getElementById(
+"totalTerjual"
+).innerText =
+totalTerjual;
+
+document
+.getElementById("searchProduk")
+.addEventListener(
+"input",
+function(){
+
+const keyword =
+this.value.toLowerCase();
+
+document
+.querySelectorAll(".searchable")
+.forEach((card)=>{
+
+card.style.display =
+card.innerText
+.toLowerCase()
+.includes(keyword)
+? ""
+: "none";
+
+});
+
+}
+);
+
+}catch(error){
+
+document.body.innerHTML = `
+
+<div class="register-card">
+
+<h2>Error</h2>
+
+<p>${error.message}</p>
+
+<a
+href="index.html"
+class="btn-primary">
+
+Kembali
+
+</a>
+
+</div>
+
+`;
+
+}
+
+</script>
+<section class="dashboard">
+
+<h2>📊 Informasi Toko</h2>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3>🚚 Pengiriman</h3>
+
+<p>
+Melayani seluruh Indonesia
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>🛡️ Toko Terverifikasi</h3>
+
+<p>
+Produk berasal dari UMKM lokal
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>💳 Pembayaran Aman</h3>
+
+<p>
+Melalui sistem PasarNusa
+</p>
+
+</div>
+
+</div>
+
+</section>
+<footer
+style="
+text-align:center;
+padding:30px;
+margin-top:40px;
+">
+
+<p>
+© 2026 PasarNusa
+</p>
+
+</footer>
+<footer
+style="
+text-align:center;
+padding:40px 20px;
+margin-top:50px;
+border-top:1px solid #eee;
+">
+
+<p>
+© 2026 PasarNusa
+</p>
+
+<p>
+Marketplace UMKM Indonesia
+</p>
+
+</footer>
+</body>
 </html>
