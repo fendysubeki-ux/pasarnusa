@@ -64,5 +64,222 @@ Lihat produk tersimpan
 Periksa keranjang belanja
 </p></a><a href="profil.html" class="dashboard-card"><h3>👤 Profil Saya</h3><p>
 Kelola akun pembeli
-</p></a></div></section></body>
+</p></a></div></section>
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+query,
+where
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+const container =
+document.getElementById("pesananContainer");
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+try{
+
+const q = query(
+collection(db,"pesanan"),
+where(
+"uidPembeli",
+"==",
+user.uid
+)
+);
+
+const snapshot =
+await getDocs(q);
+
+container.innerHTML = "";
+
+let totalPesanan = 0;
+let belumBayar = 0;
+let diproses = 0;
+let dikirim = 0;
+let selesai = 0;
+let totalBelanja = 0;
+
+if(snapshot.empty){
+
+container.innerHTML = `
+<div class="dashboard-card">
+<h3>Belum Ada Pesanan</h3>
+<p>Silakan mulai berbelanja.</p>
+</div>
+`;
+
+return;
+
+}
+
+snapshot.forEach((docu)=>{
+
+const data = docu.data();
+
+totalPesanan++;
+
+totalBelanja +=
+Number(data.totalBayar || 0);
+
+if(
+data.status === "Belum Bayar" ||
+data.status === "menunggu"
+){
+belumBayar++;
+}
+
+if(data.status === "Diproses")
+diproses++;
+
+if(data.status === "Dikirim")
+dikirim++;
+
+if(data.status === "Selesai")
+selesai++;
+
+container.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+Pesanan #${docu.id.substring(0,8)}
+</h3>
+
+<p>
+Status:
+<b>${data.status || "Belum Bayar"}</b>
+</p>
+
+<p>
+Total:
+Rp ${Number(
+data.totalBayar || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+${data.namaPembeli || "-"}
+</p>
+
+<div style="margin-top:15px;display:flex;gap:10px;flex-wrap:wrap;">
+
+<a
+href="detail-pesanan.html?id=${docu.id}"
+class="btn-secondary">
+
+Detail
+
+</a>
+
+${
+data.status === "Belum Bayar"
+?
+`
+<a
+href="upload-bukti.html?id=${docu.id}"
+class="btn-primary">
+
+💳 Upload Bukti
+
+</a>
+`
+:
+""
+}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"totalPesanan"
+).innerText =
+totalPesanan;
+
+document.getElementById(
+"belumBayar"
+).innerText =
+belumBayar;
+
+document.getElementById(
+"diproses"
+).innerText =
+diproses;
+
+document.getElementById(
+"dikirim"
+).innerText =
+dikirim;
+
+document.getElementById(
+"selesai"
+).innerText =
+selesai;
+
+document.getElementById(
+"totalBelanja"
+).innerText =
+"Rp " +
+totalBelanja.toLocaleString("id-ID");
+
+}
+catch(error){
+
+console.error(error);
+
+container.innerHTML = `
+<div class="dashboard-card">
+<h3>Error</h3>
+<p>${error.message}</p>
+</div>
+`;
+
+}
+
+});
+
+</script>
+</body>
 </html>
