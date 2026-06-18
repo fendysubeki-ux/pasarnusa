@@ -45,13 +45,20 @@ class="btn-secondary">
 
 Bagikan
 
-</button></div><div class="dashboard-grid"><a href="produk-affiliate.html" class="dashboard-card">
+</button></div><div class="dashboard-grid">
+<a href="affiliate-produk.html" class="dashboard-card">
 <h3>🛍 Produk Affiliate</h3>
-</a><a href="komisi.html" class="dashboard-card">
+</a>
+
+<a href="riwayat-komisi.html" class="dashboard-card">
 <h3>💰 Riwayat Komisi</h3>
-</a><a href="riwayat-pencairan.html" class="dashboard-card">
+</a>
+
+<a href="withdraw-affiliate.html" class="dashboard-card">
 <h3>🏦 Riwayat Pencairan</h3>
-</a><a href="statistik-affiliate.html" class="dashboard-card">
+</a>
+
+<a href="statistik-admin.html" class="dashboard-card">
 <h3>📈 Statistik</h3>
 </a></div><div class="dashboard-card"><h2>💳 Pencairan Komisi</h2><p>Minimal pencairan Rp 50.000</p><h1 id="saldoAffiliate">
 Rp 0
@@ -120,8 +127,7 @@ const uid = auth.currentUser.uid;
 document.getElementById(
 "affiliateLink"
 ).value =
-window.location.origin +
-"/?ref=" +
+"https://fendysubeki-ux.github.io/pasarnusa/?ref=" +
 uid;
 
 let totalKlik = 0;
