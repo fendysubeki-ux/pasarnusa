@@ -234,27 +234,24 @@ if(
 !kategori ||
 !deskripsi
 ){
+
+alert("Lengkapi semua data");
+
+return;
+
+}
+
 if(Number(harga) < 1000){
 
-alert(
-"Harga minimal Rp1.000"
-);
+alert("Harga minimal Rp1.000");
 
 return;
 
 }
+
 if(Number(stok) < 1){
 
-alert(
-"Stok minimal 1"
-);
-
-return;
-
-}
-alert(
-"Lengkapi semua data"
-);
+alert("Stok minimal 1");
 
 return;
 
@@ -317,6 +314,8 @@ return;
 btn.disabled = true;
 btn.innerText = "Mengupload...";
 
+const userDoc =
+await getDoc(
 doc(
 db,
 "umkm",
@@ -327,6 +326,10 @@ auth.currentUser.uid
 if(!userDoc.exists()){
 
 alert("Data UMKM tidak ditemukan");
+
+btn.disabled = false;
+btn.innerText = "Simpan Produk";
+
 return;
 
 }
@@ -423,7 +426,7 @@ alert(
 );
 
 window.location.href =
-"produk-saya.html";
+"dashboard-produk.html";
 
 }
 
