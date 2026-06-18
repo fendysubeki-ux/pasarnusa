@@ -58,7 +58,7 @@ Bagikan
 <h3>🏦 Riwayat Pencairan</h3>
 </a>
 
-<a href="statistik-admin.html" class="dashboard-card">
+<a href="affiliate-statistik.html" class="dashboard-card">
 <h3>📈 Statistik</h3>
 </a></div><div class="dashboard-card"><h2>💳 Pencairan Komisi</h2><p>Minimal pencairan Rp 50.000</p><h1 id="saldoAffiliate">
 Rp 0
@@ -78,7 +78,9 @@ Ajukan Pencairan
 <td colspan="5">
 Memuat data...
 </td>
-</tr></tbody></table></div></section><script type="module">
+</tr></tbody></table></div></section>
+
+<script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -94,49 +96,34 @@ serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
 const firebaseConfig = {
-
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
 projectId:"pasarnusa-18aa0",
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
 messagingSenderId:"866998011671",
 appId:"1:866998011671:web:5555115feb82741ab55952"
-
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-await auth.authStateReady();
+const uid = localStorage.getItem("uid");
 
-if(!auth.currentUser){
-
+if(!uid){
 window.location.href = "login.html";
-
+throw new Error("Belum login");
 }
 
-const uid = auth.currentUser.uid;
-
-document.getElementById(
-"affiliateLink"
-).value =
-"https://fendysubeki-ux.github.io/pasarnusa/?ref=" +
-uid;
+document.getElementById("affiliateLink").value =
+"https://fendysubeki-ux.github.io/pasarnusa/?ref=" + uid;
 
 let totalKlik = 0;
 let totalPenjualan = 0;
 let komisiPending = 0;
 let totalKomisi = 0;
 
-const snapshot =
-await getDocs(
+const snapshot = await getDocs(
 query(
 collection(db,"affiliate"),
 where("affiliateUid","==",uid)
@@ -153,37 +140,24 @@ totalKlik += Number(data.klik || 0);
 totalPenjualan += Number(data.penjualan || 0);
 
 if(data.status === "Pending"){
-
-komisiPending +=
-Number(data.komisi || 0);
-
+komisiPending += Number(data.komisi || 0);
 }else{
-
-totalKomisi +=
-Number(data.komisi || 0);
-
+totalKomisi += Number(data.komisi || 0);
 }
 
 html += `
-
 <tr>
-
-<td>
-${data.createdAt?.seconds
+<td>${
+data.createdAt?.seconds
 ? new Date(
 data.createdAt.seconds * 1000
 ).toLocaleDateString("id-ID")
 : "-"
-}
-</td>
+}</td>
 
-<td>
-${data.namaProduk || "-"}
-</td>
+<td>${data.namaProduk || "-"}</td>
 
-<td>
-${data.klik || 0}
-</td>
+<td>${data.klik || 0}</td>
 
 <td>
 Rp ${Number(
@@ -191,58 +165,60 @@ data.komisi || 0
 ).toLocaleString("id-ID")}
 </td>
 
-<td>
-${data.status || "-"}
-</td>
-
+<td>${data.status || "-"}</td>
 </tr>
-
 `;
 
 });
 
-document.getElementById(
-"totalKlik"
-).innerText =
+document.getElementById("totalKlik").innerText =
 totalKlik;
+let produkTerlaris = "-";
+let klikTerbesar = 0;
+
+snapshot.forEach((item)=>{
+
+const data = item.data();
+
+if(Number(data.klik || 0) > klikTerbesar){
+
+klikTerbesar =
+Number(data.klik || 0);
+
+produkTerlaris =
+data.namaProduk || "-";
+
+}
+
+});
 
 document.getElementById(
-"totalPenjualan"
+"produkTerlaris"
 ).innerText =
+produkTerlaris;
+document.getElementById("totalPenjualan").innerText =
 totalPenjualan;
 
-document.getElementById(
-"komisiPending"
-).innerText =
+document.getElementById("komisiPending").innerText =
 "Rp " +
 komisiPending.toLocaleString("id-ID");
 
-document.getElementById(
-"totalKomisi"
-).innerText =
+document.getElementById("totalKomisi").innerText =
 "Rp " +
 totalKomisi.toLocaleString("id-ID");
 
-document.getElementById(
-"saldoAffiliate"
-).innerText =
+document.getElementById("saldoAffiliate").innerText =
 "Rp " +
 totalKomisi.toLocaleString("id-ID");
 
-document.getElementById(
-"konversi"
-).innerText =
+document.getElementById("konversi").innerText =
 totalKlik > 0
-?
-Math.round(
+? Math.round(
 (totalPenjualan / totalKlik) * 100
 ) + "%"
-:
-"0%";
+: "0%";
 
-document.getElementById(
-"affiliateTable"
-).innerHTML =
+document.getElementById("affiliateTable").innerHTML =
 html ||
 `
 <tr>
@@ -252,35 +228,31 @@ Belum ada data affiliate
 </tr>
 `;
 
-document.getElementById(
-"copyAffiliate"
-).addEventListener(
-"click",
-async()=>{
-
-await navigator.clipboard.writeText(
-document.getElementById(
-"affiliateLink"
-).value
-);
-
-alert(
-"Link berhasil disalin"
-);
-
-}
-);
-
-document.getElementById(
-"shareAffiliate"
-).addEventListener(
-"click",
-async()=>{
+document.getElementById("copyAffiliate")
+.addEventListener("click",async()=>{
 
 const link =
-document.getElementById(
-"affiliateLink"
-).value;
+document.getElementById("affiliateLink").value;
+
+try{
+
+await navigator.clipboard.writeText(link);
+
+alert("Link berhasil disalin");
+
+}catch{
+
+alert("Gagal menyalin link");
+
+}
+
+});
+
+document.getElementById("shareAffiliate")
+.addEventListener("click",async()=>{
+
+const link =
+document.getElementById("affiliateLink").value;
 
 if(navigator.share){
 
@@ -291,55 +263,40 @@ url:link
 
 }else{
 
-await navigator.clipboard.writeText(
-link
-);
+navigator.clipboard.writeText(link);
 
-alert(
-"Link berhasil disalin"
-);
+alert("Link berhasil disalin");
 
 }
 
-}
-);
+});
 
-document.getElementById(
-"cairkanKomisi"
-).addEventListener(
-"click",
-async()=>{
+document.getElementById("cairkanKomisi")
+.addEventListener("click",async()=>{
 
 if(totalKomisi < 50000){
 
-alert(
-"Minimal pencairan Rp 50.000"
-);
-
+alert("Minimal pencairan Rp50.000");
 return;
 
 }
 
 await addDoc(
-collection(
-db,
-"pencairanAffiliate"
-),
+collection(db,"pencairanAffiliate"),
 {
-uid,
-nominal:totalKomisi,
-status:"Menunggu",
-createdAt:
-serverTimestamp()
+uid:uid,
+jumlah:totalKomisi,
+status:"Menunggu Persetujuan",
+createdAt:serverTimestamp()
 }
 );
 
-alert(
-"Pengajuan pencairan berhasil"
-);
+alert("Pengajuan pencairan berhasil");
 
-}
-);
+window.location.href =
+"withdraw-affiliate.html";
+
+});
 
 </script></body>
 </html>
