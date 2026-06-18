@@ -60,58 +60,60 @@ Membership: Free
 <div class="dashboard-grid">
 
 <a href="profil-umkm.html" class="dashboard-card">
-  
-<h3>Profil UMKM</h3>
+<h3>🏪 Profil UMKM</h3>
 <p>Kelola data toko</p>
 </a>
+
 <a href="pengaturan-toko.html" class="dashboard-card">
 <h3>⚙️ Pengaturan Toko</h3>
-<p>Profil, QRIS & Rekening</p>
+<p>QRIS & Rekening</p>
 </a>
+
 <a href="tambah-produk.html" class="dashboard-card">
-<h3>Tambah Produk</h3>
+<h3>➕ Tambah Produk</h3>
 <p>Tambah produk baru</p>
 </a>
 
 <a href="dashboard-produk.html" class="dashboard-card">
-<h3>Produk Saya</h3>
+<h3>📦 Produk Saya</h3>
 <p>Lihat semua produk</p>
 </a>
 
 <a href="dashboard-pesanan.html" class="dashboard-card">
-<h3>Pesanan Masuk</h3>
-<p>Lihat pesanan pelanggan</p>
+<h3>🛒 Pesanan Masuk</h3>
+<p>Kelola pesanan</p>
 </a>
-<a href="riwayat-transaksi.html"
-class="dashboard-card">
 
-<h3>Transaksi</h3>
-
-<p>Riwayat Penjualan</p>
-
+<a href="riwayat-transaksi.html" class="dashboard-card">
+<h3>💳 Transaksi</h3>
+<p>Riwayat penjualan</p>
 </a>
+
+<a href="chat-list.html" class="dashboard-card">
+<h3>💬 Chat Pembeli</h3>
+<p>Pesan pelanggan</p>
+</a>
+
 <a href="notifikasi.html" class="dashboard-card">
-
-<h3 id="jumlahNotifikasi">0</h3>
-
-<p>Notifikasi Baru</p>
-
+<h3>🔔 Notifikasi</h3>
+<p id="jumlahNotifikasi">0 Notifikasi</p>
 </a>
-<a href="index.html" class="dashboard-card">
-<h3>Beranda</h3>
-<p>Kembali ke website</p>
-</a>
-<a href="dashboard-affiliate.html" class="dashboard-card">
 
-<h3>Affiliate</h3>
-
+<a href="affiliate.html" class="dashboard-card">
+<h3>🤝 Affiliate</h3>
 <p>Komisi & Referral</p>
+</a>
 
+<a href="index.html" class="dashboard-card">
+<h3>🏠 Beranda</h3>
+<p>Kembali ke marketplace</p>
 </a>
+
 <a href="#" id="logoutBtn" class="dashboard-card">
-<h3>Logout</h3>
-<p>Keluar dari akun</p>
+<h3>🚪 Logout</h3>
+<p>Keluar akun</p>
 </a>
+
 </div>
 
 </section>
@@ -254,7 +256,9 @@ document.getElementById(
 
       const data = docItem.data();
 
-      if (data.status === "selesai") {
+if (
+String(data.status).toLowerCase() === "selesai"
+)
 
         pesananSelesai++;
 
