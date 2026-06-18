@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Statistik Affiliate - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:30px;">
+
+<div>
+<h1>📈 Statistik Affiliate</h1>
+<p>Lihat performa referral dan komisi Anda</p>
+</div>
+
+<a href="affiliate-dashboard.html" class="btn-secondary">
+⬅ Kembali
+</a>
+
+</div>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+<h3 id="totalKlik">0</h3>
+<p>Total Klik</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalPenjualan">0</h3>
+<p>Total Penjualan</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalKomisi">Rp 0</h3>
+<p>Total Komisi</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="konversi">0%</h3>
+<p>Konversi</p>
+</div>
+
+</div>
+
+<h2 style="margin-top:40px;">
+🏆 Produk Affiliate Terbaik
+</h2>
+
+<div
+id="produkContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+<p>Memuat data...</p>
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+query,
+where,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const uid = localStorage.getItem("uid");
+
+if(!uid){
+
+window.location.href = "login.html";
+throw new Error("Belum login");
+
+}
+
+const snapshot =
+await getDocs(
+query(
+collection(db,"affiliate"),
+where("affiliateUid","==",uid)
+)
+);
+
+let totalKlik = 0;
+let totalPenjualan = 0;
+let totalKomisi = 0;
+
+const produkContainer =
+document.getElementById(
+"produkContainer"
+);
+
+produkContainer.innerHTML = "";
+
+if(snapshot.empty){
+
+produkContainer.innerHTML = `
+<div class="dashboard-card">
+<h3>Belum Ada Data</h3>
+<p>Statistik affiliate akan muncul di sini.</p>
+</div>
+`;
+
+}
+
+snapshot.forEach((item)=>{
+
+const data = item.data();
+
+totalKlik += Number(data.klik || 0);
+totalPenjualan += Number(data.penjualan || 0);
+totalKomisi += Number(data.komisi || 0);
+
+produkContainer.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+${data.namaProduk || "-"}
+</h3>
+
+<p>
+Klik:
+${data.klik || 0}
+</p>
+
+<p>
+Penjualan:
+${data.penjualan || 0}
+</p>
+
+<p>
+Komisi:
+Rp ${Number(
+data.komisi || 0
+).toLocaleString("id-ID")}
+</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"totalKlik"
+).innerText =
+totalKlik;
+
+document.getElementById(
+"totalPenjualan"
+).innerText =
+totalPenjualan;
+
+document.getElementById(
+"totalKomisi"
+).innerText =
+"Rp " +
+totalKomisi.toLocaleString("id-ID");
+
+document.getElementById(
+"konversi"
+).innerText =
+totalKlik > 0
+?
+Math.round(
+(totalPenjualan / totalKlik) * 100
+) + "%"
+:
+"0%";
+
+</script>
+
+</body>
+</html>
