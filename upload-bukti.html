@@ -55,7 +55,8 @@ class="btn-secondary">
 
 Kembali ke Pesanan
 
-</a></div></section><script type="module">
+</a></div></section>
+<script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -70,46 +71,32 @@ collection
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
 const firebaseConfig = {
-  apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-  authDomain: "pasarnusa-18aa0.firebaseapp.com",
-  projectId: "pasarnusa-18aa0",
-  storageBucket:"pasarnusa-18aa0.appspot.com",
-messagingSenderId: "866998011671",
-  appId: "1:866998011671:web:5555115feb82741ab55952"
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.appspot.com",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 };
 
-const app = initializeApp(firebaseConfig);
+const CLOUD_NAME = "dq8gha9lv";
+const UPLOAD_PRESET = "pasarnusa";
 
+const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const storage = getStorage(app);
+const params = new URLSearchParams(window.location.search);
+const pesananId = params.get("id");
 
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const pesananId =
-params.get("id");
 if(!pesananId){
 
-alert("Pesanan tidak ditemukan");
+alert("ID pesanan tidak ditemukan");
 
-window.location.replace(
-"pesanan-saya.html"
-);
+window.location.href =
+"pesanan-saya.html";
 
 throw new Error("ID kosong");
-
 }
 
 const pesananRef =
@@ -120,35 +107,28 @@ await getDoc(pesananRef);
 
 if(!pesananSnap.exists()){
 
-alert("Data pesanan tidak ditemukan");
+alert("Pesanan tidak ditemukan");
 
 window.location.href =
 "pesanan-saya.html";
 
 throw new Error("Pesanan tidak ditemukan");
-
 }
 
 const pesanan =
 pesananSnap.data();
 
-document.getElementById(
-"nomorPesanan"
-).innerText =
-pesananId.slice(0,8);
+document.getElementById("nomorPesanan").innerText =
+pesananId.substring(0,8);
 
-document.getElementById(
-"totalBayar"
-).innerText =
+document.getElementById("totalBayar").innerText =
 "Rp " +
 Number(
 pesanan.totalBayar || 0
 ).toLocaleString("id-ID");
 
 const input =
-document.getElementById(
-"buktiTransfer"
-);
+document.getElementById("buktiTransfer");
 
 input.addEventListener(
 "change",
@@ -159,15 +139,11 @@ e.target.files[0];
 
 if(!file) return;
 
-document.getElementById(
-"infoFile"
-).innerText =
+document.getElementById("infoFile").innerText =
 file.name;
 
 const preview =
-document.getElementById(
-"previewBukti"
-);
+document.getElementById("previewBukti");
 
 preview.src =
 URL.createObjectURL(file);
@@ -175,7 +151,8 @@ URL.createObjectURL(file);
 preview.style.display =
 "block";
 
-});
+}
+);
 
 document
 .getElementById("uploadBtn")
@@ -193,65 +170,79 @@ alert(
 );
 
 return;
-
 }
-if(
-!file.type.includes("image")
-){
+
+if(!file.type.startsWith("image/")){
 
 alert(
 "File harus berupa gambar"
 );
 
 return;
-
 }
+
 if(file.size > 3000000){
 
 alert(
-"Ukuran file maksimal 3MB"
+"Maksimal 3 MB"
 );
 
 return;
-
 }
 
 const btn =
-document.getElementById(
-"uploadBtn"
-);
+document.getElementById("uploadBtn");
 
 btn.disabled = true;
-
-btn.innerText =
-"Mengupload...";
+btn.innerText = "Mengupload...";
 
 try{
 
-const storageRef =
-ref(
-storage,
-"bukti-transfer/" +
-Date.now() +
-"_" +
-file.name
-);
+const formData =
+new FormData();
 
-await uploadBytes(
-storageRef,
+formData.append(
+"file",
 file
 );
 
-const url =
-await getDownloadURL(
-storageRef
+formData.append(
+"upload_preset",
+UPLOAD_PRESET
 );
+
+const response =
+await fetch(
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+if(!result.secure_url){
+
+throw new Error(
+result.error?.message ||
+"Upload gagal"
+);
+
+}
 
 await updateDoc(
 pesananRef,
 {
-buktiTransfer:url,
-status:"Menunggu Verifikasi"
+buktiTransfer:
+result.secure_url,
+
+status:
+"Menunggu Verifikasi",
+
+statusPembayaran:
+"Menunggu Verifikasi"
 }
 );
 
@@ -260,14 +251,22 @@ if(pesanan.uidPembeli){
 await addDoc(
 collection(db,"notifikasi"),
 {
-uid:pesanan.uidPembeli,
-judul:"Bukti Transfer Baru",
-pesan:"Bukti transfer berhasil dikirim.",
-dibaca:false,
-createdAt:new Date()
+uid:
+pesanan.uidPembeli,
+
+judul:
+"Pembayaran Dikirim",
+
+pesan:
+"Bukti transfer berhasil dikirim dan menunggu verifikasi.",
+
+dibaca:
+false,
+
+createdAt:
+new Date()
 }
 );
-
 }
 
 alert(
@@ -282,7 +281,8 @@ window.location.href =
 console.error(error);
 
 alert(
-"Gagal mengupload bukti transfer"
+error.message ||
+"Gagal upload bukti transfer"
 );
 
 }finally{
@@ -294,7 +294,8 @@ btn.innerText =
 
 }
 
-});
+}
+);
 
 </script></body>
 </html>
