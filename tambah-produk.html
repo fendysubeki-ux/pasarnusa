@@ -119,7 +119,10 @@ collection,
 addDoc,
 doc,
 getDoc,
-serverTimestamp
+serverTimestamp,
+query,
+where,
+getDocs
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -314,28 +317,23 @@ return;
 btn.disabled = true;
 btn.innerText = "Mengupload...";
 
-const userDoc =
-await getDoc(
+const userDoc = await getDoc(
 doc(
 db,
-"umkm",
+"users",
 auth.currentUser.uid
 )
 );
 
 if(!userDoc.exists()){
 
-alert("Data UMKM tidak ditemukan");
-
-btn.disabled = false;
-btn.innerText = "Simpan Produk";
+alert("Data User tidak ditemukan");
 
 return;
 
 }
 
-const userData =
-userDoc.data();
+const userData = userDoc.data();
 
 let imageUrls = [];
 
@@ -391,7 +389,7 @@ uid:
 auth.currentUser.uid,
 
 namaToko:
-userData.namaUmkm,
+userData.namaUmkm || userData.nama,
 
 whatsapp:
 userData.whatsapp,
