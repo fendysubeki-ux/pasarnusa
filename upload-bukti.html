@@ -82,8 +82,8 @@ const firebaseConfig = {
   apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
   authDomain: "pasarnusa-18aa0.firebaseapp.com",
   projectId: "pasarnusa-18aa0",
-  storageBucket:"pasarnusa-18aa0.appspot.com"
-  messagingSenderId: "866998011671",
+  storageBucket:"pasarnusa-18aa0.appspot.com",
+messagingSenderId: "866998011671",
   appId: "1:866998011671:web:5555115feb82741ab55952"
 };
 
@@ -124,6 +124,8 @@ alert("Data pesanan tidak ditemukan");
 
 window.location.href =
 "pesanan-saya.html";
+
+throw new Error("Pesanan tidak ditemukan");
 
 }
 
@@ -253,9 +255,6 @@ status:"Menunggu Verifikasi"
 }
 );
 
-await addDoc(
-collection(db,"notifikasi"),
-{
 if(pesanan.uidPembeli){
 
 await addDoc(
