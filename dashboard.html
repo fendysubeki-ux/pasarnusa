@@ -240,7 +240,7 @@ document.getElementById(
     const pesananSnap = await getDocs(
       query(
         collection(db, "pesanan"),
-        where("uid", "==", user.uid)
+        where("uidUmkm", "==", user.uid)
       )
     );
 
@@ -252,27 +252,27 @@ document.getElementById(
     let omzet = 0;
     let pesananSelesai = 0;
 
-    pesananSnap.forEach((docItem) => {
+pesananSnap.forEach((docItem) => {
 
-      const data = docItem.data();
+  const data = docItem.data();
 
-if (
-String(data.status).toLowerCase() === "selesai"
-)
+  if (
+    String(data.status).toLowerCase() === "selesai"
+  ) {
 
-        pesananSelesai++;
+    pesananSelesai++;
 
-        omzet += Number(
-          data.totalBayar ||
-          (
-            (Number(data.harga) || 0) *
-            (Number(data.qty) || 1)
-          )
-        );
+    omzet += Number(
+      data.totalBayar ||
+      (
+        (Number(data.harga) || 0) *
+        (Number(data.qty) || 1)
+      )
+    );
 
-      }
+  }
 
-    });
+});
 
     document.getElementById(
       "totalOmzet"
@@ -284,9 +284,10 @@ String(data.status).toLowerCase() === "selesai"
       "rataPesanan"
     ).innerText =
       pesananSelesai > 0
-      ? Math.round(
-          omzet / pesananSelesai
-        ).toLocaleString("id-ID")
+      ? "Rp " +
+Math.round(
+omzet / pesananSelesai
+).toLocaleString("id-ID")
       : "0";
 
     const notifSnap = await getDocs(
@@ -306,10 +307,10 @@ String(data.status).toLowerCase() === "selesai"
 
     });
 
-    document.getElementById(
-      "jumlahNotifikasi"
-    ).innerText =
-      totalNotif;
+document.getElementById(
+"jumlahNotifikasi"
+).innerText =
+totalNotif + " Notifikasi";
 
   } catch (error) {
 
