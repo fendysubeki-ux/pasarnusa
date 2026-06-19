@@ -141,17 +141,12 @@ await auth.authStateReady();
 const role =
 localStorage.getItem("role");
 
-if(role !== "umkm"){
+console.log("Role:", role);
 
-window.location.href =
-"index.html";
-
-}
 if(!auth.currentUser){
 
 window.location.href =
 "login.html";
-
 }
 
 const container =
@@ -276,7 +271,7 @@ Lihat
 
 <a
 href="edit-produk.html?id=${item.id}"
-class="btn-primary">
+class="btn-secondary">
 
 Edit
 
@@ -340,7 +335,7 @@ document.getElementById(
 ).innerText =
 totalStok;
 
-catch(error){
+}catch(error){
 
 console.error(error);
 
@@ -414,4 +409,5 @@ card.innerText
 </script>
 
 </body>
+
 </html>
