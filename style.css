@@ -2920,5 +2920,117 @@ flex-direction:column;
 .store-actions{
 flex-direction:column;
 }
+}
+.detail-image img{
+width:100%;
+max-height:400px;
+object-fit:cover;
+border-radius:20px;
+display:block;
+}
+/* DETAIL PRODUK */
 
+.product-detail{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+#gambarProduk{
+width:100%;
+height:300px;
+object-fit:cover;
+border-radius:20px;
+display:block;
+}
+
+.gallery-produk{
+display:flex;
+gap:10px;
+overflow-x:auto;
+margin-top:15px;
+padding-bottom:10px;
+}
+
+.gallery-produk img{
+width:70px;
+height:70px;
+object-fit:cover;
+border-radius:12px;
+cursor:pointer;
+flex-shrink:0;
+border:2px solid #eee;
+}
+
+.detail-info{
+padding:20px 0;
+}
+
+.detail-info h1{
+font-size:32px;
+font-weight:800;
+margin:10px 0;
+}
+
+#hargaProduk{
+font-size:40px;
+font-weight:800;
+color:#10b981;
+margin:15px 0;
+}
+
+#stokProduk,
+#ratingInfo,
+#deskripsiProduk{
+margin:10px 0;
+line-height:1.6;
+}
+
+.action-buttons{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:20px;
+}
+
+.action-buttons .btn-primary,
+.action-buttons .btn-secondary{
+width:100%;
+text-align:center;
+}
+
+.affiliate-box{
+margin-top:20px;
+}
+
+.affiliate-box input{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #ddd;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+#gambarProduk{
+height:250px;
+}
+
+.detail-info h1{
+font-size:28px;
+}
+
+#hargaProduk{
+font-size:34px;
+}
+
+}
+.thumb-produk{
+width:70px;
+height:70px;
+object-fit:cover;
+border-radius:12px;
+cursor:pointer;
 }
