@@ -335,6 +335,31 @@ return;
 
 const userData = userDoc.data();
 
+if(userData.role !== "umkm"){
+
+alert(
+"Akses khusus UMKM"
+);
+
+window.location.href =
+"index.html";
+
+return;
+
+}
+
+if(userData.status !== "aktif"){
+
+alert(
+"Akun UMKM belum diverifikasi"
+);
+
+window.location.href =
+"dashboard-umkm.html";
+
+return;
+
+}
 let imageUrls = [];
 
 for(const file of files){
@@ -412,7 +437,10 @@ totalReview:0,
 
 terjual:0,
 
-status:status,
+status:
+Number(stok) <= 0
+? "Stok Habis"
+: status,
 
 createdAt:
 serverTimestamp()
