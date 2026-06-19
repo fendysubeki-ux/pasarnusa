@@ -144,7 +144,7 @@ try{
 
 const tokoSnap =
 await getDoc(
-doc(db,"umkm",uid)
+doc(db,"users",uid)
 );
 
 if(tokoSnap.exists()){
@@ -155,7 +155,9 @@ tokoSnap.data();
 document.getElementById(
 "namaToko"
 ).innerText =
-toko.namaUmkm || "Dashboard UMKM";
+toko.namaUmkm ||
+toko.nama ||
+"Dashboard UMKM";
 
 document.getElementById(
 "ratingToko"
@@ -186,7 +188,7 @@ const produkSnapshot =
 await getDocs(
 query(
 collection(db,"produk"),
-where("uid","==",uid)
+where("uidUmkm","==",uid)
 )
 );
 
@@ -311,7 +313,10 @@ let totalPendapatan = 0;
 
 const pesananSnapshot =
 await getDocs(
-collection(db,"pesanan")
+query(
+collection(db,"pesanan"),
+where("uidUmkm","==",uid)
+)
 );
 
 pesananSnapshot.forEach((item)=>{
@@ -426,12 +431,14 @@ Rp ${totalPendapatan.toLocaleString("id-ID")}
 </div>
 
 `;
-}catch(error){
+}
+catch(error){
 
 console.error(error);
 
 alert(
-"Gagal memuat dashboard"
+"Dashboard Error:\n\n" +
+error.message
 );
 
 }
