@@ -698,7 +698,7 @@ Rp ${Number(data.harga || 0).toLocaleString("id-ID")}
 <p>📦 Stok: ${data.stok || 0}</p>
 
 <a
-href="detail-produk.html?id=${item.id}"
+href="produk-detail.html?id=${item.id}"
 class="btn-primary">
 Lihat Detail
 </a>
@@ -890,6 +890,53 @@ navLinks.classList.toggle("active");
 
 }
 
+const revealElements =
+document.querySelectorAll(
+'.product-card,.feature-card,.dashboard-card,.stat'
+);
+
+if(revealElements.length){
+
+const observer =
+new IntersectionObserver((entries)=>{
+
+entries.forEach((entry)=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("active");
+
+}
+
+});
+
+});
+
+revealElements.forEach((el)=>{
+
+el.classList.add("reveal");
+
+observer.observe(el);
+
+});
+
+}
+
+</script>
+
+<script src="script.js"></script>
+<a
+href="https://wa.me/6285854910306"
+target="_blank"
+class="wa-float">
+
+💬
+
+</a>
+
+</body>
+
+</html>
 const revealElements =
 document.querySelectorAll(
 '.product-card,.feature-card,.dashboard-card,.stat'
