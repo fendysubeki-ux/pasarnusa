@@ -152,6 +152,10 @@ if(!auth.currentUser){
 window.location.href =
 "login.html";
 
+throw new Error(
+"Belum login"
+);
+
 }
 
 const id =
@@ -162,9 +166,15 @@ window.location.search
 if(!id){
 
 window.location.href =
-"produk-saya.html";
+"dashboard-produk.html";
+
+throw new Error(
+"ID produk tidak ditemukan"
+);
 
 }
+
+let produkData = null;
 
 try{
 
@@ -183,6 +193,27 @@ throw new Error(
 
 const produk =
 snap.data();
+
+if(
+produk.uid !==
+auth.currentUser.uid
+){
+
+alert(
+"Akses ditolak"
+);
+
+window.location.href =
+"dashboard-produk.html";
+
+throw new Error(
+"Bukan pemilik produk"
+);
+
+}
+
+produkData =
+produk;
 
 document.getElementById(
 "namaProduk"
@@ -207,7 +238,7 @@ produk.berat || 0;
 document.getElementById(
 "kategoriProduk"
 ).value =
-produk.kategori || "";
+produk.kategori || "Lainnya";
 
 document.getElementById(
 "statusProduk"
@@ -244,11 +275,12 @@ document.getElementById(
 "previewContainer"
 );
 
+preview.innerHTML = "";
+
 (produk.gambar || [])
 .forEach((img)=>{
 
 preview.innerHTML += `
-
 <img
 src="${img}"
 style="
@@ -257,64 +289,109 @@ height:120px;
 object-fit:cover;
 border-radius:12px;
 ">
-
 `;
 
 });
 
-}catch(error){
+}
+catch(error){
 
-alert(error.message);
+console.error(error);
+
+alert(
+error.message
+);
 
 }
 
 document
-.getElementById("updateProduk")
+.getElementById(
+"updateProduk"
+)
 .addEventListener(
 "click",
 async()=>{
+
+try{
+
+const nama =
+document.getElementById(
+"namaProduk"
+).value.trim();
+
+const harga =
+Number(
+document.getElementById(
+"hargaProduk"
+).value
+);
+
+const stok =
+Number(
+document.getElementById(
+"stokProduk"
+).value
+);
+
+const berat =
+Number(
+document.getElementById(
+"beratProduk"
+).value
+);
+
+const kategori =
+document.getElementById(
+"kategoriProduk"
+).value;
+
+const deskripsi =
+document.getElementById(
+"deskripsiProduk"
+).value.trim();
+
+if(
+!nama ||
+!harga ||
+!kategori ||
+!deskripsi
+){
+
+alert(
+"Lengkapi semua data"
+);
+
+return;
+
+}
+
+const status =
+
+stok <= 0
+
+? "Stok Habis"
+
+: document.getElementById(
+"statusProduk"
+).value;
 
 await updateDoc(
 doc(db,"produk",id),
 {
 
-namaProduk:
-document.getElementById(
-"namaProduk"
-).value,
+namaProduk:nama,
 
-harga:Number(
-document.getElementById(
-"hargaProduk"
-).value
-),
+harga:harga,
 
-stok:Number(
-document.getElementById(
-"stokProduk"
-).value
-),
+stok:stok,
 
-berat:Number(
-document.getElementById(
-"beratProduk"
-).value
-),
+berat:berat,
 
-kategori:
-document.getElementById(
-"kategoriProduk"
-).value,
+kategori:kategori,
 
-status:
-document.getElementById(
-"statusProduk"
-).value,
+status:status,
 
-deskripsi:
-document.getElementById(
-"deskripsiProduk"
-).value
+deskripsi:deskripsi
 
 }
 );
@@ -324,24 +401,38 @@ alert(
 );
 
 window.location.href =
-"produk-saya.html";
+"dashboard-produk.html";
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+error.message
+);
+
+}
 
 }
 );
 
 document
-.getElementById("hapusProduk")
+.getElementById(
+"hapusProduk"
+)
 .addEventListener(
 "click",
 async()=>{
 
-if(
-!confirm(
+const yakin =
+confirm(
 "Hapus produk ini?"
-)
-){
-return;
-}
+);
+
+if(!yakin) return;
+
+try{
 
 await deleteDoc(
 doc(db,"produk",id)
@@ -352,7 +443,18 @@ alert(
 );
 
 window.location.href =
-"produk-saya.html";
+"dashboard-produk.html";
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+error.message
+);
+
+}
 
 }
 );
