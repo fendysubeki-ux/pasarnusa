@@ -43,18 +43,19 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
+getAuth,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
 getFirestore,
 doc,
 getDoc
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import {
-getAuth,
-signInWithEmailAndPassword,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
@@ -67,23 +68,70 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(user){
+
+const role =
+localStorage.getItem("role");
+
+if(role === "admin"){
+
+window.location.href =
+"admin.html";
+
+}
+else if(role === "affiliate"){
+
+window.location.href =
+"affiliate-dashboard.html";
+
+}
+else if(role === "umkm"){
+
+window.location.href =
+"dashboard-umkm.html";
+
+}
+else{
+
+window.location.href =
+"index.html";
+
+}
+
+}
+
+}
+);
 
 async function login(){
 
 const btn =
-document.getElementById("btnLogin");
+document.getElementById(
+"btnLogin"
+);
 
 const email =
-document.getElementById("email")
-.value
-.trim();
+document.getElementById(
+"email"
+).value.trim();
 
 const password =
-document.getElementById("password")
-.value;
+document.getElementById(
+"password"
+).value;
 
 if(!email || !password){
 
@@ -98,7 +146,9 @@ return;
 try{
 
 btn.disabled = true;
-btn.innerText = "Memproses...";
+
+btn.innerText =
+"Memproses...";
 
 const credential =
 await signInWithEmailAndPassword(
@@ -123,9 +173,6 @@ alert(
 
 await signOut(auth);
 
-btn.disabled = false;
-btn.innerText = "Masuk";
-
 return;
 
 }
@@ -143,9 +190,6 @@ alert(
 );
 
 await signOut(auth);
-
-btn.disabled = false;
-btn.innerText = "Masuk";
 
 return;
 
@@ -166,46 +210,38 @@ localStorage.setItem(
 user.nama || ""
 );
 
+localStorage.setItem(
+"namaUmkm",
+user.namaUmkm || ""
+);
+
+localStorage.setItem(
+"status",
+user.status || ""
+);
+
 if(user.role === "admin"){
 
-window.location.replace(
-"admin.html"
-);
+window.location.href =
+"admin.html";
 
 }
 else if(user.role === "affiliate"){
 
-window.location.replace(
-"affiliate-dashboard.html"
-);
+window.location.href =
+"affiliate-dashboard.html";
 
 }
 else if(user.role === "umkm"){
 
-window.location.replace(
-"dashboard-umkm.html"
-);
-
-}
-else if(user.role === "user"){
-
-window.location.replace(
-"index.html"
-);
+window.location.href =
+"dashboard-umkm.html";
 
 }
 else{
 
-alert(
-"Role akun tidak dikenali"
-);
-
-await signOut(auth);
-
-btn.disabled = false;
-btn.innerText = "Masuk";
-
-return;
+window.location.href =
+"index.html";
 
 }
 
@@ -213,9 +249,6 @@ return;
 catch(error){
 
 console.error(error);
-
-btn.disabled = false;
-btn.innerText = "Masuk";
 
 let pesan =
 "Login gagal";
@@ -229,7 +262,8 @@ pesan =
 "Email atau Password salah";
 
 }
-else if(
+
+if(
 error.code ===
 "auth/network-request-failed"
 ){
@@ -238,24 +272,34 @@ pesan =
 "Koneksi internet bermasalah";
 
 }
-else if(
+
+if(
 error.code ===
 "auth/too-many-requests"
 ){
 
 pesan =
-"Terlalu banyak percobaan login. Coba lagi nanti";
-
+"Terlalu banyak percobaan login";
 }
 
 alert(pesan);
+
+}
+finally{
+
+btn.disabled = false;
+
+btn.innerText =
+"Masuk";
 
 }
 
 }
 
 document
-.getElementById("btnLogin")
+.getElementById(
+"btnLogin"
+)
 .addEventListener(
 "click",
 login
@@ -266,7 +310,9 @@ document
 "keypress",
 (e)=>{
 
-if(e.key === "Enter"){
+if(
+e.key === "Enter"
+){
 
 login();
 
@@ -275,5 +321,6 @@ login();
 }
 );
 
-</script></body>
+</script>
+</body>
 </html>
