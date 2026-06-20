@@ -1,7 +1,6 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Chat PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="chat-page"><!-- Header Chat --><div class="chat-header"><div class="chat-user"><img
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="chat-page"><!-- Header --><div class="chat-header"><div class="chat-user"><img
 id="fotoToko"
 src="https://picsum.photos/100"
 class="chat-avatar">
@@ -14,14 +13,14 @@ Toko PasarNusa
 href="index.html"
 class="btn-secondary">
 
-Kembali
+⬅ Kembali
 
-</a></div><!-- Produk yang dibahas --><div class="chat-product-card"><img
+</a></div><!-- Produk --><div class="chat-product-card"><img
 id="gambarProduk"
 src="https://picsum.photos/150">
 
 <div><h4 id="namaProduk">
-Produk UMKM
+Nama Produk
 </h4><p id="hargaProduk">
 Rp 0
 </p><a
@@ -30,7 +29,7 @@ href="#">
 
 Lihat Produk
 
-</a></div></div><!-- Area Chat --><div
+</a></div></div><!-- Chat --><div
 id="chatContainer"
 class="chat-container"><div class="chat-system">
 Mulai percakapan dengan penjual
@@ -48,7 +47,7 @@ Kirim
 </button></div></section><script type="module">
 
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
 getFirestore,
@@ -57,24 +56,23 @@ addDoc,
 query,
 orderBy,
 onSnapshot,
-doc,
-getDoc
+serverTimestamp
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 import {
 getAuth
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_PROJECT.appspot.com",
-messagingSenderId:"YOUR_SENDER_ID",
-appId:"YOUR_APP_ID"
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
@@ -93,6 +91,8 @@ window.location.href =
 
 }
 
+/* Parameter */
+
 const params =
 new URLSearchParams(
 window.location.search
@@ -100,9 +100,6 @@ window.location.search
 
 const roomId =
 params.get("room");
-
-const produkId =
-params.get("produk");
 
 if(!roomId){
 
@@ -115,55 +112,14 @@ window.location.href =
 
 }
 
-/* Ambil Produk */
-
-if(produkId){
-
-const produkSnap =
-await getDoc(
-doc(db,"produk",produkId)
-);
-
-if(produkSnap.exists()){
-
-const produk =
-produkSnap.data();
-
-document.getElementById(
-"namaProduk"
-).innerText =
-produk.namaProduk;
-
-document.getElementById(
-"hargaProduk"
-).innerText =
-"Rp " +
-Number(
-produk.harga
-).toLocaleString("id-ID");
-
-document.getElementById(
-"gambarProduk"
-).src =
-produk.gambar?.[0] ||
-"https://picsum.photos/150";
-
-document.getElementById(
-"detailProduk"
-).href =
-"produk-detail.html?id=" +
-produkId;
-
-}
-
-}
-
-/* Chat */
+/* Container */
 
 const container =
 document.getElementById(
 "chatContainer"
 );
+
+/* Load Chat */
 
 const q =
 query(
@@ -178,14 +134,16 @@ orderBy(
 )
 );
 
-onSnapshot(q,(snapshot)=>{
+onSnapshot(
+q,
+(snapshot)=>{
 
 container.innerHTML = "";
 
-snapshot.forEach((item)=>{
+snapshot.forEach((doc)=>{
 
 const data =
-item.data();
+doc.data();
 
 const saya =
 data.uid ===
@@ -203,20 +161,6 @@ ${data.pesan}
 
 </div>
 
-<div class="chat-time">
-
-${
-data.createdAt?.seconds
-?
-new Date(
-data.createdAt.seconds * 1000
-).toLocaleTimeString("id-ID")
-:
-""
-}
-
-</div>
-
 </div>
 
 `;
@@ -226,7 +170,10 @@ data.createdAt.seconds * 1000
 container.scrollTop =
 container.scrollHeight;
 
-});
+}
+);
+
+/* Kirim Pesan */
 
 async function kirimPesan(){
 
@@ -258,13 +205,15 @@ pesan:
 pesan,
 
 createdAt:
-new Date()
+serverTimestamp()
 }
 );
 
 input.value = "";
 
 }
+
+/* Event */
 
 document
 .getElementById(
@@ -292,4 +241,5 @@ kirimPesan();
 }
 );
 
-</script></body></html>
+</script></body>
+</html>
