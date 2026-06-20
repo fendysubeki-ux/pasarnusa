@@ -1,64 +1,49 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pembayaran Pesanan - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><h1>💳 Pembayaran Pesanan</h1><div class="dashboard-grid"><div class="dashboard-card"><h3>Status Pembayaran</h3><p class="status pending">
 Menunggu Pembayaran
 </p></div><div class="dashboard-card"><h3>Batas Pembayaran</h3><h2 id="countdown">
-23:59:59
-</h2></div></div><div class="form-card"><h2>Ringkasan Pesanan</h2><hr><p>
-Nomor Pesanan:
-<b id="nomorPesanan">
--
-</b>
+24:00:00
+</h2></div></div><!-- Ringkasan --><div class="form-card"><h2>📦 Ringkasan Pesanan</h2><hr><p>
+Nomor Pesanan :
+<b id="nomorPesanan">PSN001</b>
 </p><p>
-Toko:
-<b id="namaToko">
--
-</b>
+Nama Toko :
+<b id="namaToko">UMKM PasarNusa</b>
 </p><p>
-Produk:
-<b id="jumlahProduk">
-0 Produk
-</b>
+Jumlah Produk :
+<b id="jumlahProduk">1 Produk</b>
 </p><p>
-Subtotal:
-<b id="subtotal">
-Rp 0
-</b>
+Subtotal :
+<b id="subtotal">Rp 0</b>
 </p><p>
-Ongkir:
-<b id="ongkir">
-Rp 0
-</b>
+Ongkir :
+<b id="ongkir">Rp 0</b>
 </p><p>
-Diskon:
-<b id="diskon">
-Rp 0
-</b>
+Diskon :
+<b id="diskon">Rp 0</b>
 </p><hr><h2 id="totalBayar">
 Rp 0
-</h2></div><div class="form-card"><h2>Transfer Bank</h2><p>
-Bank:
-<b id="namaBank">
--
-</b>
+</h2></div><!-- Rekening --><div class="form-card"><h2>🏦 Transfer Bank</h2><p>
+Bank :
+<b id="namaBank">BCA</b>
 </p><p>
-Atas Nama:
+Atas Nama :
 <b id="namaRekening">
--
+PT PasarNusa Indonesia
 </b>
 </p><p>
-No Rekening:
+Nomor Rekening :
 <b id="nomorRekening">
--
+1234567890
 </b>
 </p><button
 id="salinRekening"
 class="btn-secondary">
 
-📋 Salin Rekening
+📋 Salin Nomor Rekening
 
-</button></div><div class="form-card"><h2>QRIS</h2><img
+</button></div><!-- QRIS --><div class="form-card"><h2>📱 Pembayaran QRIS</h2><img
 id="gambarQris"
 src="https://picsum.photos/400"
 style="
@@ -75,21 +60,21 @@ class="btn-secondary">
 
 🔍 Perbesar QRIS
 
-</button></div><div class="form-card"><h2>Upload Bukti Transfer</h2><input
+</button></div><!-- Upload --><div class="form-card"><h2>📤 Upload Bukti Transfer</h2><input
 type="file"
 id="buktiTransfer"
 accept="image/*">
 
-<p style="font-size:13px;opacity:.7;">
-Format JPG, PNG, WEBP maksimal 5 MB
+<p>
+Format JPG, PNG atau WEBP maksimal 5MB
 </p><img
 id="previewBukti"
 style="
 display:none;
 width:100%;
 max-width:350px;
-margin:auto;
 border-radius:16px;
+margin-top:15px;
 ">
 
 <br><br>
@@ -98,9 +83,17 @@ border-radius:16px;
 id="btnBayar"
 class="btn-primary">
 
-📤 Kirim Bukti Pembayaran
+Kirim Bukti Pembayaran
 
-</button></div></section><script>
+</button></div><a
+href="pesanan-saya.html"
+class="btn-secondary">
+
+⬅ Kembali ke Pesanan
+
+</a></section><script>
+
+/* Countdown */
 
 let detik = 86400;
 
@@ -118,7 +111,7 @@ Math.floor(
 )
 ).padStart(2,"0");
 
-const second =
+const detikSisa =
 String(
 detik%60
 ).padStart(2,"0");
@@ -128,7 +121,7 @@ document.getElementById(
 ).innerText =
 jam + ":" +
 menit + ":" +
-second;
+detikSisa;
 
 if(detik > 0){
 
@@ -138,6 +131,8 @@ detik--;
 
 },1000);
 
+/* Salin Rekening */
+
 document
 .getElementById(
 "salinRekening"
@@ -146,21 +141,22 @@ document
 "click",
 ()=>{
 
-const rekening =
+navigator.clipboard.writeText(
+
 document.getElementById(
 "nomorRekening"
-).innerText;
+).innerText
 
-navigator.clipboard.writeText(
-rekening
 );
 
 alert(
-"Nomor rekening disalin"
+"Nomor rekening berhasil disalin"
 );
 
 }
 );
+
+/* Preview Bukti */
 
 document
 .getElementById(
@@ -181,7 +177,7 @@ file.size >
 ){
 
 alert(
-"Maksimal ukuran 5MB"
+"Ukuran file maksimal 5MB"
 );
 
 return;
@@ -198,6 +194,49 @@ URL.createObjectURL(file);
 
 preview.style.display =
 "block";
+
+}
+);
+
+/* Tombol Upload */
+
+document
+.getElementById(
+"btnBayar"
+)
+.addEventListener(
+"click",
+()=>{
+
+const file =
+document.getElementById(
+"buktiTransfer"
+).files[0];
+
+if(!file){
+
+alert(
+"Silakan pilih bukti transfer"
+);
+
+return;
+
+}
+
+alert(
+"Bukti pembayaran berhasil dikirim"
+);
+
+/*
+
+Firebase nanti:
+
+1. Upload gambar ke Cloudinary
+2. Simpan URL ke Firestore
+3. Update status pesanan:
+   Menunggu Verifikasi
+
+*/
 
 }
 );
