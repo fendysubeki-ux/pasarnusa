@@ -371,6 +371,356 @@ class="dashboard-card">
 </div>
 
 </section>
+<script type="module">
 
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+query,
+where,
+getDocs,
+updateDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href = "login.html";
+
+}
+
+const uid = auth.currentUser.uid;
+
+const container =
+document.getElementById("pesananContainer");
+
+let semuaPesanan = [];
+
+const snapshot =
+await getDocs(
+query(
+collection(db,"pesanan"),
+where("uidUmkm","==",uid)
+)
+);
+
+let totalPesanan = 0;
+let menunggu = 0;
+let diproses = 0;
+let dikirim = 0;
+let selesai = 0;
+
+let totalPendapatan = 0;
+let totalProdukTerjual = 0;
+let totalOngkir = 0;
+let totalAffiliate = 0;
+
+snapshot.forEach((docSnap)=>{
+
+const data = docSnap.data();
+
+semuaPesanan.push({
+id:docSnap.id,
+...data
+});
+
+totalPesanan++;
+
+if(data.status === "Menunggu Verifikasi")
+menunggu++;
+
+if(data.status === "Diproses")
+diproses++;
+
+if(data.status === "Dikirim")
+dikirim++;
+
+if(data.status === "Selesai")
+selesai++;
+
+totalPendapatan +=
+Number(data.totalBayar || 0);
+
+totalOngkir +=
+Number(data.ongkir || 0);
+
+totalAffiliate +=
+Math.round(
+Number(data.subtotal || 0) * 0.05
+);
+
+(data.items || []).forEach((item)=>{
+
+totalProdukTerjual +=
+Number(item.qty || 0);
+
+});
+
+});
+
+document.getElementById("totalPesanan").innerText =
+totalPesanan;
+
+document.getElementById("menungguVerifikasi").innerText =
+menunggu;
+
+document.getElementById("diproses").innerText =
+diproses;
+
+document.getElementById("dikirim").innerText =
+dikirim;
+
+document.getElementById("selesai").innerText =
+selesai;
+
+document.getElementById("totalPendapatan").innerText =
+"Rp " +
+totalPendapatan.toLocaleString("id-ID");
+
+document.getElementById("produkTerjual").innerText =
+totalProdukTerjual;
+
+document.getElementById("totalOngkir").innerText =
+"Rp " +
+totalOngkir.toLocaleString("id-ID");
+
+document.getElementById("totalAffiliate").innerText =
+"Rp " +
+totalAffiliate.toLocaleString("id-ID");
+
+document.getElementById("pendapatanBersih").innerText =
+"Rp " +
+(totalPendapatan - totalAffiliate)
+.toLocaleString("id-ID");
+
+renderPesanan(semuaPesanan);
+
+function renderPesanan(data){
+
+container.innerHTML = "";
+
+if(data.length === 0){
+
+container.innerHTML = `
+<div class="dashboard-card">
+<h3>Belum Ada Pesanan</h3>
+<p>Pesanan akan muncul di sini.</p>
+</div>
+`;
+
+return;
+
+}
+
+data.forEach((pesanan)=>{
+
+let produkHtml = "";
+
+(pesanan.items || []).forEach((item)=>{
+
+produkHtml += `
+<li>
+${item.namaProduk} x${item.qty}
+</li>
+`;
+
+});
+
+container.innerHTML += `
+
+<div class="dashboard-card">
+
+<h3>
+👤 ${pesanan.namaPembeli || "-"}
+</h3>
+
+<p>
+📱 ${pesanan.whatsapp || "-"}
+</p>
+
+<p>
+📍 ${pesanan.alamat || "-"}
+</p>
+
+<hr>
+
+<h4>Produk Dibeli</h4>
+
+<ul>
+${produkHtml}
+</ul>
+
+<hr>
+
+<p>
+💰 Total :
+Rp ${Number(
+pesanan.totalBayar || 0
+).toLocaleString("id-ID")}
+</p>
+
+<p>
+📦 Status :
+<b>${pesanan.status}</b>
+</p>
+
+<br>
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+">
+
+<a
+target="_blank"
+href="https://wa.me/${
+(pesanan.whatsapp || "")
+.replace(/^0/,"62")
+}"
+class="btn-secondary">
+
+💬 Chat
+
+</a>
+
+<button
+onclick="updateStatus('${pesanan.id}','Diproses')"
+class="btn-primary">
+
+Diproses
+
+</button>
+
+<button
+onclick="updateStatus('${pesanan.id}','Dikirim')"
+class="btn-secondary">
+
+Dikirim
+
+</button>
+
+<button
+onclick="updateStatus('${pesanan.id}','Selesai')"
+class="btn-primary">
+
+Selesai
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+function updateStatus(id,status){
+
+updateDoc(
+doc(db,"pesanan",id),
+{
+status:status
+}
+)
+.then(()=>{
+
+alert("Status berhasil diperbarui");
+
+location.reload();
+
+})
+.catch((error)=>{
+
+alert(error.message);
+
+});
+
+}
+
+window.updateStatus = updateStatus;
+
+document
+.getElementById("searchPesanan")
+.addEventListener(
+"input",
+(e)=>{
+
+const keyword =
+e.target.value.toLowerCase();
+
+renderPesanan(
+
+semuaPesanan.filter(
+item=>
+
+(item.namaPembeli || "")
+.toLowerCase()
+.includes(keyword)
+
+)
+
+);
+
+}
+);
+
+document
+.getElementById("filterStatus")
+.addEventListener(
+"change",
+(e)=>{
+
+if(e.target.value === "all"){
+
+renderPesanan(semuaPesanan);
+
+return;
+
+}
+
+renderPesanan(
+
+semuaPesanan.filter(
+item =>
+item.status === e.target.value
+)
+
+);
+
+}
+);
+
+</script>
 </body>
+
 </html>
