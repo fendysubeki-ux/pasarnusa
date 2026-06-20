@@ -41,7 +41,18 @@ class="btn-secondary">
 
 </button></div><br><div
 id="favoritContainer"
-class="product-grid"></div></section><script>
+class="product-grid"></div></section>
+<script>
+
+const uid =
+localStorage.getItem("uid");
+
+if(!uid){
+
+window.location.href =
+"login.html";
+
+}
 
 let favorit =
 JSON.parse(
@@ -105,7 +116,7 @@ container.innerHTML += `
 <img
 src="${
 produk.gambar ||
-'https://picsum.photos/400/300'
+"https://picsum.photos/400/300"
 }"
 alt="${produk.namaProduk}">
 
@@ -116,11 +127,9 @@ ${produk.namaProduk}
 </h3>
 
 <p class="price">
-
 Rp ${Number(
 produk.harga || 0
 ).toLocaleString("id-ID")}
-
 </p>
 
 <div style="
@@ -219,6 +228,9 @@ cart.push({
 id:
 produk.id,
 
+uid:
+produk.uid || "",
+
 namaProduk:
 produk.namaProduk,
 
@@ -227,6 +239,9 @@ produk.harga,
 
 gambar:
 produk.gambar,
+
+kategori:
+produk.kategori || "",
 
 qty:1
 
