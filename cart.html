@@ -155,7 +155,7 @@ class="btn-secondary">
 
 });
 
-const ongkir = 10000;
+const ongkir = 0;
 
 cartContainer.innerHTML += `
 
@@ -168,7 +168,10 @@ Total Produk : ${cart.length}
 <h3>
 Total Item : ${totalItem}
 </h3>
-
+<p>
+🏪 UMKM :
+${cart[0]?.namaToko || "-"}
+</p>
 <p>
 Subtotal :
 Rp ${totalBelanja.toLocaleString("id-ID")}
@@ -176,7 +179,7 @@ Rp ${totalBelanja.toLocaleString("id-ID")}
 
 <p>
 Estimasi Ongkir :
-Rp ${ongkir.toLocaleString("id-ID")}
+Dihitung saat checkout
 </p>
 
 <hr>
@@ -332,10 +335,36 @@ return;
 
 }
 
+if(
+cart.length > 0
+){
+
+const uidUmkm =
+cart[0].uid;
+
+const bedaUmkm =
+cart.some(
+(item)=>
+item.uid !== uidUmkm
+);
+
+if(bedaUmkm){
+
+alert(
+"Saat ini checkout hanya mendukung produk dari 1 UMKM dalam 1 pesanan"
+);
+
+return;
+
+}
+
+}
+
 window.location.href =
 "checkout.html";
 
 };
 
-</script></body>
+</script>
+</body>
 </html>
