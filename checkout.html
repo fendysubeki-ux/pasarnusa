@@ -87,7 +87,8 @@ collection,
 addDoc,
 getDocs,
 query,
-where
+where,
+serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
@@ -107,11 +108,14 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+const db =
+getFirestore(app);
 
-const auth = getAuth(app);
+const auth =
+getAuth(app);
 
 await auth.authStateReady();
 
@@ -137,8 +141,10 @@ const subtotal =
 cart.reduce(
 (total,item)=>
 total +
-(Number(item.harga || 0) *
-Number(item.qty || 1)),
+(
+Number(item.harga || 0) *
+Number(item.qty || 1)
+),
 0
 );
 
@@ -149,36 +155,53 @@ subtotal +
 ongkir -
 diskon;
 
-document.getElementById("subtotalInfo").innerText =
+document.getElementById(
+"subtotalInfo"
+).innerText =
 "Subtotal : Rp " +
 subtotal.toLocaleString("id-ID");
 
-document.getElementById("ongkirInfo").innerText =
+document.getElementById(
+"ongkirInfo"
+).innerText =
 "Ongkir : Rp " +
 ongkir.toLocaleString("id-ID");
 
-document.getElementById("diskonInfo").innerText =
+document.getElementById(
+"diskonInfo"
+).innerText =
 "Diskon : Rp " +
 diskon.toLocaleString("id-ID");
 
-document.getElementById("totalBayar").innerText =
+document.getElementById(
+"totalBayar"
+).innerText =
 "Total : Rp " +
 total.toLocaleString("id-ID");
 
-document.getElementById("pendapatanUmkm").innerText =
+document.getElementById(
+"pendapatanUmkm"
+).innerText =
 "Rp " +
-Math.round(subtotal * 0.90)
-.toLocaleString("id-ID");
+Math.round(
+subtotal * 0.90
+).toLocaleString("id-ID");
 
-document.getElementById("komisiAffiliate").innerText =
+document.getElementById(
+"komisiAffiliate"
+).innerText =
 "Rp " +
-Math.round(subtotal * 0.05)
-.toLocaleString("id-ID");
+Math.round(
+subtotal * 0.05
+).toLocaleString("id-ID");
 
-document.getElementById("pendapatanPlatform").innerText =
+document.getElementById(
+"pendapatanPlatform"
+).innerText =
 "Rp " +
-Math.round(subtotal * 0.05)
-.toLocaleString("id-ID");
+Math.round(
+subtotal * 0.05
+).toLocaleString("id-ID");
 
 }
 
@@ -231,41 +254,50 @@ document.getElementById(
 
 if(!kode) return;
 
-const voucher =
+const voucherSnap =
 await getDocs(
+
 query(
 collection(db,"voucher"),
 where("kode","==",kode),
 where("aktif","==",true)
 )
+
 );
 
-if(voucher.empty){
+if(voucherSnap.empty){
 
-alert("Voucher tidak ditemukan");
+alert(
+"Voucher tidak ditemukan"
+);
+
 return;
 
 }
 
-const data =
-voucher.docs[0].data();
+const voucher =
+voucherSnap.docs[0].data();
 
 diskon =
 Math.floor(
 subtotal *
-(data.diskon / 100)
+(Number(voucher.diskon || 0) / 100)
 );
 
 voucherDipakai =
-data.kode;
+voucher.kode;
 
 document.getElementById(
 "voucherInfo"
 ).innerText =
 "Voucher aktif : " +
-data.kode;
+voucher.kode;
 
 updateTotal();
+
+alert(
+"Voucher berhasil digunakan"
+);
 
 }
 );
@@ -276,6 +308,13 @@ document
 "click",
 async()=>{
 
+const btn =
+document.getElementById(
+"checkoutBtn"
+);
+
+try{
+
 if(!auth.currentUser){
 
 window.location.href =
@@ -285,32 +324,76 @@ return;
 
 }
 
+const nama =
+document.getElementById(
+"namaPembeli"
+).value.trim();
+
+const whatsapp =
+document.getElementById(
+"whatsappPembeli"
+).value.trim();
+
+const alamat =
+document.getElementById(
+"alamatPembeli"
+).value.trim();
+
+const kota =
+document.getElementById(
+"kotaTujuan"
+).value;
+
 if(
-!document.getElementById("namaPembeli").value ||
-!document.getElementById("whatsappPembeli").value ||
-!document.getElementById("alamatPembeli").value
+!nama ||
+!whatsapp ||
+!alamat
 ){
 
-alert("Lengkapi data pembeli");
+alert(
+"Lengkapi data pembeli"
+);
 
 return;
 
 }
 
 if(
-!document.getElementById("kotaTujuan").value
+whatsapp.length < 10
 ){
 
-alert("Pilih kota tujuan");
+alert(
+"Nomor WhatsApp tidak valid"
+);
 
 return;
 
 }
+
+if(!kota){
+
+alert(
+"Pilih kota tujuan"
+);
+
+return;
+
+}
+
+btn.disabled = true;
+
+btn.innerText =
+"Membuat Pesanan...";
 
 const total =
 subtotal +
 ongkir -
 diskon;
+
+const affiliateUid =
+localStorage.getItem(
+"affiliateUid"
+) || "";
 
 const docRef =
 await addDoc(
@@ -323,17 +406,19 @@ auth.currentUser.uid,
 uidUmkm:
 cart[0]?.uid || "",
 
-namaPembeli:
-document.getElementById("namaPembeli").value,
+produk:
+cart[0]?.namaProduk || "-",
 
-whatsapp:
-document.getElementById("whatsappPembeli").value,
+produkId:
+cart[0]?.id || "",
 
-alamat:
-document.getElementById("alamatPembeli").value,
+namaPembeli:nama,
 
-kota:
-document.getElementById("kotaTujuan").value,
+whatsapp:whatsapp,
+
+alamat:alamat,
+
+kota:kota,
 
 items:cart,
 
@@ -345,38 +430,84 @@ Number(item.qty || 1),
 0
 ),
 
+subtotal:
 subtotal,
+
+ongkir:
 ongkir,
+
+diskon:
 diskon,
 
 voucher:
 voucherDipakai,
 
-affiliate:
-localStorage.getItem("affiliate"),
+affiliateUid:
+affiliateUid,
+
+pendapatanUmkm:
+Math.round(
+subtotal * 0.90
+),
+
+komisiAffiliate:
+Math.round(
+subtotal * 0.05
+),
+
+pendapatanPlatform:
+Math.round(
+subtotal * 0.05
+),
 
 status:
 "Belum Bayar",
 
+statusUmkm:
+"Pesanan Baru",
+
 statusPembayaran:
 "Belum Bayar",
 
+total:
 total,
-totalBayar:total,
+
+totalBayar:
+total,
 
 createdAt:
-new Date()
+serverTimestamp()
 
 }
 );
 
-localStorage.removeItem("cart");
+localStorage.removeItem(
+"cart"
+);
 
-alert("ID BARU = " + docRef.id);
+alert(
+"Pesanan berhasil dibuat"
+);
 
 window.location.href =
 "upload-bukti.html?id=" +
 docRef.id;
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+error.message
+);
+
+btn.disabled = false;
+
+btn.innerText =
+"Buat Pesanan";
+
+}
 
 }
 );
