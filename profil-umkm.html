@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,13 +12,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
-
 </head>
+
 <body>
 
-<!-- HEADER TOKO -->
-
 <section class="shop-header">
+
+<a href="produk.html" class="btn-secondary">
+⬅️ Kembali Belanja
+</a>
 
 <img
 id="logoToko"
@@ -39,6 +40,7 @@ Memuat informasi toko...
 
 <a
 id="waToko"
+href="#"
 target="_blank"
 class="btn-primary">
 
@@ -47,10 +49,10 @@ class="btn-primary">
 </a>
 
 <button
-id="followToko"
+disabled
 class="btn-secondary">
 
-⭐ Follow Toko
+⭐ Follow Segera Hadir
 
 </button>
 
@@ -58,101 +60,63 @@ class="btn-secondary">
 
 </section>
 
-<!-- STATISTIK TOKO -->
-
 <section class="dashboard">
 
 <div class="dashboard-grid">
 
 <div class="dashboard-card">
-
 <h2 id="totalProduk">0</h2>
-
 <p>Total Produk</p>
-
 </div>
 
 <div class="dashboard-card">
-
 <h2 id="totalTerjual">0</h2>
-
 <p>Total Terjual</p>
-
 </div>
 
 <div class="dashboard-card">
-
 <h2 id="ratingToko">0</h2>
-
 <p>Rating Toko</p>
-
 </div>
 
 <div class="dashboard-card">
-
 <h2 id="totalReview">0</h2>
-
 <p>Total Review</p>
-
 </div>
 
 </div>
 
 </section>
 
-<!-- INFORMASI TOKO -->
-
 <section class="dashboard">
 
-<h2>ℹ Informasi Toko</h2>
+<h2>ℹ️ Informasi Toko</h2>
 
 <div class="dashboard-grid">
 
 <div class="dashboard-card">
-
 <h3>📍 Alamat</h3>
-
-<p id="alamatToko">
-Belum tersedia
-</p>
-
+<p id="alamatToko">Belum tersedia</p>
 </div>
 
 <div class="dashboard-card">
-
 <h3>📱 WhatsApp</h3>
-
-<p id="nomorToko">
--
-</p>
-
+<p id="nomorToko">-</p>
 </div>
 
 <div class="dashboard-card">
-
 <h3>🕒 Jam Operasional</h3>
-
-<p id="jamToko">
--
-</p>
-
+<p id="jamToko">-</p>
 </div>
 
 <div class="dashboard-card">
-
 <h3>📅 Bergabung</h3>
-
-<p id="tanggalGabung">
--
-</p>
-
+<p id="tanggalGabung">-</p>
 </div>
 
 </div>
 
 </section>
-
-<!-- PRODUK TOKO -->
 
 <section class="products">
 
@@ -179,13 +143,14 @@ class="search-box">
 id="produkToko"
 class="product-grid">
 
-<p>Memuat produk...</p>
+<div class="dashboard-card">
+<h3>Memuat Produk...</h3>
+<p>Mohon tunggu sebentar</p>
+</div>
 
 </div>
 
 </section>
-
-<!-- REVIEW TOKO -->
 
 <section class="dashboard">
 
@@ -196,16 +161,12 @@ id="reviewToko"
 class="dashboard-grid">
 
 <div class="dashboard-card">
-
 <p>Belum ada ulasan.</p>
-
 </div>
 
 </div>
 
 </section>
-
-<!-- PRODUK TERLARIS -->
 
 <section class="products">
 
@@ -215,11 +176,13 @@ class="dashboard-grid">
 id="produkTerlaris"
 class="product-grid">
 
+<div class="dashboard-card">
+<p>Belum ada produk terlaris.</p>
+</div>
+
 </div>
 
 </section>
-
-<!-- FOOTER TOKO -->
 
 <section class="dashboard">
 
@@ -236,6 +199,8 @@ PasarNusa mendukung UMKM Indonesia berkembang melalui marketplace digital.
 </div>
 
 </section>
+
+<script type="module" src="toko.js"></script>
 
 </body>
 </html>
