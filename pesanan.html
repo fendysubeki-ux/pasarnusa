@@ -156,7 +156,11 @@ container.innerHTML += `
 data-status="${pesanan.status}">
 
 <h3>
-${pesanan.produk || "Produk"}
+${
+pesanan.items?.[0]?.namaProduk
+||
+"Produk"
+}
 </h3>
 
 <p>
@@ -172,7 +176,7 @@ ${pesanan.namaPembeli || "-"}
 <p>
 Total:
 Rp ${Number(
-pesanan.harga || 0
+pesanan.totalBayar || 0
 ).toLocaleString("id-ID")}
 </p>
 
@@ -192,7 +196,9 @@ pesanan.createdAt.seconds * 1000
 </p>
 
 <a
-href="produk-detail.html?id=${pesanan.produkId || ''}"
+href="produk-detail.html?id=${
+pesanan.items?.[0]?.id || ''
+}"
 class="btn-primary">
 
 Lihat Produk
