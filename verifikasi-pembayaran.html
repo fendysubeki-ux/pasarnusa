@@ -74,6 +74,8 @@ class="dashboard-grid">
 
 <script type="module">
 
+<!-- TEMPATKAN SCRIPT INI TEPAT SEBELUM </body> --><script type="module">
+
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
@@ -81,6 +83,8 @@ import {
 getFirestore,
 collection,
 getDocs,
+query,
+where,
 doc,
 updateDoc,
 addDoc
@@ -111,171 +115,142 @@ await auth.authStateReady();
 
 if(!auth.currentUser){
 
-window.location.href =
-"login.html";
+window.location.href = "login.html";
 
 }
 
-const role =
-localStorage.getItem("role");
-
-if(role !== "umkm"){
-
-window.location.href =
-"index.html";
-
-}
-
-const uid =
-auth.currentUser.uid;
+const uid = auth.currentUser.uid;
 
 const container =
 document.getElementById(
 "pesananContainer"
 );
 
-try{
+let semuaPesanan = [];
+
+loadPesanan();
+
+async function loadPesanan(){
+
+container.innerHTML =
+"<p>Memuat data...</p>";
 
 const snapshot =
 await getDocs(
 collection(db,"pesanan")
 );
 
-container.innerHTML = "";
-
-let totalMenunggu = 0;
-let totalDiproses = 0;
-let totalDikirim = 0;
+semuaPesanan = [];
 
 snapshot.forEach((docSnap)=>{
 
-const data =
-docSnap.data();
+const data = docSnap.data();
 
 const adaProdukSaya =
-(data.items || [])
-.some(
+(data.items || []).some(
 item => item.uid === uid
 );
 
-if(!adaProdukSaya){
+if(!adaProdukSaya) return;
+
+semuaPesanan.push({
+id:docSnap.id,
+...data
+});
+
+});
+
+renderPesanan(semuaPesanan);
+
+}
+
+function renderPesanan(data){
+
+container.innerHTML = "";
+
+if(data.length === 0){
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+Tidak Ada Data
+</h3>
+
+<p>
+Belum ada pembayaran masuk.
+</p>
+
+</div>
+
+`;
 
 return;
 
 }
 
-if(
-data.status ===
-"Menunggu Verifikasi"
-){
-totalMenunggu++;
-}
-
-if(
-data.status ===
-"Diproses"
-){
-totalDiproses++;
-}
-
-if(
-data.status ===
-"Dikirim"
-){
-totalDikirim++;
-}
+data.forEach((pesanan)=>{
 
 container.innerHTML += `
 
-<div
-class="dashboard-card pembayaran-item">
+<div class="dashboard-card pembayaran-item">
 
 <h3>
-${data.namaPembeli || "-"}
+${pesanan.namaPembeli || "-"}
 </h3>
 
 <p>
-📱 ${data.whatsapp || "-"}
+📱 ${pesanan.whatsapp || "-"}
 </p>
 
 <p>
-📍 ${data.alamat || "-"}
-</p>
-
-<hr>
-
-<p>
-💰 Total:
-<b>
-Rp ${Number(
-data.totalBayar || 0
+💰 Rp ${Number(
+pesanan.totalBayar || 0
 ).toLocaleString("id-ID")}
-</b>
 </p>
 
 <p>
-📦 Status:
-<b>
-${data.status || "-"}
-</b>
+📦 ${pesanan.status || "-"}
 </p>
 
 ${
-data.buktiTransfer
+pesanan.buktiTransfer
 ?
-
 `
 <img
-src="${data.buktiTransfer}"
+src="${pesanan.buktiTransfer}"
 style="
 width:100%;
-border-radius:12px;
 margin-top:10px;
+border-radius:12px;
 ">
-
-<br><br>
-
-<a
-href="${data.buktiTransfer}"
-target="_blank"
-class="btn-secondary">
-
-Lihat Full
-
-</a>
 `
-
 :
-
-`
-<p>
-Belum upload bukti transfer
-</p>
-`
-
+"<p>Belum ada bukti transfer</p>"
 }
 
 <br><br>
 
 <button
-onclick="verifikasiPesanan('${docSnap.id}','${data.uidPembeli}')"
-class="btn-primary">
+class="btn-primary"
+onclick="verifikasiPesanan('${pesanan.id}','${pesanan.uidPembeli}')">
 
 ✅ Verifikasi
 
 </button>
 
 <button
-onclick="ubahStatus('${docSnap.id}','${data.uidPembeli}','Dikirim')"
-class="btn-secondary">
+class="btn-secondary"
+onclick="ubahStatus('${pesanan.id}','${pesanan.uidPembeli}','Dikirim')">
 
 🚚 Dikirim
 
 </button>
 
 <button
-onclick="ubahStatus('${docSnap.id}','${data.uidPembeli}','Selesai')"
-class="btn-secondary">
+class="btn-secondary"
+onclick="ubahStatus('${pesanan.id}','${pesanan.uidPembeli}','Selesai')">
 
 ✔️ Selesai
 
@@ -287,41 +262,23 @@ class="btn-secondary">
 
 });
 
-document.getElementById(
-"totalMenunggu"
-).innerText =
-totalMenunggu;
-
-document.getElementById(
-"totalDiproses"
-).innerText =
-totalDiproses;
-
-document.getElementById(
-"totalDikirim"
-).innerText =
-totalDikirim;
-
-}catch(error){
-
-console.error(error);
-
-container.innerHTML = `
-<div class="dashboard-card">
-Gagal memuat data pembayaran
-</div>
-`;
-
 }
 
 window.verifikasiPesanan =
 async(id,pembeli)=>{
 
+if(
+!confirm(
+"Verifikasi pembayaran ini?"
+)
+){
+return;
+}
+
 await updateDoc(
 doc(db,"pesanan",id),
 {
-status:"Diproses",
-verifiedAt:new Date()
+status:"Diproses"
 }
 );
 
@@ -336,9 +293,7 @@ createdAt:new Date()
 }
 );
 
-alert(
-"Pembayaran berhasil diverifikasi"
-);
+alert("Berhasil");
 
 location.reload();
 
@@ -360,16 +315,14 @@ collection(db,"notifikasi"),
 uid:pembeli,
 judul:"Status Pesanan",
 pesan:
-"Status pesanan berubah menjadi " +
+"Pesanan berubah menjadi " +
 status,
 dibaca:false,
 createdAt:new Date()
 }
 );
 
-alert(
-"Status berhasil diperbarui"
-);
+alert("Status diperbarui");
 
 location.reload();
 
@@ -384,22 +337,17 @@ document
 const keyword =
 e.target.value.toLowerCase();
 
-document
-.querySelectorAll(
-".pembayaran-item"
-)
-.forEach((item)=>{
+renderPesanan(
 
-item.style.display =
+semuaPesanan.filter(item=>
 
-item.innerText
+(item.namaPembeli || "")
 .toLowerCase()
 .includes(keyword)
 
-? "block"
-: "none";
+)
 
-});
+);
 
 }
 );
