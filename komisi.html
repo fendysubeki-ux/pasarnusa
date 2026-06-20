@@ -18,19 +18,15 @@
 
 <section class="dashboard">
 
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+<div class="dashboard-header">
 
 <div>
-<h1 id="judulAffiliate">
-💰 Riwayat Komisi Affiliate
-</h1>
-<p>
-Pantau seluruh komisi referral Anda
-</p>
+<h1>💰 Riwayat Komisi Affiliate</h1>
+<p>Pantau seluruh komisi referral Anda</p>
 </div>
 
-<a href="dashboard-affiliate.html" class="btn-secondary">
-← Dashboard Affiliate
+<a href="affiliate-dashboard.html" class="btn-secondary">
+⬅ Dashboard Affiliate
 </a>
 
 </div>
@@ -39,41 +35,31 @@ Pantau seluruh komisi referral Anda
 
 <div class="dashboard-card">
 <h3>Total Komisi</h3>
-<h2 id="totalKomisi">
-Rp 0
-</h2>
+<h2 id="totalKomisi">Rp 0</h2>
 </div>
 
 <div class="dashboard-card">
 <h3>Komisi Cair</h3>
-<h2 id="komisiCair">
-Rp 0
-</h2>
+<h2 id="komisiCair">Rp 0</h2>
 </div>
 
 <div class="dashboard-card">
 <h3>Komisi Pending</h3>
-<h2 id="komisiPending">
-Rp 0
-</h2>
+<h2 id="komisiPending">Rp 0</h2>
 </div>
 
 <div class="dashboard-card">
 <h3>Total Referral</h3>
-<h2 id="totalReferral">
-0
-</h2>
+<h2 id="totalReferral">0</h2>
 </div>
 
 </div>
 
 <h2 style="margin-top:30px;">
-Riwayat Komisi
+📋 Riwayat Komisi
 </h2>
 
-<div
-id="komisiContainer"
-class="dashboard-grid">
+<div id="komisiContainer" class="dashboard-grid">
 
 <div class="dashboard-card">
 <p>Memuat data...</p>
@@ -86,60 +72,53 @@ class="dashboard-grid">
 <script type="module">
 
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
 getFirestore,
 collection,
+query,
+where,
 getDocs,
 doc,
-getDoc,
-query,
-where
+getDoc
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 import {
-getAuth
+getAuth,
+onAuthStateChanged
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_AUTH_DOMAIN",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_STORAGE_BUCKET",
-messagingSenderId:"YOUR_MESSAGING_ID",
-appId:"YOUR_APP_ID"
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
-
 const auth = getAuth(app);
 
-await auth.authStateReady();
+onAuthStateChanged(auth, async(user)=>{
 
-if(!auth.currentUser){
+if(!user){
 
-window.location.href =
-"login.html";
+window.location.href="login.html";
+return;
 
 }
 
-const uid =
-auth.currentUser.uid;
+const uid = user.uid;
 
-const userDoc =
-await getDoc(
-doc(
-db,
-"users",
-uid
-)
+const userDoc = await getDoc(
+doc(db,"users",uid)
 );
 
 if(
@@ -147,69 +126,43 @@ if(
 userDoc.data().role !== "affiliate"
 ){
 
-alert(
-"Akses khusus Affiliate"
-);
+alert("Akses khusus affiliate");
 
-window.location.href =
-"index.html";
-
-throw new Error(
-"Bukan Affiliate"
-);
+window.location.href="index.html";
+return;
 
 }
 
-document.getElementById(
-"judulAffiliate"
-).innerText =
-"💰 Komisi Affiliate " +
-(
-userDoc.data().namaAffiliate ||
-userDoc.data().nama ||
-"PasarNusa"
-);
-
 const container =
-document.getElementById(
-"komisiContainer"
-);
+document.getElementById("komisiContainer");
 
-container.innerHTML = "";
-
-const snapshot =
-await getDocs(
-query(
-collection(db,"pesanan"),
-where(
-"affiliate",
-"==",
-uid
-)
-)
-);
+container.innerHTML="";
 
 let totalKomisi = 0;
 let komisiCair = 0;
 let komisiPending = 0;
 let totalReferral = 0;
 
-snapshot.forEach((item)=>{
+const snapshot = await getDocs(
+query(
+collection(db,"pesanan"),
+where("affiliateUid","==",uid)
+)
+);
 
-const data = item.data();
+snapshot.forEach((docData)=>{
+
+const data = docData.data();
 
 const komisi =
-Number(
-data.komisiAffiliate || 0
-);
+Number(data.komisiAffiliate || 0);
 
 totalKomisi += komisi;
 totalReferral++;
 
 if(
-String(data.status)
-.toLowerCase() ===
-"selesai"
+String(data.status).toLowerCase()
+==="selesai"
 ){
 
 komisiCair += komisi;
@@ -233,15 +186,25 @@ Rp ${komisi.toLocaleString("id-ID")}
 </p>
 
 <p>
-📦 ${data.status || "-"}
+📦 ${data.namaProduk || "-"}
+</p>
+
+<p>
+<span class="
+${String(data.status).toLowerCase()==='selesai'
+? 'status-selesai'
+: 'status-proses'}
+">
+${data.status}
+</span>
 </p>
 
 <p>
 📅 ${
-data.createdAt
+data.createdAt?.seconds
 ?
 new Date(
-data.createdAt.seconds * 1000
+data.createdAt.seconds*1000
 ).toLocaleDateString("id-ID")
 :
 "-"
@@ -254,27 +217,23 @@ data.createdAt.seconds * 1000
 
 });
 
-document.getElementById(
-"totalKomisi"
-).innerText =
+document.getElementById("totalKomisi")
+.innerText =
 "Rp " +
 totalKomisi.toLocaleString("id-ID");
 
-document.getElementById(
-"komisiCair"
-).innerText =
+document.getElementById("komisiCair")
+.innerText =
 "Rp " +
 komisiCair.toLocaleString("id-ID");
 
-document.getElementById(
-"komisiPending"
-).innerText =
+document.getElementById("komisiPending")
+.innerText =
 "Rp " +
 komisiPending.toLocaleString("id-ID");
 
-document.getElementById(
-"totalReferral"
-).innerText =
+document.getElementById("totalReferral")
+.innerText =
 totalReferral;
 
 if(snapshot.empty){
@@ -288,7 +247,7 @@ Belum Ada Komisi
 </h3>
 
 <p>
-Komisi affiliate akan muncul di sini setelah ada transaksi referral.
+Komisi affiliate akan muncul otomatis setelah ada pembelian melalui link affiliate Anda.
 </p>
 
 </div>
@@ -296,6 +255,8 @@ Komisi affiliate akan muncul di sini setelah ada transaksi referral.
 `;
 
 }
+
+});
 
 </script>
 
