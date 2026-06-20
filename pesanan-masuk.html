@@ -105,11 +105,7 @@ const snapshot =
 await getDocs(
 query(
 collection(db,"pesanan"),
-where(
-"uid",
-"==",
-user.uid
-)
+where("uidUmkm","==",user.uid)
 )
 );
 
@@ -120,9 +116,24 @@ let verifikasi = 0;
 let proses = 0;
 let kirim = 0;
 
-snapshot.forEach((item)=>{
+const daftarPesanan = [];
 
-const data = item.data();
+snapshot.forEach((docSnap)=>{
+
+daftarPesanan.push({
+id:docSnap.id,
+...docSnap.data()
+});
+
+});
+
+daftarPesanan.sort(
+(a,b)=>
+(b.createdAt?.seconds || 0) -
+(a.createdAt?.seconds || 0)
+);
+
+daftarPesanan.forEach((data)=>{
 
 total++;
 
@@ -140,50 +151,24 @@ let daftarProduk = "";
 (data.items || []).forEach((produk)=>{
 
 daftarProduk += `
-<li>
-${produk.namaProduk}
-x ${produk.qty}
-</li>
-`;
 
-});
+  <li>
+  ${produk.namaProduk} x ${produk.qty}
+  </li>
+  `;});
 
 container.innerHTML += `
 
-<div class="dashboard-card pesanan-item">
-
-<h3>
-${data.namaPembeli || "-"}
-</h3>
-
-<p>
-📱 ${data.whatsapp || "-"}
-</p>
-
-<p>
-📍 ${data.alamat || "-"}
-</p>
-
-<hr>
-
-<ul>
-${daftarProduk}
-</ul>
-
-<p>
-💰 Rp ${Number(
-data.totalBayar || 0
-).toLocaleString("id-ID")}
-</p>
-
-<p>
-📦 Status:
-<b>
-${data.status || "-"}
-</b>
-</p>
-
-${
+ <div class="dashboard-card pesanan-item"> <h3>${data.namaPembeli || "-"}</h3> <p>📱 ${data.whatsapp || "-"}</p> <p>📍 ${data.alamat || "-"}</p> <hr> <ul>
+ ${daftarProduk}
+ </ul> <p>
+ 💰 Rp ${Number(
+ data.totalBayar || 0
+ ).toLocaleString("id-ID")}
+ </p> <p>
+ 📦 Status:
+ <b>${data.status || "-"}</b>
+ </p>${
 data.buktiTransfer
 ?
 `
@@ -194,81 +179,56 @@ class="btn-secondary">
 
 Lihat Bukti Transfer
 
-</a>
-`
-:
-`
-<p>
-Belum Upload Bukti
-</p>
-`
-}
-
-<br><br>
+ </a>
+ `
+ :
+ `
+ <p>Belum Upload Bukti</p>
+ `
+ }<br><br>
 
 <input
 type="text"
-id="resi-${item.id}"
+id="resi-${data.id}"
 placeholder="Nomor Resi">
 
 <br><br>
 
-<select
-id="status-${item.id}">
-
-<option value="Diproses">
-Diproses
-</option>
-
-<option value="Dikirim">
-Dikirim
-</option>
-
-<option value="Selesai">
-Selesai
-</option>
-
-<option value="Ditolak">
-Ditolak
-</option>
-
-</select>
-
-<br><br>
+ <select id="status-${data.id}"> <option value="Diproses">
+ Diproses
+ </option> <option value="Dikirim">
+ Dikirim
+ </option> <option value="Selesai">
+ Selesai
+ </option> <option value="Ditolak">
+ Ditolak
+ </option> </select><br><br>
 
 <button
-onclick="updateStatus('${item.id}','${data.uidPembeli}')"
+onclick="updateStatus('${data.id}','${data.uidPembeli}')"
 class="btn-primary">
 
 Update Status
 
-</button>
-
-</div>
-
-`;
+ </button> </div>`;
 
 });
 
 document.getElementById(
 "totalPesanan"
-).innerText =
-total;
+).innerText = total;
 
 document.getElementById(
 "menungguVerifikasi"
-).innerText =
-verifikasi;
+).innerText = verifikasi;
 
 document.getElementById(
 "diproses"
-).innerText =
-proses;
+).innerText = proses;
 
 document.getElementById(
 "dikirim"
-).innerText =
-kirim;
+).innerText = kirim;
 
 });
 
