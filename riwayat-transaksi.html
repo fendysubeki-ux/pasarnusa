@@ -1,277 +1,115 @@
-<!DOCTYPE html><html lang="id"><head>
+<!DOCTYPE html>
+<html lang="id">
+<head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Riwayat Transaksi - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><h1>💳 Riwayat Transaksi</h1><p>
-Pantau seluruh transaksi toko Anda.
-</p><div class="dashboard-grid"><div class="dashboard-card">
-<h3 id="totalTransaksi">0</h3>
-<p>Total Transaksi</p>
-</div><div class="dashboard-card">
-<h3 id="totalOmzet">Rp 0</h3>
-<p>Total Omzet</p>
-</div><div class="dashboard-card">
-<h3 id="transaksiSelesai">0</h3>
-<p>Transaksi Selesai</p>
-</div><div class="dashboard-card">
-<h3 id="transaksiPending">0</h3>
-<p>Belum Selesai</p>
-</div></div></section><section class="dashboard"><div style="
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:20px;
-"><input
-type="text"
-id="searchInput"
-placeholder="Cari pembeli..."
-class="search-box">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<select id="filterStatus"><option value="all">
-Semua Status
-</option><option value="Belum Bayar">
-Belum Bayar
-</option><option value="Menunggu Verifikasi">
-Menunggu Verifikasi
-</option><option value="Diproses">
-Diproses
-</option><option value="Dikirim">
-Dikirim
-</option><option value="Selesai">
-Selesai
-</option></select></div><div
-id="transaksiContainer"
-class="dashboard-grid"><div class="dashboard-card"><h3>Memuat transaksi...</h3></div></div></section><script type="module">
+<title>Riwayat Transaksi - PasarNusa</title>
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-import {
-getFirestore,
-collection,
-query,
-where,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+<link rel="stylesheet" href="style.css">
+</head>
 
-const firebaseConfig = {
+<body>
 
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
+<section class="dashboard">
 
-};
+<div class="dashboard-header">
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href = "login.html";
-
-}
-
-const uid = auth.currentUser.uid;
-
-const container =
-document.getElementById("transaksiContainer");
-
-let semuaTransaksi = [];
-
-const snapshot =
-await getDocs(
-
-query(
-collection(db,"pesanan"),
-where("uidUmkm","==",uid)
-)
-
-);
-
-let totalTransaksi = 0;
-let totalOmzet = 0;
-let transaksiSelesai = 0;
-let transaksiPending = 0;
-
-snapshot.forEach((docSnap)=>{
-
-const data = docSnap.data();
-
-semuaTransaksi.push({
-id:docSnap.id,
-...data
-});
-
-totalTransaksi++;
-
-totalOmzet +=
-Number(data.totalBayar || 0);
-
-if(data.status === "Selesai"){
-
-transaksiSelesai++;
-
-}else{
-
-transaksiPending++;
-
-}
-
-});
-
-document.getElementById("totalTransaksi").innerText =
-totalTransaksi;
-
-document.getElementById("totalOmzet").innerText =
-"Rp " +
-totalOmzet.toLocaleString("id-ID");
-
-document.getElementById("transaksiSelesai").innerText =
-transaksiSelesai;
-
-document.getElementById("transaksiPending").innerText =
-transaksiPending;
-
-renderTransaksi(semuaTransaksi);
-
-function renderTransaksi(data){
-
-container.innerHTML = "";
-
-if(data.length === 0){
-
-container.innerHTML = `
-
-<div class="dashboard-card">
-
-<h3>Belum Ada Transaksi</h3>
-
-<p>
-Transaksi akan muncul di sini.
-</p>
-
+<div>
+<h1>💳 Riwayat Transaksi</h1>
+<p>Lihat seluruh transaksi toko Anda</p>
 </div>
 
-`;
-
-return;
-
-}
-
-data.forEach((trx)=>{
-
-container.innerHTML += `
-
-<div class="dashboard-card transaksi-item">
-
-<h3>
-
-#${trx.id.substring(0,8)}
-
-</h3>
-
-<p>
-
-👤 ${trx.namaPembeli || "-"}
-
-</p>
-
-<p>
-
-💰 Rp ${Number(
-trx.totalBayar || 0
-).toLocaleString("id-ID")}
-
-</p>
-
-<p>
-
-📦 ${trx.status || "-"}
-
-</p>
-
-<p>
-
-🛍 ${(trx.items || []).length} Produk
-
-</p>
-
-<a
-href="detail-transaksi.html?id=${trx.id}"
-class="btn-primary">
-
-Lihat Detail
-
+<a href="dashboard-umkm.html" class="btn-secondary">
+⬅ Dashboard
 </a>
 
 </div>
 
-`;
+<div class="dashboard-grid">
 
-});
+<div class="dashboard-card">
+<h3 id="totalTransaksi">0</h3>
+<p>Total Transaksi</p>
+</div>
 
-}
+<div class="dashboard-card">
+<h3 id="transaksiSelesai">0</h3>
+<p>Transaksi Selesai</p>
+</div>
 
-document
-.getElementById("searchInput")
-.addEventListener(
-"input",
-filterData
-);
+<div class="dashboard-card">
+<h3 id="transaksiPending">0</h3>
+<p>Transaksi Pending</p>
+</div>
 
-document
-.getElementById("filterStatus")
-.addEventListener(
-"change",
-filterData
-);
+<div class="dashboard-card">
+<h3 id="totalPendapatan">Rp 0</h3>
+<p>Total Pendapatan</p>
+</div>
 
-function filterData(){
+</div>
 
-const keyword =
-document
-.getElementById("searchInput")
-.value
-.toLowerCase();
+<br>
 
-const status =
-document
-.getElementById("filterStatus")
-.value;
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
 
-let hasil =
-semuaTransaksi.filter((item)=>{
+<input
+type="text"
+id="searchTransaksi"
+class="search-box"
+placeholder="Cari transaksi...">
 
-const cocokNama =
+<select id="filterStatus">
 
-(item.namaPembeli || "")
-.toLowerCase()
-.includes(keyword);
+<option value="all">
+Semua Status
+</option>
 
-const cocokStatus =
+<option value="Selesai">
+Selesai
+</option>
 
-status === "all"
-||
-item.status === status;
+<option value="Diproses">
+Diproses
+</option>
 
-return cocokNama && cocokStatus;
+<option value="Dikirim">
+Dikirim
+</option>
 
-});
+<option value="Belum Bayar">
+Belum Bayar
+</option>
 
-renderTransaksi(hasil);
+</select>
 
-}
+</div>
 
-</script></body>
+<br>
+
+<div
+id="transaksiContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3>Memuat Data...</h3>
+
+<p>Mohon tunggu sebentar</p>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module" src="riwayat-transaksi.js"></script>
+
+</body>
 </html>
