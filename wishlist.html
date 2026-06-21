@@ -1,33 +1,66 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Wishlist Saya - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="products"><h1>❤️ Wishlist Saya</h1><p style="text-align:center;">
-Produk favorit yang Anda simpan.
-</p><p
-id="totalWishlist"
-style="text-align:center;font-weight:600;">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wishlist Saya - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="products">
+
+<div style="text-align:center;margin-bottom:30px;">
+
+<h1>❤️ Wishlist Saya</h1>
+
+<p id="totalWishlist">
 0 Produk Disimpan
-</p><div style="
+</p>
+
+<div style="
 display:flex;
 justify-content:center;
 gap:10px;
 flex-wrap:wrap;
-margin-bottom:30px;
-"><a
+margin-top:15px;
+">
+
+<a
 href="produk.html"
 class="btn-primary">
-
 🛍 Cari Produk
+</a>
 
-</a><button
+<button
 onclick="hapusSemuaWishlist()"
 class="btn-secondary">
-
 🗑 Hapus Semua
+</button>
 
-</button></div><div
+</div>
+
+</div>
+
+<div
 id="wishlistContainer"
-class="product-grid"></div></section><script>
+class="product-grid">
+
+<p>Memuat Wishlist...</p>
+
+</div>
+
+</section>
+
+<script>
 
 let wishlist =
 JSON.parse(
@@ -39,9 +72,18 @@ document.getElementById(
 "wishlistContainer"
 );
 
+const totalWishlist =
 document.getElementById(
 "totalWishlist"
-).innerText =
+);
+
+renderWishlist();
+
+function renderWishlist(){
+
+container.innerHTML = "";
+
+totalWishlist.innerText =
 wishlist.length +
 " Produk Disimpan";
 
@@ -52,11 +94,11 @@ container.innerHTML = `
 <div class="dashboard-card">
 
 <h3>
-❤️ Wishlist Kosong
+Wishlist Kosong
 </h3>
 
 <p>
-Belum ada produk yang disimpan.
+Belum ada produk favorit.
 </p>
 
 <br>
@@ -65,7 +107,7 @@ Belum ada produk yang disimpan.
 href="produk.html"
 class="btn-primary">
 
-Cari Produk
+Mulai Belanja
 
 </a>
 
@@ -73,9 +115,12 @@ Cari Produk
 
 `;
 
-}else{
+return;
 
-wishlist.forEach((produk,index)=>{
+}
+
+wishlist.forEach(
+(produk,index)=>{
 
 container.innerHTML += `
 
@@ -84,32 +129,24 @@ container.innerHTML += `
 <img
 src="${
 produk.gambar ||
-"https://picsum.photos/400/300"
+'https://picsum.photos/400/300'
 }"
 alt="${
-produk.namaProduk
+produk.namaProduk || 'Produk'
 }">
 
 <div class="product-info">
 
 <span class="category">
-
-❤️ Favorit
-
+${produk.kategori || "Produk"}
 </span>
 
 <h3>
-
-${produk.namaProduk}
-
+${produk.namaProduk || "-"}
 </h3>
 
 <p class="price">
-
-Rp ${Number(
-produk.harga || 0
-).toLocaleString("id-ID")}
-
+${produk.harga || "Rp 0"}
 </p>
 
 <div style="
@@ -128,10 +165,10 @@ Lihat Produk
 </a>
 
 <button
-onclick="hapusWishlist(${index})"
+onclick="hapusDariWishlist(${index})"
 class="btn-secondary">
 
-Hapus
+❌ Hapus
 
 </button>
 
@@ -147,8 +184,8 @@ Hapus
 
 }
 
-window.hapusWishlist =
-(index)=>{
+window.hapusDariWishlist =
+function(index){
 
 if(
 !confirm(
@@ -165,16 +202,16 @@ localStorage.setItem(
 JSON.stringify(wishlist)
 );
 
-location.reload();
+renderWishlist();
 
 };
 
 window.hapusSemuaWishlist =
-()=>{
+function(){
 
 if(
 !confirm(
-"Hapus seluruh wishlist?"
+"Hapus semua wishlist?"
 )
 ){
 return;
@@ -184,8 +221,13 @@ localStorage.removeItem(
 "favorit"
 );
 
-location.reload();
+wishlist = [];
+
+renderWishlist();
 
 };
 
-</script></body></html>
+</script>
+
+</body>
+</html>
