@@ -74,8 +74,6 @@ class="dashboard-grid">
 
 <script type="module">
 
-<!-- TEMPATKAN SCRIPT INI TEPAT SEBELUM </body> --><script type="module">
-
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
@@ -151,8 +149,12 @@ const adaProdukSaya =
 item => item.uid === uid
 );
 
-if(!adaProdukSaya) return;
-
+if(
+!adaProdukSaya ||
+!data.buktiTransfer
+){
+return;
+}
 semuaPesanan.push({
 id:docSnap.id,
 ...data
@@ -161,7 +163,38 @@ id:docSnap.id,
 });
 
 renderPesanan(semuaPesanan);
+const totalMenunggu =
+semuaPesanan.filter(
+item =>
+item.status === "Menunggu Verifikasi"
+).length;
 
+const totalDiproses =
+semuaPesanan.filter(
+item =>
+item.status === "Diproses"
+).length;
+
+const totalDikirim =
+semuaPesanan.filter(
+item =>
+item.status === "Dikirim"
+).length;
+
+document.getElementById(
+"totalMenunggu"
+).innerText =
+totalMenunggu;
+
+document.getElementById(
+"totalDiproses"
+).innerText =
+totalDiproses;
+
+document.getElementById(
+"totalDikirim"
+).innerText =
+totalDikirim;
 }
 
 function renderPesanan(data){
@@ -232,6 +265,11 @@ border-radius:12px;
 
 <br><br>
 
+${
+pesanan.status ===
+"Menunggu Verifikasi"
+?
+`
 <button
 class="btn-primary"
 onclick="verifikasiPesanan('${pesanan.id}','${pesanan.uidPembeli}')">
@@ -239,6 +277,10 @@ onclick="verifikasiPesanan('${pesanan.id}','${pesanan.uidPembeli}')">
 ✅ Verifikasi
 
 </button>
+`
+:
+""
+}
 
 <button
 class="btn-secondary"
@@ -278,7 +320,8 @@ return;
 await updateDoc(
 doc(db,"pesanan",id),
 {
-status:"Diproses"
+status:"Diproses",
+statusPembayaran:"Lunas"
 }
 );
 
