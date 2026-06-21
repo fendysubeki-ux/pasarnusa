@@ -167,69 +167,6 @@ Daftar UMKM
 </div>
 
 </section>
-<section class="premium-banner">
-
-<h2>UMKM Pilihan Minggu Ini</h2>
-
-<div class="product-grid">
-
-<div class="product-card">
-
-<img src="https://picsum.photos/400/250?11">
-
-<div class="product-info">
-
-<span class="category">
-Pilihan Editor
-</span>
-
-<h3>
-Keripik Berkah Tulungagung
-</h3>
-
-<p class="price">
-Rp25.000
-</p>
-
-<a href="produk-detail.html"
-class="btn-primary">
-Lihat Detail
-</a>
-
-</div>
-
-</div>
-
-<div class="product-card">
-
-<img src="https://picsum.photos/400/250?12">
-
-<div class="product-info">
-
-<span class="category">
-Premium
-</span>
-
-<h3>
-Kopi Robusta Nusantara
-</h3>
-
-<p class="price">
-Rp45.000
-</p>
-
-<a href="produk-detail.html"
-class="btn-primary">
-Lihat Detail
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
 
 <section class="stats">
 
@@ -643,16 +580,31 @@ const db = getFirestore(app);
 const params = new URLSearchParams(window.location.search);
 const ref = params.get("ref");
 
-if(ref){
+if(
+ref &&
+sessionStorage.getItem("affiliate_clicked") !== ref
+){
+
 localStorage.setItem("affiliate",ref);
 
+try{
 await addDoc(
 collection(db,"affiliate_clicks"),
 {
 affiliate:ref,
-tanggal:new Date()
+tanggal:new Date(),
+userAgent:navigator.userAgent
 }
 );
+}catch(e){
+console.log("Affiliate click gagal:",e);
+}
+
+sessionStorage.setItem(
+"affiliate_clicked",
+ref
+);
+
 }
 
 const produkContainer =
@@ -662,6 +614,8 @@ const snapshot =
 await getDocs(
 collection(db,"produk")
 );
+let totalProdukAktif = 0;
+
 if(snapshot.empty){
 
 produkContainer.innerHTML = `
@@ -674,14 +628,22 @@ produkContainer.innerHTML = `
 snapshot.forEach((item)=>{
 
 const data = item.data();
-if(Number(data.stok || 0) <= 0){
+
+if(
+Number(data.stok || 0) <= 0 ||
+data.status !== "Aktif"
+){
 return;
 }
+
+totalProdukAktif++;
 produkContainer.innerHTML += `
 <div class="product-card searchable"
 data-category="${data.kategori || ''}">
 
-<img src="${data.gambar?.[0] || 'https://picsum.photos/400/300'}">
+<img src="${Array.isArray(data.gambar)
+? data.gambar[0]
+: (data.gambar || 'https://picsum.photos/400/300')}">
 
 <div class="product-info">
 
@@ -689,13 +651,19 @@ data-category="${data.kategori || ''}">
 ${data.kategori || 'Produk'}
 </span>
 
-<h3>${data.namaProduk}</h3>
+<h3>${String(data.namaProduk || "")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")}</h3>
 
 <p class="price">
 Rp ${Number(data.harga || 0).toLocaleString("id-ID")}
 </p>
 
 <p>📦 Stok: ${data.stok || 0}</p>
+<p>
+🏪 ${data.namaToko || "UMKM Indonesia"}
+</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
 
 <a
 href="produk-detail.html?id=${item.id}"
@@ -703,11 +671,29 @@ class="btn-primary">
 Lihat Detail
 </a>
 
+<a
+href="profil-umkm.html?uid=${data.uid}"
+class="btn-secondary">
+🏪 Lihat Toko
+</a>
+
+</div>
+
 </div>
 </div>
 `;
 
 });
+
+document.getElementById("totalProduk").innerText =
+totalProdukAktif;
+
+document.getElementById("jumlahProduk").innerText =
+totalProdukAktif;
+
+document.getElementById("footerProduk").innerText =
+totalProdukAktif + " Produk";
+
 </script>
 <script>
 
@@ -721,15 +707,20 @@ document.getElementById("cartCount");
 
 if(cartCount){
 
-cartCount.innerText =
-cart.length;
+let totalQty = 0;
+
+cart.forEach(item=>{
+totalQty += Number(item.qty || 1);
+});
+
+cartCount.innerText = totalQty;
 
 }
 
 </script>
 <script type="module">
 
-import { initializeApp }
+import { getApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
@@ -755,27 +746,76 @@ messagingSenderId:"866998011671",
 appId:"1:866998011671:web:5555115feb82741ab55952"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApp();
 const db = getFirestore(app);
-document.getElementById("totalUmkm").innerText = "-";
-document.getElementById("jumlahUmkm").innerText = "-";
-document.getElementById("footerUmkm").innerText = "- UMKM";
+const umkmSnap =
+await getDocs(
+query(
+collection(db,"users"),
+where("role","==","umkm"),
+where("status","==","aktif")
+)
+);
 
-document.getElementById("totalAffiliate").innerText = "-";
-document.getElementById("jumlahAffiliate").innerText = "-";
-document.getElementById("footerAffiliate").innerText = "- Affiliate";
-const totalProduk =
-document.querySelectorAll(".searchable").length;
+document.getElementById("totalUmkm").innerText =
+umkmSnap.size;
 
-document.getElementById("totalProduk")?.innerText =
-totalProduk;
+document.getElementById("jumlahUmkm").innerText =
+umkmSnap.size;
 
-document.getElementById("jumlahProduk")?.innerText =
-totalProduk;
+document.getElementById("footerUmkm").innerText =
+umkmSnap.size + " UMKM";
 
-document.getElementById("footerProduk")?.innerText =
-totalProduk + " Produk";
+const affiliateSnap =
+await getDocs(
+query(
+collection(db,"users"),
+where("role","==","affiliate"),
+where("status","==","aktif")
+)
+);
 
+document.getElementById("totalAffiliate").innerText =
+affiliateSnap.size;
+
+document.getElementById("jumlahAffiliate").innerText =
+affiliateSnap.size;
+
+document.getElementById("footerAffiliate").innerText =
+affiliateSnap.size + " Affiliate";
+const pesananSnap =
+await getDocs(
+collection(db,"pesanan")
+);
+
+document.getElementById("totalTransaksi").innerText =
+pesananSnap.size;
+
+document.getElementById("jumlahTransaksi").innerText =
+pesananSnap.size;
+const produkSnap =
+await getDocs(
+collection(db,"produk")
+);
+
+document.getElementById("dashboardProduk").innerText =
+produkSnap.size;
+
+document.getElementById("dashboardPesanan").innerText =
+pesananSnap.size;
+
+document.getElementById("dashboardAffiliate").innerText =
+affiliateSnap.size;
+
+let totalPenjualan = 0;
+
+produkSnap.forEach((item)=>{
+totalPenjualan +=
+Number(item.data().terjual || 0);
+});
+
+document.getElementById("dashboardPenjualan").innerText =
+totalPenjualan;
 const auth = getAuth(app);
 
 await auth.authStateReady();
@@ -860,7 +900,7 @@ window.calculateCommission = function(){
 
 const sales =
 Number(
-document.getElementById("sales").value
+document.getElementById("sales").value || 0
 );
 
 const commission =
@@ -921,7 +961,26 @@ observer.observe(el);
 });
 
 }
+</script>
 
+<script>
+
+const role =
+localStorage.getItem("role");
+
+if(role){
+
+document.querySelector(".nav-btn").innerHTML = `
+<a href="profil.html" class="btn-primary">
+👤 Profil Saya
+</a>
+`;
+
+}else{
+
+// biarkan menu asli tetap tampil
+
+}
 </script>
 
 <script src="script.js"></script>
