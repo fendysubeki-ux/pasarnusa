@@ -234,6 +234,7 @@ if(
 !nama ||
 !harga ||
 !stok ||
+!berat ||
 !kategori ||
 !deskripsi
 ){
@@ -334,7 +335,32 @@ return;
 }
 
 const userData = userDoc.data();
+const cekProduk =
+await getDocs(
+query(
+collection(db,"produk"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+),
+where(
+"namaProduk",
+"==",
+nama
+)
+)
+);
 
+if(!cekProduk.empty){
+
+alert(
+"Produk dengan nama tersebut sudah ada"
+);
+
+return;
+
+}
 if(userData.role !== "umkm"){
 
 alert(
