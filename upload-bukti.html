@@ -1,22 +1,15 @@
-<!DOCTYPE html><html lang="id">
-<head>
-<meta charset="UTF-8">
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Upload Bukti Pembayaran - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
-</head><body><section class="product-form"><h1>💳 Upload Bukti Pembayaran</h1><p style="text-align:center;margin-bottom:25px;">
-Silakan transfer sesuai nominal tagihan lalu upload bukti pembayaran.
-</p><div class="form-card"><div class="dashboard-card"><h3>Informasi Rekening</h3><p><b>Bank:</b> BCA</p>
-<p><b>No Rekening:</b> 1234567890</p>
-<p><b>Atas Nama:</b> PT PasarNusa Indonesia</p></div><div class="dashboard-card"><h3>Detail Pesanan</h3><p>
-Nomor Pesanan:
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><h1>💳 Upload Bukti Pembayaran</h1><p>
+Upload bukti transfer untuk pesanan Anda.
+</p><div class="form-card"><div class="dashboard-card"><h3>Informasi Pembayaran</h3><p><b>Bank:</b> BCA</p><p><b>No Rekening:</b> 1234567890</p><p><b>Atas Nama:</b> PT PasarNusa Indonesia</p></div><div class="dashboard-card"><p>
+Nomor Pesanan :
 <b id="nomorPesanan">-</b>
 </p><p>
-Total Pembayaran:
-<b id="totalBayar">
-Rp 0
-</b>
+Total Bayar :
+<b id="totalBayar">Rp 0</b>
 </p><p>
-Status:
+Status :
 <span class="category">
 Menunggu Pembayaran
 </span>
@@ -32,31 +25,30 @@ id="previewBukti"
 style="
 display:none;
 width:100%;
-max-width:350px;
+max-width:400px;
 margin-top:15px;
-border-radius:16px;
-object-fit:cover;
+border-radius:12px;
 ">
 
 <p
 id="infoFile"
-class="category"
-style="margin-top:10px;">
-Belum ada file dipilih
+class="category">Belum ada file dipilih
+
 </p><button
 id="uploadBtn"
 class="btn-primary">
 
-📤 Upload Bukti Transfer
+📤 Upload Bukti
 
-</button><a
+</button><br><br>
+
+<a
 href="pesanan-saya.html"
 class="btn-secondary">
 
-Kembali ke Pesanan
+⬅ Kembali
 
-</a></div></section>
-<script type="module">
+</a></div></section><script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -72,70 +64,152 @@ collection
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
+
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
 projectId:"pasarnusa-18aa0",
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
 messagingSenderId:"866998011671",
 appId:"1:866998011671:web:5555115feb82741ab55952"
+
 };
 
-const CLOUD_NAME = "dq8gha9lv";
-const UPLOAD_PRESET = "pasarnusa";
+const CLOUD_NAME =
+"dq8gha9lv";
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const UPLOAD_PRESET =
+"pasarnusa";
 
-const params = new URLSearchParams(window.location.search);
-const pesananId = params.get("id");
-alert(window.location.href);
-alert("ID = " + pesananId);
+const app =
+initializeApp(firebaseConfig);
 
-const pesananSnap =
-await getDoc(pesananRef);
-
-alert("ADA DATA = " + pesananSnap.exists());
-
-if(pesananSnap.exists()){
-  alert(JSON.stringify(pesananSnap.data()));
+const db =
+getFirestore(app);
+import {
+getAuth
 }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+throw new Error(
+"Belum login"
+);
+
+}
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const pesananId =
+params.get("id");
+
+if(!pesananId){
+
+alert(
+"ID Pesanan tidak ditemukan"
+);
 
 window.location.href =
 "pesanan-saya.html";
 
-throw new Error("ID kosong");
+throw new Error(
+"ID kosong"
+);
+
 }
 
 const pesananRef =
-doc(db,"pesanan",pesananId);
+doc(
+db,
+"pesanan",
+pesananId
+);
 
 const pesananSnap =
-await getDoc(pesananRef);
+await getDoc(
+pesananRef
+);
 
 if(!pesananSnap.exists()){
 
-alert("Pesanan tidak ditemukan");
+alert(
+"Pesanan tidak ditemukan"
+);
 
 window.location.href =
 "pesanan-saya.html";
 
-throw new Error("Pesanan tidak ditemukan");
+throw new Error(
+"Pesanan tidak ditemukan"
+);
+
 }
 
 const pesanan =
 pesananSnap.data();
+if(
+pesanan.status ===
+"Menunggu Verifikasi"
+){
 
-document.getElementById("nomorPesanan").innerText =
+alert(
+"Pesanan sudah mengirim bukti pembayaran"
+);
+
+window.location.href =
+"pesanan-saya.html";
+
+throw new Error(
+"Sudah upload"
+);
+
+}
+if(
+
+pesanan.uidPembeli !==
+auth.currentUser.uid
+
+){
+
+alert(
+"Akses ditolak"
+);
+
+window.location.href =
+"pesanan-saya.html";
+
+throw new Error(
+"Bukan pemilik pesanan"
+);
+
+}
+document.getElementById(
+"nomorPesanan"
+).innerText =
 pesananId.substring(0,8);
 
-document.getElementById("totalBayar").innerText =
+document.getElementById(
+"totalBayar"
+).innerText =
 "Rp " +
 Number(
 pesanan.totalBayar || 0
 ).toLocaleString("id-ID");
 
 const input =
-document.getElementById("buktiTransfer");
+document.getElementById(
+"buktiTransfer"
+);
 
 input.addEventListener(
 "change",
@@ -143,14 +217,29 @@ input.addEventListener(
 
 const file =
 e.target.files[0];
+if(
+file.size >
+2 * 1024 * 1024
+){
 
+alert(
+"Maksimal ukuran file 2 MB"
+);
+
+return;
+
+}
 if(!file) return;
 
-document.getElementById("infoFile").innerText =
+document.getElementById(
+"infoFile"
+).innerText =
 file.name;
 
 const preview =
-document.getElementById("previewBukti");
+document.getElementById(
+"previewBukti"
+);
 
 preview.src =
 URL.createObjectURL(file);
@@ -173,35 +262,22 @@ input.files[0];
 if(!file){
 
 alert(
-"Pilih bukti transfer terlebih dahulu"
+"Pilih bukti transfer"
 );
 
 return;
-}
 
-if(!file.type.startsWith("image/")){
-
-alert(
-"File harus berupa gambar"
-);
-
-return;
-}
-
-if(file.size > 3000000){
-
-alert(
-"Maksimal 3 MB"
-);
-
-return;
 }
 
 const btn =
-document.getElementById("uploadBtn");
+document.getElementById(
+"uploadBtn"
+);
 
 btn.disabled = true;
-btn.innerText = "Mengupload...";
+
+btn.innerText =
+"Mengupload...";
 
 try{
 
@@ -233,8 +309,7 @@ await response.json();
 if(!result.secure_url){
 
 throw new Error(
-result.error?.message ||
-"Upload gagal"
+"Gagal upload gambar"
 );
 
 }
@@ -242,6 +317,7 @@ result.error?.message ||
 await updateDoc(
 pesananRef,
 {
+
 buktiTransfer:
 result.secure_url,
 
@@ -250,14 +326,19 @@ status:
 
 statusPembayaran:
 "Menunggu Verifikasi"
+
 }
 );
 
 if(pesanan.uidPembeli){
 
 await addDoc(
-collection(db,"notifikasi"),
+collection(
+db,
+"notifikasi"
+),
 {
+
 uid:
 pesanan.uidPembeli,
 
@@ -267,13 +348,14 @@ judul:
 pesan:
 "Bukti transfer berhasil dikirim dan menunggu verifikasi.",
 
-dibaca:
-false,
+dibaca:false,
 
 createdAt:
 new Date()
+
 }
 );
+
 }
 
 alert(
@@ -283,21 +365,20 @@ alert(
 window.location.href =
 "pesanan-saya.html";
 
-}catch(error){
-
-console.error(error);
+}
+catch(error){
 
 alert(
-error.message ||
-"Gagal upload bukti transfer"
+error.message
 );
 
-}finally{
+}
+finally{
 
 btn.disabled = false;
 
 btn.innerText =
-"📤 Upload Bukti Transfer";
+"📤 Upload Bukti";
 
 }
 
