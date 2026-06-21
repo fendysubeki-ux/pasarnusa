@@ -1,183 +1,377 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Beri Ulasan - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><h1>⭐ Beri Ulasan</h1><p style="text-align:center;margin-bottom:30px;">
-Bagikan pengalaman Anda setelah menerima pesanan.
-</p><div class="form-card"><div class="dashboard-card"><div style="
-display:flex;
-gap:15px;
-align-items:center;
-"><img
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Beri Ulasan - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<section class="dashboard">
+
+<h1>⭐ Beri Ulasan Produk</h1>
+
+<p>
+Bagikan pengalaman Anda setelah menerima produk.
+</p>
+
+<div class="form-card">
+
+<img
 id="gambarProduk"
-src="https://picsum.photos/200"
+src="https://picsum.photos/400/300"
 style="
-width:90px;
-height:90px;
-border-radius:16px;
-object-fit:cover;
+width:100%;
+max-width:300px;
+border-radius:12px;
+margin:auto;
+display:block;
 ">
 
-<div><h3 id="namaProduk">
+<h2 id="namaProduk">
 Memuat Produk...
-</h3><p id="namaToko">
-PasarNusa Store
-</p><p id="hargaProduk">
-Rp 0
-</p></div></div></div><label>Rating Produk</label>
+</h2>
 
-<div class="rating-container"><button class="rating-btn" data-rating="1">⭐</button>
-<button class="rating-btn" data-rating="2">⭐</button>
-<button class="rating-btn" data-rating="3">⭐</button>
-<button class="rating-btn" data-rating="4">⭐</button>
-<button class="rating-btn" data-rating="5">⭐</button>
+<p id="namaToko">
+Memuat UMKM...
+</p>
 
-</div><p id="ratingText">
-Pilih rating
-</p><input
-type="hidden"
-id="rating"
-value="5">
+<br>
 
-<label>Judul Ulasan</label>
+<h3>Pilih Rating</h3>
 
-<input
-type="text"
-id="judulUlasan"
-placeholder="Contoh: Produk sangat bagus">
+<div
+style="
+display:flex;
+gap:10px;
+justify-content:center;
+font-size:35px;
+cursor:pointer;
+">
 
-<label>Ulasan Anda</label>
+<span class="star" data-rating="1">⭐</span>
+<span class="star" data-rating="2">⭐</span>
+<span class="star" data-rating="3">⭐</span>
+<span class="star" data-rating="4">⭐</span>
+<span class="star" data-rating="5">⭐</span>
+
+</div>
+
+<p
+id="ratingText"
+style="
+text-align:center;
+margin-top:10px;
+font-weight:700;
+">
+
+Belum memilih rating
+
+</p>
+
+<br>
 
 <textarea
 id="ulasan"
-maxlength="500"
-placeholder="Ceritakan pengalaman Anda menggunakan produk ini...">
-</textarea><div style="
-display:flex;
-justify-content:space-between;
-margin-top:8px;
-"><small>
-Minimal 20 karakter
-</small><small id="counter">
-0 / 500
-</small></div><label>Foto Ulasan (Opsional)</label>
+rows="6"
+placeholder="Tulis pengalaman Anda menggunakan produk ini..."
+></textarea>
 
-<input
-type="file"
-id="fotoReview"
-accept="image/*">
+<br><br>
 
-<img
-id="previewReview"
-style="
-display:none;
-width:120px;
-height:120px;
-object-fit:cover;
-border-radius:12px;
-margin-top:10px;
-">
-
-<div class="dashboard-card"><h3>Pesanan</h3><p>
-No Pesanan:
-<b id="nomorPesanan">
--
-</b>
-</p><p>
-Status:
-<b>
-Selesai
-</b>
-</p></div><button
-id="kirimReview"
+<button
+id="btnKirim"
 class="btn-primary">
 
 ⭐ Kirim Ulasan
 
-</button><a
+</button>
+
+<br><br>
+
+<a
 href="pesanan-saya.html"
 class="btn-secondary">
 
-Kembali
+⬅ Kembali
 
-</a></div></section><script>
+</a>
 
-let rating = 5;
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+addDoc,
+collection,
+query,
+where,
+getDocs,
+updateDoc,
+serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href = "login.html";
+
+}
+
+const produkId =
+new URLSearchParams(
+window.location.search
+).get("id");
+
+if(!produkId){
+
+alert("Produk tidak ditemukan");
+
+window.location.href =
+"pesanan-saya.html";
+
+}
+
+const produkRef =
+doc(db,"produk",produkId);
+
+const produkSnap =
+await getDoc(produkRef);
+
+if(!produkSnap.exists()){
+
+alert("Produk tidak ditemukan");
+
+window.location.href =
+"pesanan-saya.html";
+
+}
+
+const produk =
+produkSnap.data();
+
+document.getElementById(
+"namaProduk"
+).innerText =
+produk.namaProduk || "-";
+
+document.getElementById(
+"namaToko"
+).innerText =
+produk.namaToko || "UMKM";
+
+document.getElementById(
+"gambarProduk"
+).src =
+produk.gambar?.[0] ||
+"https://picsum.photos/400/300";
+
+let rating = 0;
 
 document
-.querySelectorAll(".rating-btn")
-.forEach((btn)=>{
+.querySelectorAll(".star")
+.forEach((star)=>{
 
-btn.addEventListener(
+star.addEventListener(
 "click",
 ()=>{
 
 rating =
 Number(
-btn.dataset.rating
+star.dataset.rating
 );
-
-document.getElementById(
-"rating"
-).value =
-rating;
-
-const teks = [
-"",
-"Sangat Buruk",
-"Kurang Puas",
-"Cukup",
-"Puas",
-"Sangat Puas"
-];
 
 document.getElementById(
 "ratingText"
 ).innerText =
-teks[rating];
+rating + " / 5 Bintang";
 
 });
 
 });
 
 document
-.getElementById("ulasan")
+.getElementById("btnKirim")
 .addEventListener(
-"input",
-(e)=>{
+"click",
+async()=>{
 
+const ulasan =
 document.getElementById(
-"counter"
-).innerText =
-e.target.value.length +
-" / 500";
+"ulasan"
+).value.trim();
+
+if(rating === 0){
+
+alert(
+"Pilih rating terlebih dahulu"
+);
+
+return;
+
+}
+
+if(ulasan.length < 10){
+
+alert(
+"Minimal 10 karakter"
+);
+
+return;
+
+}
+
+try{
+
+const cekUlasan =
+await getDocs(
+query(
+collection(db,"ulasan"),
+where(
+"uid",
+"==",
+auth.currentUser.uid
+),
+where(
+"produkId",
+"==",
+produkId
+)
+)
+);
+
+if(!cekUlasan.empty){
+
+alert(
+"Anda sudah memberi ulasan"
+);
+
+return;
+
+}
+
+await addDoc(
+collection(db,"ulasan"),
+{
+
+uid:
+auth.currentUser.uid,
+
+produkId:
+produkId,
+
+nama:
+auth.currentUser.displayName ||
+"Pembeli",
+
+rating:
+rating,
+
+ulasan:
+ulasan,
+
+createdAt:
+serverTimestamp()
 
 }
 );
 
-document
-.getElementById("fotoReview")
-.addEventListener(
-"change",
-(e)=>{
+const totalReview =
+Number(
+produk.totalReview || 0
+) + 1;
 
-const file =
-e.target.files[0];
+const totalRating =
+(
+Number(produk.rating || 0)
+*
+Number(produk.totalReview || 0)
+)
++
+rating;
 
-if(!file) return;
+const ratingBaru =
+(
+totalRating /
+totalReview
+).toFixed(1);
 
-const preview =
-document.getElementById(
-"previewReview"
-);
+await updateDoc(
+produkRef,
+{
 
-preview.src =
-URL.createObjectURL(file);
+rating:
+Number(ratingBaru),
 
-preview.style.display =
-"block";
+totalReview:
+totalReview
 
 }
 );
 
-</script></body>
+alert(
+"Ulasan berhasil dikirim"
+);
+
+window.location.href =
+"produk-detail.html?id=" +
+produkId;
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+error.message
+);
+
+}
+
+});
+
+</script>
+
+</body>
 </html>
