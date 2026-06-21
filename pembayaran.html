@@ -91,78 +91,191 @@ class="btn-secondary">
 
 ⬅ Kembali ke Pesanan
 
-</a></section><script>
+</a></section>
 
-/* Countdown */
+<script type="module">
 
-let detik = 86400;
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
-setInterval(()=>{
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const jam =
-String(
-Math.floor(detik/3600)
-).padStart(2,"0");
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-const menit =
-String(
-Math.floor(
-(detik%3600)/60
-)
-).padStart(2,"0");
+const firebaseConfig = {
 
-const detikSisa =
-String(
-detik%60
-).padStart(2,"0");
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
 
-document.getElementById(
-"countdown"
-).innerText =
-jam + ":" +
-menit + ":" +
-detikSisa;
+};
 
-if(detik > 0){
+const CLOUD_NAME =
+"dq8gha9lv";
 
-detik--;
+const UPLOAD_PRESET =
+"pasarnusa";
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href =
+"login.html";
+
+throw new Error(
+"Belum login"
+);
 
 }
 
-},1000);
-
-/* Salin Rekening */
-
-document
-.getElementById(
-"salinRekening"
-)
-.addEventListener(
-"click",
-()=>{
-
-navigator.clipboard.writeText(
-
-document.getElementById(
-"nomorRekening"
-).innerText
-
+const params =
+new URLSearchParams(
+window.location.search
 );
+
+const pesananId =
+params.get("id");
+
+if(!pesananId){
 
 alert(
-"Nomor rekening berhasil disalin"
+"ID Pesanan tidak ditemukan"
+);
+
+window.location.href =
+"pesanan-saya.html";
+
+throw new Error(
+"ID kosong"
 );
 
 }
+
+const pesananRef =
+doc(
+db,
+"pesanan",
+pesananId
 );
 
-/* Preview Bukti */
+const pesananSnap =
+await getDoc(
+pesananRef
+);
 
-document
-.getElementById(
+if(!pesananSnap.exists()){
+
+alert(
+"Pesanan tidak ditemukan"
+);
+
+window.location.href =
+"pesanan-saya.html";
+
+throw new Error(
+"Pesanan tidak ada"
+);
+
+}
+
+const pesanan =
+pesananSnap.data();
+
+if(
+pesanan.uidPembeli !==
+auth.currentUser.uid
+){
+
+alert(
+"Akses ditolak"
+);
+
+window.location.href =
+"pesanan-saya.html";
+
+throw new Error(
+"Bukan pemilik pesanan"
+);
+
+}
+
+document.getElementById(
+"nomorPesanan"
+).innerText =
+pesananId.substring(0,8);
+
+document.getElementById(
+"jumlahProduk"
+).innerText =
+(pesanan.jumlahItem || 0)
++ " Produk";
+document.getElementById(
+"namaToko"
+).innerText =
+pesanan.namaUmkm ||
+"UMKM PasarNusa";
+document.getElementById(
+"subtotal"
+).innerText =
+"Rp " +
+Number(
+pesanan.subtotal || 0
+).toLocaleString("id-ID");
+
+document.getElementById(
+"ongkir"
+).innerText =
+"Rp " +
+Number(
+pesanan.ongkir || 0
+).toLocaleString("id-ID");
+
+document.getElementById(
+"diskon"
+).innerText =
+"Rp " +
+Number(
+pesanan.diskon || 0
+).toLocaleString("id-ID");
+
+document.getElementById(
+"totalBayar"
+).innerText =
+"Rp " +
+Number(
+pesanan.totalBayar || 0
+).toLocaleString("id-ID");
+
+/* PREVIEW */
+
+const input =
+document.getElementById(
 "buktiTransfer"
-)
-.addEventListener(
+);
+
+input.addEventListener(
 "change",
 (e)=>{
 
@@ -171,14 +284,36 @@ e.target.files[0];
 
 if(!file) return;
 
+const allowed = [
+"image/jpeg",
+"image/png",
+"image/webp"
+];
+
+if(
+!allowed.includes(file.type)
+){
+
+alert(
+"Format harus JPG PNG WEBP"
+);
+
+input.value = "";
+
+return;
+
+}
+
 if(
 file.size >
 5 * 1024 * 1024
 ){
 
 alert(
-"Ukuran file maksimal 5MB"
+"Ukuran maksimal 5MB"
 );
+
+input.value = "";
 
 return;
 
@@ -198,7 +333,48 @@ preview.style.display =
 }
 );
 
-/* Tombol Upload */
+/* SALIN REKENING */
+
+document
+.getElementById(
+"salinRekening"
+)
+.addEventListener(
+"click",
+()=>{
+
+navigator.clipboard.writeText(
+document.getElementById(
+"nomorRekening"
+).innerText
+);
+
+alert(
+"Nomor rekening disalin"
+);
+
+}
+);
+
+document
+.getElementById(
+"lihatQris"
+)
+.addEventListener(
+"click",
+()=>{
+
+window.open(
+document.getElementById(
+"gambarQris"
+).src,
+"_blank"
+);
+
+}
+);
+
+/* UPLOAD */
 
 document
 .getElementById(
@@ -206,37 +382,105 @@ document
 )
 .addEventListener(
 "click",
-()=>{
+async()=>{
 
 const file =
-document.getElementById(
-"buktiTransfer"
-).files[0];
+input.files[0];
 
 if(!file){
 
 alert(
-"Silakan pilih bukti transfer"
+"Pilih bukti transfer"
 );
 
 return;
 
 }
 
-alert(
-"Bukti pembayaran berhasil dikirim"
+const btn =
+document.getElementById(
+"btnBayar"
 );
 
-/*
+try{
 
-Firebase nanti:
+btn.disabled = true;
 
-1. Upload gambar ke Cloudinary
-2. Simpan URL ke Firestore
-3. Update status pesanan:
-   Menunggu Verifikasi
+btn.innerText =
+"Mengupload...";
 
-*/
+const formData =
+new FormData();
+
+formData.append(
+"file",
+file
+);
+
+formData.append(
+"upload_preset",
+UPLOAD_PRESET
+);
+
+const response =
+await fetch(
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+if(!result.secure_url){
+
+throw new Error(
+"Gagal upload gambar"
+);
+
+}
+
+await updateDoc(
+pesananRef,
+{
+buktiTransfer:
+result.secure_url,
+
+status:
+"Menunggu Verifikasi",
+
+statusPembayaran:
+"Menunggu Verifikasi"
+}
+);
+
+alert(
+"Pembayaran berhasil dikirim"
+);
+
+window.location.href =
+"pesanan-saya.html";
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+error.message
+);
+
+}
+finally{
+
+btn.disabled = false;
+
+btn.innerText =
+"Kirim Bukti Pembayaran";
+
+}
 
 }
 );
