@@ -92,7 +92,9 @@ ${produk.kategori || "Produk"}
 </span>
 
 <h3>
-${produk.namaProduk}
+${String(produk.namaProduk || "")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")}
 </h3>
 
 <p class="price">
@@ -170,7 +172,7 @@ Total Item : ${totalItem}
 </h3>
 <p>
 🏪 UMKM :
-${cart[0]?.namaToko || "-"}
+${cart[0]?.uid || "-"}
 </p>
 <p>
 Subtotal :
