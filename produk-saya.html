@@ -148,6 +148,11 @@ if(!auth.currentUser){
 
 window.location.href =
 "login.html";
+
+throw new Error(
+"Belum login"
+);
+
 }
 
 const container =
@@ -182,7 +187,15 @@ snapshot.forEach((item)=>{
 
 const produk =
 item.data();
+if(
+Number(produk.stok || 0) <= 0 &&
+produk.status === "Aktif"
+){
 
+produk.status =
+"Stok Habis";
+
+}
 totalProduk++;
 
 totalStok +=
@@ -196,7 +209,9 @@ produk.terjual || 0
 );
 
 if(
-produk.status === "Aktif"
+String(produk.status)
+.toLowerCase() ===
+"aktif"
 ){
 
 produkAktif++;
@@ -224,7 +239,11 @@ ${produk.kategori || "Produk"}
 
 <h3>
 
-${produk.namaProduk}
+${String(
+produk.namaProduk || ""
+)
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")}
 
 </h3>
 
@@ -365,7 +384,41 @@ confirm(
 );
 
 if(!yakin) return;
+const cekPesanan =
+await getDocs(
+query(
+collection(db,"pesanan"),
+where("uidUmkm","==",auth.currentUser.uid)
+)
+);
 
+let pernahDibeli = false;
+
+cekPesanan.forEach((item)=>{
+
+const data = item.data();
+
+(data.items || []).forEach((produk)=>{
+
+if(produk.id === id){
+
+pernahDibeli = true;
+
+}
+
+});
+
+});
+
+if(pernahDibeli){
+
+alert(
+"Produk sudah memiliki riwayat transaksi dan tidak dapat dihapus"
+);
+
+return;
+
+}
 await deleteDoc(
 doc(db,"produk",id)
 );
