@@ -174,12 +174,20 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     const userData = userDoc.data();
+const umkmDoc = await getDoc(
+doc(db,"umkm",user.uid)
+);
 
+const umkmData =
+umkmDoc.exists()
+? umkmDoc.data()
+: {};
     if (userData.role !== "umkm") {
-      alert("Akses khusus UMKM");
-      location.href = "index.html";
-      return;
-    }
+  alert("Akses khusus UMKM");
+  await signOut(auth);
+  location.href = "index.html";
+  return;
+}
 
     if (userData.status !== "aktif") {
       alert("Akun UMKM masih menunggu verifikasi admin");
@@ -192,8 +200,13 @@ onAuthStateChanged(auth, async (user) => {
       "Dashboard " +
       (userData.namaUmkm || userData.nama || "UMKM");
 document.getElementById("statusMembership").innerText =
-  "Membership: " +
-  (userData.membership || "Free");
+"Membership: " +
+String(
+umkmData.membership || "Free"
+).charAt(0).toUpperCase() +
+String(
+umkmData.membership || "Free"
+).slice(1);
     const produkSnap = await getDocs(
       query(
         collection(db, "produk"),
@@ -212,7 +225,10 @@ document.getElementById("statusMembership").innerText =
 
       const data = docItem.data();
 
-      if (data.status === "aktif") {
+      if(
+String(data.status).toLowerCase()
+=== "aktif"
+) {
         produkAktif++;
       }
 
@@ -262,13 +278,9 @@ pesananSnap.forEach((docItem) => {
 
     pesananSelesai++;
 
-    omzet += Number(
-      data.totalBayar ||
-      (
-        (Number(data.harga) || 0) *
-        (Number(data.qty) || 1)
-      )
-    );
+omzet += Number(
+  data.pendapatanUmkm || 0
+);
 
   }
 
@@ -333,9 +345,19 @@ document
 
     e.preventDefault();
 
-    await signOut(auth);
+try{
+await signOut(auth);
+}catch(error){
+alert("Logout gagal");
+return;
+}
 
-    localStorage.clear();
+localStorage.removeItem("user");
+localStorage.removeItem("role");
+localStorage.removeItem("uid");
+localStorage.removeItem("nama");
+localStorage.removeItem("namaUmkm");
+localStorage.removeItem("status");
 
     alert("Logout berhasil");
 
