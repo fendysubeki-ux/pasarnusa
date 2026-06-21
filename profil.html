@@ -224,6 +224,10 @@ alert(
 window.location.href =
 "login.html";
 
+throw new Error(
+"Belum login"
+);
+
 }
 
 try{
@@ -266,6 +270,10 @@ uid;
 
 }
 else{
+
+await signOut(auth);
+
+localStorage.clear();
 
 alert(
 "Data user tidak ditemukan"
