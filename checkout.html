@@ -359,7 +359,7 @@ return;
 }
 
 if(
-whatsapp.length < 10
+!/^(08|628)[0-9]{8,13}$/.test(whatsapp)
 ){
 
 alert(
@@ -386,15 +386,22 @@ btn.innerText =
 "Membuat Pesanan...";
 
 const total =
-subtotal +
-ongkir -
-diskon;
+Math.max(
+0,
+subtotal + ongkir - diskon
+);
 
 const affiliateUid =
-localStorage.getItem(
-"affiliateUid"
-) || "";
+localStorage.getItem("affiliate") || "";
+const komisiAffiliate =
+affiliateUid
+? Math.round(subtotal * 0.05)
+: 0;
 
+const pendapatanPlatform =
+affiliateUid
+? Math.round(subtotal * 0.05)
+: Math.round(subtotal * 0.10);
 const docRef =
 await addDoc(
 collection(db,"pesanan"),
@@ -449,17 +456,11 @@ pendapatanUmkm:
 Math.round(
 subtotal * 0.90
 ),
-
 komisiAffiliate:
-Math.round(
-subtotal * 0.05
-),
+komisiAffiliate,
 
 pendapatanPlatform:
-Math.round(
-subtotal * 0.05
-),
-
+pendapatanPlatform,
 status:
 "Belum Bayar",
 
