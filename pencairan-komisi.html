@@ -1,229 +1,91 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pencairan Komisi Affiliate</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
-<body><section class="dashboard"><div class="page-header"><div>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pencairan Komisi - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
 <h1>💰 Pencairan Komisi</h1>
-<p>Ajukan pencairan komisi affiliate Anda</p>
-</div><a href="dashboard-affiliate.html" class="btn-secondary">
-← Dashboard Affiliate
-</a></div><div class="dashboard-grid"><div class="dashboard-card">
-<h3 id="saldoTersedia">Rp 0</h3>
-<p>Saldo Tersedia</p>
-</div><div class="dashboard-card">
-<h3 id="totalDicairkan">Rp 0</h3>
-<p>Total Dicairkan</p>
-</div><div class="dashboard-card">
-<h3 id="pendingPencairan">Rp 0</h3>
-<p>Menunggu Pencairan</p>
-</div><div class="dashboard-card">
-<h3 id="jumlahKomisi">0</h3>
+<p>Kelola pencairan komisi affiliate Anda</p>
+</div>
+
+<a href="affiliate-dashboard.html" class="btn-secondary">
+⬅ Dashboard
+</a>
+
+</div>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+<h3 id="totalKomisi">Rp 0</h3>
 <p>Total Komisi</p>
-</div></div><div class="form-card"><h2>Ajukan Pencairan</h2><input
-type="text"
-id="namaBank"
-placeholder="Nama Bank">
+</div>
 
-<input
-type="text"
-id="nomorRekening"
-placeholder="Nomor Rekening">
+<div class="dashboard-card">
+<h3 id="komisiPending">Rp 0</h3>
+<p>Belum Dicairkan</p>
+</div>
 
-<input
-type="text"
-id="namaPemilik"
-placeholder="Nama Pemilik Rekening">
+<div class="dashboard-card">
+<h3 id="komisiCair">Rp 0</h3>
+<p>Sudah Dicairkan</p>
+</div>
+
+</div>
+
+<div class="form-card">
+
+<h2>Ajukan Pencairan</h2>
 
 <input
 type="number"
 id="jumlahPencairan"
-placeholder="Jumlah Pencairan">
+placeholder="Jumlah pencairan">
 
 <button
-id="ajukanPencairan"
+id="btnAjukan"
 class="btn-primary">
 
-Ajukan Pencairan
+💸 Ajukan Pencairan
 
-</button></div><h2 style="margin-top:40px;">
-📋 Riwayat Pencairan
-</h2><div
-id="riwayatContainer"
-class="dashboard-grid"><div class="dashboard-card"><h3>Belum ada data</h3></div></div></section><script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-query,
-where
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_AUTH_DOMAIN",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_STORAGE_BUCKET",
-messagingSenderId:"YOUR_MESSAGING_SENDER_ID",
-appId:"YOUR_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href = "login.html";
-
-}
-
-const uid = auth.currentUser.uid;
-
-document
-.getElementById("ajukanPencairan")
-.addEventListener(
-"click",
-async()=>{
-
-const bank =
-document.getElementById("namaBank").value;
-
-const rekening =
-document.getElementById("nomorRekening").value;
-
-const pemilik =
-document.getElementById("namaPemilik").value;
-
-const jumlah =
-Number(
-document.getElementById("jumlahPencairan").value
-);
-
-if(
-!bank ||
-!rekening ||
-!pemilik ||
-!jumlah
-){
-
-alert(
-"Lengkapi data pencairan"
-);
-
-return;
-
-}
-
-await addDoc(
-collection(db,"pencairan_komisi"),
-{
-uid:uid,
-bank:bank,
-rekening:rekening,
-pemilik:pemilik,
-jumlah:jumlah,
-status:"Menunggu",
-createdAt:new Date()
-}
-);
-
-alert(
-"Pengajuan pencairan berhasil dikirim"
-);
-
-location.reload();
-
-}
-);
-
-const snapshot =
-await getDocs(
-query(
-collection(db,"pencairan_komisi"),
-where("uid","==",uid)
-)
-);
-
-const container =
-document.getElementById(
-"riwayatContainer"
-);
-
-container.innerHTML = "";
-
-let totalDicairkan = 0;
-let pendingPencairan = 0;
-
-snapshot.forEach((item)=>{
-
-const data = item.data();
-
-if(data.status === "Disetujui"){
-totalDicairkan += Number(data.jumlah || 0);
-}
-
-if(data.status === "Menunggu"){
-pendingPencairan += Number(data.jumlah || 0);
-}
-
-container.innerHTML += `
-
-<div class="dashboard-card">
-
-<h3>
-Rp ${Number(
-data.jumlah || 0
-).toLocaleString("id-ID")}
-</h3>
-
-<p>
-🏦 ${data.bank}
-</p>
-
-<p>
-👤 ${data.pemilik}
-</p>
-
-<p>
-📄 ${data.rekening}
-</p>
-
-<p>
-Status:
-<b>${data.status}</b>
-</p>
+</button>
 
 </div>
 
-`;
+<h2 style="margin-top:30px;">
+📋 Riwayat Pencairan
+</h2>
 
-});
+<div
+id="riwayatContainer"
+class="dashboard-grid">
 
-document.getElementById(
-"totalDicairkan"
-).innerText =
-"Rp " +
-totalDicairkan.toLocaleString("id-ID");
+<div class="dashboard-card">
+Memuat data...
+</div>
 
-document.getElementById(
-"pendingPencairan"
-).innerText =
-"Rp " +
-pendingPencairan.toLocaleString("id-ID");
+</div>
 
-</script></body>
+</section>
+
+<script type="module" src="pencairan-komisi.js"></script>
+
+</body>
 </html>
