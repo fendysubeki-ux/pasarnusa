@@ -252,12 +252,6 @@ Verifikasi
 
 </button>
 
-<button class="btn-secondary">
-
-Input Resi
-
-</button>
-
 <button class="btn-primary">
 
 Selesai
@@ -411,7 +405,12 @@ await auth.authStateReady();
 
 if(!auth.currentUser){
 
-window.location.href = "login.html";
+window.location.href =
+"login.html";
+
+throw new Error(
+"Belum login"
+);
 
 }
 
@@ -452,8 +451,12 @@ id:docSnap.id,
 
 totalPesanan++;
 
-if(data.status === "Menunggu Verifikasi")
+if(
+data.status === "Belum Bayar" ||
+data.status === "Menunggu Verifikasi"
+){
 menunggu++;
+}
 
 if(data.status === "Diproses")
 diproses++;
@@ -465,7 +468,9 @@ if(data.status === "Selesai")
 selesai++;
 
 totalPendapatan +=
-Number(data.totalBayar || 0);
+Number(
+data.pendapatanUmkm || 0
+);
 
 totalOngkir +=
 Number(data.ongkir || 0);
@@ -609,7 +614,22 @@ class="btn-secondary">
 💬 Chat
 
 </a>
+${
+pesanan.buktiTransfer
+?
+`
+<a
+href="${pesanan.buktiTransfer}"
+target="_blank"
+class="btn-secondary">
 
+📄 Bukti Transfer
+
+</a>
+`
+:
+""
+}
 <button
 onclick="updateStatus('${pesanan.id}','Diproses')"
 class="btn-primary">
@@ -649,7 +669,8 @@ function updateStatus(id,status){
 updateDoc(
 doc(db,"pesanan",id),
 {
-status:status
+status:status,
+statusUmkm:status
 }
 )
 .then(()=>{
