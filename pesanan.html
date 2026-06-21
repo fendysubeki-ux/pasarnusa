@@ -153,13 +153,16 @@ data.forEach((pesanan)=>{
 container.innerHTML += `
 
 <div class="cart-card searchable"
-data-status="${pesanan.status}">
+data-status="${pesanan.status || ''}">
 
 <h3>
 ${
+String(
 pesanan.items?.[0]?.namaProduk
-||
-"Produk"
+|| "Produk"
+)
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
 }
 </h3>
 
@@ -244,7 +247,7 @@ renderPesanan(
 
 semuaPesanan.filter(item =>
 
-(item.produk || "")
+(item.items?.[0]?.namaProduk || "")
 .toLowerCase()
 .includes(keyword)
 
