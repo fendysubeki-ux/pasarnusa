@@ -332,14 +332,30 @@ document.getElementById(
 "stokProduk"
 ).value
 );
+if(stok < 0){
 
+alert(
+"Stok tidak boleh negatif"
+);
+
+return;
+
+}
 const berat =
 Number(
 document.getElementById(
 "beratProduk"
 ).value
 );
+if(berat < 0){
 
+alert(
+"Berat tidak valid"
+);
+
+return;
+
+}
 const kategori =
 document.getElementById(
 "kategoriProduk"
