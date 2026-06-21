@@ -1,302 +1,501 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard Affiliate - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
-<body><section class="dashboard"><div class="dashboard-header"><div>
-<h1>🤝 Dashboard Affiliate</h1>
-<p>Kelola referral dan komisi affiliate Anda</p>
-</div><a href="index.html" class="btn-secondary">
-⬅️ Beranda
-</a></div><div class="dashboard-grid"><div class="dashboard-card">
-<h3 id="totalKlik">0</h3>
-<p>Total Klik</p>
-</div><div class="dashboard-card">
-<h3 id="totalPenjualan">0</h3>
-<p>Total Penjualan</p>
-</div><div class="dashboard-card">
-<h3 id="komisiPending">Rp 0</h3>
-<p>Komisi Pending</p>
-</div><div class="dashboard-card">
-<h3 id="totalKomisi">Rp 0</h3>
-<p>Komisi Cair</p>
-</div><div class="dashboard-card">
-<h3 id="konversi">0%</h3>
-<p>Konversi</p>
-</div><div class="dashboard-card">
-<h3 id="produkTerlaris">-</h3>
-<p>Produk Terlaris</p>
-</div></div><div class="dashboard-card"><h2>🔗 Link Affiliate Saya</h2><input
-type="text"
-id="affiliateLink"
-readonly
-class="search-box">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Affiliate - PasarNusa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Dashboard Affiliate PasarNusa - Kelola Referral dan Komisi Anda">
+    <meta name="theme-color" content="#16a34a">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; padding:20px;">
+        <div style="font-size:48px; margin-bottom:20px;">🔄</div>
+        <h2>Memuat Dashboard Affiliate...</h2>
+        <p style="color:#6b7280; margin-top:8px;">Tunggu sebentar ya...</p>
+    </div>
 
-<br><br>
+    <!-- Konten Utama (Sembunyi Awalnya) -->
+    <section class="dashboard" id="mainDashboard" style="display:none;">
+        <div class="dashboard-header">
+            <div>
+                <h1>🤝 Dashboard Affiliate</h1>
+                <p id="namaAffiliate">Kelola referral dan komisi affiliate Anda</p>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <a href="profil.html" class="btn-secondary">
+                    👤 Profil Saya
+                </a>
+                <a href="index.html" class="btn-secondary">
+                    ⬅️ Beranda
+                </a>
+            </div>
+        </div>
 
-<button
-id="copyAffiliate"
-class="btn-primary">
+        <!-- Statistik Utama -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="stat-icon">📊</div>
+                <h3 id="totalKlik">0</h3>
+                <p>Total Klik</p>
+            </div>
+            <div class="dashboard-card">
+                <div class="stat-icon">🛒</div>
+                <h3 id="totalPenjualan">0</h3>
+                <p>Total Penjualan</p>
+            </div>
+            <div class="dashboard-card">
+                <div class="stat-icon">⏳</div>
+                <h3 id="komisiPending">Rp 0</h3>
+                <p>Komisi Pending</p>
+            </div>
+            <div class="dashboard-card">
+                <div class="stat-icon">💰</div>
+                <h3 id="totalKomisi">Rp 0</h3>
+                <p>Komisi Cair</p>
+            </div>
+            <div class="dashboard-card">
+                <div class="stat-icon">📈</div>
+                <h3 id="konversi">0%</h3>
+                <p>Konversi</p>
+            </div>
+            <div class="dashboard-card">
+                <div class="stat-icon">🔥</div>
+                <h3 id="produkTerlaris">-</h3>
+                <p>Produk Terlaris</p>
+            </div>
+        </div>
 
-Salin Link
+        <!-- Pemberitahuan Penting -->
+        <div id="alertMessage" style="background:#fef3c7; color:#92400e; padding:15px; border-radius:12px; margin:20px 0; display:none;">
+            <strong>⚠️ Pemberitahuan:</strong> <span id="alertText"></span>
+        </div>
 
-</button><button
-id="shareAffiliate"
-class="btn-secondary">
+        <!-- Link Affiliate -->
+        <div class="dashboard-card link-section">
+            <h2>🔗 Link Affiliate Saya</h2>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <input type="text" id="affiliateLink" readonly class="search-box" placeholder="Link affiliate Anda akan muncul disini">
+                <button id="copyAffiliate" class="btn-primary">
+                    📋 Salin Link
+                </button>
+                <button id="shareAffiliate" class="btn-secondary">
+                    📤 Bagikan
+                </button>
+            </div>
+            <p style="font-size:14px; color:#6b7280; margin-top:10px;">
+                Bagikan link ini untuk mendapatkan komisi dari setiap penjualan yang berhasil!
+            </p>
+        </div>
 
-Bagikan
+        <!-- Menu Aksi -->
+        <div class="dashboard-grid">
+            <a href="affiliate-produk.html" class="dashboard-card">
+                <div class="menu-icon">🛍</div>
+                <h3>Produk Affiliate</h3>
+                <p>Lihat produk yang bisa dipromosikan</p>
+            </a>
+            <a href="riwayat-komisi.html" class="dashboard-card">
+                <div class="menu-icon">💰</div>
+                <h3>Riwayat Komisi</h3>
+                <p>Cek semua komisi yang diperoleh</p>
+            </a>
+            <a href="withdraw-affiliate.html" class="dashboard-card">
+                <div class="menu-icon">🏦</div>
+                <h3>Riwayat Pencairan</h3>
+                <p>Lihat status pengajuan pencairan</p>
+            </a>
+            <a href="affiliate-statistik.html" class="dashboard-card">
+                <div class="menu-icon">📈</div>
+                <h3>Statistik</h3>
+                <p>Analisis performa affiliate Anda</p>
+            </a>
+        </div>
 
-</button></div><div class="dashboard-grid">
-<a href="affiliate-produk.html" class="dashboard-card">
-<h3>🛍 Produk Affiliate</h3>
-</a>
+        <!-- Pencairan Komisi -->
+        <div class="dashboard-card withdraw-section">
+            <h2>💳 Ajukan Pencairan Komisi</h2>
+            <p style="margin-bottom:15px;">Minimal pencairan: <strong>Rp 50.000</strong></p>
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+                <h1 id="saldoAffiliate">Rp 0</h1>
+                <span id="statusSaldo" style="padding:5px 12px; border-radius:8px; background:#f3f4f6; font-size:14px;">
+                    Saldo Tersedia
+                </span>
+            </div>
+            <button id="cairkanKomisi" class="btn-primary">
+                📝 Ajukan Pencairan
+            </button>
+            <p style="font-size:14px; color:#6b7280; margin-top:10px;">
+                *Pengajuan akan diproses dalam waktu 1-3 hari kerja
+            </p>
+        </div>
 
-<a href="riwayat-komisi.html" class="dashboard-card">
-<h3>💰 Riwayat Komisi</h3>
-</a>
-
-<a href="withdraw-affiliate.html" class="dashboard-card">
-<h3>🏦 Riwayat Pencairan</h3>
-</a>
-
-<a href="affiliate-statistik.html" class="dashboard-card">
-<h3>📈 Statistik</h3>
-</a></div><div class="dashboard-card"><h2>💳 Pencairan Komisi</h2><p>Minimal pencairan Rp 50.000</p><h1 id="saldoAffiliate">
-Rp 0
-</h1><button
-id="cairkanKomisi"
-class="btn-primary">
-
-Ajukan Pencairan
-
-</button></div><div class="dashboard-card"><h2>📋 Riwayat Affiliate</h2><table class="commission-table"><thead><tr>
+        <!-- Riwayat Affiliate -->
+        <div class="dashboard-card history-section">
+            <h2>📋 Riwayat Aktivitas Affiliate</h2>
+            <div class="table-responsive">
+                <table class="commission-table">
+                    <thead>
+                        <tr>
 <th>Tanggal</th>
-<th>Produk</th>
-<th>Klik</th>
-<th>Komisi</th>
-<th>Status</th>
-</tr></thead><tbody id="affiliateTable"><tr>
-<td colspan="5">
-Memuat data...
-</td>
-</tr></tbody></table></div></section>
+<th>Nama Produk</th>
+<th>Jumlah Klik</th>
+<th>Komisi Diterima</th>
+<th>Status Komisi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="affiliateTable">
+                        <tr>
+                            <td colspan="5" style="text-align:center; color:#6b7280; padding:20px;">
+                                Memuat data riwayat...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 
-<script type="module">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        // Firebase Konfigurasi
+        const firebaseConfig = {
+            apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+            authDomain:"pasarnusa-18aa0.firebaseapp.com",
+            projectId:"pasarnusa-18aa0",
+            storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+            messagingSenderId:"866998011671",
+            appId:"1:866998011671:web:5555115feb82741ab55952"
+        };
 
-import {
-getFirestore,
-collection,
-query,
-where,
-getDocs,
-addDoc,
-serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
 
-const firebaseConfig = {
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-};
+        // Elemen DOM
+        const loadingScreen = document.getElementById("loadingScreen");
+        const mainDashboard = document.getElementById("mainDashboard");
+        const alertMessage = document.getElementById("alertMessage");
+        const alertText = document.getElementById("alertText");
+        const namaAffiliate = document.getElementById("namaAffiliate");
+        const statusSaldo = document.getElementById("statusSaldo");
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+        // Fungsi Format Rupiah
+        const formatRupiah = (angka) => {
+            return "Rp " + Number(angka || 0).toLocaleString("id-ID");
+        };
 
-const uid = localStorage.getItem("uid");
+        // Fungsi Tampilkan Notifikasi
+        const showNotification = (message, type = "info") => {
+            const notification = document.createElement("div");
+            notification.style.position = "fixed";
+            notification.style.bottom = "20px";
+            notification.style.right = "20px";
+            notification.style.padding = "15px 25px";
+            notification.style.borderRadius = "12px";
+            notification.style.color = "white";
+            notification.style.zIndex = "9999";
+            notification.style.opacity = "0";
+            notification.style.transform = "translateY(20px)";
+            notification.style.transition = "all 0.3s ease";
 
-if(!uid){
-window.location.href = "login.html";
-throw new Error("Belum login");
-}
+            if (type === "success") notification.style.background = "#22c55e";
+            if (type === "error") notification.style.background = "#ef4444";
+            if (type === "info") notification.style.background = "#06b6d4";
 
-document.getElementById("affiliateLink").value =
-"https://fendysubeki-ux.github.io/pasarnusa/?ref=" + uid;
+            notification.innerText = message;
+            document.body.appendChild(notification);
 
-let totalKlik = 0;
-let totalPenjualan = 0;
-let komisiPending = 0;
-let totalKomisi = 0;
+            setTimeout(() => {
+                notification.style.opacity = "1";
+                notification.style.transform = "translateY(0)";
+            }, 10);
 
-const snapshot = await getDocs(
-query(
-collection(db,"affiliate"),
-where("affiliateUid","==",uid)
-)
-);
+            setTimeout(() => {
+                notification.style.opacity = "0";
+                notification.style.transform = "translateY(20px)";
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        };
 
-let html = "";
+        // Fungsi Utama Memuat Dashboard
+        const loadAffiliateDashboard = async (user) => {
+            try {
+                // Tampilkan Loading
+                loadingScreen.style.display = "flex";
+                mainDashboard.style.display = "none";
 
-snapshot.forEach((item)=>{
+                // Ambil Data User
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (!userDoc.exists()) {
+                    throw new Error("Data affiliate tidak ditemukan");
+                }
 
-const data = item.data();
+                const userData = userDoc.data();
 
-totalKlik += Number(data.klik || 0);
-totalPenjualan += Number(data.penjualan || 0);
+                // Validasi Apakah User Adalah Affiliate
+                if (userData.role !== "affiliate") {
+                    throw new Error("Akses khusus untuk pengguna dengan peran Affiliate");
+                }
 
-if(data.status === "Pending"){
-komisiPending += Number(data.komisi || 0);
-}else{
-totalKomisi += Number(data.komisi || 0);
-}
+                // Isi Nama Affiliate
+                namaAffiliate.innerText = `Selamat datang, ${userData.nama || "Affiliate"}! Kelola referral dan komisi Anda`;
 
-html += `
-<tr>
-<td>${
-data.createdAt?.seconds
-? new Date(
-data.createdAt.seconds * 1000
-).toLocaleDateString("id-ID")
-: "-"
-}</td>
+                // Isi Link Affiliate
+                const affiliateLink = `${window.location.origin}/?ref=${user.uid}`;
+                document.getElementById("affiliateLink").value = affiliateLink;
 
-<td>${data.namaProduk || "-"}</td>
+                // Ambil Data Affiliate
+                const affiliateQuery = query(
+                    collection(db, "affiliate"),
+                    where("affiliateUid", "==", user.uid)
+                );
+                const affiliateSnap = await getDocs(affiliateQuery);
 
-<td>${data.klik || 0}</td>
+                // Hitung Statistik
+                let totalKlik = 0;
+                let totalPenjualan = 0;
+                let komisiPending = 0;
+                let totalKomisi = 0;
+                let produkTerlaris = "-";
+                let klikTerbesar = 0;
+                let htmlTable = "";
 
-<td>
-Rp ${Number(
-data.komisi || 0
-).toLocaleString("id-ID")}
-</td>
+                affiliateSnap.forEach((item) => {
+                    const data = item.data();
+                    const tanggal = data.createdAt?.seconds 
+                        ? new Date(data.createdAt.seconds * 1000).toLocaleDateString("id-ID") 
+                        : "-";
 
-<td>${data.status || "-"}</td>
-</tr>
-`;
+                    // Hitung Total Klik & Penjualan
+                    totalKlik += Number(data.klik || 0);
+                    totalPenjualan += Number(data.penjualan || 0);
 
-});
+                    // Hitung Komisi
+                    const komisi = Number(data.komisi || 0);
+                    if (data.status === "Pending") {
+                        komisiPending += komisi;
+                    } else if (data.status === "Selesai") {
+                        totalKomisi += komisi;
+                    }
 
-document.getElementById("totalKlik").innerText =
-totalKlik;
-let produkTerlaris = "-";
-let klikTerbesar = 0;
+                    // Cari Produk Terlaris
+                    if (Number(data.klik || 0) > klikTerbesar) {
+                        klikTerbesar = Number(data.klik || 0);
+                        produkTerlaris = data.namaProduk || "-";
+                    }
 
-snapshot.forEach((item)=>{
+                    // Buat Baris Tabel
+                    htmlTable += `
+                        <tr>
+                            <td>${tanggal}</td>
+                            <td>${data.namaProduk || "-"}</td>
+                            <td>${data.klik || 0}</td>
+                            <td>${formatRupiah(data.komisi)}</td>
+                            <td>
+                                <span style="padding:4px 8px; border-radius:6px; ${
+                                    data.status === "Pending" 
+                                        ? "background:#fef3c7; color:#92400e;" 
+                                        : data.status === "Selesai" 
+                                            ? "background:#dcfce7; color:#166534;" 
+                                            : "background:#f3f4f6; color:#4b5563;"
+                                }">
+                                    ${data.status || "-"}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                });
 
-const data = item.data();
+                // Hitung Konversi
+                const konversi = totalKlik > 0 
+                    ? Math.round((totalPenjualan / totalKlik) * 100) 
+                    : 0;
 
-if(Number(data.klik || 0) > klikTerbesar){
+                // Update Statistik ke Halaman
+                document.getElementById("totalKlik").innerText = totalKlik;
+                document.getElementById("totalPenjualan").innerText = totalPenjualan;
+                document.getElementById("komisiPending").innerText = formatRupiah(komisiPending);
+                document.getElementById("totalKomisi").innerText = formatRupiah(totalKomisi);
+                document.getElementById("saldoAffiliate").innerText = formatRupiah(totalKomisi);
+                document.getElementById("konversi").innerText = `${konversi}%`;
+                document.getElementById("produkTerlaris").innerText = produkTerlaris;
 
-klikTerbesar =
-Number(data.klik || 0);
+                // Update Status Saldo
+                if (totalKomisi < 50000) {
+                    statusSaldo.innerText = "Saldo Belum Cukup";
+                    statusSaldo.style.background = "#fee2e2";
+                    statusSaldo.style.color = "#991b1b";
+                    document.getElementById("cairkanKomisi").disabled = true;
+                    document.getElementById("cairkanKomisi").style.opacity = "0.6";
+                } else {
+                    statusSaldo.innerText = "Saldo Tersedia";
+                    statusSaldo.style.background = "#dcfce7";
+                    statusSaldo.style.color = "#166534";
+                    document.getElementById("cairkanKomisi").disabled = false;
+                    document.getElementById("cairkanKomisi").style.opacity = "1";
+                }
 
-produkTerlaris =
-data.namaProduk || "-";
+                // Update Tabel Riwayat
+                document.getElementById("affiliateTable").innerHTML = htmlTable || `
+                    <tr>
+                        <td colspan="5" style="text-align:center; color:#6b7280; padding:30px;">
+                            Belum ada aktivitas affiliate. Mulai promosikan produk sekarang juga!
+                        </td>
+                    </tr>
+                `;
 
-}
+                // Cek Apakah Ada Pengajuan Pencairan yang Sedang Proses
+                const pendingWithdraw = await getDocs(
+                    query(
+                        collection(db, "pencairanAffiliate"),
+                        where("uid", "==", user.uid),
+                        where("status", "==", "Menunggu Persetujuan")
+                    )
+                );
 
-});
+                if (!pendingWithdraw.empty) {
+                    alertText.innerText = "Anda memiliki pengajuan pencairan yang sedang dalam proses verifikasi.";
+                    alertMessage.style.display = "block";
+                    document.getElementById("cairkanKomisi").disabled = true;
+                    document.getElementById("cairkanKomisi").style.opacity = "0.6";
+                }
 
-document.getElementById(
-"produkTerlaris"
-).innerText =
-produkTerlaris;
-document.getElementById("totalPenjualan").innerText =
-totalPenjualan;
+                // Tampilkan Dashboard Utama
+                loadingScreen.style.display = "none";
+                mainDashboard.style.display = "block";
 
-document.getElementById("komisiPending").innerText =
-"Rp " +
-komisiPending.toLocaleString("id-ID");
+            } catch (error) {
+                console.error("Error memuat dashboard affiliate:", error);
+                
+                // Tampilkan Halaman Error
+                loadingScreen.style.display = "none";
+                document.body.innerHTML = `
+                    <div class="register-card" style="max-width:500px; margin:50px auto; padding:30px;">
+                        <div style="font-size:64px; text-align:center; margin-bottom:20px;">⚠️</div>
+                        <h2>Oops, Ada Masalah!</h2>
+                        <p style="font-size:16px; color:#6b7280; margin:20px 0;">${error.message || "Gagal memuat dashboard affiliate"}</p>
+                        <a href="index.html" class="btn-primary" style="display:block; text-align:center;">
+                            🏠 Kembali ke Beranda
+                        </a>
+                        <a href="login.html" class="btn-secondary" style="display:block; text-align:center; margin-top:10px;">
+                            🔄 Login Ulang
+                        </a>
+                    </div>
+                `;
+            }
+        };
 
-document.getElementById("totalKomisi").innerText =
-"Rp " +
-totalKomisi.toLocaleString("id-ID");
+        // Event Listener Tombol Salin Link
+        document.getElementById("copyAffiliate").addEventListener("click", async () => {
+            const link = document.getElementById("affiliateLink").value;
+            if (!link) {
+                showNotification("Link affiliate tidak tersedia!", "error");
+                return;
+            }
 
-document.getElementById("saldoAffiliate").innerText =
-"Rp " +
-totalKomisi.toLocaleString("id-ID");
+            try {
+                await navigator.clipboard.writeText(link);
+                showNotification("Link affiliate berhasil disalin!", "success");
+            } catch (error) {
+                // Fallback jika clipboard tidak tersedia
+                document.getElementById("affiliateLink").select();
+                document.execCommand("copy");
+                showNotification("Link berhasil disalin!", "success");
+            }
+        });
 
-document.getElementById("konversi").innerText =
-totalKlik > 0
-? Math.round(
-(totalPenjualan / totalKlik) * 100
-) + "%"
-: "0%";
+        // Event Listener Tombol Bagikan
+        document.getElementById("shareAffiliate").addEventListener("click", async () => {
+            const link = document.getElementById("affiliateLink").value;
+            if (!link) {
+                showNotification("Link affiliate tidak tersedia!", "error");
+                return;
+            }
 
-document.getElementById("affiliateTable").innerHTML =
-html ||
-`
-<tr>
-<td colspan="5">
-Belum ada data affiliate
-</td>
-</tr>
-`;
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: "Program Affiliate PasarNusa",
+                        text: "Dapatkan komisi dengan mempromosikan produk UMKM Indonesia!",
+                        url: link
+                    });
+                } catch (error) {
+                    // Fallback ke copy link
+                    await navigator.clipboard.writeText(link);
+                    showNotification("Link berhasil disalin karena fitur berbagi tidak tersedia!", "info");
+                }
+            } else {
+                // Copy link jika Web Share tidak tersedia
+                await navigator.clipboard.writeText(link);
+                showNotification("Link berhasil disalin!", "success");
+            }
+        });
 
-document.getElementById("copyAffiliate")
-.addEventListener("click",async()=>{
+        // Event Listener Tombol Ajukan Pencairan
+        document.getElementById("cairkanKomisi").addEventListener("click", async () => {
+            const user = auth.currentUser;
+            if (!user) {
+                showNotification("Silakan login terlebih dahulu!", "error");
+                window.location.href = "login.html";
+                return;
+            }
 
-const link =
-document.getElementById("affiliateLink").value;
+            const totalKomisi = Number(document.getElementById("totalKomisi").innerText.replace("Rp ", "").replace(/\./g, ""));
+            
+            // Konfirmasi Pengajuan
+            if (!confirm(`Apakah Anda yakin ingin mengajukan pencairan sebesar ${formatRupiah(totalKomisi)}?`)) {
+                return;
+            }
 
-try{
+            try {
+                await addDoc(collection(db, "pencairanAffiliate"), {
+                    uid: user.uid,
+                    jumlah: totalKomisi,
+                    status: "Menunggu Persetujuan",
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                });
 
-await navigator.clipboard.writeText(link);
+                showNotification("Pengajuan pencairan berhasil dikirim! Tunggu proses verifikasi.", "success");
+                window.location.href = "withdraw-affiliate.html";
+            } catch (error) {
+                console.error("Error mengajukan pencairan:", error);
+                showNotification("Gagal mengajukan pencairan, silakan coba lagi!", "error");
+            }
+        });
 
-alert("Link berhasil disalin");
+        // Cek Status User Saat Halaman Dimuat
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
 
-}catch{
+            // Ambil Role dari Local Storage atau Firestore
+            const role = localStorage.getItem("role");
+            if (!role || role !== "affiliate") {
+                // Ambil Role dari Firestore jika tidak ada di Local Storage
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (!userDoc.exists() || userDoc.data().role !== "affiliate") {
+                    alert("Akses khusus untuk pengguna Affiliate");
+                    window.location.href = "index.html";
+                    return;
+                }
+                localStorage.setItem("role", userDoc.data().role);
+            }
 
-alert("Gagal menyalin link");
-
-}
-
-});
-
-document.getElementById("shareAffiliate")
-.addEventListener("click",async()=>{
-
-const link =
-document.getElementById("affiliateLink").value;
-
-if(navigator.share){
-
-await navigator.share({
-title:"Affiliate PasarNusa",
-url:link
-});
-
-}else{
-
-navigator.clipboard.writeText(link);
-
-alert("Link berhasil disalin");
-
-}
-
-});
-
-document.getElementById("cairkanKomisi")
-.addEventListener("click",async()=>{
-
-if(totalKomisi < 50000){
-
-alert("Minimal pencairan Rp50.000");
-return;
-
-}
-
-await addDoc(
-collection(db,"pencairanAffiliate"),
-{
-uid:uid,
-jumlah:totalKomisi,
-status:"Menunggu Persetujuan",
-createdAt:serverTimestamp()
-}
-);
-
-alert("Pengajuan pencairan berhasil");
-
-window.location.href =
-"withdraw-affiliate.html";
-
-});
-
-</script></body>
+            // Muat Dashboard
+            loadAffiliateDashboard(user);
+        });
+    </script>
+</body>
 </html>
