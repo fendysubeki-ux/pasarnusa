@@ -168,7 +168,9 @@ ${produk.kategori || "UMKM"}
 </span>
 
 <h3>
-${produk.namaProduk || "-"}
+${String(produk.namaProduk || "")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")}
 </h3>
 
 ${
@@ -209,8 +211,9 @@ ${produk.terjual || 0}
 
 <p>
 ${
-(produk.deskripsi || "")
-.slice(0,80)
+String(
+produk.deskripsi || ""
+).slice(0,80)
 }
 ...
 </p>
