@@ -1,61 +1,146 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard Admin PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
-</head><body><section class="dashboard"><div class="dashboard-header"><div>
-<h1>🛠 Dashboard Admin a</h1>
-<p>Pusat kontrol marketplace UMKM Indonesia</p>
-</div><div style="display:flex;gap:10px;flex-wrap:wrap;">
-<a href="index.html" class="btn-secondary">🏠 Beranda</a>
-</div></div><h2>📊 Ringkasan Marketplace</h2><div class="dashboard-grid"><div class="dashboard-card">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Admin - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+
+<h1>🛠 Dashboard Admin</h1>
+
+<p>
+Pusat kontrol Marketplace UMKM Indonesia
+</p>
+
+</div>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+<a href="index.html" class="btn-secondary">
+🏠 Beranda
+</a>
+
+<button id="logoutBtn" class="btn-primary">
+🚪 Logout
+</button>
+
+</div>
+
+</div>
+
+<h2>📊 Ringkasan Marketplace</h2>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
 <h3 id="totalProduk">0</h3>
 <p>Total Produk</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="totalPesanan">0</h3>
 <p>Total Pesanan</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="totalUmkm">0</h3>
 <p>Total UMKM</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalAffiliate">0</h3>
+<p>Total Affiliate</p>
+</div>
+
+<div class="dashboard-card">
 <h3 id="pesananHariIni">0</h3>
 <p>Pesanan Hari Ini</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="totalTransaksi">Rp 0</h3>
 <p>Total Transaksi</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
 <h3 id="produkHabis">0</h3>
 <p>Produk Stok Habis</p>
-</div></div><h2>⚙ Menu Admin</h2><div class="dashboard-grid"><a href="pesanan-admin.html" class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
+<h3 id="umkmPending">0</h3>
+<p>UMKM Pending</p>
+</div>
+
+</div>
+
+<h2>⚙ Menu Admin</h2>
+
+<div class="dashboard-grid">
+
+<a href="pesanan-admin.html" class="dashboard-card">
 <h3>📦 Kelola Pesanan</h3>
-<p>Kelola seluruh transaksi marketplace</p>
-</a><a href="verifikasi-pembayaran.html" class="dashboard-card">
+<p>Kelola seluruh transaksi</p>
+</a>
+
+<a href="verifikasi-pembayaran.html" class="dashboard-card">
 <h3>💳 Verifikasi Pembayaran</h3>
-<p>Periksa bukti transfer pembeli</p>
-</a><a href="produk-admin.html" class="dashboard-card">
+<p>Cek bukti transfer</p>
+</a>
+
+<a href="produk-admin.html" class="dashboard-card">
 <h3>🛍 Kelola Produk</h3>
-<p>Tambah, edit dan hapus produk</p>
-</a><a href="umkm-admin.html" class="dashboard-card">
+<p>Kelola seluruh produk</p>
+</a>
+
+<a href="umkm-admin.html" class="dashboard-card">
 <h3>🏪 Kelola UMKM</h3>
-<p>Verifikasi dan kelola UMKM</p>
-</a><a href="voucher-admin.html" class="dashboard-card">
+<p>Verifikasi UMKM</p>
+</a>
+
+<a href="affiliate-admin.html" class="dashboard-card">
+<h3>🤝 Kelola Affiliate</h3>
+<p>Kelola akun affiliate</p>
+</a>
+
+<a href="komisi-admin.html" class="dashboard-card">
+<h3>💰 Pencairan Komisi</h3>
+<p>Verifikasi pencairan</p>
+</a>
+
+<a href="voucher-admin.html" class="dashboard-card">
 <h3>🎟 Kelola Voucher</h3>
-<p>Promo dan diskon marketplace</p>
-</a><a href="index.html" class="dashboard-card">
-<h3>🌐 Marketplace</h3>
-<p>Kembali ke halaman utama</p>
-</a></div><h2>🚀 Status Beta Launch</h2><div class="dashboard-grid"><div class="dashboard-card">
-<h3>🛍 Produk</h3>
-<p>Siap digunakan</p>
-</div><div class="dashboard-card">
-<h3>🛒 Checkout</h3>
-<p>Siap digunakan</p>
-</div><div class="dashboard-card">
-<h3>📦 Pesanan</h3>
-<p>Dalam pengujian</p>
-</div><div class="dashboard-card">
-<h3>💳 Pembayaran</h3>
-<p>Dalam pengujian</p>
-</div></div></section>
-</script></body>
+<p>Promo marketplace</p>
+</a>
+
+<a href="laporan-admin.html" class="dashboard-card">
+<h3>📊 Laporan</h3>
+<p>Laporan marketplace</p>
+</a>
+
+</div>
+
+</section>
+
+<script type="module" src="admin.js"></script>
+
+</body>
 </html>
