@@ -44,7 +44,8 @@ class="btn-primary">
 
 Kirim
 
-</button></div></section><script type="module">
+</button></div></section>
+<script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -56,7 +57,9 @@ addDoc,
 query,
 orderBy,
 onSnapshot,
-serverTimestamp
+serverTimestamp,
+doc,
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
@@ -76,11 +79,14 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+const db =
+getFirestore(app);
 
-const auth = getAuth(app);
+const auth =
+getAuth(app);
 
 await auth.authStateReady();
 
@@ -89,9 +95,11 @@ if(!auth.currentUser){
 window.location.href =
 "login.html";
 
-}
+throw new Error(
+"Belum login"
+);
 
-/* Parameter */
+}
 
 const params =
 new URLSearchParams(
@@ -104,24 +112,114 @@ params.get("room");
 if(!roomId){
 
 alert(
-"Room chat tidak ditemukan"
+"Room tidak ditemukan"
 );
 
 window.location.href =
 "index.html";
 
+throw new Error(
+"Room kosong"
+);
+
 }
 
-/* Container */
+const roomRef =
+doc(
+db,
+"chat_rooms",
+roomId
+);
+
+const roomSnap =
+await getDoc(roomRef);
+
+if(!roomSnap.exists()){
+
+alert(
+"Room tidak ditemukan"
+);
+
+window.location.href =
+"index.html";
+
+throw new Error(
+"Room tidak ada"
+);
+
+}
+
+const room =
+roomSnap.data();
+
+if(
+!room.members ||
+!room.members.includes(
+auth.currentUser.uid
+)
+){
+
+alert(
+"Akses ditolak"
+);
+
+window.location.href =
+"index.html";
+
+throw new Error(
+"Bukan anggota room"
+);
+
+}
+
+/* HEADER */
+
+document.getElementById(
+"namaToko"
+).innerText =
+room.namaToko ||
+"Toko PasarNusa";
+
+document.getElementById(
+"fotoToko"
+).src =
+room.fotoToko ||
+"https://picsum.photos/100";
+
+document.getElementById(
+"namaProduk"
+).innerText =
+room.namaProduk ||
+"Produk";
+
+document.getElementById(
+"hargaProduk"
+).innerText =
+"Rp " +
+Number(
+room.hargaProduk || 0
+).toLocaleString("id-ID");
+
+document.getElementById(
+"gambarProduk"
+).src =
+room.gambarProduk ||
+"https://picsum.photos/150";
+
+document.getElementById(
+"detailProduk"
+).href =
+"produk-detail.html?id=" +
+(room.produkId || "");
+
+/* CHAT */
 
 const container =
 document.getElementById(
 "chatContainer"
 );
 
-/* Load Chat */
-
-const q =
+const chatQuery =
 query(
 collection(
 db,
@@ -130,24 +228,44 @@ roomId,
 "messages"
 ),
 orderBy(
-"createdAt"
+"createdAt",
+"asc"
 )
 );
 
 onSnapshot(
-q,
+chatQuery,
 (snapshot)=>{
 
 container.innerHTML = "";
 
-snapshot.forEach((doc)=>{
+if(snapshot.empty){
+
+container.innerHTML = `
+<div class="chat-system">
+Mulai percakapan dengan penjual
+</div>
+`;
+
+return;
+
+}
+
+snapshot.forEach((item)=>{
 
 const data =
-doc.data();
+item.data();
 
 const saya =
 data.uid ===
 auth.currentUser.uid;
+
+const pesan =
+String(
+data.pesan || ""
+)
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
 
 container.innerHTML += `
 
@@ -157,7 +275,7 @@ ${saya ? "chat-right" : "chat-left"}
 
 <div class="chat-bubble">
 
-${data.pesan}
+${pesan}
 
 </div>
 
@@ -173,9 +291,13 @@ container.scrollHeight;
 }
 );
 
-/* Kirim Pesan */
+/* KIRIM PESAN */
+
+let sending = false;
 
 async function kirimPesan(){
+
+if(sending) return;
 
 const input =
 document.getElementById(
@@ -187,6 +309,22 @@ input.value.trim();
 
 if(!pesan) return;
 
+if(
+pesan.length > 1000
+){
+
+alert(
+"Maksimal 1000 karakter"
+);
+
+return;
+
+}
+
+try{
+
+sending = true;
+
 await addDoc(
 collection(
 db,
@@ -195,6 +333,7 @@ roomId,
 "messages"
 ),
 {
+
 uid:
 auth.currentUser.uid,
 
@@ -206,14 +345,31 @@ pesan,
 
 createdAt:
 serverTimestamp()
+
 }
 );
 
 input.value = "";
 
 }
+catch(error){
 
-/* Event */
+console.error(error);
+
+alert(
+"Gagal mengirim pesan"
+);
+
+}
+finally{
+
+sending = false;
+
+}
+
+}
+
+/* EVENT */
 
 document
 .getElementById(
@@ -232,7 +388,9 @@ document
 "keydown",
 (e)=>{
 
-if(e.key === "Enter"){
+if(
+e.key === "Enter"
+){
 
 kirimPesan();
 
