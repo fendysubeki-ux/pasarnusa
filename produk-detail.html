@@ -445,12 +445,8 @@ ref
             }
         });
 
-        // Event Listener Tambah ke Keranjang
-        document.getElementById(
-"addToCart"
-).addEventListener(
-"click",
-()=>{
+document.getElementById("addToCart")
+.addEventListener("click",()=>{
 
 const params =
 new URLSearchParams(
@@ -478,7 +474,7 @@ Number(produkData.stok || 0)
 ){
 
 showNotification(
-"Jumlah melebihi stok tersedia",
+"Jumlah melebihi stok",
 "error"
 );
 
@@ -496,28 +492,34 @@ id: produkId,
 
 uidUmkm:
 produkData.uidUmkm ||
-produkData.uid,
+produkData.uid ||
+"",
 
 uid:
-produkData.uid,
+produkData.uid || "",
 
 namaToko:
 produkData.namaToko || "",
 
 namaProduk:
-produkData.namaProduk,
+produkData.namaProduk || "",
 
 gambar:
-produkData.gambar,
+Array.isArray(produkData.gambar)
+? produkData.gambar[0]
+: produkData.gambar,
 
 harga:
-Number(produkData.harga),
-
-kategori:
-produkData.kategori,
+Number(produkData.harga || 0),
 
 stok:
 Number(produkData.stok || 0),
+
+berat:
+Number(produkData.berat || 0),
+
+kategori:
+produkData.kategori || "",
 
 qty:1
 
@@ -531,18 +533,13 @@ JSON.stringify(cart)
 );
 
 showNotification(
-"Produk berhasil ditambahkan ke keranjang",
+"Produk masuk keranjang",
 "success"
 );
 
 });
-
-        // Event Listener Beli Sekarang
-        document.getElementById(
-"buyNow"
-).addEventListener(
-"click",
-()=>{
+document.getElementById("buyNow")
+.addEventListener("click",()=>{
 
 const params =
 new URLSearchParams(
@@ -552,49 +549,58 @@ window.location.search
 const produkId =
 params.get("id");
 
-localStorage.setItem(
-"cart",
-JSON.stringify([
+const cart = [
+
 {
 
 id: produkId,
 
 uidUmkm:
 produkData.uidUmkm ||
-produkData.uid,
+produkData.uid ||
+"",
 
 uid:
-produkData.uid,
+produkData.uid || "",
 
 namaToko:
 produkData.namaToko || "",
 
 namaProduk:
-produkData.namaProduk,
+produkData.namaProduk || "",
 
 gambar:
-produkData.gambar,
+Array.isArray(produkData.gambar)
+? produkData.gambar[0]
+: produkData.gambar,
 
 harga:
-Number(produkData.harga),
-
-kategori:
-produkData.kategori,
+Number(produkData.harga || 0),
 
 stok:
 Number(produkData.stok || 0),
 
+berat:
+Number(produkData.berat || 0),
+
+kategori:
+produkData.kategori || "",
+
 qty:1
 
 }
-])
+
+];
+
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
 );
 
 window.location.href =
 "checkout.html";
 
-}
-);
+});
         onAuthStateChanged(auth, (user) => {
             // Load Detail Produk Setelah User Diketahui
             loadProductDetail();
