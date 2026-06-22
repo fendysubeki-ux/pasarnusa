@@ -6,24 +6,29 @@
 
 <title>Pesanan Saya - PasarNusa</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-</head>
 
+<link rel="stylesheet" href="style.css">
+
+</head>
 <body>
 
 <section class="dashboard">
 
 <div class="dashboard-header">
+
 <div>
 <h1>📦 Pesanan Saya</h1>
-<p>Pantau seluruh status pesanan Anda</p>
+<p>Lihat dan pantau seluruh pesanan Anda.</p>
 </div>
 
 <a href="index.html" class="btn-secondary">
 🏠 Beranda
 </a>
+
 </div>
 
 <div class="dashboard-grid">
@@ -36,6 +41,11 @@
 <div class="dashboard-card">
 <h3 id="belumBayar">0</h3>
 <p>Belum Bayar</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="menungguVerifikasi">0</h3>
+<p>Verifikasi</p>
 </div>
 
 <div class="dashboard-card">
@@ -65,29 +75,58 @@
 <input
 type="text"
 id="searchPesanan"
-placeholder="Cari pesanan...">
+placeholder="Cari nomor pesanan atau nama toko...">
 
 <br><br>
 
 <select id="filterStatus">
-<option value="all">Semua Status</option>
-<option value="Belum Bayar">Belum Bayar</option>
-<option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
-<option value="Diproses">Diproses</option>
-<option value="Dikirim">Dikirim</option>
-<option value="Selesai">Selesai</option>
-<option value="Dibatalkan">Dibatalkan</option>
+
+<option value="all">
+Semua Status
+</option>
+
+<option value="Belum Bayar">
+Belum Bayar
+</option>
+
+<option value="Menunggu Verifikasi">
+Menunggu Verifikasi
+</option>
+
+<option value="Diproses">
+Diproses
+</option>
+
+<option value="Dikirim">
+Dikirim
+</option>
+
+<option value="Selesai">
+Selesai
+</option>
+
+<option value="Ditolak">
+Ditolak
+</option>
+
 </select>
 
 </div>
+
+<br>
 
 <div
 id="pesananContainer"
 class="dashboard-grid">
 
 <div class="dashboard-card">
+
 <h3>Memuat Pesanan...</h3>
-<p>Mohon tunggu...</p>
+
+<p>
+Mohon tunggu sebentar
+</p>
+
 </div>
 
 </div>
