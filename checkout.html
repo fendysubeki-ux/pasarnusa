@@ -126,10 +126,6 @@ JSON.parse(
 localStorage.getItem("cart")
 ) || [];
 console.log(cart);
-
-alert(
-JSON.stringify(cart)
-);
 if(cart.length === 0){
 
 alert("Keranjang kosong");
@@ -154,6 +150,9 @@ const tokoData =
 tokoSnap.exists()
 ? tokoSnap.data()
 : {};
+const kotaAsal =
+tokoData.kota || "";
+alert("KOTA ASAL = " + kotaAsal);
 const bedaToko =
 cart.some(
 item =>
@@ -190,8 +189,6 @@ Number(item.qty || 1)
 ),
 0
 );
-
-alert("SUBTOTAL = " + subtotal);
 
 function updateTotal(){
 
@@ -258,26 +255,57 @@ document
 "change",
 (e)=>{
 
-switch(e.target.value){
+const kotaTujuan =
+e.target.value;
 
-case "Tulungagung":
-ongkir = 5000;
-break;
+const totalBerat =
+cart.reduce(
+(total,item)=>
+total +
+(
+Number(item.berat || 0) *
+Number(item.qty || 1)
+),
+0
+);
 
-case "Blitar":
-ongkir = 10000;
-break;
+if(
+kotaAsal === "Blitar" &&
+kotaTujuan === "Tulungagung"
+){
 
-case "Kediri":
+ongkir = 8000;
+
+}
+else if(
+kotaAsal === "Blitar" &&
+kotaTujuan === "Kediri"
+){
+
 ongkir = 12000;
-break;
 
-case "Trenggalek":
+}
+else if(
+kotaAsal === "Blitar" &&
+kotaTujuan === "Trenggalek"
+){
+
 ongkir = 15000;
-break;
 
-default:
-ongkir = 0;
+}
+else{
+
+ongkir = 10000;
+
+}
+
+if(totalBerat > 1000){
+
+ongkir +=
+Math.ceil(
+(totalBerat - 1000)
+/1000
+) * 3000;
 
 }
 
