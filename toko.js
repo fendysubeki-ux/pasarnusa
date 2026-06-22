@@ -100,7 +100,7 @@ toko.deskripsi ||
 document.getElementById(
 "logoToko"
 ).src =
-toko.fotoUmkm ||
+toko.logo ||
 "https://picsum.photos/200";
 
 document.getElementById(
