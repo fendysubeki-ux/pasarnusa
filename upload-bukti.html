@@ -2,7 +2,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Upload Bukti Pembayaran - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="dashboard"><h1>💳 Upload Bukti Pembayaran</h1><p>
 Upload bukti transfer untuk pesanan Anda.
-</p><div class="form-card"><div class="dashboard-card"><h3>Informasi Pembayaran</h3><p><b>Bank:</b> BCA</p><p><b>No Rekening:</b> 1234567890</p><p><b>Atas Nama:</b> PT PasarNusa Indonesia</p></div><div class="dashboard-card"><p>
+</p><div class="form-card"><div class="dashboard-card"><h3>Informasi Pembayaran</h3>
+<p>
+<b>Bank:</b>
+<span id="namaBank">-</span>
+</p>
+
+<p>
+<b>No Rekening:</b>
+<span id="nomorRekening">-</span>
+</p>
+
+<p>
+<b>Atas Nama:</b>
+<span id="atasNama">-</span>
+</p>
+
+<button
+id="copyRekening"
+class="btn-secondary">
+📋 Salin Rekening
+</button>
+</div><div class="dashboard-card"><p>
 Nomor Pesanan :
 <b id="nomorPesanan">-</b>
 </p><p>
@@ -157,6 +178,18 @@ throw new Error(
 
 const pesanan =
 pesananSnap.data();
+const umkmSnap = await getDoc(
+doc(
+db,
+"users",
+pesanan.uidUmkm
+)
+);
+
+const umkmData =
+umkmSnap.exists()
+? umkmSnap.data()
+: {};
 if(
 pesanan.status ===
 "Menunggu Verifikasi"
@@ -205,7 +238,36 @@ document.getElementById(
 Number(
 pesanan.totalBayar || 0
 ).toLocaleString("id-ID");
+document.getElementById(
+"namaBank"
+).innerText =
+umkmData.namaBank || "-";
 
+document.getElementById(
+"nomorRekening"
+).innerText =
+umkmData.nomorRekening || "-";
+
+document.getElementById(
+"atasNama"
+).innerText =
+umkmData.atasNama || "-";
+document
+.getElementById("copyRekening")
+.addEventListener(
+"click",
+()=>{
+
+navigator.clipboard.writeText(
+umkmData.nomorRekening || ""
+);
+
+alert(
+"Nomor rekening berhasil disalin"
+);
+
+}
+);
 const input =
 document.getElementById(
 "buktiTransfer"
@@ -217,6 +279,9 @@ input.addEventListener(
 
 const file =
 e.target.files[0];
+
+if(!file) return;
+
 if(
 file.size >
 2 * 1024 * 1024
