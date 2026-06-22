@@ -4,9 +4,11 @@ from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import {
 getFirestore,
 collection,
-getDocs,
 query,
-where
+where,
+getDocs,
+doc,
+updateDoc
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
@@ -24,6 +26,7 @@ projectId:"pasarnusa-18aa0",
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
 messagingSenderId:"866998011671",
 appId:"1:866998011671:web:5555115feb82741ab55952"
+
 };
 
 const app = initializeApp(firebaseConfig);
@@ -31,9 +34,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 const container =
-document.getElementById(
-"pesananContainer"
-);
+document.getElementById("pesananContainer");
 
 let semuaPesanan = [];
 
@@ -54,7 +55,7 @@ Pesanan Anda akan muncul di sini
 </p>
 
 <a
-href="produk.html"
+href="index.html"
 class="btn-primary">
 
 Belanja Sekarang
@@ -80,25 +81,22 @@ Pesanan #${item.id.substring(0,8)}
 </h3>
 
 <p>
-Status :
+🏪 ${item.namaUmkm || "-"}
+</p>
+
+<p>
+📦 Status :
 <b>${item.status || "Belum Bayar"}</b>
 </p>
 
 <p>
-Total :
-Rp ${Number(
+💰 Rp ${Number(
 item.totalBayar || 0
 ).toLocaleString("id-ID")}
 </p>
 
 <p>
-Pembeli :
-${item.namaPembeli || "-"}
-</p>
-
-<p>
-Tanggal :
-${
+📅 ${
 item.createdAt?.seconds
 ?
 new Date(
@@ -108,6 +106,19 @@ item.createdAt.seconds * 1000
 "-"
 }
 </p>
+
+${
+item.resi
+?
+`
+<p>
+🚚 Resi :
+<b>${item.resi}</b>
+</p>
+`
+:
+""
+}
 
 <div
 style="
@@ -141,6 +152,22 @@ class="btn-primary">
 ""
 }
 
+${
+item.status === "Dikirim"
+?
+`
+<button
+onclick="pesananDiterima('${item.id}')"
+class="btn-primary">
+
+✔️ Pesanan Diterima
+
+</button>
+`
+:
+""
+}
+
 </div>
 
 </div>
@@ -150,6 +177,32 @@ class="btn-primary">
 });
 
 }
+
+window.pesananDiterima =
+async(id)=>{
+
+if(
+!confirm(
+"Pesanan sudah diterima?"
+)
+){
+return;
+}
+
+await updateDoc(
+doc(db,"pesanan",id),
+{
+status:"Selesai"
+}
+);
+
+alert(
+"Pesanan selesai"
+);
+
+location.reload();
+
+};
 
 onAuthStateChanged(
 auth,
@@ -166,8 +219,6 @@ return;
 
 try{
 
-semuaPesanan = [];
-
 const snapshot =
 await getDocs(
 
@@ -182,20 +233,23 @@ user.uid
 
 );
 
+semuaPesanan = [];
+
 let totalPesanan = 0;
 let belumBayar = 0;
+let menungguVerifikasi = 0;
 let diproses = 0;
 let dikirim = 0;
 let selesai = 0;
 let totalBelanja = 0;
 
-snapshot.forEach((docu)=>{
+snapshot.forEach((docSnap)=>{
 
 const data =
-docu.data();
+docSnap.data();
 
 semuaPesanan.push({
-id:docu.id,
+id:docSnap.id,
 ...data
 });
 
@@ -207,25 +261,36 @@ data.totalBayar || 0
 );
 
 if(
-data.status === "Belum Bayar"
+data.status ===
+"Belum Bayar"
 ){
 belumBayar++;
 }
 
 if(
-data.status === "Diproses"
+data.status ===
+"Menunggu Verifikasi"
+){
+menungguVerifikasi++;
+}
+
+if(
+data.status ===
+"Diproses"
 ){
 diproses++;
 }
 
 if(
-data.status === "Dikirim"
+data.status ===
+"Dikirim"
 ){
 dikirim++;
 }
 
 if(
-data.status === "Selesai"
+data.status ===
+"Selesai"
 ){
 selesai++;
 }
@@ -241,6 +306,11 @@ document.getElementById(
 "belumBayar"
 ).innerText =
 belumBayar;
+
+document.getElementById(
+"menungguVerifikasi"
+).innerText =
+menungguVerifikasi;
 
 document.getElementById(
 "diproses"
@@ -278,9 +348,7 @@ container.innerHTML = `
 
 <h3>Error</h3>
 
-<p>
-${error.message}
-</p>
+<p>${error.message}</p>
 
 </div>
 
@@ -303,9 +371,15 @@ e.target.value.toLowerCase();
 renderPesanan(
 
 semuaPesanan.filter(
-item =>
+item=>
 
 item.id
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(item.namaUmkm || "")
 .toLowerCase()
 .includes(keyword)
 
