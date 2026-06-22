@@ -261,6 +261,13 @@ return;
 
 }
 
+if(Number(berat) < 1){
+
+alert("Berat minimal 1 gram");
+
+return;
+
+}
 const files =
 imageInput.files;
 
@@ -452,6 +459,12 @@ harga: Number(harga),
 stok: Number(stok),
 
 berat: Number(berat),
+
+kotaAsal:
+userData.kota || "",
+
+provinsiAsal:
+userData.provinsi || "",
 
 kategori: kategori,
 
