@@ -184,6 +184,12 @@ getFirestore(app);
 const auth =
 getAuth(app);
 
+const CLOUD_NAME =
+"dq8gha9lv";
+
+const UPLOAD_PRESET =
+"pasarnusa";
+
 await auth.authStateReady();
 
 if(!auth.currentUser){
@@ -197,7 +203,7 @@ const uid =
 auth.currentUser.uid;
 
 const tokoRef =
-doc(db,"umkm",uid);
+doc(db,"users",uid);
 
 const tokoSnap =
 await getDoc(tokoRef);
@@ -288,7 +294,111 @@ btn.innerText =
 "Menyimpan...";
 
 try{
+let logoUrl = tokoSnap.data()?.logo || "";
+let bannerUrl = tokoSnap.data()?.banner || "";
+let qrisUrl = tokoSnap.data()?.qris || "";
+const logoFile =
+document.getElementById("logo").files[0];
 
+if(logoFile){
+
+const formData =
+new FormData();
+
+formData.append(
+"file",
+logoFile
+);
+
+formData.append(
+"upload_preset",
+UPLOAD_PRESET
+);
+
+const response =
+await fetch(
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+logoUrl =
+result.secure_url;
+
+}
+const bannerFile =
+document.getElementById("banner").files[0];
+
+if(bannerFile){
+
+const formData =
+new FormData();
+
+formData.append(
+"file",
+bannerFile
+);
+
+formData.append(
+"upload_preset",
+UPLOAD_PRESET
+);
+
+const response =
+await fetch(
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+bannerUrl =
+result.secure_url;
+
+}
+const qrisFile =
+document.getElementById("qris").files[0];
+
+if(qrisFile){
+
+const formData =
+new FormData();
+
+formData.append(
+"file",
+qrisFile
+);
+
+formData.append(
+"upload_preset",
+UPLOAD_PRESET
+);
+
+const response =
+await fetch(
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+qrisUrl =
+result.secure_url;
+
+}
 await updateDoc(
 tokoRef,
 {
@@ -326,8 +436,12 @@ document.getElementById(
 atasNama:
 document.getElementById(
 "atasNama"
-).value
+).value, 
+logo: logoUrl,
 
+banner: bannerUrl,
+
+qris: qrisUrl,
 }
 );
 
