@@ -431,37 +431,45 @@ data.secure_url
 }
 
 await addDoc(
-collection(
-db,
-"produk"
-),
+collection(db,"produk"),
 {
-uid:
-auth.currentUser.uid,
+
+uid: auth.currentUser.uid,
+
+uidUmkm: auth.currentUser.uid,
 
 namaToko:
-userData.namaUmkm || userData.nama,
+userData.namaUmkm ||
+userData.nama,
 
 whatsapp:
-userData.whatsapp,
+userData.whatsapp || "",
 
-namaProduk:nama,
+namaProduk: nama,
 
-harga:Number(harga),
+harga: Number(harga),
 
-stok:Number(stok),
-berat:Number(berat || 0),
-kategori:kategori,
+stok: Number(stok),
 
-deskripsi:deskripsi,
+berat: Number(berat),
 
-gambar:imageUrls,
+kategori: kategori,
 
-rating:0,
+deskripsi: deskripsi,
 
-totalReview:0,
+gambar: imageUrls,
 
-terjual:0,
+rating: 0,
+
+totalReview: 0,
+
+terjual: 0,
+
+followers: 0,
+
+affiliateAktif: true,
+
+komisiAffiliate: 5,
 
 status:
 Number(stok) <= 0
@@ -470,6 +478,7 @@ Number(stok) <= 0
 
 createdAt:
 serverTimestamp()
+
 }
 );
 
@@ -478,8 +487,7 @@ alert(
 );
 
 window.location.href =
-"dashboard-produk.html";
-
+"produk-saya.html";
 }
 
 catch(error){
