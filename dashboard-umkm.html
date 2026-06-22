@@ -63,7 +63,11 @@
 <h3>📈 Statistik</h3>
 </a><a href="pengaturan.html" class="dashboard-card">
 <h3>⚙️ Pengaturan</h3>
-</a><a href="notifikasi.html" class="dashboard-card">
+</a>
+<a href="rekening-umkm.html" class="dashboard-card">
+<h3>🏦 Rekening UMKM</h3>
+</a>
+<a href="notifikasi.html" class="dashboard-card">
 <h3>🔔 Notifikasi</h3>
 </a>
 
@@ -334,25 +338,29 @@ if(!adaProdukSaya) return;
 
 totalPesanan++;
 
+if(
+pesanan.status === "Selesai"
+){
+
 totalPendapatan +=
 Number(
 pesanan.totalBayar || 0
 );
 
-if(
-pesanan.status === "menunggu"
-){
+}
 
+if(
+pesanan.status === "Belum Bayar"
+){
 pesananBaru++;
-
 }
+
 if(
-pesanan.status === "dikirim"
+pesanan.status === "Dikirim"
 ){
-
 pesananDikirim++;
-
 }
+
 if(
 pesanan.status ===
 "Menunggu Verifikasi"
