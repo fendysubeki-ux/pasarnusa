@@ -1,12 +1,29 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Login PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><meta name="description" content="Login PasarNusa Marketplace UMKM Indonesia">
-<meta name="theme-color" content="#16a34a"></head>
-<body><div class="register-card"><h1>🔐 Login PasarNusa</h1><p style="text-align:center;margin-bottom:20px;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login PasarNusa</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<section class="auth-section">
+
+<div class="register-card">
+
+<h1>🔐 Login PasarNusa</h1>
+
+<p>
 Masuk untuk berbelanja, mengelola UMKM, atau menjalankan affiliate.
-</p><input
+</p>
+
+<input
 type="email"
 id="email"
 placeholder="Masukkan Email">
@@ -22,306 +39,45 @@ class="btn-primary">
 
 Masuk
 
-</button><p style="text-align:center;margin-top:15px;"><a href="reset-password.html">Lupa Password?
+</button>
 
-</a></p><p style="text-align:center;margin-top:20px;"><a href="register-user.html">
+<div style="margin-top:20px;text-align:center;">
+
+<a href="reset-password.html">
+Lupa Password?
+</a>
+
+<br><br>
+
+<a href="register-user.html">
 Daftar Pembeli
-</a>|
+</a>
+
+|
 
 <a href="register.html">
 Daftar UMKM
-</a>|
+</a>
+
+|
 
 <a href="register-affiliate.html">
 Daftar Affiliate
-</a></p><p style="text-align:center;margin-top:20px;"><a href="index.html">⬅ Kembali ke Beranda
+</a>
 
-</a></p></div>
-<script type="module">
+<br><br>
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+<a href="index.html">
+⬅ Kembali ke Beranda
+</a>
 
-import {
-getAuth,
-signInWithEmailAndPassword,
-onAuthStateChanged,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+</div>
 
-import {
-getFirestore,
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+</div>
 
-const firebaseConfig = {
+</section>
 
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
-onAuthStateChanged(
-auth,
-(user)=>{
-
-if(user){
-
-const role =
-localStorage.getItem("role");
-
-if(role === "admin"){
-
-window.location.href =
-"admin.html";
-
-}
-else if(role === "affiliate"){
-
-window.location.href =
-"affiliate-dashboard.html";
-
-}
-else if(role === "umkm"){
-
-window.location.href =
-"dashboard-umkm.html";
-
-}
-else{
-
-window.location.href =
-"index.html";
-
-}
-
-}
-
-}
-);
-
-async function login(){
-
-const btn =
-document.getElementById(
-"btnLogin"
-);
-
-const email =
-document.getElementById(
-"email"
-).value.trim();
-
-const password =
-document.getElementById(
-"password"
-).value;
-
-if(!email || !password){
-
-alert(
-"Email dan Password wajib diisi"
-);
-
-return;
-
-}
-
-try{
-
-btn.disabled = true;
-
-btn.innerText =
-"Memproses...";
-
-const credential =
-await signInWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-const uid =
-credential.user.uid;
-
-const userDoc =
-await getDoc(
-doc(db,"users",uid)
-);
-
-if(!userDoc.exists()){
-
-alert(
-"Data akun tidak ditemukan"
-);
-
-await signOut(auth);
-
-return;
-
-}
-
-const user =
-userDoc.data();
-
-if(
-user.role === "umkm" &&
-user.status !== "aktif"
-){
-
-alert(
-"Akun UMKM belum diverifikasi admin"
-);
-
-await signOut(auth);
-
-return;
-
-}
-
-localStorage.setItem(
-"uid",
-uid
-);
-
-localStorage.setItem(
-"role",
-user.role || "user"
-);
-
-localStorage.setItem(
-"nama",
-user.nama || ""
-);
-
-localStorage.setItem(
-"namaUmkm",
-user.namaUmkm || ""
-);
-
-localStorage.setItem(
-"status",
-user.status || ""
-);
-
-if(user.role === "admin"){
-
-window.location.href =
-"admin.html";
-
-}
-else if(user.role === "affiliate"){
-
-window.location.href =
-"affiliate-dashboard.html";
-
-}
-else if(user.role === "umkm"){
-
-window.location.href =
-"dashboard-umkm.html";
-
-}
-else{
-
-window.location.href =
-"index.html";
-
-}
-
-}
-catch(error){
-
-console.error(error);
-
-let pesan =
-"Login gagal";
-
-if(
-error.code ===
-"auth/invalid-credential"
-){
-
-pesan =
-"Email atau Password salah";
-
-}
-
-if(
-error.code ===
-"auth/network-request-failed"
-){
-
-pesan =
-"Koneksi internet bermasalah";
-
-}
-
-if(
-error.code ===
-"auth/too-many-requests"
-){
-
-pesan =
-"Terlalu banyak percobaan login";
-}
-
-alert(pesan);
-
-}
-finally{
-
-btn.disabled = false;
-
-btn.innerText =
-"Masuk";
-
-}
-
-}
-
-document
-.getElementById(
-"btnLogin"
-)
-.addEventListener(
-"click",
-login
-);
-
-document
-.addEventListener(
-"keypress",
-(e)=>{
-
-if(
-e.key === "Enter"
-){
-
-login();
-
-}
-
-}
-);
-
-</script>
+<script type="module" src="login.js"></script>
 
 </body>
 </html>
