@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rekening UMKM - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+<h1>🏦 Rekening UMKM</h1>
+<p>Atur rekening untuk menerima pembayaran.</p>
+</div>
+
+<a href="dashboard-umkm.html" class="btn-secondary">
+⬅ Dashboard
+</a>
+
+</div>
+
+<div class="form-card">
+
+<label>Nama Bank</label>
+
+<select id="namaBank">
+
+<option value="">Pilih Bank</option>
+
+<option>BCA</option>
+<option>BRI</option>
+<option>BNI</option>
+<option>Mandiri</option>
+<option>BSI</option>
+<option>CIMB Niaga</option>
+<option>BTN</option>
+
+</select>
+
+<br><br>
+
+<label>Nomor Rekening</label>
+
+<input
+type="text"
+id="nomorRekening"
+placeholder="Masukkan nomor rekening">
+
+<br><br>
+
+<label>Atas Nama</label>
+
+<input
+type="text"
+id="atasNama"
+placeholder="Nama pemilik rekening">
+
+<br><br>
+
+<button
+id="simpanBtn"
+class="btn-primary">
+
+💾 Simpan Rekening
+
+</button>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href = "login.html";
+
+}
+
+const uid = auth.currentUser.uid;
+
+const userRef =
+doc(db,"users",uid);
+
+const userSnap =
+await getDoc(userRef);
+
+if(userSnap.exists()){
+
+const data = userSnap.data();
+
+document.getElementById(
+"namaBank"
+).value =
+data.namaBank || "";
+
+document.getElementById(
+"nomorRekening"
+).value =
+data.nomorRekening || "";
+
+document.getElementById(
+"atasNama"
+).value =
+data.atasNama || "";
+
+}
+
+document
+.getElementById("simpanBtn")
+.addEventListener(
+"click",
+async()=>{
+
+const namaBank =
+document.getElementById(
+"namaBank"
+).value;
+
+const nomorRekening =
+document.getElementById(
+"nomorRekening"
+).value.trim();
+
+const atasNama =
+document.getElementById(
+"atasNama"
+).value.trim();
+
+if(
+!namaBank ||
+!nomorRekening ||
+!atasNama
+){
+
+alert(
+"Lengkapi data rekening"
+);
+
+return;
+
+}
+
+await updateDoc(
+userRef,
+{
+namaBank,
+nomorRekening,
+atasNama
+}
+);
+
+alert(
+"Rekening berhasil disimpan"
+);
+
+}
+);
+
+</script>
+
+</body>
+</html>
