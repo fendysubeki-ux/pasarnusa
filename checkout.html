@@ -123,13 +123,37 @@ const cart =
 JSON.parse(
 localStorage.getItem("cart")
 ) || [];
-
 if(cart.length === 0){
 
 alert("Keranjang kosong");
 
 window.location.href =
 "cart.html";
+
+}
+const uidUmkmPertama =
+cart[0]?.uidUmkm ||
+cart[0]?.uid;
+
+const bedaToko =
+cart.some(
+item =>
+(item.uidUmkm || item.uid)
+!== uidUmkmPertama
+);
+
+if(bedaToko){
+
+alert(
+"Saat ini checkout hanya bisa untuk produk dari 1 toko"
+);
+
+window.location.href =
+"cart.html";
+
+throw new Error(
+"Multi toko belum didukung"
+);
 
 }
 
@@ -411,29 +435,39 @@ uidPembeli:
 auth.currentUser.uid,
 
 uidUmkm:
-cart[0]?.uid || "",
+cart[0]?.uidUmkm ||
+cart[0]?.uid ||
+"",
 
-produk:
-cart[0]?.namaProduk || "-",
+namaUmkm:
+cart[0]?.namaToko ||
+"",
 
 produkId:
 cart[0]?.id || "",
 
-namaPembeli:nama,
+produk:
+cart[0]?.namaProduk || "",
 
-whatsapp:whatsapp,
+namaPembeli:
+nama,
 
-alamat:alamat,
+whatsapp:
+whatsapp,
 
-kota:kota,
+alamat:
+alamat,
 
-items:cart,
+kota:
+kota,
+
+items:
+cart,
 
 jumlahItem:
 cart.reduce(
 (total,item)=>
-total +
-Number(item.qty || 1),
+total + Number(item.qty || 1),
 0
 ),
 
@@ -447,20 +481,22 @@ diskon:
 diskon,
 
 voucher:
-voucherDipakai,
+voucherDipakai || "",
 
 affiliateUid:
-affiliateUid,
+affiliateUid || "",
 
 pendapatanUmkm:
-Math.round(
-subtotal * 0.90
-),
+Math.round(subtotal * 0.90),
+
 komisiAffiliate:
 komisiAffiliate,
 
 pendapatanPlatform:
 pendapatanPlatform,
+
+resi:"",
+
 status:
 "Belum Bayar",
 
