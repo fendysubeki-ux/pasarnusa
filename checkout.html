@@ -125,6 +125,11 @@ const cart =
 JSON.parse(
 localStorage.getItem("cart")
 ) || [];
+console.log(cart);
+
+alert(
+JSON.stringify(cart)
+);
 if(cart.length === 0){
 
 alert("Keranjang kosong");
