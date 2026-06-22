@@ -178,6 +178,61 @@ throw new Error(
 let ongkir = 0;
 let diskon = 0;
 let voucherDipakai = null;
+const tarifOngkir = {
+
+// Trenggalek
+"Trenggalek-Trenggalek":5000,
+"Trenggalek-Tulungagung":10000,
+"Trenggalek-Blitar":15000,
+"Trenggalek-Kediri":16000,
+"Trenggalek-Ponorogo":12000,
+"Trenggalek-Pacitan":15000,
+"Trenggalek-Madiun":18000,
+"Trenggalek-Nganjuk":18000,
+"Trenggalek-Malang":18000,
+"Trenggalek-Batu":20000,
+"Trenggalek-Mojokerto":22000,
+"Trenggalek-Surabaya":25000,
+"Trenggalek-Sidoarjo":25000,
+"Trenggalek-Gresik":28000,
+"Trenggalek-Lamongan":28000,
+"Trenggalek-Bojonegoro":28000,
+"Trenggalek-Tuban":30000,
+"Trenggalek-Probolinggo":25000,
+"Trenggalek-Pasuruan":23000,
+"Trenggalek-Lumajang":28000,
+"Trenggalek-Jember":28000,
+"Trenggalek-Bondowoso":30000,
+"Trenggalek-Situbondo":32000,
+"Trenggalek-Banyuwangi":35000,
+
+// Tulungagung
+"Tulungagung-Tulungagung":5000,
+"Tulungagung-Trenggalek":10000,
+"Tulungagung-Blitar":10000,
+"Tulungagung-Kediri":12000,
+"Tulungagung-Ponorogo":15000,
+"Tulungagung-Pacitan":18000,
+"Tulungagung-Madiun":18000,
+"Tulungagung-Nganjuk":15000,
+"Tulungagung-Malang":18000,
+"Tulungagung-Batu":18000,
+"Tulungagung-Mojokerto":20000,
+"Tulungagung-Surabaya":22000,
+"Tulungagung-Sidoarjo":22000,
+"Tulungagung-Gresik":25000,
+"Tulungagung-Lamongan":25000,
+"Tulungagung-Bojonegoro":25000,
+"Tulungagung-Tuban":28000,
+"Tulungagung-Probolinggo":22000,
+"Tulungagung-Pasuruan":20000,
+"Tulungagung-Lumajang":25000,
+"Tulungagung-Jember":25000,
+"Tulungagung-Bondowoso":28000,
+"Tulungagung-Situbondo":30000,
+"Tulungagung-Banyuwangi":32000
+
+};
 
 const subtotal =
 cart.reduce(
@@ -249,14 +304,15 @@ subtotal * 0.05
 
 updateTotal();
 
+
 document
 .getElementById("kotaTujuan")
 .addEventListener(
 "change",
 (e)=>{
 
-const kotaTujuan =
-e.target.value;
+const key =
+`${tokoData.kota}-${e.target.value}`;
 
 const totalBerat =
 cart.reduce(
@@ -269,45 +325,16 @@ Number(item.qty || 1)
 0
 );
 
-if(
-kotaAsal === "Blitar" &&
-kotaTujuan === "Tulungagung"
-){
+const tarif =
+tarifOngkir[key] || 25000;
 
-ongkir = 8000;
-
-}
-else if(
-kotaAsal === "Blitar" &&
-kotaTujuan === "Kediri"
-){
-
-ongkir = 12000;
-
-}
-else if(
-kotaAsal === "Blitar" &&
-kotaTujuan === "Trenggalek"
-){
-
-ongkir = 15000;
-
-}
-else{
-
-ongkir = 10000;
-
-}
-
-if(totalBerat > 1000){
-
-ongkir +=
+alert("KEY = " + key);
+alert("BERAT = " + totalBerat);
+alert("TARIF = " + tarif);
+ongkir =
 Math.ceil(
-(totalBerat - 1000)
-/1000
-) * 3000;
-
-}
+totalBerat / 1000
+) * tarif;
 
 updateTotal();
 
