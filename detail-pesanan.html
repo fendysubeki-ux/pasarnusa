@@ -115,6 +115,9 @@ data.createdAt?.toDate
 
 let statusColor = "#f59e0b";
 
+if(data.status === "Menunggu Verifikasi")
+statusColor = "#f97316";
+
 if(data.status === "Diproses")
 statusColor = "#3b82f6";
 
@@ -171,7 +174,18 @@ ${data.whatsapp || "-"}
 <b>Alamat :</b>
 ${data.alamat || "-"}
 </p>
-
+${
+data.resi
+?
+`
+<p>
+<b>Resi :</b>
+${data.resi}
+</p>
+`
+:
+""
+}
 </div>
 
 <div class="dashboard-card">
@@ -308,7 +322,7 @@ margin-bottom:10px;
 ` : ""}
 
 <a
-href="https://wa.me/6281234567890"
+href="https://wa.me/${data.whatsappUmkm || ''}"
 target="_blank"
 class="btn-secondary"
 style="
@@ -316,7 +330,7 @@ display:block;
 text-align:center;
 ">
 
-💬 Hubungi Admin
+💬 Hubungi Toko
 
 </a>
 
