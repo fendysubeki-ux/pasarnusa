@@ -75,6 +75,7 @@ id="filterStatus"
 class="search-box">
 
 <option value="all">Semua Status</option>
+<option value="Belum Bayar">Belum Bayar</option>
 <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
 <option value="Diproses">Diproses</option>
 <option value="Dikirim">Dikirim</option>
@@ -246,7 +247,13 @@ container.innerHTML += `
 <p>📱 ${pesanan.whatsapp || "-"}</p>
 
 <p>📍 ${pesanan.alamat || "-"}</p>
-
+<p>
+🕒 ${
+pesanan.createdAt?.toDate
+? pesanan.createdAt.toDate().toLocaleString("id-ID")
+: "-"
+}
+</p>
 <hr>
 
 <ul>
@@ -294,6 +301,10 @@ placeholder="Nomor Resi">
 <br><br>
 
 <select id="status-${pesanan.id}">
+<option value="${pesanan.status}">
+${pesanan.status}
+</option>
+
 <option value="Diproses">Diproses</option>
 <option value="Dikirim">Dikirim</option>
 <option value="Selesai">Selesai</option>
