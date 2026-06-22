@@ -88,7 +88,9 @@ addDoc,
 getDocs,
 query,
 where,
-serverTimestamp
+serverTimestamp,
+doc,
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
@@ -134,7 +136,19 @@ window.location.href =
 const uidUmkmPertama =
 cart[0]?.uidUmkm ||
 cart[0]?.uid;
+const tokoSnap =
+await getDoc(
+doc(
+db,
+"users",
+uidUmkmPertama
+)
+);
 
+const tokoData =
+tokoSnap.exists()
+? tokoSnap.data()
+: {};
 const bedaToko =
 cart.some(
 item =>
@@ -461,6 +475,12 @@ alamat,
 kota:
 kota,
 
+provinsiAsal:
+tokoData.provinsi || "",
+
+kotaAsal:
+tokoData.kota || "",
+
 items:
 cart,
 
@@ -470,7 +490,16 @@ cart.reduce(
 total + Number(item.qty || 1),
 0
 ),
-
+totalBerat:
+cart.reduce(
+(total,item)=>
+total +
+(
+Number(item.berat || 0) *
+Number(item.qty || 1)
+),
+0
+),
 subtotal:
 subtotal,
 
