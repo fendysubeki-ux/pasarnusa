@@ -82,6 +82,15 @@ document.getElementById(
 ).innerText =
 toko.whatsapp || "-";
 
+document.getElementById("namaBank").innerText =
+toko.namaBank || "-";
+
+document.getElementById("nomorRekening").innerText =
+toko.nomorRekening || "-";
+
+document.getElementById("atasNama").innerText =
+toko.atasNama || "-";
+
 document.getElementById(
 "jamToko"
 ).innerText =
