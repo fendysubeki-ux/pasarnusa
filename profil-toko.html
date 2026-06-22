@@ -96,7 +96,15 @@ placeholder="WhatsApp">
 id="alamat"
 placeholder="Alamat Lengkap">
 </textarea>
+<input
+type="text"
+id="provinsi"
+placeholder="Provinsi">
 
+<input
+type="text"
+id="kota"
+placeholder="Kota / Kabupaten">
 <h3>💳 Rekening Pencairan</h3>
 
 <input
@@ -233,6 +241,15 @@ document.getElementById(
 ).value =
 toko.alamat || "";
 
+document.getElementById(
+"provinsi"
+).value =
+toko.provinsi || "";
+
+document.getElementById(
+"kota"
+).value =
+toko.kota || "";
 document.getElementById(
 "bank"
 ).value =
@@ -423,6 +440,15 @@ document.getElementById(
 "alamat"
 ).value,
 
+provinsi:
+document.getElementById(
+"provinsi"
+).value,
+
+kota:
+document.getElementById(
+"kota"
+).value,
 bank:
 document.getElementById(
 "bank"
