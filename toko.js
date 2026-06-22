@@ -3,12 +3,10 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 getFirestore,
-doc,
-getDoc,
 collection,
-getDocs,
 query,
-where
+where,
+getDocs
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -24,13 +22,10 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const params =
+const uid =
 new URLSearchParams(
 window.location.search
-);
-
-const uid =
-params.get("uid");
+).get("uid");
 
 if(!uid){
 
@@ -45,32 +40,31 @@ throw new Error("UID kosong");
 
 try{
 
-console.log("UID TOKO:", uid);
+console.log("UID:",uid);
 
-const userSnap =
-await getDoc(
-doc(db,"users",uid)
+const umkmSnap =
+await getDocs(
+query(
+collection(db,"umkm"),
+where("uid","==",uid)
+)
 );
 
-if(!userSnap.exists()){
+if(umkmSnap.empty){
 
 throw new Error(
-"Data UMKM tidak ditemukan"
+"UMKM tidak ditemukan"
 );
 
 }
 
 const toko =
-userSnap.data();
-
-console.log("DATA TOKO:", toko);
+umkmSnap.docs[0].data();
 
 document.getElementById(
 "namaToko"
 ).innerText =
-toko.namaUmkm ||
-toko.nama ||
-"UMKM";
+toko.namaUmkm || "UMKM";
 
 document.getElementById(
 "deskripsiToko"
@@ -97,7 +91,6 @@ toko.jamOperasional ||
 document.getElementById(
 "tentangToko"
 ).innerText =
-toko.tentangToko ||
 toko.deskripsi ||
 "Belum ada informasi toko";
 
@@ -126,23 +119,12 @@ toko.createdAt.seconds * 1000
 
 }
 
-console.log("Mengambil produk UMKM...");
-
 const produkSnap =
 await getDocs(
 query(
 collection(db,"produk"),
-where(
-"uidUmkm",
-"==",
-uid
+where("uidUmkm","==",uid)
 )
-)
-);
-
-console.log(
-"Jumlah Produk:",
-produkSnap.size
 );
 
 const produkContainer =
@@ -150,45 +132,44 @@ document.getElementById(
 "produkToko"
 );
 
+const terlarisContainer =
+document.getElementById(
+"produkTerlaris"
+);
+
 produkContainer.innerHTML = "";
+terlarisContainer.innerHTML = "";
 
-if(produkSnap.empty){
+let totalProduk = 0;
+let totalTerjual = 0;
 
-produkContainer.innerHTML = `
-
-<div class="dashboard-card">
-
-<h3>
-Belum Ada Produk
-</h3>
-
-<p>
-UMKM ini belum memiliki produk.
-</p>
-
-</div>
-
-`;
-
-}else{
+let produkTerlaris = [];
 
 produkSnap.forEach((docItem)=>{
 
 const produk =
 docItem.data();
 
+totalProduk++;
+
+totalTerjual +=
+Number(
+produk.terjual || 0
+);
+
+produkTerlaris.push({
+id:docItem.id,
+...produk
+});
+
 produkContainer.innerHTML += `
 
 <div class="product-card searchable">
 
-<img
-src="${
+<img src="${
 Array.isArray(produk.gambar)
 ? produk.gambar[0]
-: (
-produk.gambar ||
-"https://picsum.photos/400/300"
-)
+: produk.gambar
 }">
 
 <div class="product-info">
@@ -198,7 +179,7 @@ ${produk.kategori || "Produk"}
 </span>
 
 <h3>
-${produk.namaProduk || "-"}
+${produk.namaProduk}
 </h3>
 
 <p class="price">
@@ -210,6 +191,11 @@ produk.harga || 0
 <p>
 📦 Stok:
 ${produk.stok || 0}
+</p>
+
+<p>
+🔥 Terjual:
+${produk.terjual || 0}
 </p>
 
 <a
@@ -228,14 +214,98 @@ Lihat Detail
 
 });
 
-}
+document.getElementById(
+"totalProduk"
+).innerText =
+totalProduk;
 
-}catch(error){
+document.getElementById(
+"totalTerjual"
+).innerText =
+totalTerjual;
+
+document.getElementById(
+"ratingToko"
+).innerText =
+toko.ratingToko || 0;
+
+document.getElementById(
+"totalReview"
+).innerText =
+toko.totalReviewToko || 0;
+
+produkTerlaris.sort(
+(a,b)=>
+Number(b.terjual || 0)
+-
+Number(a.terjual || 0)
+);
+
+produkTerlaris
+.slice(0,4)
+.forEach((produk)=>{
+
+terlarisContainer.innerHTML += `
+
+<div class="product-card">
+
+<img src="${
+Array.isArray(produk.gambar)
+? produk.gambar[0]
+: produk.gambar
+}">
+
+<div class="product-info">
+
+<h3>
+${produk.namaProduk}
+</h3>
+
+<p>
+🔥 ${produk.terjual || 0}
+Terjual
+</p>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+catch(error){
 
 console.error(error);
 
 alert(
+"Gagal memuat toko\n\n" +
 error.message
 );
 
 }
+
+document
+.getElementById("searchProduk")
+.addEventListener(
+"input",
+(e)=>{
+
+const keyword =
+e.target.value.toLowerCase();
+
+document
+.querySelectorAll(".searchable")
+.forEach((card)=>{
+
+card.style.display =
+card.innerText
+.toLowerCase()
+.includes(keyword)
+? "block"
+: "none";
+
+});
+
+});
