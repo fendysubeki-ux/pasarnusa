@@ -80,7 +80,9 @@ cartContainer.innerHTML += `
 
 <img
 src="${
-produk.gambar ||
+Array.isArray(produk.gambar)
+? produk.gambar[0]
+: produk.gambar ||
 'https://picsum.photos/400/300'
 }"
 alt="${produk.namaProduk}">
@@ -172,7 +174,7 @@ Total Item : ${totalItem}
 </h3>
 <p>
 🏪 UMKM :
-${cart[0]?.uid || "-"}
+${cart[0]?.namaToko || "-"}
 </p>
 <p>
 Subtotal :
@@ -241,8 +243,21 @@ class="btn-primary">
 
 window.tambahQty = function(index){
 
-cart[index].qty =
-(cart[index].qty || 1) + 1;
+const stok =
+Number(cart[index].stok || 999);
+
+const qty =
+Number(cart[index].qty || 1);
+
+if(qty >= stok){
+
+alert("Stok tidak mencukupi");
+
+return;
+
+}
+
+cart[index].qty = qty + 1;
 
 localStorage.setItem(
 "cart",
@@ -342,12 +357,14 @@ cart.length > 0
 ){
 
 const uidUmkm =
+cart[0].uidUmkm ||
 cart[0].uid;
 
 const bedaUmkm =
 cart.some(
 (item)=>
-item.uid !== uidUmkm
+(item.uidUmkm || item.uid)
+!== uidUmkm
 );
 
 if(bedaUmkm){
