@@ -173,7 +173,7 @@
             }, 3000);
         };
 
-        // Fungsi Utama Memuat Detail Produk
+let produkData = null;
         const loadProductDetail = async () => {
             try {
                 // Ambil ID Produk dari URL
@@ -191,7 +191,9 @@
                     throw new Error("Produk tidak ditemukan di database");
                 }
 
-                const produk = produkDoc.data();
+produkData = produkDoc.data();
+
+const produk = produkData;
 
                 // Cek Status Produk
                 if (String(produk.status).toLowerCase() !== "aktif") {
@@ -384,8 +386,20 @@ showNotification("Gagal menyalin link","error");
 
         // Event Listener Tombol Favorit
         document.getElementById("btnFavorit").addEventListener("click", () => {
-            const params = new URLSearchParams(window.location.search);
-            const produkId = params.get("id");
+const params = new URLSearchParams(window.location.search);
+
+const produkId = params.get("id");
+
+const ref = params.get("ref");
+
+if(ref){
+
+localStorage.setItem(
+"affiliate",
+ref
+);
+
+}
             const produk = document.getElementById("namaProduk").innerText;
             const gambar = document.getElementById("gambarProduk").src;
             const harga = document.getElementById("hargaProduk").innerText;
@@ -432,77 +446,155 @@ showNotification("Gagal menyalin link","error");
         });
 
         // Event Listener Tambah ke Keranjang
-        document.getElementById("addToCart").addEventListener("click", () => {
-            const params = new URLSearchParams(window.location.search);
-            const produkId = params.get("id");
-            const produk = document.getElementById("namaProduk").innerText;
-            const gambar = document.getElementById("gambarProduk").src;
-            const harga = Number(
-document.getElementById("hargaProduk")
-.innerText
-.replace(/[^\d]/g,"")
+        document.getElementById(
+"addToCart"
+).addEventListener(
+"click",
+()=>{
+
+const params =
+new URLSearchParams(
+window.location.search
 );
-            const kategori = document.getElementById("kategoriProduk").innerText;
-            const stok = Number(document.getElementById("stokProduk").innerText.replace("📦 Stok: ", ""));
 
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
-            const existingItem = cart.find(item => item.id === produkId);
+const produkId =
+params.get("id");
 
-            if (existingItem) {
-                if (existingItem.qty >= stok) {
-                    showNotification("Jumlah melebihi stok yang tersedia!", "error");
-                    return;
-                }
-                existingItem.qty += 1;
-            } else {
-                cart.push({
-                    id: produkId,
-                    namaProduk: produk,
-                    gambar: gambar,
-                    harga: Number(harga),
-                    kategori: kategori,
-                    qty: 1
-                });
-            }
+let cart =
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
 
-            localStorage.setItem("cart", JSON.stringify(cart));
-            showNotification("Produk berhasil ditambahkan ke keranjang!", "success");
-            
-            // Update jumlah keranjang jika ada di halaman
-            const cartCount = document.getElementById("cartCount");
-            if (cartCount) {
-                let totalQty = 0;
-                cart.forEach(item => totalQty += item.qty);
-                cartCount.innerText = totalQty;
-            }
-        });
+const existingItem =
+cart.find(
+item => item.id === produkId
+);
+
+if(existingItem){
+
+if(
+existingItem.qty >=
+Number(produkData.stok || 0)
+){
+
+showNotification(
+"Jumlah melebihi stok tersedia",
+"error"
+);
+
+return;
+
+}
+
+existingItem.qty++;
+
+}else{
+
+cart.push({
+
+id: produkId,
+
+uidUmkm:
+produkData.uidUmkm ||
+produkData.uid,
+
+uid:
+produkData.uid,
+
+namaToko:
+produkData.namaToko || "",
+
+namaProduk:
+produkData.namaProduk,
+
+gambar:
+produkData.gambar,
+
+harga:
+Number(produkData.harga),
+
+kategori:
+produkData.kategori,
+
+stok:
+Number(produkData.stok || 0),
+
+qty:1
+
+});
+
+}
+
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
+
+showNotification(
+"Produk berhasil ditambahkan ke keranjang",
+"success"
+);
+
+});
 
         // Event Listener Beli Sekarang
-        document.getElementById("buyNow").addEventListener("click", () => {
-            const params = new URLSearchParams(window.location.search);
-            const produkId = params.get("id");
-            const produk = document.getElementById("namaProduk").innerText;
-            const gambar = document.getElementById("gambarProduk").src;
-            const harga = Number(
-document.getElementById("hargaProduk")
-.innerText
-.replace(/[^\d]/g,"")
+        document.getElementById(
+"buyNow"
+).addEventListener(
+"click",
+()=>{
+
+const params =
+new URLSearchParams(
+window.location.search
 );
-            const kategori = document.getElementById("kategoriProduk").innerText;
 
-            localStorage.setItem("cart", JSON.stringify([{
-                id: produkId,
-                namaProduk: produk,
-                gambar: gambar,
-                harga: Number(harga),
-                kategori: kategori,
-                qty: 1
-            }]));
+const produkId =
+params.get("id");
 
-            window.location.href = "checkout.html";
-        });
+localStorage.setItem(
+"cart",
+JSON.stringify([
+{
 
-        // Cek Status User
+id: produkId,
+
+uidUmkm:
+produkData.uidUmkm ||
+produkData.uid,
+
+uid:
+produkData.uid,
+
+namaToko:
+produkData.namaToko || "",
+
+namaProduk:
+produkData.namaProduk,
+
+gambar:
+produkData.gambar,
+
+harga:
+Number(produkData.harga),
+
+kategori:
+produkData.kategori,
+
+stok:
+Number(produkData.stok || 0),
+
+qty:1
+
+}
+])
+);
+
+window.location.href =
+"checkout.html";
+
+}
+);
         onAuthStateChanged(auth, (user) => {
             // Load Detail Produk Setelah User Diketahui
             loadProductDetail();
