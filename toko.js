@@ -23,7 +23,16 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+window.onerror = function(msg,url,line,col,error){
 
+alert(
+"ERROR\n\n" +
+msg +
+"\n\nBaris : " +
+line
+);
+
+};
 const uid =
 new URLSearchParams(
 window.location.search
