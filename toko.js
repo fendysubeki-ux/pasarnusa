@@ -33,7 +33,8 @@ if(!uid){
 
 alert("Toko tidak ditemukan");
 
-location.href = "index.html";
+window.location.href =
+"index.html";
 
 throw new Error("UID kosong");
 
@@ -58,7 +59,7 @@ const toko =
 tokoSnap.data();
 
 /* =====================
-   INFORMASI TOKO
+INFORMASI TOKO
 ===================== */
 
 document.getElementById(
@@ -68,11 +69,6 @@ toko.namaUmkm || "UMKM";
 
 document.getElementById(
 "deskripsiToko"
-).innerText =
-toko.deskripsi || "-";
-
-document.getElementById(
-"tentangToko"
 ).innerText =
 toko.deskripsi || "-";
 
@@ -91,11 +87,6 @@ document.getElementById(
 "nomorToko"
 ).innerText =
 toko.whatsapp || "-";
-
-document.getElementById(
-"jamToko"
-).innerText =
-toko.jamOperasional || "-";
 
 document.getElementById(
 "namaBank"
@@ -118,15 +109,21 @@ document.getElementById(
 toko.ratingToko || 0;
 
 document.getElementById(
-"totalReview"
+"ratingMini"
 ).innerText =
-toko.totalReviewToko || 0;
+toko.ratingToko || 0;
 
 document.getElementById(
 "logoToko"
 ).src =
 toko.logo ||
 "https://picsum.photos/200";
+
+document.getElementById(
+"bannerToko"
+).src =
+toko.banner ||
+"https://picsum.photos/1200/350";
 
 document.getElementById(
 "waToko"
@@ -148,34 +145,31 @@ toko.createdAt.seconds * 1000
 }
 
 /* =====================
-   PRODUK TOKO
+PRODUK TOKO
 ===================== */
 
 const produkSnap =
 await getDocs(
 query(
 collection(db,"produk"),
-where("uidUmkm","==",uid)
+where(
+"uidUmkm",
+"==",
+uid
+)
 )
 );
 
 const produkContainer =
 document.getElementById(
-"produkToko"
-);
-
-const terlarisContainer =
-document.getElementById(
-"produkTerlaris"
+"tokoContainer"
 );
 
 produkContainer.innerHTML = "";
-terlarisContainer.innerHTML = "";
 
 let totalProduk = 0;
 let totalTerjual = 0;
-
-const produkTerlaris = [];
+let produkAktif = 0;
 
 produkSnap.forEach((docItem)=>{
 
@@ -184,64 +178,59 @@ docItem.data();
 
 totalProduk++;
 
+if(
+produk.status === "Aktif"
+){
+produkAktif++;
+}
+
 totalTerjual += Number(
 produk.terjual || 0
 );
 
-produkTerlaris.push({
-id:docItem.id,
-...produk
-});
-
 produkContainer.innerHTML += `
-<div class="product-card searchable">
 
-<img src="${
+<div class="product-card searchable"><img src="${
 Array.isArray(produk.gambar)
 ? produk.gambar[0]
 : produk.gambar
-}">
+}" alt="${produk.namaProduk}">
 
-<div class="product-info">
-
-<span class="category">
+<div class="product-info"><span class="category">
 ${produk.kategori || "Produk"}
-</span>
-
-<h3>
+</span><h3>
 ${produk.namaProduk}
-</h3>
-
-<p class="price">
+</h3><p class="price">
 Rp ${Number(
 produk.harga || 0
 ).toLocaleString("id-ID")}
-</p>
-
-<p>
+</p><p>
 📦 Stok:
 ${produk.stok || 0}
-</p>
-
-<p>
+</p><p>
 🔥 Terjual:
 ${produk.terjual || 0}
-</p>
-
-<a
+</p><a
 href="produk-detail.html?id=${docItem.id}"
 class="btn-primary">
 
 Lihat Detail
 
-</a>
-
-</div>
-
-</div>
-`;
+</a></div></div>`;
 
 });
+
+if(totalProduk === 0){
+
+produkContainer.innerHTML = `
+
+<div class="dashboard-card"><h3>
+Belum Ada Produk
+</h3><p>
+UMKM ini belum menambahkan produk.
+</p></div>`;
+
+}
 
 document.getElementById(
 "totalProduk"
@@ -249,50 +238,40 @@ document.getElementById(
 totalProduk;
 
 document.getElementById(
+"produkAktif"
+).innerText =
+produkAktif;
+
+document.getElementById(
 "totalTerjual"
 ).innerText =
 totalTerjual;
 
+document.getElementById(
+"totalTerjualMini"
+).innerText =
+totalTerjual;
+
 /* =====================
-   PRODUK TERLARIS
+SHARE TOKO
 ===================== */
 
-produkTerlaris
-.sort(
-(a,b)=>
-Number(b.terjual || 0)
--
-Number(a.terjual || 0)
-)
-.slice(0,4)
-.forEach((produk)=>{
+document.getElementById(
+"shareToko"
+).addEventListener(
+"click",
+()=>{
 
-terlarisContainer.innerHTML += `
-<div class="product-card">
+navigator.clipboard.writeText(
+window.location.href
+);
 
-<img src="${
-Array.isArray(produk.gambar)
-? produk.gambar[0]
-: produk.gambar
-}">
+alert(
+"Link toko berhasil disalin"
+);
 
-<div class="product-info">
-
-<h3>
-${produk.namaProduk}
-</h3>
-
-<p>
-🔥 ${produk.terjual || 0}
-Terjual
-</p>
-
-</div>
-
-</div>
-`;
-
-});
+}
+);
 
 }
 catch(error){
@@ -307,11 +286,13 @@ error.message
 }
 
 /* =====================
-   SEARCH PRODUK
+SEARCH PRODUK
 ===================== */
 
 document
-.getElementById("searchProduk")
+.getElementById(
+"searchProduk"
+)
 .addEventListener(
 "input",
 (e)=>{
@@ -320,7 +301,9 @@ const keyword =
 e.target.value.toLowerCase();
 
 document
-.querySelectorAll(".searchable")
+.querySelectorAll(
+".searchable"
+)
 .forEach((card)=>{
 
 card.style.display =
