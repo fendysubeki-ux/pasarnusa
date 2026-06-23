@@ -124,10 +124,6 @@ cek("logoToko").src =
 toko.logo ||
 "https://picsum.photos/200";
 
-// cek("bannerToko").src =
-// toko.banner ||
-// "https://picsum.photos/1200/350";
-
 cek("waToko").href =
 "https://wa.me/" +
 String(
