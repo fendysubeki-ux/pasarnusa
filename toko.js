@@ -6,7 +6,9 @@ getFirestore,
 collection,
 query,
 where,
-getDocs
+getDocs,
+doc,
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -42,15 +44,12 @@ try{
 
 console.log("UID:",uid);
 
-const umkmSnap =
-await getDocs(
-query(
-collection(db,"umkm"),
-where("uid","==",uid)
-)
+const tokoSnap =
+await getDoc(
+doc(db,"users",uid)
 );
 
-if(umkmSnap.empty){
+if(!tokoSnap.exists()){
 
 throw new Error(
 "UMKM tidak ditemukan"
@@ -59,7 +58,7 @@ throw new Error(
 }
 
 const toko =
-umkmSnap.docs[0].data();
+tokoSnap.data();
 
 document.getElementById(
 "namaToko"
