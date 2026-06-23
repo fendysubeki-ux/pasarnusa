@@ -4,7 +4,9 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 collection,
-getDocs
+getDocs,
+doc,
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -15,122 +17,99 @@ signOut
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
 projectId:"pasarnusa-18aa0",
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
 messagingSenderId:"866998011671",
 appId:"1:866998011671:web:5555115feb82741ab55952"
-
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
-
 const auth = getAuth(app);
 
 await auth.authStateReady();
 
-if(!auth.currentUser){
-
+if (!auth.currentUser) {
 window.location.href = "login.html";
-
+throw new Error("Belum login");
 }
 
-const role =
-localStorage.getItem("role");
+const uid = auth.currentUser.uid;
 
-if(role !== "admin"){
+const adminSnap = await getDoc(
+doc(db,"users",uid)
+);
 
+if(
+!adminSnap.exists() ||
+adminSnap.data().role !== "admin"
+){
 alert("Akses khusus admin");
-
-window.location.href =
-"index.html";
-
+window.location.href = "index.html";
 throw new Error("Bukan admin");
-
 }
 
 try{
 
-const usersSnap =
-await getDocs(
-collection(db,"users")
-);
-
-const produkSnap =
-await getDocs(
-collection(db,"produk")
-);
-
-const pesananSnap =
-await getDocs(
-collection(db,"pesanan")
-);
-
-const affiliateSnap =
-await getDocs(
-collection(db,"affiliate")
-);
-
-const voucherSnap =
-await getDocs(
-collection(db,"voucher")
-);
-
-const pencairanSnap =
-await getDocs(
-collection(db,"pencairanAffiliate")
-);
+const [
+usersSnap,
+produkSnap,
+pesananSnap,
+affiliateSnap,
+voucherSnap,
+pencairanSnap
+] = await Promise.all([
+getDocs(collection(db,"users")),
+getDocs(collection(db,"produk")),
+getDocs(collection(db,"pesanan")),
+getDocs(collection(db,"affiliate")),
+getDocs(collection(db,"voucher")),
+getDocs(collection(db,"pencairanAffiliate"))
+]);
 
 let totalUmkm = 0;
 let totalAffiliate = 0;
+let totalProduk = produkSnap.size;
+let totalPesanan = pesananSnap.size;
+
 let umkmPending = 0;
-let umkmBaru = 0;
-let affiliateBaru = 0;
+let voucherAktif = 0;
+let pesananBaru = 0;
+let pencairanPending = 0;
 
-usersSnap.forEach((doc)=>{
+let totalTransaksi = 0;
+let pendapatanPlatform = 0;
+let pendapatanUmkm = 0;
+let komisiAffiliate = 0;
 
-const data = doc.data();
+usersSnap.forEach(docItem => {
+
+const data = docItem.data();
 
 if(data.role === "umkm"){
 
 totalUmkm++;
 
-if(data.status !== "aktif"){
-
+if(
+data.status !== "aktif" &&
+data.statusToko !== "Buka"
+){
 umkmPending++;
-
 }
 
 }
 
 if(data.role === "affiliate"){
-
 totalAffiliate++;
-
 }
 
 });
 
-let totalProduk =
-produkSnap.size;
+pesananSnap.forEach(docItem => {
 
-let totalPesanan =
-pesananSnap.size;
-
-let totalTransaksi = 0;
-let pendapatanPlatform = 0;
-let pendapatanUmkm = 0;
-let subsidiOngkir = 0;
-
-let pesananBaru = 0;
-
-pesananSnap.forEach((doc)=>{
-
-const data = doc.data();
+const data = docItem.data();
 
 const total =
 Number(
@@ -138,6 +117,10 @@ data.totalBayar ||
 data.total ||
 0
 );
+
+if(
+data.status === "Selesai"
+){
 
 totalTransaksi += total;
 
@@ -147,26 +130,19 @@ total * 0.05;
 pendapatanUmkm +=
 total * 0.95;
 
-subsidiOngkir +=
-Number(
-data.subsidiOngkir || 0
-);
+}
 
 if(
 data.status === "Menunggu"
 ){
-
 pesananBaru++;
-
 }
 
 });
 
-let komisiAffiliate = 0;
+affiliateSnap.forEach(docItem => {
 
-affiliateSnap.forEach((doc)=>{
-
-const data = doc.data();
+const data = docItem.data();
 
 komisiAffiliate +=
 Number(
@@ -175,132 +151,76 @@ data.komisi || 0
 
 });
 
-let voucherAktif = 0;
+voucherSnap.forEach(docItem => {
 
-voucherSnap.forEach((doc)=>{
-
-const data = doc.data();
-
-if(data.aktif){
-
+if(docItem.data().aktif){
 voucherAktif++;
-
 }
 
 });
 
-let pencairanPending = 0;
-
-pencairanSnap.forEach((doc)=>{
-
-const data = doc.data();
+pencairanSnap.forEach(docItem => {
 
 if(
-data.status ===
+docItem.data().status ===
 "Menunggu Persetujuan"
 ){
-
 pencairanPending++;
-
 }
 
 });
 
-document.getElementById(
-"totalUmkm"
-).innerText =
+document.getElementById("totalUmkm").innerText =
 totalUmkm;
 
-document.getElementById(
-"totalProduk"
-).innerText =
+document.getElementById("totalProduk").innerText =
 totalProduk;
 
-document.getElementById(
-"totalPesanan"
-).innerText =
+document.getElementById("totalPesanan").innerText =
 totalPesanan;
 
-document.getElementById(
-"totalAffiliate"
-).innerText =
+document.getElementById("totalAffiliate").innerText =
 totalAffiliate;
 
-document.getElementById(
-"totalTransaksi"
-).innerText =
+document.getElementById("umkmPending").innerText =
+umkmPending;
+
+document.getElementById("voucherAktif").innerText =
+voucherAktif;
+
+document.getElementById("pesananBaru").innerText =
+pesananBaru;
+
+document.getElementById("pencairanPending").innerText =
+pencairanPending;
+
+document.getElementById("totalTransaksi").innerText =
 "Rp " +
 totalTransaksi.toLocaleString("id-ID");
 
-document.getElementById(
-"pendapatanPlatform"
-).innerText =
+document.getElementById("pendapatanPlatform").innerText =
 "Rp " +
 Math.round(
 pendapatanPlatform
 ).toLocaleString("id-ID");
 
-document.getElementById(
-"komisiAffiliate"
-).innerText =
-"Rp " +
-komisiAffiliate.toLocaleString("id-ID");
-
-document.getElementById(
-"pendapatanUmkm"
-).innerText =
+document.getElementById("pendapatanUmkm").innerText =
 "Rp " +
 Math.round(
 pendapatanUmkm
 ).toLocaleString("id-ID");
 
-document.getElementById(
-"subsidiOngkir"
-).innerText =
+document.getElementById("komisiAffiliate").innerText =
 "Rp " +
-subsidiOngkir.toLocaleString("id-ID");
+komisiAffiliate.toLocaleString("id-ID");
 
-document.getElementById(
-"umkmPending"
-).innerText =
-umkmPending;
-
-document.getElementById(
-"pencairanPending"
-).innerText =
-pencairanPending;
-
-document.getElementById(
-"voucherAktif"
-).innerText =
-voucherAktif;
-
-document.getElementById(
-"pesananBaru"
-).innerText =
-pesananBaru + " Pesanan";
-
-document.getElementById(
-"umkmBaru"
-).innerText =
-umkmPending + " Pendaftaran";
-
-document.getElementById(
-"affiliateBaru"
-).innerText =
-totalAffiliate + " Affiliate";
-
-document.getElementById(
-"komplainBaru"
-).innerText =
-"0 Laporan";
-
-}catch(error){
+}
+catch(error){
 
 console.error(error);
 
 alert(
-"Gagal memuat dashboard admin\n" +
+"Gagal memuat dashboard admin\n\n" +
 error.message
 );
 
@@ -310,16 +230,11 @@ document
 .getElementById("logoutAdmin")
 .addEventListener(
 "click",
-async(e)=>{
-
-e.preventDefault();
+async()=>{
 
 await signOut(auth);
-
-localStorage.clear();
 
 window.location.href =
 "login.html";
 
-}
-);
+});
