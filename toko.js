@@ -117,8 +117,8 @@ toko.atasNama || "-";
 cek("ratingToko").innerText =
 toko.ratingToko || 0;
 
-cek("ratingMini").innerText =
-toko.ratingToko || 0;
+// cek("ratingMini").innerText =
+// toko.ratingToko || 0;
 
 cek("logoToko").src =
 toko.logo ||
