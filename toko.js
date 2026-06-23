@@ -1,16 +1,14 @@
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
 getFirestore,
 collection,
 query,
 where,
-getDocs,
-doc,
-getDoc
+getDocs
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
@@ -24,62 +22,45 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const uid =
-new URLSearchParams(
+const uid = new URLSearchParams(
 window.location.search
 ).get("uid");
 
 if(!uid){
-
 alert("Toko tidak ditemukan");
-
-window.location.href =
-"index.html";
-
+location.href = "index.html";
 throw new Error("UID kosong");
-
 }
 
 try{
 
-console.log("UID:",uid);
-
-const tokoSnap =
-await getDoc(
-doc(db,"users",uid)
+const umkmSnap = await getDocs(
+query(
+collection(db,"umkm"),
+where("uid","==",uid)
+)
 );
 
-if(!tokoSnap.exists()){
-
-throw new Error(
-"UMKM tidak ditemukan"
-);
-
+if(umkmSnap.empty){
+throw new Error("Data UMKM tidak ditemukan");
 }
 
-const toko =
-tokoSnap.data();
+const toko = umkmSnap.docs[0].data();
 
-document.getElementById(
-"namaToko"
-).innerText =
+document.getElementById("namaToko").innerText =
 toko.namaUmkm || "UMKM";
 
-document.getElementById(
-"deskripsiToko"
-).innerText =
-toko.deskripsi ||
-"Belum ada deskripsi";
+document.getElementById("deskripsiToko").innerText =
+toko.deskripsi || "-";
 
-document.getElementById(
-"alamatToko"
-).innerText =
+document.getElementById("alamatToko").innerText =
 toko.alamat || "-";
 
-document.getElementById(
-"nomorToko"
-).innerText =
+document.getElementById("nomorToko").innerText =
 toko.whatsapp || "-";
+
+document.getElementById("jamToko").innerText =
+toko.jamOperasional || "-";
 
 document.getElementById("namaBank").innerText =
 toko.namaBank || "-";
@@ -88,33 +69,27 @@ document.getElementById("nomorRekening").innerText =
 toko.nomorRekening || "-";
 
 document.getElementById("atasNama").innerText =
-toko.atasNama || "-";
+toko.namaPemilik ||
+toko.atasNama ||
+"-";
 
-document.getElementById(
-"jamToko"
-).innerText =
-toko.jamOperasional ||
-"08:00 - 17:00";
+document.getElementById("tentangToko").innerText =
+toko.deskripsi || "-";
 
-document.getElementById(
-"tentangToko"
-).innerText =
-toko.deskripsi ||
-"Belum ada informasi toko";
+document.getElementById("ratingToko").innerText =
+toko.ratingToko || 0;
 
-document.getElementById(
-"logoToko"
-).src =
+document.getElementById("totalReview").innerText =
+toko.totalReviewToko || 0;
+
+document.getElementById("logoToko").src =
 toko.logo ||
 "https://picsum.photos/200";
 
-document.getElementById(
-"waToko"
-).href =
+document.getElementById("waToko").href =
 "https://wa.me/" +
-String(
-toko.whatsapp || ""
-).replace(/^0/,"62");
+String(toko.whatsapp || "")
+.replace(/^0/,"62");
 
 if(toko.createdAt?.seconds){
 
@@ -127,8 +102,7 @@ toko.createdAt.seconds * 1000
 
 }
 
-const produkSnap =
-await getDocs(
+const produkSnap = await getDocs(
 query(
 collection(db,"produk"),
 where("uidUmkm","==",uid)
@@ -136,14 +110,10 @@ where("uidUmkm","==",uid)
 );
 
 const produkContainer =
-document.getElementById(
-"produkToko"
-);
+document.getElementById("produkToko");
 
 const terlarisContainer =
-document.getElementById(
-"produkTerlaris"
-);
+document.getElementById("produkTerlaris");
 
 produkContainer.innerHTML = "";
 terlarisContainer.innerHTML = "";
@@ -151,17 +121,15 @@ terlarisContainer.innerHTML = "";
 let totalProduk = 0;
 let totalTerjual = 0;
 
-let produkTerlaris = [];
+const produkTerlaris = [];
 
 produkSnap.forEach((docItem)=>{
 
-const produk =
-docItem.data();
+const produk = docItem.data();
 
 totalProduk++;
 
-totalTerjual +=
-Number(
+totalTerjual += Number(
 produk.terjual || 0
 );
 
@@ -186,9 +154,7 @@ Array.isArray(produk.gambar)
 ${produk.kategori || "Produk"}
 </span>
 
-<h3>
-${produk.namaProduk}
-</h3>
+<h3>${produk.namaProduk}</h3>
 
 <p class="price">
 Rp ${Number(
@@ -196,22 +162,14 @@ produk.harga || 0
 ).toLocaleString("id-ID")}
 </p>
 
-<p>
-📦 Stok:
-${produk.stok || 0}
-</p>
+<p>📦 Stok: ${produk.stok || 0}</p>
 
-<p>
-🔥 Terjual:
-${produk.terjual || 0}
-</p>
+<p>🔥 Terjual: ${produk.terjual || 0}</p>
 
 <a
 href="produk-detail.html?id=${docItem.id}"
 class="btn-primary">
-
 Lihat Detail
-
 </a>
 
 </div>
@@ -224,32 +182,17 @@ Lihat Detail
 
 document.getElementById(
 "totalProduk"
-).innerText =
-totalProduk;
+).innerText = totalProduk;
 
 document.getElementById(
 "totalTerjual"
-).innerText =
-totalTerjual;
-
-document.getElementById(
-"ratingToko"
-).innerText =
-toko.ratingToko || 0;
-
-document.getElementById(
-"totalReview"
-).innerText =
-toko.totalReviewToko || 0;
-
-produkTerlaris.sort(
-(a,b)=>
-Number(b.terjual || 0)
--
-Number(a.terjual || 0)
-);
+).innerText = totalTerjual;
 
 produkTerlaris
+.sort((a,b)=>
+Number(b.terjual||0) -
+Number(a.terjual||0)
+)
 .slice(0,4)
 .forEach((produk)=>{
 
@@ -265,13 +208,10 @@ Array.isArray(produk.gambar)
 
 <div class="product-info">
 
-<h3>
-${produk.namaProduk}
-</h3>
+<h3>${produk.namaProduk}</h3>
 
 <p>
-🔥 ${produk.terjual || 0}
-Terjual
+🔥 ${produk.terjual || 0} Terjual
 </p>
 
 </div>
