@@ -48,6 +48,22 @@ window.location.href =
 throw new Error("UID kosong");
 
 }
+function cek(id){
+
+const el =
+document.getElementById(id);
+
+if(!el){
+
+throw new Error(
+"ID HILANG: " + id
+);
+
+}
+
+return el;
+
+}
 
 try{
 
@@ -71,19 +87,13 @@ tokoSnap.data();
 INFORMASI TOKO
 ===================== */
 
-document.getElementById(
-"namaToko"
-).innerText =
+cek("namaToko").innerText =
 toko.namaUmkm || "UMKM";
 
-document.getElementById(
-"deskripsiToko"
-).innerText =
+cek("deskripsiToko").innerText =
 toko.deskripsi || "-";
 
-document.getElementById(
-"alamatToko"
-).innerText =
+cek("alamatToko").innerText =
 [
 toko.alamat,
 toko.kota,
@@ -92,51 +102,33 @@ toko.provinsi
 .filter(Boolean)
 .join(", ") || "-";
 
-document.getElementById(
-"nomorToko"
-).innerText =
+cek("nomorToko").innerText =
 toko.whatsapp || "-";
 
-document.getElementById(
-"namaBank"
-).innerText =
+cek("namaBank").innerText =
 toko.bank || "-";
 
-document.getElementById(
-"nomorRekening"
-).innerText =
+cek("nomorRekening").innerText =
 toko.rekening || "-";
 
-document.getElementById(
-"atasNama"
-).innerText =
+cek("atasNama").innerText =
 toko.atasNama || "-";
 
-document.getElementById(
-"ratingToko"
-).innerText =
+cek("ratingToko").innerText =
 toko.ratingToko || 0;
 
-document.getElementById(
-"ratingMini"
-).innerText =
+cek("ratingMini").innerText =
 toko.ratingToko || 0;
 
-document.getElementById(
-"logoToko"
-).src =
+cek("logoToko").src =
 toko.logo ||
 "https://picsum.photos/200";
 
-document.getElementById(
-"bannerToko"
-).src =
+cek("bannerToko").src =
 toko.banner ||
 "https://picsum.photos/1200/350";
 
-document.getElementById(
-"waToko"
-).href =
+cek("waToko").href =
 "https://wa.me/" +
 String(
 toko.whatsapp || ""
@@ -144,12 +136,15 @@ toko.whatsapp || ""
 
 if(toko.createdAt?.seconds){
 
-document.getElementById(
-"tanggalGabung"
-).innerText =
+cek("tanggalGabung").innerText =
 new Date(
 toko.createdAt.seconds * 1000
 ).toLocaleDateString("id-ID");
+
+}else{
+
+cek("tanggalGabung").innerText =
+"-";
 
 }
 
