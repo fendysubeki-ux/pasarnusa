@@ -133,32 +133,52 @@ getAuth
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
+
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
+
 projectId:"pasarnusa-18aa0",
+
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+
 messagingSenderId:"866998011671",
+
 appId:"1:866998011671:web:5555115feb82741ab55952"
+
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
 
 await auth.authStateReady();
 
 if(!auth.currentUser){
-window.location.href = "login.html";
+
+window.location.href =
+"login.html";
+
 }
 
-const uid = auth.currentUser.uid;
+const uid =
+auth.currentUser.uid;
 
 const container =
-document.getElementById("produkContainer");
+document.getElementById(
+"produkContainer"
+);
 
 let semuaProduk = [];
 
 async function loadProduk(){
+
+container.innerHTML = "";
 
 const snapshot =
 await getDocs(
@@ -167,16 +187,17 @@ collection(db,"produk")
 
 let totalTerjual = 0;
 let totalRating = 0;
-
-const kategoriSet = new Set();
+let kategoriSet = new Set();
 
 semuaProduk = [];
 
-snapshot.forEach((docItem)=>{
+snapshot.forEach((doc)=>{
 
 const produk = {
-id:docItem.id,
-...docItem.data()
+
+id:doc.id,
+...doc.data()
+
 };
 
 semuaProduk.push(produk);
@@ -213,8 +234,10 @@ document.getElementById(
 ).innerText =
 semuaProduk.length
 ?
-(totalRating / semuaProduk.length)
-.toFixed(1)
+(
+totalRating /
+semuaProduk.length
+).toFixed(1)
 :
 0;
 
@@ -240,25 +263,34 @@ const hasil =
 semuaProduk.filter((produk)=>{
 
 const cocokNama =
+
 (produk.namaProduk || "")
 .toLowerCase()
 .includes(keyword);
 
 const cocokKategori =
+
 kategori === ""
 ||
 produk.kategori === kategori;
 
-return cocokNama && cocokKategori;
+return cocokNama &&
+cocokKategori;
 
 });
 
 if(hasil.length === 0){
 
 container.innerHTML = `
+
 <div class="dashboard-card">
-<h3>Produk Tidak Ditemukan</h3>
+
+<h3>
+Produk Tidak Ditemukan
+</h3>
+
 </div>
+
 `;
 
 return;
@@ -268,7 +300,10 @@ return;
 hasil.forEach((produk)=>{
 
 const linkAffiliate =
-`${window.location.origin}/PasarNusa/produk-detail.html?id=${produk.id}&ref=${uid}`;
+"https://fendysubeki-ux.github.io/produk-detail.html?id=" +
+produk.id +
+"&ref=" +
+uid;
 
 container.innerHTML += `
 
@@ -276,8 +311,9 @@ container.innerHTML += `
 
 <img
 src="${
-produk.gambar?.[0] ||
-"https://picsum.photos/400"
+produk.gambar?.[0]
+||
+'https://picsum.photos/400'
 }"
 alt="${produk.namaProduk}">
 
@@ -346,7 +382,9 @@ class="btn-secondary">
 window.copyAffiliate =
 async(link)=>{
 
-await navigator.clipboard.writeText(link);
+await navigator.clipboard.writeText(
+link
+);
 
 alert(
 "Link affiliate berhasil disalin"
@@ -355,14 +393,18 @@ alert(
 };
 
 document
-.getElementById("searchProduk")
+.getElementById(
+"searchProduk"
+)
 .addEventListener(
 "input",
 renderProduk
 );
 
 document
-.getElementById("filterKategori")
+.getElementById(
+"filterKategori"
+)
 .addEventListener(
 "change",
 renderProduk
