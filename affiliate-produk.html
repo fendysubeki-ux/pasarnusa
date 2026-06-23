@@ -300,7 +300,12 @@ return;
 hasil.forEach((produk)=>{
 
 const linkAffiliate =
-"https://fendysubeki-ux.github.io/produk-detail.html?id=" +
+window.location.origin +
+window.location.pathname.replace(
+"affiliate-produk.html",
+"produk-detail.html"
+) +
+"?id=" +
 produk.id +
 "&ref=" +
 uid;
