@@ -168,30 +168,6 @@ Daftar UMKM
 
 </section>
 
-<section class="stats">
-
-<div class="stat">
-<h2 id="jumlahProduk">0</h2>
-<p>Produk</p>
-</div>
-
-<div class="stat">
-<h2 id="jumlahUmkm">0</h2>
-<p>UMKM</p>
-</div>
-
-<div class="stat">
-<h2 id="jumlahAffiliate">0</h2>
-<p>Affiliate</p>
-</div>
-
-<div class="stat">
-<h2 id="jumlahTransaksi">0</h2>
-<p>Transaksi</p>
-</div>
-
-</section>
-
 <section class="section-title">
 
 <h2>
@@ -331,33 +307,7 @@ Komisi masuk setiap ada transaksi berhasil.
 </div>
 
 </section>
-<section class="commission">
 
-<h2>Simulasi Penghasilan Affiliate</h2>
-
-<div class="commission-card">
-
-<p>
-Penjualan Produk:
-</p>
-
-<input
-type="number"
-id="sales"
-placeholder="Masukkan nilai penjualan">
-
-<button onclick="calculateCommission()">
-
-Hitung Komisi
-</button>
-
-<h3 id="result">
-Komisi: Rp0
-</h3>
-
-</div>
-
-</section>
 <section
 id="umkm"
 class="umkm-register">
@@ -457,8 +407,6 @@ Produk kami lebih mudah ditemukan pelanggan baru.
 </div>
 
 </section>
-
-</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -595,8 +543,13 @@ totalProdukAktif;
 document.getElementById("jumlahProduk").innerText =
 totalProdukAktif;
 
-document.getElementById("footerProduk").innerText =
+const footerProduk =
+document.getElementById("footerProduk");
+
+if(footerProduk){
+footerProduk.innerText =
 totalProdukAktif + " Produk";
+}
 
 </script>
 <script>
@@ -667,8 +620,13 @@ umkmSnap.size;
 document.getElementById("jumlahUmkm").innerText =
 umkmSnap.size;
 
-document.getElementById("footerUmkm").innerText =
+const footerUmkm =
+document.getElementById("footerUmkm");
+
+if(footerUmkm){
+footerUmkm.innerText =
 umkmSnap.size + " UMKM";
+}
 
 const affiliateSnap =
 await getDocs(
@@ -685,8 +643,13 @@ affiliateSnap.size;
 document.getElementById("jumlahAffiliate").innerText =
 affiliateSnap.size;
 
-document.getElementById("footerAffiliate").innerText =
+const footerAffiliate =
+document.getElementById("footerAffiliate");
+
+if(footerAffiliate){
+footerAffiliate.innerText =
 affiliateSnap.size + " Affiliate";
+}
 const pesananSnap =
 await getDocs(
 collection(db,"pesanan")
