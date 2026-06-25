@@ -255,7 +255,7 @@
 
                 // Ambil Data Affiliate
                 const affiliateQuery = query(
-                    collection(db, "affiliate"),
+                    collection(db,"affiliate_commissions"),
                     where("affiliateUid", "==", user.uid)
                 );
                 const affiliateSnap = await getDocs(affiliateQuery);
@@ -356,8 +356,7 @@
                 // Cek Apakah Ada Pengajuan Pencairan yang Sedang Proses
                 const pendingWithdraw = await getDocs(
                     query(
-                        collection(db, "pencairanAffiliate"),
-                        where("uid", "==", user.uid),
+collection(db, "affiliate_withdraws"),                        where("uid", "==", user.uid),
                         where("status", "==", "Menunggu Persetujuan")
                     )
                 );
@@ -457,7 +456,7 @@
             }
 
             try {
-                await addDoc(collection(db, "pencairanAffiliate"), {
+                await addDoc(collection(db, "affiliate_withdraws"), {
                     uid: user.uid,
                     jumlah: totalKomisi,
                     status: "Menunggu Persetujuan",
