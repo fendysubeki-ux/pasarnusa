@@ -631,7 +631,29 @@ serverTimestamp()
 localStorage.removeItem(
 "cart"
 );
+if (affiliateUid) {
 
+    // Simpan komisi affiliate
+    await addDoc(collection(db, "affiliate_commissions"), {
+        affiliateUid: affiliateUid,
+        pesananId: docRef.id,
+        namaProduk: cart[0]?.namaProduk || "",
+        klik: 1,
+        penjualan: 1,
+        komisi: komisiAffiliate,
+        status: "Pending",
+        createdAt: serverTimestamp()
+    });
+
+    // Tambah data klik affiliate
+    await addDoc(collection(db, "affiliate_clicks"), {
+        affiliateUid: affiliateUid,
+        pesananId: docRef.id,
+        produkId: cart[0]?.id || "",
+        createdAt: serverTimestamp()
+    });
+
+}
 alert(
 "Pesanan berhasil dibuat"
 );
