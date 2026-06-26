@@ -1,35 +1,482 @@
-<div class="dashboard-header"><div><h1>💳 Verifikasi Pembayaran</h1><p>
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Verifikasi Pembayaran Admin - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+
+<h1>💳 Verifikasi Pembayaran</h1>
+
+<p>
 Kelola bukti transfer dan verifikasi pembayaran pembeli.
-</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><a
+</p>
+
+</div>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+<a
 href="dashboard-admin.html"
 class="btn-secondary">
 
 ⬅ Dashboard
 
-</a><button
+</a>
+
+<button
 onclick="location.reload()"
 class="btn-primary">
 
 🔄 Refresh
 
-</button></div></div><div class="dashboard-grid"><div class="dashboard-card"><h3 id="totalVerifikasi">0</h3><p>
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<h2>📊 Statistik Pembayaran</h2>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+<h3 id="totalVerifikasi">0</h3>
+<p>Menunggu Verifikasi</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalDiproses">0</h3>
+<p>Diproses</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalDikirim">0</h3>
+<p>Dikirim</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="totalSelesai">0</h3>
+<p>Selesai</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<div style="display:flex;gap:15px;flex-wrap:wrap;">
+
+<input
+type="text"
+id="searchPesanan"
+class="search-box"
+placeholder="Cari nama pembeli...">
+
+<select id="filterStatus">
+
+<option value="all">
+Semua Status
+</option>
+
+<option value="Menunggu Verifikasi">
 Menunggu Verifikasi
-</p></div><div class="dashboard-card"><h3 id="totalDiproses">0</h3><p>
+</option>
+
+<option value="Diproses">
 Diproses
-</p></div><div class="dashboard-card"><h3 id="totalDikirim">0</h3><p>
+</option>
+
+<option value="Dikirim">
 Dikirim
-</p></div><div class="dashboard-card"><h3 id="totalSelesai">0</h3><p>
+</option>
+
+<option value="Selesai">
 Selesai
-</p></div></div><br>
-<a
-href="detail-pesanan-admin.html?id=${data.id}"
-class="btn-secondary"
+</option>
+
+</select>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<div
+id="pesananContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<p>Memuat data pembayaran...</p>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+updateDoc,
+doc,
+addDoc,
+serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href="login.html";
+throw new Error("Belum login");
+
+}
+
+const container =
+document.getElementById("pesananContainer");
+
+let semuaPesanan=[];
+
+async function loadPesanan(){
+
+container.innerHTML="<p>Memuat...</p>";
+
+const snapshot =
+await getDocs(collection(db,"pesanan"));
+
+semuaPesanan=[];
+
+let verifikasi=0;
+let diproses=0;
+let dikirim=0;
+let selesai=0;
+
+snapshot.forEach((docSnap)=>{
+
+const data=docSnap.data();
+
+if(!data.buktiTransfer) return;
+
+semuaPesanan.push({
+id:docSnap.id,
+...data
+});
+
+if(data.status==="Menunggu Verifikasi") verifikasi++;
+
+if(data.status==="Diproses") diproses++;
+
+if(data.status==="Dikirim") dikirim++;
+
+if(data.status==="Selesai") selesai++;
+
+});
+
+document.getElementById("totalVerifikasi").innerText=verifikasi;
+
+document.getElementById("totalDiproses").innerText=diproses;
+
+document.getElementById("totalDikirim").innerText=dikirim;
+
+document.getElementById("totalSelesai").innerText=selesai;
+
+renderPesanan(semuaPesanan);
+
+}
+
+loadPesanan();
+function renderPesanan(data){
+
+container.innerHTML="";
+
+if(data.length===0){
+
+container.innerHTML=`
+<div class="dashboard-card">
+<h3>Tidak Ada Pembayaran</h3>
+<p>Belum ada pembayaran yang perlu diverifikasi.</p>
+</div>
+`;
+
+return;
+
+}
+
+data.forEach((pesanan)=>{
+
+container.innerHTML+=`
+
+<div class="dashboard-card">
+
+<h3>👤 ${pesanan.namaPembeli||"-"}</h3>
+
+<p>📱 ${pesanan.whatsapp||"-"}</p>
+
+<p>🏪 ${pesanan.namaUmkm||"-"}</p>
+
+<p>💰 Rp ${Number(
+pesanan.totalBayar||0
+).toLocaleString("id-ID")}</p>
+
+<p>
+📦
+<b>${pesanan.status}</b>
+</p>
+
+${
+pesanan.buktiTransfer
+?
+`
+<img
+src="${pesanan.buktiTransfer}"
 style="
-display:block;
-text-align:center;
-margin-bottom:10px;
+width:100%;
+margin-top:12px;
+border-radius:12px;
+object-fit:cover;
 ">
+`
+:
+`<p>Tidak ada bukti transfer</p>`
+}
+
+<br><br>
+
+<a
+href="detail-pesanan-admin.html?id=${pesanan.id}"
+class="btn-secondary"
+style="display:block;text-align:center;margin-bottom:10px;">
 
 📋 Detail Pesanan
 
 </a>
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+">
+
+<button
+class="btn-primary"
+onclick="updateStatus('${pesanan.id}','Diproses','${pesanan.uidPembeli}')">
+
+✅ Verifikasi
+
+</button>
+
+<button
+class="btn-secondary"
+onclick="updateStatus('${pesanan.id}','Dikirim','${pesanan.uidPembeli}')">
+
+🚚 Dikirim
+
+</button>
+
+<button
+class="btn-primary"
+onclick="updateStatus('${pesanan.id}','Selesai','${pesanan.uidPembeli}')">
+
+✔️ Selesai
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+window.updateStatus = async(id,status,uidPembeli)=>{
+
+try{
+
+await updateDoc(
+doc(db,"pesanan",id),
+{
+
+status:status,
+
+statusUmkm:status,
+
+statusPembayaran:
+status==="Diproses"
+?"Lunas"
+:"Lunas"
+
+}
+);
+
+await addDoc(
+collection(db,"notifikasi"),
+{
+
+uid:uidPembeli,
+
+judul:"Status Pesanan",
+
+pesan:
+status==="Diproses"
+?
+"Pembayaran Anda telah diverifikasi dan pesanan sedang diproses."
+:
+status==="Dikirim"
+?
+"Pesanan Anda telah dikirim."
+:
+"Pesanan Anda telah selesai.",
+
+dibaca:false,
+
+createdAt:serverTimestamp()
+
+}
+);
+
+if(status==="Selesai"){
+
+const komisiSnap =
+await getDocs(collection(db,"affiliate_commissions"));
+
+for(const item of komisiSnap.docs){
+
+const data=item.data();
+
+if(data.pesananId===id){
+
+await updateDoc(item.ref,{
+status:"Selesai"
+});
+
+}
+
+}
+
+}
+
+alert("Status berhasil diperbarui");
+
+loadPesanan();
+
+}
+catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+};
+
+document
+.getElementById("searchPesanan")
+.addEventListener(
+"input",
+(e)=>{
+
+const keyword=
+e.target.value.toLowerCase();
+
+renderPesanan(
+
+semuaPesanan.filter(item=>
+
+(item.namaPembeli||"")
+.toLowerCase()
+.includes(keyword)
+
+)
+
+);
+
+}
+);
+
+document
+.getElementById("filterStatus")
+.addEventListener(
+"change",
+(e)=>{
+
+if(e.target.value==="all"){
+
+renderPesanan(semuaPesanan);
+
+return;
+
+}
+
+renderPesanan(
+
+semuaPesanan.filter(item=>
+
+item.status===e.target.value
+
+)
+
+);
+
+}
+);
+
+</script>
+
+</body>
+</html>
