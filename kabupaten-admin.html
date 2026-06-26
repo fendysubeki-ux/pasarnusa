@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Kelola Kabupaten</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="style.css">
+
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+
+<h1>
+
+🏛 Kelola Kabupaten
+
+</h1>
+
+<p>
+
+Kelola seluruh kabupaten di PasarNusa
+
+</p>
+
+</div>
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+">
+
+<a
+href="dashboard-admin.html"
+class="btn-secondary">
+
+⬅ Dashboard
+
+</a>
+
+<button
+onclick="location.reload()"
+class="btn-primary">
+
+🔄 Refresh
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3 id="totalKabupaten">
+
+0
+
+</h3>
+
+<p>Total Kabupaten</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="totalKecamatan">
+
+0
+
+</h3>
+
+<p>Total Kecamatan</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="totalProduk">
+
+0
+
+</h3>
+
+<p>Total Produk</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<input
+id="searchKabupaten"
+class="search-box"
+placeholder="Cari kabupaten...">
+
+<br><br>
+
+<button
+onclick="bukaTambahKabupaten()"
+class="btn-primary">
+
+➕ Tambah Kabupaten
+
+</button>
+
+</section>
+
+<section class="dashboard">
+
+<div
+id="kabupatenContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+Memuat data kabupaten...
+
+</div>
+
+</div>
+
+</section>
+
+<div
+id="kabupatenModal"
+class="modal"
+style="display:none;">
+
+<div class="modal-content">
+
+<h2 id="modalTitle">
+
+Tambah Kabupaten
+
+</h2>
+
+<input
+id="namaKabupatenInput"
+class="search-box"
+placeholder="Nama Kabupaten">
+
+<input
+id="provinsiInput"
+class="search-box"
+placeholder="Provinsi">
+
+<input
+id="bannerInput"
+class="search-box"
+placeholder="URL Banner">
+
+<input
+id="mapsInput"
+class="search-box"
+placeholder="Google Maps">
+
+<textarea
+id="deskripsiInput"
+class="search-box"
+placeholder="Deskripsi Kabupaten"
+style="height:120px;"></textarea>
+
+<div style="
+display:flex;
+gap:10px;
+margin-top:20px;
+">
+
+<button
+id="simpanKabupatenBtn"
+class="btn-primary">
+
+💾 Simpan
+
+</button>
+
+<button
+onclick="tutupModal()"
+class="btn-secondary">
+
+Batal
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+
+getFirestore,
+collection,
+getDocs,
+doc,
+getDoc,
+deleteDoc,
+addDoc,
+updateDoc
+
+}
+from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app=
+initializeApp(firebaseConfig);
+
+const db=
+getFirestore(app);
+
+const auth=
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href="login.html";
+
+throw new Error("Belum login");
+
+}
+
+const adminSnap=
+await getDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+)
+);
+
+if(
+!adminSnap.exists()||
+adminSnap.data().role!=="admin"
+){
+
+alert("Akses khusus Admin");
+
+window.location.href="index.html";
+
+throw new Error("Bukan Admin");
+
+}
+
+const container=
+document.getElementById(
+"kabupatenContainer"
+);
+
+let semuaKabupaten=[];
+
+let editId=null;
+
+async function loadKabupaten(){
+
+container.innerHTML=
+"<p>Memuat data...</p>";
+
+const [
+
+kabupatenSnap,
+kecamatanSnap,
+produkSnap
+
+]=await Promise.all([
+
+getDocs(collection(db,"kabupaten")),
+
+getDocs(collection(db,"kecamatan")),
+
+getDocs(collection(db,"produk"))
+
+]);
+
+semuaKabupaten=[];
+
+let totalKabupaten=0;
+
+let totalKecamatan=0;
+
+let totalProduk=0;
+
+kabupatenSnap.forEach((docSnap)=>{
+
+const data=
+docSnap.data();
+
+let jumlahKecamatan=0;
+
+let jumlahProduk=0;
+
+kecamatanSnap.forEach((kecamatan)=>{
+
+const k=
+kecamatan.data();
+
+if(
+k.kabupaten===data.nama
+){
+
+jumlahKecamatan++;
+
+}
+
+});
+
+produkSnap.forEach((produk)=>{
+
+const p=
+produk.data();
+
+if(
+p.kabupaten===data.nama
+){
+
+jumlahProduk++;
+
+}
+
+});
+
+totalKabupaten++;
+
+totalKecamatan+=jumlahKecamatan;
+
+totalProduk+=jumlahProduk;
+
+semuaKabupaten.push({
+
+id:docSnap.id,
+
+...data,
+
+jumlahKecamatan,
+
+jumlahProduk
+
+});
+
+});
+
+document.getElementById(
+"totalKabupaten"
+).innerText=
+totalKabupaten;
+
+document.getElementById(
+"totalKecamatan"
+).innerText=
+totalKecamatan;
+
+document.getElementById(
+"totalProduk"
+).innerText=
+totalProduk;
+
+renderKabupaten();
+
+}
+function renderKabupaten(){
+
+const keyword=
+document.getElementById(
+"searchKabupaten"
+).value.toLowerCase();
+
+container.innerHTML="";
+
+const hasil=
+semuaKabupaten.filter((item)=>{
+
+return(
+
+(item.nama||"")
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(item.provinsi||"")
+.toLowerCase()
+.includes(keyword)
+
+);
+
+});
+
+if(hasil.length===0){
+
+container.innerHTML=`
+
+<div class="dashboard-card">
+
+<h3>
+
+Kabupaten Tidak Ditemukan
+
+</h3>
+
+<p>
+
+Tidak ada data yang sesuai.
+
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+hasil.forEach((item)=>{
+
+container.innerHTML+=`
+
+<div class="dashboard-card">
+
+<img
+src="${item.banner||'https://placehold.co/600x300'}"
+style="
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:15px;
+">
+
+<h3>
+
+🏛 ${item.nama}
+
+</h3>
+
+<p>
+
+🌍 ${item.provinsi}
+
+</p>
+
+<p>
+
+🏘 ${item.jumlahKecamatan} Kecamatan
+
+</p>
+
+<p>
+
+🛍 ${item.jumlahProduk} Produk
+
+</p>
+
+<p>
+
+${(item.deskripsi||"-")
+.substring(0,100)}...
+
+</p>
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:15px;
+">
+
+<a
+href="kabupaten.html?kabupaten=${encodeURIComponent(item.nama)}"
+class="btn-primary">
+
+👁 Lihat
+
+</a>
+
+<button
+class="btn-secondary"
+onclick="editKabupaten('${item.id}')">
+
+✏ Edit
+
+</button>
+
+<button
+class="btn-secondary"
+onclick="hapusKabupaten('${item.id}')">
+
+🗑 Hapus
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+window.hapusKabupaten=async(id)=>{
+
+if(
+!confirm(
+"Yakin ingin menghapus kabupaten ini?"
+)
+){
+
+return;
+
+}
+
+try{
+
+await deleteDoc(
+doc(db,"kabupaten",id)
+);
+
+alert(
+"Kabupaten berhasil dihapus."
+);
+
+loadKabupaten();
+
+}
+catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+};
+
+document
+.getElementById("searchKabupaten")
+.addEventListener(
+"input",
+renderKabupaten
+);
+
+loadKabupaten();
+window.bukaTambahKabupaten=()=>{
+
+editId=null;
+
+document.getElementById("modalTitle").innerText=
+"Tambah Kabupaten";
+
+document.getElementById("namaKabupatenInput").value="";
+
+document.getElementById("provinsiInput").value="";
+
+document.getElementById("bannerInput").value="";
+
+document.getElementById("mapsInput").value="";
+
+document.getElementById("deskripsiInput").value="";
+
+document.getElementById("kabupatenModal").style.display=
+"flex";
+
+};
+
+window.tutupModal=()=>{
+
+document.getElementById("kabupatenModal").style.display=
+"none";
+
+};
+
+window.editKabupaten=(id)=>{
+
+const data=
+semuaKabupaten.find(
+item=>item.id===id
+);
+
+if(!data)return;
+
+editId=id;
+
+document.getElementById("modalTitle").innerText=
+"Edit Kabupaten";
+
+document.getElementById("namaKabupatenInput").value=
+data.nama||"";
+
+document.getElementById("provinsiInput").value=
+data.provinsi||"";
+
+document.getElementById("bannerInput").value=
+data.banner||"";
+
+document.getElementById("mapsInput").value=
+data.maps||"";
+
+document.getElementById("deskripsiInput").value=
+data.deskripsi||"";
+
+document.getElementById("kabupatenModal").style.display=
+"flex";
+
+};
+
+document
+.getElementById("simpanKabupatenBtn")
+.addEventListener(
+"click",
+async()=>{
+
+const data={
+
+nama:
+document.getElementById("namaKabupatenInput").value,
+
+provinsi:
+document.getElementById("provinsiInput").value,
+
+banner:
+document.getElementById("bannerInput").value,
+
+maps:
+document.getElementById("mapsInput").value,
+
+deskripsi:
+document
+</script>
+</body>
+</html>
