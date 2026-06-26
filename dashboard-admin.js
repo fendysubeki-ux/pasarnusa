@@ -168,9 +168,6 @@ const data = docItem.data();
 
 totalPesanan++;
 
-const subtotal =
-Number(data.subtotal || 0);
-
 const total =
 Number(
 data.totalBayar ||
@@ -294,7 +291,7 @@ error.message
 
 }
 const logoutBtn =
-document.getElementById("logoutAdmin");
+document.getElementById("logoutBtn");
 
 if(logoutBtn){
 
