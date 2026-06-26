@@ -1,30 +1,81 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Detail Pesanan Admin</title>
+<title>Detail Pesanan Admin - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 
+<meta name="theme-color" content="#16a34a">
+
 </head>
+
 <body>
 
 <section class="dashboard">
 
+<div class="dashboard-header">
+
+<div>
+
 <h1>📦 Detail Pesanan</h1>
 
-<div id="detailPesanan" class="dashboard-card">
+<p>
+Informasi lengkap transaksi marketplace.
+</p>
 
-Loading...
+</div>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+<a
+href="pesanan-admin.html"
+class="btn-secondary">
+
+⬅ Kembali
+
+</a>
+
+<button
+onclick="window.print()"
+class="btn-primary">
+
+🖨 Cetak Invoice
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<div
+id="detailPesanan"
+class="dashboard-card">
+
+<h2>Memuat Detail Pesanan...</h2>
+
+<p>
+Mohon tunggu sebentar.
+</p>
 
 </div>
 
 </section>
 
 <script type="module">
-
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
@@ -32,11 +83,22 @@ import {
 getFirestore,
 doc,
 getDoc,
-updateDoc
+updateDoc,
+collection,
+getDocs,
+query,
+where,
+addDoc,
+serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const firebaseConfig = {
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig={
 
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
@@ -47,123 +109,412 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app=
+initializeApp(firebaseConfig);
 
-const params =
-new URLSearchParams(window.location.search);
+const db=
+getFirestore(app);
 
-const id =
-params.get("id");
+const auth=
+getAuth(app);
 
-const snap =
-await getDoc(
-doc(db,"pesanan",id)
-);
+await auth.authStateReady();
 
-if(!snap.exists()){
+if(!auth.currentUser){
 
-document.getElementById(
-"detailPesanan"
-).innerHTML =
-"Pesanan tidak ditemukan";
+window.location.href="login.html";
 
-throw new Error();
+throw new Error("Belum login");
 
 }
 
-const data =
-snap.data();
+const adminSnap=
+await getDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+)
+);
+
+if(
+!adminSnap.exists()||
+adminSnap.data().role!=="admin"
+){
+
+alert("Akses khusus Admin");
+
+window.location.href="index.html";
+
+throw new Error("Bukan Admin");
+
+}
+
+const params=
+new URLSearchParams(
+window.location.search
+);
+
+const id=
+params.get("id");
+
+if(!id){
 
 document.getElementById(
 "detailPesanan"
-).innerHTML = `
+).innerHTML=
+"<h2>ID Pesanan tidak ditemukan</h2>";
 
-<h2>
-Pesanan #${id.substring(0,8)}
-</h2>
+throw new Error("ID kosong");
 
-<p>
-Status:
-<b>${data.status || "menunggu"}</b>
-</p>
+}
 
-<p>
-UID Pembeli:
-${data.uidPembeli || "-"}
-</p>
+const pesananRef=
+doc(db,"pesanan",id);
 
-<p>
-Total:
-Rp ${Number(data.total || 0)
-.toLocaleString("id-ID")}
-</p>
+const pesananSnap=
+await getDoc(pesananRef);
 
-<p>
-Alamat:
-${data.alamat || "-"}
-</p>
+if(!pesananSnap.exists()){
 
-<p>
-Metode Pembayaran:
-${data.metodePembayaran || "-"}
-</p>
+document.getElementById(
+"detailPesanan"
+).innerHTML=
+"<h2>Pesanan tidak ditemukan</h2>";
+
+throw new Error("Pesanan tidak ada");
+
+}
+
+const data=
+pesananSnap.data();
+
+const detail=
+document.getElementById(
+"detailPesanan"
+);
+let daftarProduk="";
+
+(data.items||[]).forEach((item)=>{
+
+daftarProduk+=`
+
+<div style="
+padding:12px;
+border:1px solid #e5e7eb;
+border-radius:12px;
+margin-bottom:12px;
+">
+
+<b>${item.namaProduk||"-"}</b>
 
 <br>
 
-<select id="statusBaru">
+Jumlah :
+${item.qty||1}
 
-<option value="menunggu">
-Menunggu
-</option>
+<br>
 
-<option value="diproses">
-Diproses
-</option>
+Harga :
+Rp ${Number(item.harga||0)
+.toLocaleString("id-ID")}
 
-<option value="dikirim">
-Dikirim
-</option>
+<br>
 
-<option value="selesai">
-Selesai
-</option>
+Subtotal :
+Rp ${(
+Number(item.harga||0)*
+Number(item.qty||1)
+).toLocaleString("id-ID")}
 
-</select>
-
-<button onclick="ubahStatus()"
-class="btn-primary">
-
-Update Status
-
-</button>
+</div>
 
 `;
 
-window.ubahStatus =
-async function(){
+});
 
-const status =
+const tanggal=
+
+data.createdAt?.seconds
+
+?
+
+new Date(
+data.createdAt.seconds*1000
+).toLocaleString("id-ID")
+
+:
+
+"-";
+
+detail.innerHTML=`
+
+<h2>
+
+📦 Pesanan #${id.substring(0,8)}
+
+</h2>
+
+<hr>
+
+<h3>👤 Data Pembeli</h3>
+
+<p><b>Nama :</b> ${data.namaPembeli||"-"}</p>
+
+<p><b>WhatsApp :</b> ${data.whatsapp||"-"}</p>
+
+<p><b>Alamat :</b> ${data.alamat||"-"}</p>
+
+<p><b>Kota :</b> ${data.kota||"-"}</p>
+
+<hr>
+
+<h3>🏪 Data UMKM</h3>
+
+<p><b>Nama Toko :</b> ${data.namaUmkm||"-"}</p>
+
+<p><b>UID UMKM :</b> ${data.uidUmkm||"-"}</p>
+
+<hr>
+
+<h3>📦 Produk Dibeli</h3>
+
+${daftarProduk}
+
+<hr>
+
+<h3>💰 Rincian Pembayaran</h3>
+
+<p><b>Subtotal :</b> Rp ${Number(data.subtotal||0).toLocaleString("id-ID")}</p>
+
+<p><b>Ongkir :</b> Rp ${Number(data.ongkir||0).toLocaleString("id-ID")}</p>
+
+<p><b>Diskon :</b> Rp ${Number(data.diskon||0).toLocaleString("id-ID")}</p>
+
+<p><b>Total :</b> Rp ${Number(data.totalBayar||0).toLocaleString("id-ID")}</p>
+
+<p><b>Pendapatan UMKM :</b> Rp ${Number(data.pendapatanUmkm||0).toLocaleString("id-ID")}</p>
+
+<p><b>Komisi Affiliate :</b> Rp ${Number(data.komisiAffiliate||0).toLocaleString("id-ID")}</p>
+
+<p><b>Pendapatan Platform :</b> Rp ${Number(data.pendapatanPlatform||0).toLocaleString("id-ID")}</p>
+
+<hr>
+
+<h3>🤝 Affiliate</h3>
+
+<p><b>UID Affiliate :</b> ${data.affiliateUid||"-"}</p>
+
+<hr>
+
+<h3>🧾 Bukti Transfer</h3>
+
+${
+data.buktiTransfer
+
+?
+
+`
+<img
+src="${data.buktiTransfer}"
+style="
+width:100%;
+max-width:500px;
+border-radius:12px;
+margin-top:10px;
+">
+`
+
+:
+
+"<p>Belum upload bukti transfer.</p>"
+
+}
+
+<hr>
+
+<h3>🚚 Pengiriman</h3>
+
+<p><b>Kurir :</b> ${data.kurir||"-"}</p>
+
+<p><b>Nomor Resi :</b> ${data.resi||"-"}</p>
+
+<p><b>Tanggal :</b> ${tanggal}</p>
+
+<hr>
+
+<h3>🔄 Ubah Status</h3>
+
+<select id="statusBaru" class="search-box">
+
+<option value="Belum Bayar">Belum Bayar</option>
+
+<option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
+
+<option value="Diproses">Diproses</option>
+
+<option value="Dikirim">Dikirim</option>
+
+<option value="Selesai">Selesai</option>
+
+<option value="Dibatalkan">Dibatalkan</option>
+
+</select>
+
+<br><br>
+
+<button
+id="updateStatusBtn"
+class="btn-primary">
+
+💾 Simpan Status
+
+</button>
+
+<a
+target="_blank"
+href="https://wa.me/${(data.whatsapp||"").replace(/^0/,"62")}"
+class="btn-secondary"
+style="margin-left:10px;">
+
+💬 Chat Pembeli
+
+</a>
+
+`;
+
+document.getElementById("statusBaru").value=
+data.status||"Belum Bayar";
+document
+.getElementById("updateStatusBtn")
+.addEventListener(
+"click",
+async()=>{
+
+try{
+
+const statusBaru=
 document.getElementById(
 "statusBaru"
 ).value;
 
 await updateDoc(
-doc(db,"pesanan",id),
+pesananRef,
 {
-status:status
+
+status:statusBaru,
+
+statusUmkm:statusBaru,
+
+statusPembayaran:
+statusBaru==="Diproses"||
+statusBaru==="Dikirim"||
+statusBaru==="Selesai"
+?
+"Lunas"
+:
+data.statusPembayaran||
+
+"Belum Bayar"
+
 }
 );
 
+/* Update komisi affiliate */
+
+if(
+statusBaru==="Selesai" &&
+data.affiliateUid
+){
+
+const komisiSnap=
+await getDocs(
+
+query(
+
+collection(
+db,
+"affiliate_commissions"
+),
+
+where(
+"pesananId",
+"==",
+id
+)
+
+)
+
+);
+
+for(const item of komisiSnap.docs){
+
+await updateDoc(
+item.ref,
+{
+status:"Selesai"
+}
+);
+
+}
+
+}
+
+/* Kirim notifikasi */
+
+if(data.uidPembeli){
+
+await addDoc(
+
+collection(
+db,
+"notifikasi"
+),
+
+{
+
+uid:
+data.uidPembeli,
+
+judul:
+"Status Pesanan",
+
+pesan:
+"Status pesanan Anda berubah menjadi " +
+statusBaru,
+
+dibaca:false,
+
+createdAt:
+serverTimestamp()
+
+}
+
+);
+
+}
+
 alert(
-"Status berhasil diupdate"
+"Status berhasil diperbarui"
 );
 
 location.reload();
 
 }
+catch(error){
+
+console.error(error);
+
+alert(
+error.message
+);
+
+}
+
+});
 
 </script>
 
 </body>
+
 </html>
