@@ -673,7 +673,24 @@ status:status,
 statusUmkm:status
 }
 )
-.then(()=>{
+.then(async()=>{
+
+if (status === "Selesai") {
+
+    const komisiSnap = await getDocs(
+        query(
+            collection(db, "affiliate_commissions"),
+            where("pesananId", "==", id)
+        )
+    );
+
+    for (const item of komisiSnap.docs) {
+        await updateDoc(item.ref, {
+            status: "Selesai"
+        });
+    }
+
+}
 
 alert("Status berhasil diperbarui");
 
