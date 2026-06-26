@@ -1,72 +1,198 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pesanan Admin - PasarNusa</title><link rel="stylesheet" href="style.css"></head>
-<body><section class="dashboard"><div class="dashboard-header"><div>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kelola Pesanan Admin - PasarNusa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<meta name="theme-color" content="#16a34a">
+
+</head>
+
+<body>
+
+<section class="dashboard">
+
+<div class="dashboard-header">
+
+<div>
+
 <h1>📦 Kelola Pesanan</h1>
-<p>Kelola seluruh transaksi marketplace PasarNusa</p>
-</div><div style="display:flex;gap:10px;flex-wrap:wrap;"><a
+
+<p>
+Kelola seluruh transaksi Marketplace PasarNusa.
+</p>
+
+</div>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+<a
 href="dashboard-admin.html"
 class="btn-secondary">
 
 ⬅ Dashboard
 
-</a><button
+</a>
+
+<button
 onclick="location.reload()"
 class="btn-primary">
 
 🔄 Refresh
 
-</button></div></div><div class="dashboard-grid"><div class="dashboard-card">
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<h2>📊 Statistik Pesanan</h2>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
 <h3 id="totalPesanan">0</h3>
 <p>Total Pesanan</p>
-</div><div class="dashboard-card">
-<h3 id="pesananBelumBayar">0</h3>
+</div>
+
+<div class="dashboard-card">
+<h3 id="belumBayar">0</h3>
 <p>Belum Bayar</p>
-</div><div class="dashboard-card">
-<h3 id="pesananDiproses">0</h3>
+</div>
+
+<div class="dashboard-card">
+<h3 id="menungguVerifikasi">0</h3>
+<p>Menunggu Verifikasi</p>
+</div>
+
+<div class="dashboard-card">
+<h3 id="diproses">0</h3>
 <p>Diproses</p>
-</div><div class="dashboard-card">
-<h3 id="pesananDikirim">0</h3>
+</div>
+
+<div class="dashboard-card">
+<h3 id="dikirim">0</h3>
 <p>Dikirim</p>
-</div><div class="dashboard-card">
-<h3 id="pesananSelesai">0</h3>
+</div>
+
+<div class="dashboard-card">
+<h3 id="selesai">0</h3>
 <p>Selesai</p>
-</div><div class="dashboard-card">
+</div>
+
+<div class="dashboard-card">
+<h3 id="dibatalkan">0</h3>
+<p>Dibatalkan</p>
+</div>
+
+<div class="dashboard-card">
 <h3 id="totalOmset">Rp 0</h3>
 <p>Total Omset</p>
-</div></div><br><div class="form-card"><input
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<div style="display:flex;gap:15px;flex-wrap:wrap;">
+
+<input
 type="text"
 id="searchPesanan"
-placeholder="Cari nama pembeli atau ID pesanan...">
+class="search-box"
+placeholder="Cari ID atau nama pembeli...">
 
-<select id="filterStatus"><option value="Semua">
+<select id="filterStatus">
+
+<option value="Semua">
 Semua Status
-</option><option value="Belum Bayar">
-Belum Bayar
-</option><option value="Menunggu Verifikasi">
-Menunggu Verifikasi
-</option><option value="Diproses">
-Diproses
-</option><option value="Dikirim">
-Dikirim
-</option><option value="Selesai">
-Selesai
-</option><option value="Dibatalkan">
-Dibatalkan
-</option></select></div><br><div
-id="pesananContainer"
-class="dashboard-grid"><div class="dashboard-card"><h3>Loading...</h3><p>Memuat data pesanan</p></div></div></section><script type="module">
+</option>
 
+<option value="Belum Bayar">
+Belum Bayar
+</option>
+
+<option value="Menunggu Verifikasi">
+Menunggu Verifikasi
+</option>
+
+<option value="Diproses">
+Diproses
+</option>
+
+<option value="Dikirim">
+Dikirim
+</option>
+
+<option value="Selesai">
+Selesai
+</option>
+
+<option value="Dibatalkan">
+Dibatalkan
+</option>
+
+</select>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<div
+id="pesananContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3>Loading...</h3>
+
+<p>
+Memuat seluruh pesanan marketplace...
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
 getFirestore,
 collection,
-getDocs
+getDocs,
+doc,
+getDoc,
+updateDoc
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
 
@@ -79,87 +205,139 @@ appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href="login.html";
+
+throw new Error("Belum login");
+
+}
+
+const adminSnap =
+await getDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+)
+);
+
+if(
+!adminSnap.exists() ||
+adminSnap.data().role !== "admin"
+){
+
+alert("Akses khusus admin");
+
+window.location.href="index.html";
+
+throw new Error("Bukan admin");
+
+}
 
 const container =
-document.getElementById("pesananContainer");
+document.getElementById(
+"pesananContainer"
+);
 
-let semuaPesanan = [];
+let semuaPesanan=[];
 
 async function loadPesanan(){
 
 try{
 
-const snapshot =
+const snapshot=
 await getDocs(
 collection(db,"pesanan")
 );
 
-semuaPesanan = [];
+semuaPesanan=[];
 
-let total = 0;
-let belumBayar = 0;
-let diproses = 0;
-let dikirim = 0;
-let selesai = 0;
-let omset = 0;
+let total=0;
+let belumBayar=0;
+let menungguVerifikasi=0;
+let diproses=0;
+let dikirim=0;
+let selesai=0;
+let dibatalkan=0;
+let omset=0;
 
-snapshot.forEach((item)=>{
+snapshot.forEach((docSnap)=>{
 
-const data = item.data();
+const data=docSnap.data();
 
 semuaPesanan.push({
-id:item.id,
+
+id:docSnap.id,
+
 ...data
+
 });
 
 total++;
 
-omset += Number(
-data.totalBayar || 0
-);
+switch(data.status){
 
-if(data.status === "Belum Bayar")
+case "Belum Bayar":
 belumBayar++;
+break;
 
-if(data.status === "Diproses")
+case "Menunggu Verifikasi":
+menungguVerifikasi++;
+break;
+
+case "Diproses":
 diproses++;
+break;
 
-if(data.status === "Dikirim")
+case "Dikirim":
 dikirim++;
+break;
 
-if(data.status === "Selesai")
+case "Selesai":
 selesai++;
+omset+=Number(
+data.totalBayar||0
+);
+break;
+
+case "Dibatalkan":
+dibatalkan++;
+break;
+
+}
 
 });
 
 semuaPesanan.reverse();
 
-document.getElementById(
-"totalPesanan"
-).innerText = total;
+document.getElementById("totalPesanan").innerText=total;
 
-document.getElementById(
-"pesananBelumBayar"
-).innerText = belumBayar;
+document.getElementById("belumBayar").innerText=belumBayar;
 
-document.getElementById(
-"pesananDiproses"
-).innerText = diproses;
+document.getElementById("menungguVerifikasi").innerText=menungguVerifikasi;
 
-document.getElementById(
-"pesananDikirim"
-).innerText = dikirim;
+document.getElementById("diproses").innerText=diproses;
 
-document.getElementById(
-"pesananSelesai"
-).innerText = selesai;
+document.getElementById("dikirim").innerText=dikirim;
 
-document.getElementById(
-"totalOmset"
-).innerText =
-"Rp " +
+document.getElementById("selesai").innerText=selesai;
+
+document.getElementById("dibatalkan").innerText=dibatalkan;
+
+document.getElementById("totalOmset").innerText=
+"Rp "+
 omset.toLocaleString("id-ID");
 
 renderPesanan();
@@ -169,7 +347,7 @@ catch(error){
 
 console.error(error);
 
-container.innerHTML = `
+container.innerHTML=`
 <div class="dashboard-card">
 <h3>Error</h3>
 <p>${error.message}</p>
@@ -179,7 +357,6 @@ container.innerHTML = `
 }
 
 }
-
 function renderPesanan(){
 
 const keyword =
@@ -192,13 +369,13 @@ document.getElementById(
 "filterStatus"
 ).value;
 
-container.innerHTML = "";
+container.innerHTML="";
 
 const hasil =
 semuaPesanan.filter((pesanan)=>{
 
 const cocokNama =
-(pesanan.namaPembeli || "")
+(pesanan.namaPembeli||"")
 .toLowerCase()
 .includes(keyword);
 
@@ -208,25 +385,33 @@ pesanan.id
 .includes(keyword);
 
 const cocokStatus =
-filter === "Semua"
+filter==="Semua"
 ||
-(pesanan.status || "")
-=== filter;
+pesanan.status===filter;
 
-return (
-(cocokNama || cocokId)
+return(
+(cocokNama||cocokId)
 && cocokStatus
 );
 
 });
 
-if(hasil.length === 0){
+if(hasil.length===0){
 
-container.innerHTML = `
+container.innerHTML=`
+
 <div class="dashboard-card">
-<h3>Tidak Ada Pesanan</h3>
-<p>Pesanan tidak ditemukan.</p>
+
+<h3>
+Tidak Ada Pesanan
+</h3>
+
+<p>
+Pesanan tidak ditemukan.
+</p>
+
 </div>
+
 `;
 
 return;
@@ -235,45 +420,150 @@ return;
 
 hasil.forEach((pesanan)=>{
 
+const tanggal =
+pesanan.createdAt?.seconds
+?
+new Date(
+pesanan.createdAt.seconds*1000
+).toLocaleString("id-ID")
+:
+"-";
+
+let badge="#6b7280";
+
+switch(pesanan.status){
+
+case "Belum Bayar":
+badge="#ef4444";
+break;
+
+case "Menunggu Verifikasi":
+badge="#f59e0b";
+break;
+
+case "Diproses":
+badge="#3b82f6";
+break;
+
+case "Dikirim":
+badge="#8b5cf6";
+break;
+
+case "Selesai":
+badge="#16a34a";
+break;
+
+case "Dibatalkan":
+badge="#374151";
+break;
+
+}
+
 container.innerHTML += `
 
 <div class="dashboard-card">
 
 <h3>
-Pesanan #${pesanan.id.substring(0,8)}
+
+🧾 #${pesanan.id.substring(0,8)}
+
 </h3>
 
 <p>
-👤 ${pesanan.namaPembeli || "-"}
+
+👤 ${pesanan.namaPembeli||"-"}
+
 </p>
 
 <p>
-📱 ${pesanan.whatsapp || "-"}
+
+🏪 ${pesanan.namaUmkm||"-"}
+
 </p>
 
 <p>
-📦 Status:
-<b>${pesanan.status || "Belum Bayar"}</b>
+
+📱 ${pesanan.whatsapp||"-"}
+
 </p>
 
 <p>
+
+📅 ${tanggal}
+
+</p>
+
+<p>
+
 💰 Rp ${Number(
-pesanan.totalBayar || 0
+pesanan.totalBayar||0
 ).toLocaleString("id-ID")}
+
 </p>
+
+<p>
+
+<span style="
+background:${badge};
+color:#fff;
+padding:5px 12px;
+border-radius:8px;
+">
+
+${pesanan.status}
+
+</span>
+
+</p>
+
+<div style="
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:15px;
+">
 
 <a
 href="detail-pesanan-admin.html?id=${pesanan.id}"
-class="btn-primary"
-style="
-display:block;
-text-align:center;
-margin-top:10px;
-">
+class="btn-primary">
 
-Lihat Detail
+📋 Detail
 
 </a>
+
+<button
+class="btn-secondary"
+onclick="updateStatus('${pesanan.id}','Diproses')">
+
+Diproses
+
+</button>
+
+<button
+class="btn-secondary"
+onclick="updateStatus('${pesanan.id}','Dikirim')">
+
+Dikirim
+
+</button>
+
+<button
+class="btn-primary"
+onclick="updateStatus('${pesanan.id}','Selesai')">
+
+Selesai
+
+</button>
+
+<button
+class="btn-secondary"
+onclick="updateStatus('${pesanan.id}','Dibatalkan')">
+
+Batalkan
+
+</button>
+
+</div>
 
 </div>
 
@@ -282,6 +572,32 @@ Lihat Detail
 });
 
 }
+window.updateStatus = async(id,status)=>{
+
+try{
+
+await updateDoc(
+doc(db,"pesanan",id),
+{
+status:status,
+statusUmkm:status
+}
+);
+
+alert("Status berhasil diperbarui");
+
+loadPesanan();
+
+}
+catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+};
 
 document
 .getElementById("searchPesanan")
@@ -299,5 +615,8 @@ renderPesanan
 
 loadPesanan();
 
-</script></body>
+</script>
+
+</body>
+
 </html>
