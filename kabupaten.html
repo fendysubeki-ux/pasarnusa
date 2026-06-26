@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Kabupaten - PasarNusa</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="style.css">
+
+<meta name="theme-color"
+content="#16a34a">
+
+</head>
+
+<body>
+
+<section class="hero">
+
+<img
+id="bannerKabupaten"
+src="https://placehold.co/1200x400"
+style="
+width:100%;
+height:260px;
+object-fit:cover;
+border-radius:20px;
+">
+
+</section>
+
+<section class="dashboard">
+
+<h1 id="namaKabupaten">
+
+Memuat...
+
+</h1>
+
+<p id="lokasiKabupaten">
+
+Provinsi
+
+</p>
+
+</section>
+
+<section class="dashboard">
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3 id="jumlahKecamatan">
+
+0
+
+</h3>
+
+<p>Kecamatan</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="jumlahDesa">
+
+0
+
+</h3>
+
+<p>Desa</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="jumlahUmkm">
+
+0
+
+</h3>
+
+<p>UMKM</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="jumlahProduk">
+
+0
+
+</h3>
+
+<p>Produk</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<h2>
+
+📖 Tentang Kabupaten
+
+</h2>
+
+<div class="dashboard-card">
+
+<p id="deskripsiKabupaten">
+
+Memuat informasi...
+
+</p>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<h2>
+
+🏛 Daftar Kecamatan
+
+</h2>
+
+<div
+id="kecamatanContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+Memuat data kecamatan...
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+
+getFirestore,
+collection,
+getDocs
+
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app=
+initializeApp(firebaseConfig);
+
+const db=
+getFirestore(app);
+
+const params=
+new URLSearchParams(
+window.location.search
+);
+
+const namaKabupaten=
+params.get("kabupaten");
+
+const kecamatanContainer=
+document.getElementById(
+"kecamatanContainer"
+);
+
+let semuaKecamatan=[];
+
+async function loadKabupaten(){
+
+const kabupatenSnap=
+await getDocs(
+collection(db,"kabupaten")
+);
+
+kabupatenSnap.forEach((doc)=>{
+
+const data=
+doc.data();
+
+if(
+data.nama!==namaKabupaten
+){
+
+return;
+
+}
+
+document.getElementById(
+"namaKabupaten"
+).innerText=
+data.nama;
+
+document.getElementById(
+"lokasiKabupaten"
+).innerText=
+data.provinsi||"-";
+
+document.getElementById(
+"deskripsiKabupaten"
+).innerText=
+data.deskripsi||"-";
+
+document.getElementById(
+"bannerKabupaten"
+).src=
+data.banner||
+"https://placehold.co/1200x400";
+
+});
+
+await loadStatistik();
+
+}
+async function loadStatistik(){
+
+const [
+
+kecamatanSnap,
+desaSnap,
+produkSnap
+
+]=await Promise.all([
+
+getDocs(collection(db,"kecamatan")),
+
+getDocs(collection(db,"desa")),
+
+getDocs(collection(db,"produk"))
+
+]);
+
+semuaKecamatan=[];
+
+let jumlahKecamatan=0;
+
+let jumlahDesa=0;
+
+let jumlahProduk=0;
+
+const umkmSet=
+new Set();
+
+kecamatanSnap.forEach((docSnap)=>{
+
+const data=
+docSnap.data();
+
+if(
+data.kabupaten!==namaKabupaten
+){
+
+return;
+
+}
+
+jumlahKecamatan++;
+
+semuaKecamatan.push({
+
+id:docSnap.id,
+
+...data
+
+});
+
+});
+
+desaSnap.forEach((docSnap)=>{
+
+const data=
+docSnap.data();
+
+if(
+data.kabupaten===namaKabupaten
+){
+
+jumlahDesa++;
+
+}
+
+});
+
+produkSnap.forEach((docSnap)=>{
+
+const data=
+docSnap.data();
+
+if(
+data.kabupaten!==namaKabupaten
+){
+
+return;
+
+}
+
+jumlahProduk++;
+
+if(data.uidUmkm){
+
+umkmSet.add(
+data.uidUmkm
+);
+
+}
+
+});
+
+document.getElementById(
+"jumlahKecamatan"
+).innerText=
+jumlahKecamatan;
+
+document.getElementById(
+"jumlahDesa"
+).innerText=
+jumlahDesa;
+
+document.getElementById(
+"jumlahUmkm"
+).innerText=
+umkmSet.size;
+
+document.getElementById(
+"jumlahProduk"
+).innerText=
+jumlahProduk;
+
+renderKecamatan();
+
+}
+function renderKecamatan(){
+
+kecamatanContainer.innerHTML="";
+
+if(
+semuaKecamatan.length===0
+){
+
+kecamatanContainer.innerHTML=`
+
+<div class="dashboard-card">
+
+<h3>
+
+Belum Ada Kecamatan
+
+</h3>
+
+<p>
+
+Belum ada data kecamatan.
+
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+semuaKecamatan.forEach((item)=>{
+
+kecamatanContainer.innerHTML+=`
+
+<div class="dashboard-card">
+
+<img
+src="${item.banner||'https://placehold.co/600x300'}"
+style="
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:15px;
+">
+
+<h3>
+
+🏛 ${item.nama}
+
+</h3>
+
+<p>
+
+${item.deskripsi||"-"}
+
+</p>
+
+<a
+href="kecamatan.html?kecamatan=${encodeURIComponent(item.nama)}"
+class="btn-primary">
+
+Lihat Kecamatan
+
+</a>
+
+</div>
+
+`;
+
+});
+
+}
+
+loadKabupaten();
+
+</script>
+
+</body>
+
+</html>
