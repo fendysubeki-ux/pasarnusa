@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PasarNusa | Marketplace & Affiliate UMKM Indonesia</title>
+<title>PasarNusa | Marketplace UMKM Indonesia</title>
+
 <meta name="description"
-content="Marketplace dan Affiliate UMKM Indonesia. Jual beli produk lokal, dukung UMKM, dan dapatkan komisi affiliate.">
+content="Marketplace UMKM Indonesia yang menghubungkan UMKM dengan pelanggan di seluruh Indonesia.">
 
-<meta name="keywords"
-content="UMKM, Marketplace Indonesia, Affiliate Marketing, PasarNusa">
+<meta name="theme-color"
+content="#16a34a">
 
-<meta name="author"
-content="PasarNusa">
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
 
 <link rel="preconnect"
 href="https://fonts.gstatic.com"
@@ -21,145 +24,325 @@ crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="assets/css/style.css">
+
+<link rel="stylesheet"
+href="assets/css/animation.css">
+
 </head>
 
 <body>
+<!-- ==========================
+     LOADING
+========================== -->
+
+<div class="loading-screen">
+
+<div class="loader"></div>
+
+</div>
+<!-- ==========================
+     NAVBAR
+========================== -->
 
 <header class="navbar">
 
-<div class="logo">
-PASAR<span>NUSA</span>
+<div class="container navbar-content">
+
+<a href="index.html"
+class="logo">
+
+🌿
+<span>PasarNusa</span>
+
+</a>
+
+<nav class="navbar-menu">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<a href="umkm.html">
+
+UMKM
+
+</a>
+
+<a href="wilayah.html">
+
+Wilayah
+
+</a>
+
+<a href="affiliate.html">
+
+Affiliate
+
+</a>
+
+<a href="tentang.html">
+
+Tentang
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
+
+<a
+href="login.html"
+class="btn btn-secondary">
+
+Masuk
+
+</a>
+
+<a
+href="register.html"
+class="btn btn-primary">
+
+Daftar
+
+</a>
+
 </div>
 
 <div class="menu-toggle">
+
 ☰
+
 </div>
-
-<nav class="nav-links">
-
-<a href="#">Beranda</a>
-
-<a href="#produk">Produk</a>
-
-<a href="cart.html">
-🛒 Keranjang
-(<span id="cartCount">0</span>)
-</a>
-
-<a href="favorit.html">
-❤️ Favorit
-</a>
-
-<a href="toko-favorit.html">
-⭐ Toko Favorit
-</a>
-<a href="riwayat-toko.html">
-🕒 Riwayat Toko
-</a>
-<a href="riwayat-produk.html">
-🛍 Riwayat Produk
-</a>
-<a href="notifikasi.html">
-🔔 Notifikasi
-(<span id="notifCount">0</span>)
-</a>
-<a href="#umkm">UMKM</a>
-
-<a href="affiliate-dashboard.html">Affiliate</a>
-
-<a href="dashboard-umkm.html">
-Dashboard UMKM
-</a>
-
-<a href="pesanan-saya.html">
-Pesanan Saya
-</a>
-<a href="profil.html">
-👤 Profil
-</a>
-</nav>
-
-<div class="nav-btn">
-
-<a href="login.html" class="btn-login">
-Masuk
-</a>
-
-<a href="register.html"
-class="btn-primary">
-Daftar
-</a>
 
 </div>
 
 </header>
+<!-- ==========================
+     HERO
+========================== -->
 
 <section class="hero">
 
-<div class="hero-left">
+<div class="container hero-grid">
 
-<span class="badge">
-🚀 Platform UMKM Indonesia
-</span>
+<!-- HERO TEXT -->
+
+<div class="hero-content">
+
+<div class="hero-badge">
+
+🇮🇩 Marketplace UMKM Indonesia
+
+</div>
 
 <h1>
-Bangun UMKM Indonesia
-Bersama Affiliate Marketing
+
+Belanja Langsung dari UMKM Terpercaya di Seluruh Indonesia
+
 </h1>
-<div class="hero-badges">
 
-<span>Marketplace UMKM</span>
-
-<span>Affiliate Marketing</span>
-
-<span>Digital Commerce</span>
-
-</div>
 <p>
-PasarNusa membantu UMKM menjual produk ke seluruh Indonesia,
-affiliate memperoleh komisi dari setiap penjualan,
-dan pembeli menemukan produk lokal terbaik dalam satu platform.
+
+Temukan ribuan produk lokal berkualitas dari pelaku UMKM di seluruh Indonesia. Belanja lebih mudah, aman, dan langsung dari produsennya.
+
 </p>
 
-<div class="hero-action">
+<!-- SEARCH -->
 
-<a href="#produk" class="btn-primary">
-Jelajahi Produk
+<div class="hero-search">
+
+<input
+type="text"
+id="searchHome"
+placeholder="Cari produk, UMKM atau wilayah...">
+
+<button
+class="btn btn-primary">
+
+🔍 Cari
+
+</button>
+
+</div>
+
+<!-- QUICK MENU -->
+
+<div class="hero-menu">
+
+<a
+href="produk.html"
+class="hero-item">
+
+<div class="hero-icon">
+
+🛍️
+
+</div>
+
+<h4>
+
+Belanja
+
+</h4>
+
 </a>
 
-<a href="register.html" class="btn-secondary">
+<a
+href="register-umkm.html"
+class="hero-item">
+
+<div class="hero-icon">
+
+🏪
+
+</div>
+
+<h4>
+
 Daftar UMKM
+
+</h4>
+
+</a>
+
+<a
+href="affiliate.html"
+class="hero-item">
+
+<div class="hero-icon">
+
+🤝
+
+</div>
+
+<h4>
+
+Affiliate
+
+</h4>
+
+</a>
+
+<a
+href="wilayah.html"
+class="hero-item">
+
+<div class="hero-icon">
+
+🗺️
+
+</div>
+
+<h4>
+
+Jelajahi
+
+</h4>
+
 </a>
 
 </div>
 
 </div>
 
-<div class="hero-right">
+<!-- HERO IMAGE -->
 
-<div class="mockup-card">
+<div class="hero-image">
 
-<h3>Dashboard PasarNusa</h3>
+<img
+src="assets/images/hero.webp"
+alt="PasarNusa">
 
-<div class="stat-item">
-<span>UMKM Aktif</span>
-<h2 id="totalUmkm">0</h2>
 </div>
 
-<div class="stat-item">
-<span>Produk Lokal</span>
-<h2 id="totalProduk">0</h2>
 </div>
 
-<div class="stat-item">
-<span>Affiliate Aktif</span>
-<h2 id="totalAffiliate">0</h2>
+</section>
+<!-- ==========================
+     BANNER SLIDER
+========================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>🎉 Promo & Informasi Terbaru</h2>
+
+<p>
+
+Temukan promo, event, dan informasi terbaru dari PasarNusa.
+
+</p>
+
 </div>
 
-<div class="stat-item">
-<span>Total Transaksi</span>
-<h2 id="totalTransaksi">0</h2>
+</div>
+
+<div class="banner-slider">
+
+<div class="banner-track">
+
+<div class="banner-slide active">
+
+<img
+src="assets/images/banner-1.webp"
+alt="Banner 1">
+
+</div>
+
+<div class="banner-slide">
+
+<img
+src="assets/images/banner-2.webp"
+alt="Banner 2">
+
+</div>
+
+<div class="banner-slide">
+
+<img
+src="assets/images/banner-3.webp"
+alt="Banner 3">
+
+</div>
+
+</div>
+
+<button class="banner-prev">
+
+❮
+
+</button>
+
+<button class="banner-next">
+
+❯
+
+</button>
+
+<div class="banner-pagination">
+
+<span class="active"></span>
+
+<span></span>
+
+<span></span>
+
 </div>
 
 </div>
@@ -167,699 +350,1567 @@ Daftar UMKM
 </div>
 
 </section>
+<!-- ==========================
+     KATEGORI PRODUK
+========================== -->
 
-<section class="section-title">
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>🛒 Jelajahi Kategori</h2>
+
+<p>
+
+Temukan berbagai produk UMKM berdasarkan kategori favoritmu.
+
+</p>
+
+</div>
+
+<a
+href="kategori.html"
+class="btn btn-secondary">
+
+Lihat Semua
+
+</a>
+
+</div>
+
+<div
+class="grid grid-4"
+id="kategoriContainer">
+
+<!-- CARD -->
+
+<a
+href="kategori.html?kategori=Makanan"
+class="card kategori-card">
+
+<div class="kategori-icon">
+
+🍜
+
+</div>
+
+<h3>
+
+Makanan
+
+</h3>
+
+<p>
+
+<span id="katMakanan">
+
+0
+
+</span>
+
+Produk
+
+</p>
+
+</a>
+
+<a
+href="kategori.html?kategori=Minuman"
+class="card kategori-card">
+
+<div class="kategori-icon">
+
+☕
+
+</div>
+
+<h3>
+
+Minuman
+
+</h3>
+
+<p>
+
+<span id="katMinuman">
+
+0
+
+</span>
+
+Produk
+
+</p>
+
+</a>
+
+<a
+href="kategori.html?kategori=Fashion"
+class="card kategori-card">
+
+<div class="kategori-icon">
+
+👕
+
+</div>
+
+<h3>
+
+Fashion
+
+</h3>
+
+<p>
+
+<span id="katFashion">
+
+0
+
+</span>
+
+Produk
+
+</p>
+
+</a>
+
+<a
+href="kategori.html?kategori=Kerajinan"
+class="card kategori-card">
+
+<div class="kategori-icon">
+
+🧶
+
+</div>
+
+<h3>
+
+Kerajinan
+
+</h3>
+
+<p>
+
+<span id="katKerajinan">
+
+0
+
+</span>
+
+Produk
+
+</p>
+
+</a>
+
+<a
+href="kategori.html?kategori=Pertanian"
+class="card kategori-card">
+
+<div class="kategori-icon">
+
+🌾
+
+</div>
+
+<h3>
+
+Pertanian
+
+</h3>
+
+<p>
+
+<span id="katPertanian">
+
+0
+
+</span>
+
+Produk
+
+</p>
+
+</a>
+
+<a
+href="kategori.html?kategori=Peternakan"
+class="card kategori-card">
+
+<div class="kategori-icon">
+
+🐄
+
+</div>
+
+<h3>
+
+Peternakan
+
+</h3>
+
+<p>
+
+<span id="katPeternakan">
+
+0
+
+</span>
+
+Produk
+
+</p>
+
+</a>
+
+<a
+href="kategori.html?kategori=Perikanan"
+class="card kategori-card">
+
+<div class="kategori-icon">
+
+🐟
+
+</div>
+
+<h3>
+
+Perikanan
+
+</h3>
+
+<p>
+
+<span id="katPerikanan">
+
+0
+
+</span>
+
+Produk
+
+</p>
+
+</a>
+
+<a
+href="kategori.html?kategori=Lainnya"
+class="card kategori-card">
+
+<div class="kategori-icon">
+
+📦
+
+</div>
+
+<h3>
+
+Lainnya
+
+</h3>
+
+<p>
+
+<span id="katLainnya">
+
+0
+
+</span>
+
+Produk
+
+</p>
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================
+     PRODUK TERBARU
+========================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>🆕 Produk Terbaru</h2>
+
+<p>
+
+Produk terbaru dari UMKM seluruh Indonesia.
+
+</p>
+
+</div>
+
+<a
+href="produk.html"
+class="btn btn-secondary">
+
+Lihat Semua
+
+</a>
+
+</div>
+
+<div
+class="product-grid"
+id="produkContainer">
+
+<!-- CARD -->
+
+<div class="product-card">
+
+<div class="product-image">
+
+<img
+src="assets/images/no-image.webp"
+alt="Produk">
+
+<div class="product-badge">
+
+Baru
+
+</div>
+
+<div class="favorite">
+
+❤️
+
+</div>
+
+</div>
+
+<div class="product-content">
+
+<h3 class="product-title">
+
+Loading Produk...
+
+</h3>
+
+<div class="product-rating">
+
+⭐⭐⭐⭐⭐
+
+<span class="rating-count">
+
+(0)
+
+</span>
+
+</div>
+
+<div class="product-location">
+
+📍 Indonesia
+
+</div>
+
+<div class="product-store">
+
+🏪 PasarNusa
+
+</div>
+
+<div class="product-price">
+
+<span class="new-price">
+
+Rp0
+
+</span>
+
+</div>
+
+<div class="product-action">
+
+<a
+href="#"
+class="btn btn-secondary">
+
+Detail
+
+</a>
+
+<a
+href="#"
+class="btn btn-primary">
+
+Beli
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================
+     UMKM PILIHAN
+========================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>🏪 UMKM Pilihan</h2>
+
+<p>
+
+Kenali UMKM terbaik dari berbagai daerah di Indonesia.
+
+</p>
+
+</div>
+
+<a
+href="umkm.html"
+class="btn btn-secondary">
+
+Lihat Semua
+
+</a>
+
+</div>
+
+<div
+class="umkm-grid"
+id="umkmContainer">
+
+<!-- CARD -->
+
+<div class="umkm-card">
+
+<div class="product-image">
+
+<img
+src="assets/images/no-store.webp"
+alt="UMKM">
+
+<div class="umkm-badge">
+
+✔ Terverifikasi
+
+</div>
+
+</div>
+
+<img
+class="umkm-logo"
+src="assets/images/logo-default.webp"
+alt="Logo">
+
+<div class="umkm-content">
+
+<h3 class="umkm-name">
+
+Loading UMKM...
+
+</h3>
+
+<p class="umkm-location">
+
+📍 Indonesia
+
+</p>
+
+<div class="umkm-rating">
+
+⭐⭐⭐⭐⭐
+
+<span>(0)</span>
+
+</div>
+
+<div class="grid grid-2">
+
+<div class="card">
+
+<strong id="produkCount">
+
+0
+
+</strong>
+
+<small>Produk</small>
+
+</div>
+
+<div class="card">
+
+<strong id="terjualCount">
+
+0
+
+</strong>
+
+<small>Terjual</small>
+
+</div>
+
+</div>
+
+<div class="mt-3">
+
+<a
+href="#"
+class="btn btn-primary w-100">
+
+Kunjungi Toko
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================
+     JELAJAHI INDONESIA
+========================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>🗺️ Jelajahi Indonesia</h2>
+
+<p>
+
+Temukan UMKM dan produk lokal berdasarkan wilayah di seluruh Indonesia.
+
+</p>
+
+</div>
+
+<a
+href="wilayah.html"
+class="btn btn-secondary">
+
+Lihat Semua
+
+</a>
+
+</div>
+
+<div class="grid grid-4">
+
+<!-- PROVINSI -->
+
+<a
+href="provinsi.html"
+class="card hover-up text-center">
+
+<div style="font-size:60px;">
+
+🌎
+
+</div>
+
+<h3 class="mt-2">
+
+Provinsi
+
+</h3>
+
+<p class="mt-1">
+
+<span id="totalProvinsi">
+
+38
+
+</span>
+
+Provinsi
+
+</p>
+
+</a>
+
+<!-- KABUPATEN -->
+
+<a
+href="kabupaten.html"
+class="card hover-up text-center">
+
+<div style="font-size:60px;">
+
+🏛️
+
+</div>
+
+<h3 class="mt-2">
+
+Kabupaten
+
+</h3>
+
+<p class="mt-1">
+
+<span id="totalKabupaten">
+
+514
+
+</span>
+
+Kabupaten
+
+</p>
+
+</a>
+
+<!-- KECAMATAN -->
+
+<a
+href="kecamatan.html"
+class="card hover-up text-center">
+
+<div style="font-size:60px;">
+
+🏘️
+
+</div>
+
+<h3 class="mt-2">
+
+Kecamatan
+
+</h3>
+
+<p class="mt-1">
+
+<span id="totalKecamatan">
+
+0
+
+</span>
+
+Kecamatan
+
+</p>
+
+</a>
+
+<!-- DESA -->
+
+<a
+href="desa.html"
+class="card hover-up text-center">
+
+<div style="font-size:60px;">
+
+🏡
+
+</div>
+
+<h3 class="mt-2">
+
+Desa
+
+</h3>
+
+<p class="mt-1">
+
+<span id="totalDesa">
+
+0
+
+</span>
+
+Desa
+
+</p>
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================
+     STATISTIK PASARNUSA
+========================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>📊 PasarNusa Dalam Angka</h2>
+
+<p>
+
+Perkembangan ekosistem UMKM Indonesia yang terus bertumbuh bersama PasarNusa.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="dashboard-stats">
+
+<!-- Produk -->
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+📦
+
+</div>
+
+<div
+class="stat-value"
+id="statProduk">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+Total Produk
+
+</div>
+
+</div>
+
+<!-- UMKM -->
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+🏪
+
+</div>
+
+<div
+class="stat-value"
+id="statUmkm">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+UMKM Aktif
+
+</div>
+
+</div>
+
+<!-- Pembeli -->
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+👥
+
+</div>
+
+<div
+class="stat-value"
+id="statUser">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+Pengguna
+
+</div>
+
+</div>
+
+<!-- Transaksi -->
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+💳
+
+</div>
+
+<div
+class="stat-value"
+id="statOrder">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+Transaksi
+
+</div>
+
+</div>
+
+</div>
+
+<div class="dashboard-stats mt-3">
+
+<!-- Provinsi -->
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+🌎
+
+</div>
+
+<div
+class="stat-value"
+id="statProvinsi">
+
+38
+
+</div>
+
+<div class="stat-label">
+
+Provinsi
+
+</div>
+
+</div>
+
+<!-- Kabupaten -->
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+🏛️
+
+</div>
+
+<div
+class="stat-value"
+id="statKabupaten">
+
+514
+
+</div>
+
+<div class="stat-label">
+
+Kabupaten
+
+</div>
+
+</div>
+
+<!-- Kecamatan -->
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+🏘️
+
+</div>
+
+<div
+class="stat-value"
+id="statKecamatan">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+Kecamatan
+
+</div>
+
+</div>
+
+<!-- Desa -->
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+🏡
+
+</div>
+
+<div
+class="stat-value"
+id="statDesa">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+Desa
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================
+     MENGAPA PASARNUSA
+========================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>❤️ Mengapa Memilih PasarNusa?</h2>
+
+<p>
+
+PasarNusa hadir untuk menghubungkan UMKM Indonesia dengan jutaan pembeli secara mudah, aman, dan transparan.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="grid grid-4">
+
+<!-- CARD -->
+
+<div class="card hover-up text-center">
+
+<div class="fitur-icon">
+
+🏪
+
+</div>
+
+<h3>
+
+Langsung dari UMKM
+
+</h3>
+
+<p>
+
+Belanja langsung dari pelaku usaha tanpa perantara sehingga produk lebih asli dan harga lebih kompetitif.
+
+</p>
+
+</div>
+
+<!-- CARD -->
+
+<div class="card hover-up text-center">
+
+<div class="fitur-icon">
+
+🔒
+
+</div>
+
+<h3>
+
+Transaksi Aman
+
+</h3>
+
+<p>
+
+Seluruh proses pembayaran dan pesanan tercatat sehingga lebih aman bagi pembeli maupun UMKM.
+
+</p>
+
+</div>
+
+<!-- CARD -->
+
+<div class="card hover-up text-center">
+
+<div class="fitur-icon">
+
+🚚
+
+</div>
+
+<h3>
+
+Pengiriman Mudah
+
+</h3>
+
+<p>
+
+Produk dikirim langsung oleh UMKM ke seluruh Indonesia menggunakan layanan ekspedisi terpercaya.
+
+</p>
+
+</div>
+
+<!-- CARD -->
+
+<div class="card hover-up text-center">
+
+<div class="fitur-icon">
+
+🤝
+
+</div>
+
+<h3>
+
+Affiliate Marketing
+
+</h3>
+
+<p>
+
+Siapa pun dapat memperoleh komisi dengan membagikan produk UMKM melalui sistem affiliate PasarNusa.
+
+</p>
+
+</div>
+
+<!-- CARD -->
+
+<div class="card hover-up text-center">
+
+<div class="fitur-icon">
+
+🇮🇩
+
+</div>
+
+<h3>
+
+Mendukung Produk Lokal
+
+</h3>
+
+<p>
+
+Setiap transaksi membantu pertumbuhan UMKM dan ekonomi daerah di seluruh Indonesia.
+
+</p>
+
+</div>
+
+<!-- CARD -->
+
+<div class="card hover-up text-center">
+
+<div class="fitur-icon">
+
+📱
+
+</div>
+
+<h3>
+
+Mudah Digunakan
+
+</h3>
+
+<p>
+
+Tampilan sederhana, cepat, dan responsif sehingga nyaman digunakan di HP maupun komputer.
+
+</p>
+
+</div>
+
+<!-- CARD -->
+
+<div class="card hover-up text-center">
+
+<div class="fitur-icon">
+
+⭐
+
+</div>
+
+<h3>
+
+UMKM Terverifikasi
+
+</h3>
+
+<p>
+
+UMKM yang telah melalui proses verifikasi akan memperoleh tanda khusus sehingga lebih terpercaya.
+
+</p>
+
+</div>
+
+<!-- CARD -->
+
+<div class="card hover-up text-center">
+
+<div class="fitur-icon">
+
+📊
+
+</div>
+
+<h3>
+
+Data Transparan
+
+</h3>
+
+<p>
+
+Jumlah produk, transaksi, dan perkembangan UMKM ditampilkan secara terbuka dan selalu diperbarui.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================
+     CARA KERJA PASARNUSA
+========================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>🚀 Cara Kerja PasarNusa</h2>
+
+<p>
+
+Belanja produk UMKM hanya dalam empat langkah mudah.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="grid grid-4">
+
+<!-- STEP 1 -->
+
+<div class="card hover-up text-center">
+
+<div class="step-number">
+
+1
+
+</div>
+
+<div class="step-icon">
+
+🔍
+
+</div>
+
+<h3>
+
+Cari Produk
+
+</h3>
+
+<p>
+
+Cari produk, UMKM, atau wilayah yang ingin kamu temukan melalui fitur pencarian.
+
+</p>
+
+</div>
+
+<!-- STEP 2 -->
+
+<div class="card hover-up text-center">
+
+<div class="step-number">
+
+2
+
+</div>
+
+<div class="step-icon">
+
+🛒
+
+</div>
+
+<h3>
+
+Checkout
+
+</h3>
+
+<p>
+
+Masukkan produk ke keranjang lalu lakukan pembayaran dengan metode yang tersedia.
+
+</p>
+
+</div>
+
+<!-- STEP 3 -->
+
+<div class="card hover-up text-center">
+
+<div class="step-number">
+
+3
+
+</div>
+
+<div class="step-icon">
+
+📦
+
+</div>
+
+<h3>
+
+UMKM Mengirim
+
+</h3>
+
+<p>
+
+Pesanan diterima oleh UMKM dan langsung diproses untuk dikirim ke alamatmu.
+
+</p>
+
+</div>
+
+<!-- STEP 4 -->
+
+<div class="card hover-up text-center">
+
+<div class="step-number">
+
+4
+
+</div>
+
+<div class="step-icon">
+
+🎉
+
+</div>
+
+<h3>
+
+Pesanan Diterima
+
+</h3>
+
+<p>
+
+Produk sampai di rumah. Berikan ulasan agar membantu UMKM berkembang.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================
+     CALL TO ACTION
+========================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="card text-center cta-section">
+
+<div class="cta-icon">
+
+🚀
+
+</div>
 
 <h2>
-Mengapa PasarNusa?
+
+Mulai Bersama PasarNusa
+
 </h2>
 
 <p>
-Membantu UMKM berkembang melalui teknologi dan affiliate marketing.
+
+Belanja produk UMKM terbaik dari seluruh Indonesia atau daftarkan usahamu dan jangkau lebih banyak pelanggan.
+
 </p>
 
-</section>
-
-<section class="features">
-
-<div class="feature-card">
-<h3>🛍️ Marketplace UMKM</h3>
-<p>Jual produk lokal ke seluruh Indonesia dengan mudah.</p>
-</div>
-
-<div class="feature-card">
-<h3>💰 Affiliate Marketing</h3>
-<p>Affiliate dapat mempromosikan produk dan memperoleh komisi otomatis.</p>
-</div>
-
-<div class="feature-card">
-<h3>📊 Dashboard Bisnis</h3>
-<p>Pantau produk, pesanan, omzet, dan performa usaha secara real-time.</p>
-</div>
-
-<div class="feature-card">
-<h3>🚀 Scale Up Business</h3>
-<p>Membantu UMKM berkembang melalui teknologi digital dan pemasaran modern.</p>
-</div>
-
-</section>
-<section id="produk" class="products">
-
-<div class="section-title">
-<h2>Produk Unggulan</h2>
-<p>Temukan produk UMKM terbaik dari seluruh Indonesia</p>
-</div>
-
-<div class="search-box">
-<input
-type="text"
-id="searchInput"
-placeholder="Cari produk...">
-</div>
-<div style="margin:20px 0">
-
-<button onclick="filterProduk('all')">
-Semua
-</button>
-
-<button onclick="filterProduk('Makanan')">
-Makanan
-</button>
-
-<button onclick="filterProduk('Minuman')">
-Minuman
-</button>
-
-<button onclick="filterProduk('Kerajinan')">
-Kerajinan
-</button>
-
-</div>
-<div
-id="produkContainer"
-class="product-grid">
-</div>
-
-</section>
-
-<section id="affiliate" class="affiliate-section">
-
-<div class="section-title">
-
-<h2>Program Affiliate PasarNusa</h2>
-
-<p>
-Dapatkan komisi dari setiap produk yang berhasil terjual melalui link Anda.
-</p>
-
-</div>
-
-<div class="affiliate-steps">
-
-<div class="step">
-
-<div class="number">1</div>
-
-<h3>Daftar Affiliate</h3>
-
-<p>
-Buat akun affiliate gratis.
-</p>
-
-</div>
-
-<div class="step">
-
-<div class="number">2</div>
-
-<h3>Ambil Link</h3>
-
-<p>
-Pilih produk dan salin link referral.
-</p>
-
-</div>
-
-<div class="step">
-
-<div class="number">3</div>
-
-<h3>Promosikan</h3>
-
-<p>
-Bagikan ke TikTok, WhatsApp, Instagram.
-</p>
-
-</div>
-
-<div class="step">
-
-<div class="number">4</div>
-
-<h3>Dapat Komisi</h3>
-
-<p>
-Komisi masuk setiap ada transaksi berhasil.
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<section
-id="umkm"
-class="umkm-register">
-
-<div class="section-title">
-
-<h2>Gabung Sebagai UMKM</h2>
-
-<p>
-Daftarkan usaha Anda dan mulai menjual di PasarNusa.
-</p>
-
-</div>
-
-<div class="register-card">
-
-<h3>Mulai Jualan di PasarNusa</h3>
-
-<p>
-Daftarkan UMKM Anda dan kelola produk melalui dashboard khusus UMKM.
-</p>
-
-<a href="register.html" class="btn-primary">
-Daftar UMKM Sekarang
-</a>
-
-</div>
-
-</section>
-<section class="dashboard-preview">
-
-<div class="section-title">
-
-<h2>Dashboard UMKM</h2>
-
-<p>
-Pantau produk, penjualan, dan performa usaha dalam satu tempat.
-</p>
-
-</div>
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-<h3>Total Produk</h3>
-<h1 id="dashboardProduk">0</h1>
-</div>
-
-<div class="dashboard-card">
-<h3>Total Penjualan</h3>
-<h1 id="dashboardPenjualan">0</h1>
-</div>
-
-<div class="dashboard-card">
-<h3>Total Pesanan</h3>
-<h1 id="dashboardPesanan">0</h1>
-</div>
-
-<div class="dashboard-card">
-<h3>Affiliate Aktif</h3>
-<h1 id="dashboardAffiliate">0</h1>
-</div>
-
-</div>
-
-</section>
-<section class="testimonials">
-
-<div class="section-title">
-<h2>Apa Kata Pengguna?</h2>
-<p>Testimoni UMKM dan Affiliate PasarNusa</p>
-</div>
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-<h3>Pelaku UMKM</h3>
-<p>
-Penjualan kami meningkat setelah bergabung dengan PasarNusa.
-</p>
-</div>
-
-<div class="dashboard-card">
-<h3>Mitra Affiliate</h3>
-<p>
-Saya mendapat komisi tambahan setiap bulan dari promosi produk UMKM.
-</p>
-</div>
-
-<div class="dashboard-card">
-<h3>UMKM Kopi Nusantara</h3>
-<p>
-Produk kami lebih mudah ditemukan pelanggan baru.
-</p>
-</div>
-
-</div>
-
-</section>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const params = new URLSearchParams(window.location.search);
-const ref = params.get("ref");
-
-if(
-ref &&
-sessionStorage.getItem("affiliate_clicked") !== ref
-){
-
-localStorage.setItem("affiliate",ref);
-
-try{
-await addDoc(
-collection(db,"affiliate_clicks"),
-{
-affiliate:ref,
-tanggal:new Date(),
-userAgent:navigator.userAgent
-}
-);
-}catch(e){
-console.log("Affiliate click gagal:",e);
-}
-
-sessionStorage.setItem(
-"affiliate_clicked",
-ref
-);
-
-}
-
-const produkContainer =
-document.getElementById("produkContainer");
-
-const snapshot =
-await getDocs(
-collection(db,"produk")
-);
-let totalProdukAktif = 0;
-
-if(snapshot.empty){
-
-produkContainer.innerHTML = `
-<div class="cart-card">
-<h3>Belum ada produk tersedia</h3>
-</div>
-`;
-
-}
-snapshot.forEach((item)=>{
-
-const data = item.data();
-
-if(
-Number(data.stok || 0) <= 0 ||
-data.status !== "Aktif"
-){
-return;
-}
-
-totalProdukAktif++;
-produkContainer.innerHTML += `
-<div class="product-card searchable"
-data-category="${data.kategori || ''}">
-
-<img src="${Array.isArray(data.gambar)
-? data.gambar[0]
-: (data.gambar || 'https://picsum.photos/400/300')}">
-
-<div class="product-info">
-
-<span class="category">
-${data.kategori || 'Produk'}
-</span>
-
-<h3>${String(data.namaProduk || "")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")}</h3>
-
-<p class="price">
-Rp ${Number(data.harga || 0).toLocaleString("id-ID")}
-</p>
-
-<p>📦 Stok: ${data.stok || 0}</p>
-<p>
-🏪 ${data.namaToko || "UMKM Indonesia"}
-</p>
-<div style="display:flex;gap:10px;flex-wrap:wrap;">
+<div class="cta-button">
 
 <a
-href="produk-detail.html?id=${item.id}"
-class="btn-primary">
-Lihat Detail
+href="produk.html"
+class="btn btn-secondary">
+
+🛍️ Mulai Belanja
+
 </a>
 
 <a
-href="profil-umkm.html?uid=${data.uid}"
-class="btn-secondary">
-🏪 Lihat Toko
+href="register-umkm.html"
+class="btn btn-primary">
+
+🏪 Daftarkan UMKM
+
 </a>
 
 </div>
 
+<div class="cta-info">
+
+<div>
+
+📦
+
+<strong id="ctaProduk">
+
+0
+
+</strong>
+
+<p>Produk</p>
+
 </div>
+
+<div>
+
+🏪
+
+<strong id="ctaUmkm">
+
+0
+
+</strong>
+
+<p>UMKM</p>
+
 </div>
-`;
-
-});
-
-document.getElementById("totalProduk").innerText =
-totalProdukAktif;
-
-document.getElementById("jumlahProduk").innerText =
-totalProdukAktif;
-
-const footerProduk =
-document.getElementById("footerProduk");
-
-if(footerProduk){
-footerProduk.innerText =
-totalProdukAktif + " Produk";
-}
-
-</script>
-<script>
-
-const cart =
-JSON.parse(
-localStorage.getItem("cart")
-) || [];
-
-const cartCount =
-document.getElementById("cartCount");
-
-if(cartCount){
-
-let totalQty = 0;
-
-cart.forEach(item=>{
-totalQty += Number(item.qty || 1);
-});
-
-cartCount.innerText = totalQty;
-
-}
-
-</script>
-<script type="module">
-
-import { getApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-query,
-where
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-};
-
-const app = getApp();
-const db = getFirestore(app);
-const umkmSnap =
-await getDocs(
-query(
-collection(db,"users"),
-where("role","==","umkm"),
-where("status","==","aktif")
-)
-);
 
-document.getElementById("totalUmkm").innerText =
-umkmSnap.size;
+<div>
 
-document.getElementById("jumlahUmkm").innerText =
-umkmSnap.size;
+👥
 
-const footerUmkm =
-document.getElementById("footerUmkm");
+<strong id="ctaUser">
 
-if(footerUmkm){
-footerUmkm.innerText =
-umkmSnap.size + " UMKM";
-}
+0
 
-const affiliateSnap =
-await getDocs(
-query(
-collection(db,"users"),
-where("role","==","affiliate"),
-where("status","==","aktif")
-)
-);
+</strong>
 
-document.getElementById("totalAffiliate").innerText =
-affiliateSnap.size;
+<p>Pengguna</p>
 
-document.getElementById("jumlahAffiliate").innerText =
-affiliateSnap.size;
+</div>
 
-const footerAffiliate =
-document.getElementById("footerAffiliate");
+</div>
 
-if(footerAffiliate){
-footerAffiliate.innerText =
-affiliateSnap.size + " Affiliate";
-}
-const pesananSnap =
-await getDocs(
-collection(db,"pesanan")
-);
+</div>
 
-document.getElementById("totalTransaksi").innerText =
-pesananSnap.size;
+</div>
 
-document.getElementById("jumlahTransaksi").innerText =
-pesananSnap.size;
-const produkSnap =
-await getDocs(
-collection(db,"produk")
-);
+</section>
+<!-- ==========================
+     FOOTER
+========================== -->
 
-document.getElementById("dashboardProduk").innerText =
-produkSnap.size;
+<footer class="footer">
 
-document.getElementById("dashboardPesanan").innerText =
-pesananSnap.size;
+<div class="container">
 
-document.getElementById("dashboardAffiliate").innerText =
-affiliateSnap.size;
+<div class="footer-top">
 
-let totalPenjualan = 0;
+<!-- BRAND -->
 
-produkSnap.forEach((item)=>{
-totalPenjualan +=
-Number(item.data().terjual || 0);
-});
+<div>
 
-document.getElementById("dashboardPenjualan").innerText =
-totalPenjualan;
-const auth = getAuth(app);
+<div class="footer-logo">
 
-await auth.authStateReady();
+🌿 PasarNusa
 
-if(auth.currentUser){
+</div>
 
-const snapshot =
-await getDocs(
-query(
-collection(db,"notifikasi"),
-where("uid","==",auth.currentUser.uid),
-where("dibaca","==",false)
-)
-);
+<p class="footer-desc">
 
-const notif =
-document.getElementById("notifCount");
+Marketplace UMKM Indonesia yang menghubungkan pelaku usaha lokal dengan jutaan pembeli di seluruh Indonesia.
 
-if(notif){
+</p>
 
-notif.innerText =
-snapshot.size;
+<div class="social">
 
-}
+<a href="#" title="Facebook">📘</a>
 
-}
+<a href="#" title="Instagram">📸</a>
 
-</script>
-<script>
+<a href="#" title="TikTok">🎵</a>
 
-const searchInput =
-document.getElementById("searchInput");
+<a href="#" title="YouTube">▶️</a>
 
-if(searchInput){
+</div>
 
-searchInput.addEventListener(
-"input",
-function(){
+</div>
 
-const keyword =
-this.value.toLowerCase();
+<!-- BELANJA -->
 
-document
-.querySelectorAll(".searchable")
-.forEach((card)=>{
+<div>
 
-const nama =
-card.innerText.toLowerCase();
+<h3 class="footer-title">
 
-card.style.display =
-nama.includes(keyword)
-? "block"
-: "none";
+Belanja
 
-});
+</h3>
 
-});
-}
+<div class="footer-links">
 
-window.filterProduk = function(kategori){
+<a href="produk.html">Semua Produk</a>
 
-document
-.querySelectorAll(".searchable")
-.forEach((card)=>{
+<a href="kategori.html">Kategori</a>
 
-if(kategori === "all"){
+<a href="umkm.html">UMKM</a>
 
-card.style.display = "block";
-return;
+<a href="affiliate.html">Affiliate</a>
 
-}
+<a href="wishlist.html">Wishlist</a>
 
-card.style.display =
-card.dataset.category === kategori
-? "block"
-: "none";
+</div>
 
-});
+</div>
 
-};
-window.calculateCommission = function(){
+<!-- UMKM -->
 
-const sales =
-Number(
-document.getElementById("sales").value || 0
-);
+<div>
 
-const commission =
-sales * 0.1;
+<h3 class="footer-title">
 
-document.getElementById("result").innerText =
-"Komisi: Rp " +
-commission.toLocaleString("id-ID");
+Untuk UMKM
 
-};
+</h3>
 
-const menuToggle =
-document.querySelector(".menu-toggle");
+<div class="footer-links">
 
-const navLinks =
-document.querySelector(".nav-links");
+<a href="register-umkm.html">Daftar UMKM</a>
 
-if(menuToggle){
+<a href="dashboard-umkm.html">Dashboard</a>
 
-menuToggle.addEventListener(
-"click",
-()=>{
+<a href="pusat-bantuan.html">Panduan Berjualan</a>
 
-navLinks.classList.toggle("active");
+<a href="kebijakan.html">Kebijakan Penjual</a>
 
-});
+</div>
 
-}
+</div>
 
-const revealElements =
-document.querySelectorAll(
-'.product-card,.feature-card,.dashboard-card,.stat'
-);
+<!-- BANTUAN -->
 
-if(revealElements.length){
+<div>
 
-const observer =
-new IntersectionObserver((entries)=>{
+<h3 class="footer-title">
 
-entries.forEach((entry)=>{
+Bantuan
 
-if(entry.isIntersecting){
+</h3>
 
-entry.target.classList.add("active");
+<div class="footer-links">
 
-}
+<a href="tentang.html">Tentang Kami</a>
 
-});
+<a href="kontak.html">Kontak</a>
 
-});
+<a href="faq.html">FAQ</a>
 
-revealElements.forEach((el)=>{
+<a href="privasi.html">Kebijakan Privasi</a>
 
-el.classList.add("reveal");
+<a href="syarat.html">Syarat & Ketentuan</a>
 
-observer.observe(el);
+</div>
 
-});
+</div>
 
-}
-</script>
+</div>
 
-<script>
+<hr>
 
-const role =
-localStorage.getItem("role");
+<div class="footer-bottom">
 
-if(role){
+<div>
 
-document.querySelector(".nav-btn").innerHTML = `
-<a href="profil.html" class="btn-primary">
-👤 Profil Saya
-</a>
-`;
+© 2026 <strong>PasarNusa</strong>. All Rights Reserved.
 
-}else{
+</div>
 
-// biarkan menu asli tetap tampil
+<div>
 
-}
-</script>
+Dibuat dengan ❤️ untuk UMKM Indonesia 🇮🇩
 
-<script src="script.js"></script>
-<a
-href="https://wa.me/6285854910306"
-target="_blank"
-class="wa-float">
+</div>
 
-💬
+</div>
 
-</a>
+</div>
 
-</body>
-
-</html>
+</footer>
