@@ -2,196 +2,311 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
-getFirestore,
-collection,
-getDocs
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    where,
+    doc,
+    getDoc
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 import {
-getAuth
+    getAuth,
+    signOut
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
+    apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+    authDomain:"pasarnusa-18aa0.firebaseapp.com",
+    projectId:"pasarnusa-18aa0",
+    storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+    messagingSenderId:"866998011671",
+    appId:"1:866998011671:web:5555115feb82741ab55952"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-
 await auth.authStateReady();
 
-if(!auth.currentUser){
+if (!auth.currentUser) {
 
-window.location.href = "login.html";
+    window.location.href = "login.html";
 
-throw new Error("Belum login");
-
-}
-
-const role = localStorage.getItem("role");
-
-if(role !== "admin"){
-
-alert("Akses khusus admin");
-
-window.location.href = "index.html";
-
-throw new Error("Bukan admin");
+    throw new Error("Belum login");
 
 }
 
-async function loadDashboard(){
-
-try{
-
-let totalProduk = 0;
-let totalPesanan = 0;
-let totalUmkm = 0;
-let pesananHariIni = 0;
-let totalTransaksi = 0;
-let produkHabis = 0;
-
-const hariIni =
-new Date().toDateString();
-
-/* PRODUK */
-
-const produkSnapshot =
-await getDocs(
-collection(db,"produk")
+const uid = auth.currentUser.uid;
+const userSnap = await getDoc(
+    doc(db,"users",uid)
 );
 
-produkSnapshot.forEach((doc)=>{
+if(!userSnap.exists()){
 
-const data = doc.data();
+    alert("User tidak ditemukan");
+
+    window.location.href="login.html";
+
+    throw new Error("User tidak ditemukan");
+
+}
+
+const userData = userSnap.data();
+
+if(userData.role !== "admin"){
+
+    alert("Akses khusus admin");
+
+    window.location.href="index.html";
+
+    throw new Error("Bukan admin");
+
+}
+let totalUser = 0;
+
+let totalUmkm = 0;
+
+let totalAffiliate = 0;
+
+let totalProduk = 0;
+
+let totalPesanan = 0;
+
+let totalTransaksi = 0;
+
+let pendapatanPlatform = 0;
+
+let pendapatanUmkm = 0;
+
+let komisiAffiliate = 0;
+
+let produkPending = 0;
+
+let umkmPending = 0;
+
+let pesananPending = 0;
+
+let withdrawPending = 0;
+
+let voucherAktif = 0;
+try{
+
+const [
+
+usersSnap,
+produkSnap,
+pesananSnap,
+affiliateSnap,
+withdrawSnap,
+voucherSnap
+
+] = await Promise.all([
+
+getDocs(collection(db,"users")),
+
+getDocs(collection(db,"produk")),
+
+getDocs(collection(db,"pesanan")),
+
+getDocs(collection(db,"affiliate_commissions")),
+
+getDocs(collection(db,"affiliate_withdraws")),
+
+getDocs(collection(db,"voucher"))
+
+]);
+usersSnap.forEach((docItem)=>{
+
+const data = docItem.data();
+
+totalUser++;
+
+if(data.role === "umkm"){
+
+totalUmkm++;
+
+if(
+data.status !== "aktif" &&
+data.statusToko !== "Buka"
+){
+
+umkmPending++;
+
+}
+
+}
+
+if(data.role === "affiliate"){
+
+totalAffiliate++;
+
+}
+
+});
+produkSnap.forEach((docItem)=>{
+
+const data = docItem.data();
 
 totalProduk++;
 
 if(
-Number(data.stok || 0) <= 0
+String(data.status).toLowerCase() !== "aktif"
 ){
 
-produkHabis++;
+produkPending++;
 
 }
 
 });
+pesananSnap.forEach((docItem)=>{
 
-/* PESANAN */
-
-const pesananSnapshot =
-await getDocs(
-collection(db,"pesanan")
-);
-
-pesananSnapshot.forEach((doc)=>{
-
-const data = doc.data();
+const data = docItem.data();
 
 totalPesanan++;
 
-if(
-data.status === "Selesai"
-){
+const subtotal =
+Number(data.subtotal || 0);
 
-totalTransaksi +=
-Number(data.totalBayar || 0);
-
-}
-
-if(data.createdAt?.seconds){
-
-const tanggal =
-new Date(
-data.createdAt.seconds * 1000
+const total =
+Number(
+data.totalBayar ||
+data.total ||
+0
 );
 
 if(
-tanggal.toDateString() === hariIni
+data.status === "Belum Bayar" ||
+data.status === "Menunggu Verifikasi"
 ){
 
-pesananHariIni++;
+pesananPending++;
 
 }
+
+if(data.status === "Selesai"){
+
+totalTransaksi += total;
+
+pendapatanUmkm +=
+Number(
+data.pendapatanUmkm || 0
+);
+
+pendapatanPlatform +=
+Number(
+data.pendapatanPlatform || 0
+);
 
 }
 
 });
+affiliateSnap.forEach((docItem)=>{
 
-/* USERS */
+const data = docItem.data();
 
-const usersSnapshot =
-await getDocs(
-collection(db,"users")
+komisiAffiliate +=
+Number(
+data.komisi || 0
 );
 
-usersSnapshot.forEach((doc)=>{
+});
+withdrawSnap.forEach((docItem)=>{
 
-const data = doc.data();
+const data = docItem.data();
 
 if(
-data.role === "umkm"
+data.status ===
+"Menunggu Persetujuan"
 ){
 
-totalUmkm++;
+withdrawPending++;
 
 }
 
 });
+voucherSnap.forEach((docItem)=>{
 
-/* TAMPILKAN */
+if(docItem.data().aktif){
 
-document.getElementById(
-"totalProduk"
-).innerText =
-totalProduk;
+voucherAktif++;
 
-document.getElementById(
-"totalPesanan"
-).innerText =
-totalPesanan;
+}
 
-document.getElementById(
-"totalUmkm"
-).innerText =
+});
+document.getElementById("totalUser").innerText =
+totalUser;
+
+document.getElementById("totalUmkm").innerText =
 totalUmkm;
 
-document.getElementById(
-"pesananHariIni"
-).innerText =
-pesananHariIni;
+document.getElementById("totalAffiliate").innerText =
+totalAffiliate;
 
-document.getElementById(
-"totalTransaksi"
-).innerText =
+document.getElementById("totalProduk").innerText =
+totalProduk;
+
+document.getElementById("totalPesanan").innerText =
+totalPesanan;
+
+document.getElementById("totalTransaksi").innerText =
 "Rp " +
 totalTransaksi.toLocaleString("id-ID");
 
-document.getElementById(
-"produkHabis"
-).innerText =
-produkHabis;
+document.getElementById("pendapatanPlatform").innerText =
+"Rp " +
+pendapatanPlatform.toLocaleString("id-ID");
 
+document.getElementById("pendapatanUmkm").innerText =
+"Rp " +
+pendapatanUmkm.toLocaleString("id-ID");
+
+document.getElementById("komisiAffiliate").innerText =
+"Rp " +
+komisiAffiliate.toLocaleString("id-ID");
+
+document.getElementById("produkPending").innerText =
+produkPending;
+
+document.getElementById("umkmPending").innerText =
+umkmPending;
+
+document.getElementById("pesananPending").innerText =
+pesananPending;
+
+document.getElementById("withdrawPending").innerText =
+withdrawPending;
+
+document.getElementById("voucherAktif").innerText =
+voucherAktif;
 }
 catch(error){
 
 console.error(error);
 
 alert(
-"Gagal memuat dashboard admin"
+"Gagal memuat Dashboard Admin\n\n" +
+error.message
 );
 
 }
+const logoutBtn =
+document.getElementById("logoutAdmin");
+
+if(logoutBtn){
+
+logoutBtn.addEventListener(
+"click",
+async()=>{
+
+await signOut(auth);
+
+window.location.href =
+"login.html";
+
+});
 
 }
-
-loadDashboard();
