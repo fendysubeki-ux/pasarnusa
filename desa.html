@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Desa - PasarNusa</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="style.css">
+
+<meta name="theme-color"
+content="#16a34a">
+
+</head>
+
+<body>
+
+<section class="hero">
+
+<img
+id="bannerDesa"
+src="https://placehold.co/1200x400"
+style="
+width:100%;
+height:260px;
+object-fit:cover;
+border-radius:20px;
+">
+
+</section>
+
+<section class="dashboard">
+
+<h1 id="namaDesa">
+
+Memuat...
+
+</h1>
+
+<p id="lokasiDesa">
+
+Kabupaten
+
+</p>
+
+</section>
+<section class="dashboard">
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3 id="jumlahUmkm">
+
+0
+
+</h3>
+
+<p>UMKM</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="jumlahProduk">
+
+0
+
+</h3>
+
+<p>Produk</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="produkUnggulan">
+
+0
+
+</h3>
+
+<p>Produk Unggulan</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="kategoriProduk">
+
+0
+
+</h3>
+
+<p>Kategori</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<h2>
+
+📖 Tentang Desa
+
+</h2>
+
+<div class="dashboard-card">
+
+<p id="deskripsiDesa">
+
+Memuat informasi desa...
+
+</p>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<h2>
+
+🔍 Cari Produk
+
+</h2>
+
+<input
+id="searchProduk"
+class="search-box"
+type="text"
+placeholder="Cari produk desa...">
+
+</section>
+
+<section class="dashboard">
+
+<h2>
+
+⭐ Produk Unggulan
+
+</h2>
+
+<div
+id="produkUnggulanContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+Memuat produk unggulan...
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard">
+
+<h2>
+
+🏪 Semua Produk Desa
+
+</h2>
+
+<div
+id="produkContainer"
+class="dashboard-grid">
+
+<div class="dashboard-card">
+
+Memuat produk...
+
+</div>
+
+</div>
+
+</section>
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+authDomain:"pasarnusa-18aa0.firebaseapp.com",
+projectId:"pasarnusa-18aa0",
+storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+messagingSenderId:"866998011671",
+appId:"1:866998011671:web:5555115feb82741ab55952"
+
+};
+
+const app=
+initializeApp(firebaseConfig);
+
+const db=
+getFirestore(app);
+
+const params=
+new URLSearchParams(window.location.search);
+
+const namaDesa=
+params.get("desa");
+
+const produkContainer=
+document.getElementById("produkContainer");
+
+const unggulanContainer=
+document.getElementById("produkUnggulanContainer");
+
+let semuaProduk=[];
+
+async function loadDesa(){
+
+const desaSnap=
+await getDocs(collection(db,"desa"));
+
+desaSnap.forEach((doc)=>{
+
+const data=doc.data();
+
+if(data.nama!==namaDesa){
+
+return;
+
+}
+
+document.getElementById("namaDesa").innerText=
+data.nama;
+
+document.getElementById("lokasiDesa").innerText=
+`${data.kecamatan}, ${data.kabupaten}`;
+
+document.getElementById("deskripsiDesa").innerText=
+data.deskripsi||"-";
+
+document.getElementById("bannerDesa").src=
+data.banner||"https://placehold.co/1200x400";
+
+});
+
+await loadProduk();
+
+}
+async function loadProduk(){
+
+const snapshot=
+await getDocs(
+collection(db,"produk")
+);
+
+semuaProduk=[];
+
+let jumlahProduk=0;
+
+let jumlahKategori=0;
+
+let jumlahUnggulan=0;
+
+const kategori=new Set();
+
+snapshot.forEach((docSnap)=>{
+
+const data=docSnap.data();
+
+if(data.desa!==namaDesa){
+
+return;
+
+}
+
+semuaProduk.push({
+
+id:docSnap.id,
+
+...data
+
+});
+
+jumlahProduk++;
+
+if(data.kategori){
+
+kategori.add(data.kategori);
+
+}
+
+});
+
+jumlahKategori=
+kategori.size;
+
+document.getElementById(
+"jumlahProduk"
+).innerText=
+jumlahProduk;
+
+document.getElementById(
+"kategoriProduk"
+).innerText=
+jumlahKategori;
+
+const umkm=new Set();
+
+semuaProduk.forEach((item)=>{
+
+if(item.uidUmkm){
+
+umkm.add(item.uidUmkm);
+
+}
+
+});
+
+document.getElementById(
+"jumlahUmkm"
+).innerText=
+umkm.size;
+
+renderProduk();
+
+renderProdukUnggulan();
+
+}
+function renderProduk(){
+
+produkContainer.innerHTML="";
+
+const keyword=
+document.getElementById(
+"searchProduk"
+).value.toLowerCase();
+
+const hasil=
+semuaProduk.filter((item)=>
+
+(item.namaProduk||"")
+.toLowerCase()
+.includes(keyword)
+
+);
+
+if(hasil.length===0){
+
+produkContainer.innerHTML=`
+
+<div class="dashboard-card">
+
+<h3>
+
+Belum Ada Produk
+
+</h3>
+
+<p>
+
+Produk desa belum tersedia.
+
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+hasil.forEach((item)=>{
+
+produkContainer.innerHTML+=`
+
+<div class="dashboard-card">
+
+<img
+src="${item.fotoProduk||item.gambar||'https://placehold.co/400x300'}"
+style="
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:15px;
+">
+
+<h3>
+
+${item.namaProduk}
+
+</h3>
+
+<p>
+
+🏪 ${item.namaToko||"-"}
+
+</p>
+
+<p>
+
+💰 Rp ${Number(item.harga||0)
+.toLocaleString("id-ID")}
+
+</p>
+
+<a
+href="detail-produk.html?id=${item.id}"
+class="btn-primary">
+
+Lihat Produk
+
+</a>
+
+</div>
+
+`;
+
+});
+
+}
+function renderProdukUnggulan(){
+
+unggulanContainer.innerHTML="";
+
+const unggulan=
+semuaProduk.filter(
+item=>item.unggulan===true
+);
+
+document.getElementById(
+"produkUnggulan"
+).innerText=
+unggulan.length;
+
+if(unggulan.length===0){
+
+unggulanContainer.innerHTML=`
+
+<div class="dashboard-card">
+
+Belum ada produk unggulan.
+
+</div>
+
+`;
+
+return;
+
+}
+
+unggulan.forEach((item)=>{
+
+unggulanContainer.innerHTML+=`
+
+<div class="dashboard-card">
+
+<img
+src="${item.fotoProduk||item.gambar||'https://placehold.co/400x300'}"
+style="
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:15px;
+">
+
+<h3>
+
+⭐ ${item.namaProduk}
+
+</h3>
+
+<p>
+
+Rp ${Number(item.harga||0)
+.toLocaleString("id-ID")}
+
+</p>
+
+<a
+href="detail-produk.html?id=${item.id}"
+class="btn-secondary">
+
+Lihat
+
+</a>
+
+</div>
+
+`;
+
+});
+
+}
+document
+.getElementById("searchProduk")
+.addEventListener(
+"input",
+renderProduk
+);
+
+loadDesa();
+
+</script>
+
+</body>
+</html>
