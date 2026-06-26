@@ -200,6 +200,13 @@ id:doc.id,
 
 };
 
+if (
+produk.status !== "Aktif" ||
+Number(produk.stok || 0) <= 0
+){
+return;
+}
+
 semuaProduk.push(produk);
 
 totalTerjual +=
@@ -316,9 +323,9 @@ container.innerHTML += `
 
 <img
 src="${
-produk.gambar?.[0]
-||
-'https://picsum.photos/400'
+Array.isArray(produk.gambar)
+? produk.gambar[0]
+: (produk.gambar || "img/no-image.png")
 }"
 alt="${produk.namaProduk}">
 
@@ -348,6 +355,17 @@ produk.harga || 0
 ${produk.terjual || 0}
 </p>
 
+<p>
+📦 Stok: ${produk.stok || 0}
+</p>
+
+<p>
+🏪 ${produk.namaToko || "-"}
+</p>
+<p style="color:#16a34a;font-weight:bold;">
+💰 Komisi:
+Rp ${Math.round((produk.harga || 0) * 0.05).toLocaleString("id-ID")}
+</p>
 <div style="
 display:flex;
 gap:10px;
@@ -363,14 +381,13 @@ class="btn-primary">
 
 </button>
 
-<a
-href="${linkAffiliate}"
-target="_blank"
+<button
+onclick="shareWA('${linkAffiliate}')"
 class="btn-secondary">
 
-👀 Lihat
+📱 Share WhatsApp
 
-</a>
+</button>
 
 </div>
 
@@ -384,15 +401,30 @@ class="btn-secondary">
 
 }
 
-window.copyAffiliate =
-async(link)=>{
+window.copyAffiliate = async function(link){
 
-await navigator.clipboard.writeText(
-link
+await navigator.clipboard.writeText(link);
+
+alert("Link affiliate berhasil disalin");
+
+};
+
+window.shareWA = function(link){
+
+const text = encodeURIComponent(
+`Halo 👋
+
+Saya merekomendasikan produk UMKM ini.
+
+Silakan lihat produknya melalui link berikut:
+${link}
+
+Belanja produk lokal, dukung UMKM Indonesia 🇮🇩`
 );
 
-alert(
-"Link affiliate berhasil disalin"
+window.open(
+"https://wa.me/?text=" + text,
+"_blank"
 );
 
 };
