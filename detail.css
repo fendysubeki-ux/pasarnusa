@@ -1,0 +1,847 @@
+/* ==========================================
+HERO DETAIL
+========================================== */
+
+.hero-page{
+
+padding:150px 0 90px;
+
+background:
+linear-gradient(
+135deg,
+#f0fdf4 0%,
+#ffffff 100%
+);
+
+text-align:center;
+
+overflow:hidden;
+
+}
+
+.hero-page-content{
+
+max-width:850px;
+
+margin:auto;
+
+}
+
+.hero-page h1{
+
+font-size:3rem;
+
+font-weight:800;
+
+line-height:1.2;
+
+color:var(--color-heading);
+
+margin:25px 0;
+
+}
+
+.hero-page p{
+
+max-width:650px;
+
+margin:auto;
+
+font-size:1.1rem;
+
+line-height:1.8;
+
+color:var(--color-text);
+
+}
+
+.badge{
+
+display:inline-flex;
+
+align-items:center;
+
+gap:8px;
+
+padding:12px 24px;
+
+border-radius:999px;
+
+background:#dcfce7;
+
+color:#166534;
+
+font-weight:700;
+
+}
+/* ==========================================
+BREADCRUMB
+========================================== */
+
+.breadcrumb{
+
+padding:25px 0;
+
+background:#fafafa;
+
+border-bottom:1px solid var(--color-border);
+
+}
+
+.breadcrumb .container{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+font-size:.95rem;
+
+flex-wrap:wrap;
+
+}
+
+.breadcrumb a{
+
+color:var(--color-primary);
+
+font-weight:600;
+
+text-decoration:none;
+
+}
+
+.breadcrumb span{
+
+color:#6b7280;
+
+}
+/* ==========================================
+DETAIL GRID
+========================================== */
+
+.detail-grid{
+
+display:grid;
+
+grid-template-columns:
+
+1.2fr
+1fr
+380px;
+
+gap:40px;
+
+align-items:start;
+
+}
+/* ==========================================
+GALERI
+========================================== */
+
+.detail-gallery{
+
+display:flex;
+
+flex-direction:column;
+
+gap:18px;
+
+}
+
+.main-image{
+
+position:relative;
+
+background:#fff;
+
+border-radius:24px;
+
+overflow:hidden;
+
+box-shadow:0 8px 30px rgba(0,0,0,.06);
+
+}
+
+.main-image img{
+
+width:100%;
+
+aspect-ratio:1/1;
+
+object-fit:cover;
+
+display:block;
+
+transition:.35s;
+
+}
+
+.main-image:hover img{
+
+transform:scale(1.05);
+
+}
+
+.thumbnail-list{
+
+display:flex;
+
+gap:12px;
+
+overflow-x:auto;
+
+padding-bottom:5px;
+
+}
+
+.thumbnail-list img{
+
+width:90px;
+
+height:90px;
+
+border-radius:14px;
+
+cursor:pointer;
+
+object-fit:cover;
+
+border:2px solid transparent;
+
+transition:.3s;
+
+}
+
+.thumbnail-list img:hover{
+
+border-color:var(--color-primary);
+
+}
+/* ==========================================
+BADGE
+========================================== */
+
+.product-badge{
+
+position:absolute;
+
+top:18px;
+
+left:18px;
+
+background:var(--color-primary);
+
+color:#fff;
+
+padding:8px 16px;
+
+border-radius:999px;
+
+font-size:.85rem;
+
+font-weight:700;
+
+}
+/* ==========================================
+DETAIL CONTENT
+========================================== */
+
+.detail-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:18px;
+
+}
+
+.product-category{
+
+display:inline-flex;
+
+align-items:center;
+
+width:max-content;
+
+padding:8px 18px;
+
+border-radius:999px;
+
+background:#dcfce7;
+
+color:#166534;
+
+font-weight:700;
+
+font-size:.9rem;
+
+}
+
+.detail-title{
+
+font-size:2rem;
+
+font-weight:800;
+
+line-height:1.4;
+
+color:var(--color-heading);
+
+}
+
+.detail-meta{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:18px;
+
+font-size:.95rem;
+
+color:#6b7280;
+
+}
+
+.detail-price{
+
+font-size:2.3rem;
+
+font-weight:800;
+
+color:var(--color-primary);
+
+}
+
+.detail-location,
+
+.detail-store{
+
+font-size:1rem;
+
+color:#6b7280;
+
+}
+
+.detail-description{
+
+padding-top:10px;
+
+line-height:1.9;
+
+color:var(--color-text);
+
+}
+/* ==========================================
+BUY BOX
+========================================== */
+
+.buy-box{
+
+position:sticky;
+
+top:100px;
+
+background:#fff;
+
+border-radius:24px;
+
+padding:30px;
+
+box-shadow:0 10px 35px rgba(0,0,0,.08);
+
+border:1px solid rgba(0,0,0,.05);
+
+display:flex;
+
+flex-direction:column;
+
+gap:16px;
+
+}
+
+.buy-box h3{
+
+font-size:1.3rem;
+
+font-weight:700;
+
+}
+
+.buy-price{
+
+font-size:2rem;
+
+font-weight:800;
+
+color:var(--color-primary);
+
+padding-bottom:15px;
+
+border-bottom:1px solid var(--color-border);
+
+}
+
+.buy-box .btn{
+
+width:100%;
+
+justify-content:center;
+
+}
+/* ==========================================
+INFO PENGIRIMAN
+========================================== */
+
+.info-card{
+
+background:#fff;
+
+border-radius:24px;
+
+padding:35px;
+
+box-shadow:0 8px 30px rgba(0,0,0,.06);
+
+}
+
+.info-card h2{
+
+margin-bottom:30px;
+
+}
+
+.info-grid{
+
+display:grid;
+
+grid-template-columns:
+
+repeat(2,1fr);
+
+gap:25px;
+
+}
+
+.info-item{
+
+padding:20px;
+
+border-radius:18px;
+
+background:#f9fafb;
+
+}
+
+.info-item h4{
+
+margin-bottom:10px;
+
+font-size:1rem;
+
+}
+
+.info-item p{
+
+color:#6b7280;
+
+}
+/* ==========================================
+STORE
+========================================== */
+
+.store-card{
+
+background:#fff;
+
+padding:35px;
+
+border-radius:24px;
+
+box-shadow:0 8px 30px rgba(0,0,0,.06);
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+flex-wrap:wrap;
+
+gap:25px;
+
+}
+
+.store-header{
+
+display:flex;
+
+align-items:center;
+
+gap:20px;
+
+}
+
+.store-logo{
+
+width:70px;
+
+height:70px;
+
+border-radius:50%;
+
+background:#dcfce7;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:2rem;
+
+}
+
+.store-action{
+
+display:flex;
+
+}
+/* ==========================================
+PRODUK TERKAIT
+========================================== */
+
+.related-products{
+
+margin-top:20px;
+
+}
+
+.related-products .product-grid{
+
+display:grid;
+
+grid-template-columns:
+
+repeat(auto-fill,minmax(260px,1fr));
+
+gap:30px;
+
+margin-top:30px;
+
+}
+/* ==========================================
+ULASAN
+========================================== */
+
+.review-card{
+
+background:#fff;
+
+padding:35px;
+
+border-radius:24px;
+
+box-shadow:0 8px 30px rgba(0,0,0,.06);
+
+}
+
+.review-card h2{
+
+margin-bottom:30px;
+
+}
+
+.review-item{
+
+padding:20px;
+
+border-radius:18px;
+
+background:#f9fafb;
+
+margin-bottom:20px;
+
+}
+
+.review-name{
+
+font-weight:700;
+
+margin-bottom:8px;
+
+}
+
+.review-rating{
+
+color:#f59e0b;
+
+margin-bottom:10px;
+
+}
+
+.review-text{
+
+line-height:1.8;
+
+color:#6b7280;
+
+}
+/* ==========================================
+SKELETON
+========================================== */
+
+.detail-skeleton{
+
+background:#fff;
+
+padding:25px;
+
+border-radius:24px;
+
+box-shadow:0 8px 25px rgba(0,0,0,.05);
+
+}
+
+.skeleton{
+
+border-radius:12px;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+#f3f4f6 25%,
+
+#e5e7eb 50%,
+
+#f3f4f6 75%
+
+);
+
+background-size:200% 100%;
+
+animation:skeletonLoading 1.5s infinite;
+
+}
+
+.skeleton-image{
+
+aspect-ratio:1/1;
+
+width:100%;
+
+margin-bottom:20px;
+
+}
+
+.skeleton-title{
+
+height:28px;
+
+width:75%;
+
+margin-bottom:15px;
+
+}
+
+.skeleton-text{
+
+height:16px;
+
+margin-bottom:12px;
+
+}
+
+@keyframes skeletonLoading{
+
+0%{
+
+background-position:200% 0;
+
+}
+
+100%{
+
+background-position:-200% 0;
+
+}
+
+}
+/* ==========================================
+ANIMATION
+========================================== */
+
+.detail-gallery,
+
+.detail-content,
+
+.buy-box,
+
+.info-card,
+
+.store-card,
+
+.review-card{
+
+animation:fadeUp .5s ease;
+
+}
+
+@keyframes fadeUp{
+
+from{
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+/* ==========================================
+TABLET
+========================================== */
+
+@media(max-width:992px){
+
+.detail-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.buy-box{
+
+position:static;
+
+}
+
+.info-grid{
+
+grid-template-columns:1fr 1fr;
+
+}
+
+.store-card{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+}
+/* ==========================================
+MOBILE
+========================================== */
+
+@media(max-width:768px){
+
+.hero-page{
+
+padding:120px 0 70px;
+
+}
+
+.hero-page h1{
+
+font-size:2.2rem;
+
+}
+
+.detail-title{
+
+font-size:1.7rem;
+
+}
+
+.detail-price{
+
+font-size:1.9rem;
+
+}
+
+.info-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.thumbnail-list img{
+
+width:70px;
+
+height:70px;
+
+}
+
+.buy-box{
+
+padding:22px;
+
+}
+
+.store-card{
+
+padding:25px;
+
+}
+
+.review-card{
+
+padding:25px;
+
+}
+
+}
+/* ==========================================
+SMALL MOBILE
+========================================== */
+
+@media(max-width:576px){
+
+.product-meta,
+
+.detail-meta{
+
+flex-direction:column;
+
+gap:10px;
+
+}
+
+.store-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+.product-action{
+
+flex-direction:column;
+
+}
+
+.buy-box .btn{
+
+width:100%;
+
+}
+
+}
