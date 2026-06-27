@@ -23,9 +23,9 @@
 
 <body>
 
-<!-- =========================
+<!-- =====================================================
      NAVBAR
-========================= -->
+===================================================== -->
 
 <header class="navbar">
 
@@ -41,19 +41,23 @@
 
 <nav class="navbar-menu">
 
-<a href="#">Beranda</a>
+<a href="index.html">Beranda</a>
 
-<a href="#">Produk</a>
+<a href="produk.html">Produk</a>
 
-<a href="#">UMKM</a>
+<a href="wilayah.html">Wilayah</a>
 
-<a href="#">Kategori</a>
-
-<a href="#">Tentang</a>
+<a href="tentang.html">Tentang</a>
 
 </nav>
 
 <div class="navbar-action">
+
+<button id="themeToggle" class="btn btn-secondary">
+
+🌙
+
+</button>
 
 <a href="login.html" class="btn btn-secondary">
 
@@ -74,10 +78,9 @@ Daftar
 </div>
 
 </header>
-
-<!-- =========================
+<!-- =====================================================
      HERO
-========================= -->
+===================================================== -->
 
 <section class="hero">
 
@@ -85,24 +88,25 @@ Daftar
 
 <div class="hero-grid">
 
+<!-- HERO CONTENT -->
+
 <div class="hero-content">
 
 <div class="hero-badge">
 
-🇮🇩 Marketplace UMKM Desa Jabalsari
+🇮🇩 Platform Digital UMKM Indonesia
 
 </div>
 
 <h1>
 
-Belanja Produk Lokal,
-Dukung UMKM Desa Jabalsari.
+Temukan Produk Lokal Terbaik dari Seluruh Indonesia
 
 </h1>
 
 <p>
 
-Temukan produk unggulan UMKM Desa Jabalsari secara mudah, aman, dan langsung dari pelaku usahanya.
+PasarNusa menghubungkan pembeli dengan pelaku UMKM melalui sistem wilayah bertingkat, mulai dari provinsi hingga desa.
 
 </p>
 
@@ -110,11 +114,11 @@ Temukan produk unggulan UMKM Desa Jabalsari secara mudah, aman, dan langsung dar
 
 <input
 type="text"
-placeholder="Cari produk atau UMKM...">
+placeholder="Cari produk, UMKM, atau wilayah...">
 
 <button>
 
-Cari
+🔍 Cari
 
 </button>
 
@@ -122,13 +126,13 @@ Cari
 
 <div class="hero-action">
 
-<a href="#" class="btn btn-primary">
+<a href="produk.html" class="btn btn-primary">
 
-Mulai Belanja
+Jelajahi Produk
 
 </a>
 
-<a href="#" class="btn btn-secondary">
+<a href="register.html" class="btn btn-secondary">
 
 Daftarkan UMKM
 
@@ -138,11 +142,13 @@ Daftarkan UMKM
 
 </div>
 
+<!-- HERO IMAGE -->
+
 <div class="hero-image">
 
 <img
 src="assets/hero.webp"
-alt="PasarNusa">
+alt="Marketplace UMKM Indonesia">
 
 </div>
 
@@ -151,7 +157,7 @@ alt="PasarNusa">
 </div>
 
 </section>
-<!-- =====================================================
+<!-- <!-- =====================================================
      KATEGORI PRODUK
 ===================================================== -->
 
@@ -167,7 +173,7 @@ alt="PasarNusa">
 
 <p>
 
-Temukan berbagai produk unggulan UMKM Desa Jabalsari berdasarkan kategori.
+Temukan berbagai produk UMKM Indonesia berdasarkan kategori pilihan.
 
 </p>
 
@@ -181,114 +187,66 @@ Lihat Semua
 
 </div>
 
-<div class="grid grid-3">
+<div id="categoryGrid" class="grid grid-4">
 
 <a href="#" class="card text-center">
-
-<div class="category-icon">
-
-🍜
-
-</div>
-
+<div class="category-icon">🍜</div>
 <h3>Makanan</h3>
-
-<p>
-
-Aneka makanan khas UMKM Desa Jabalsari.
-
-</p>
-
 </a>
 
 <a href="#" class="card text-center">
-
-<div class="category-icon">
-
-🥤
-
-</div>
-
+<div class="category-icon">🥤</div>
 <h3>Minuman</h3>
-
-<p>
-
-Minuman tradisional dan kekinian.
-
-</p>
-
 </a>
 
 <a href="#" class="card text-center">
-
-<div class="category-icon">
-
-🧺
-
-</div>
-
-<h3>Kerajinan</h3>
-
-<p>
-
-Produk kerajinan tangan masyarakat desa.
-
-</p>
-
-</a>
-
-<a href="#" class="card text-center">
-
-<div class="category-icon">
-
-👕
-
-</div>
-
-<h3>Fashion</h3>
-
-<p>
-
-Produk fashion dan konveksi lokal.
-
-</p>
-
-</a>
-
-<a href="#" class="card text-center">
-
-<div class="category-icon">
-
-🌾
-
-</div>
-
+<div class="category-icon">🌾</div>
 <h3>Pertanian</h3>
-
-<p>
-
-Hasil pertanian unggulan desa.
-
-</p>
-
 </a>
 
 <a href="#" class="card text-center">
+<div class="category-icon">🐟</div>
+<h3>Perikanan</h3>
+</a>
 
-<div class="category-icon">
+<a href="#" class="card text-center">
+<div class="category-icon">🐄</div>
+<h3>Peternakan</h3>
+</a>
 
-📦
+<a href="#" class="card text-center">
+<div class="category-icon">🧺</div>
+<h3>Kerajinan</h3>
+</a>
 
-</div>
+<a href="#" class="card text-center">
+<div class="category-icon">👕</div>
+<h3>Fashion</h3>
+</a>
 
+<a href="#" class="card text-center">
+<div class="category-icon">💄</div>
+<h3>Kecantikan</h3>
+</a>
+
+<a href="#" class="card text-center">
+<div class="category-icon">🏠</div>
+<h3>Rumah Tangga</h3>
+</a>
+
+<a href="#" class="card text-center">
+<div class="category-icon">🌱</div>
+<h3>Tanaman</h3>
+</a>
+
+<a href="#" class="card text-center">
+<div class="category-icon">🎁</div>
+<h3>Souvenir</h3>
+</a>
+
+<a href="#" class="card text-center">
+<div class="category-icon">📦</div>
 <h3>Lainnya</h3>
-
-<p>
-
-Berbagai produk UMKM lainnya.
-
-</p>
-
 </a>
 
 </div>
@@ -297,7 +255,7 @@ Berbagai produk UMKM lainnya.
 
 </section>
 <!-- =====================================================
-     PRODUK TERBARU
+     JELAJAHI WILAYAH
 ===================================================== -->
 
 <section class="section">
@@ -308,11 +266,243 @@ Berbagai produk UMKM lainnya.
 
 <div class="section-title">
 
-<h2>Produk Terbaru</h2>
+<h2>Jelajahi Berdasarkan Wilayah</h2>
 
 <p>
 
-Produk terbaru dari UMKM Desa Jabalsari.
+Temukan produk dan UMKM melalui sistem wilayah bertingkat, mulai dari provinsi hingga desa.
+
+</p>
+
+</div>
+
+<a href="wilayah.html" class="btn btn-secondary">
+
+Jelajahi Wilayah
+
+</a>
+
+</div>
+
+<div class="grid grid-4">
+
+<a href="#" class="card text-center">
+
+<div class="category-icon">🌍</div>
+
+<h3>Provinsi</h3>
+
+<p>Pilih provinsi tujuan.</p>
+
+</a>
+
+<a href="#" class="card text-center">
+
+<div class="category-icon">🏛️</div>
+
+<h3>Kabupaten</h3>
+
+<p>Temukan UMKM di berbagai kabupaten.</p>
+
+</a>
+
+<a href="#" class="card text-center">
+
+<div class="category-icon">🏘️</div>
+
+<h3>Kecamatan</h3>
+
+<p>Jelajahi produk berdasarkan kecamatan.</p>
+
+</a>
+
+<a href="#" class="card text-center">
+
+<div class="category-icon">🏡</div>
+
+<h3>Desa</h3>
+
+<p>Temukan produk langsung dari desa.</p>
+
+</a>
+
+</div>
+
+<!-- SISTEM BERTINGKAT -->
+
+<div class="card mt-5 text-center">
+
+<h3>Sistem Wilayah Bertingkat</h3>
+
+<p class="mt-2">
+
+Produk ditampilkan berdasarkan lokasi sehingga pencarian menjadi lebih mudah dan terarah.
+
+</p>
+
+<div class="hero-action mt-4">
+
+<span class="btn btn-secondary">🌍 Provinsi</span>
+
+<span>→</span>
+
+<span class="btn btn-secondary">🏛️ Kabupaten</span>
+
+<span>→</span>
+
+<span class="btn btn-secondary">🏘️ Kecamatan</span>
+
+<span>→</span>
+
+<span class="btn btn-secondary">🏡 Desa</span>
+
+<span>→</span>
+
+<span class="btn btn-primary">🛍️ Produk</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- =====================================================
+     ANGKA & DAMPAK
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>PasarNusa dalam Angka</h2>
+
+<p>
+
+Bersama membangun ekosistem digital yang mendukung pertumbuhan UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="dashboard-stats">
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+🏪
+
+</div>
+
+<div id="totalUmkm" class="stat-value">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+UMKM Terdaftar
+
+</div>
+
+</div>
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+📦
+
+</div>
+
+<div id="totalProduk" class="stat-value">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+Produk
+
+</div>
+
+</div>
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+👥
+
+</div>
+
+<div id="totalPengguna" class="stat-value">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+Pengguna
+
+</div>
+
+</div>
+
+<div class="stat-card">
+
+<div class="stat-icon">
+
+🤝
+
+</div>
+
+<div id="totalTransaksi" class="stat-value">
+
+0
+
+</div>
+
+<div class="stat-label">
+
+Transaksi
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- =====================================================
+     GALERI PRODUK
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>Galeri Produk</h2>
+
+<p>
+
+Jelajahi berbagai produk UMKM dari berbagai daerah di Indonesia.
 
 </p>
 
@@ -326,156 +516,71 @@ Lihat Semua
 
 </div>
 
-<!-- FIREBASE AKAN MENGISI DI SINI -->
+<!-- FIREBASE PRODUCT -->
 
 <div id="productGrid" class="product-grid">
 
-<div class="product-card">
+<!-- Skeleton / Loading -->
 
-<div class="product-image">
+<div class="product-card skeleton-card">
 
-<img src="assets/no-image.png" alt="Produk">
-
-<span class="product-badge">
-
-Baru
-
-</span>
-
-</div>
+<div class="skeleton skeleton-image"></div>
 
 <div class="product-content">
 
-<h3 class="product-title">
+<div class="skeleton skeleton-title"></div>
 
-Memuat Produk...
+<div class="skeleton skeleton-text"></div>
 
-</h3>
-
-<p class="product-location">
-
-📍 Desa Jabalsari
-
-</p>
-
-<div class="product-price">
-
-<span class="new-price">
-
-Rp0
-
-</span>
-
-</div>
-
-<div class="product-action">
-
-<a href="#" class="btn btn-secondary">
-
-Detail
-
-</a>
-
-<a href="#" class="btn btn-primary">
-
-Beli
-
-</a>
+<div class="skeleton skeleton-text"></div>
 
 </div>
 
 </div>
 
-</div>
+<div class="product-card skeleton-card">
+
+<div class="skeleton skeleton-image"></div>
+
+<div class="product-content">
+
+<div class="skeleton skeleton-title"></div>
+
+<div class="skeleton skeleton-text"></div>
+
+<div class="skeleton skeleton-text"></div>
 
 </div>
 
 </div>
 
-</section>
-<!-- =====================================================
-     UMKM UNGGULAN
-===================================================== -->
+<div class="product-card skeleton-card">
 
-<section class="section">
+<div class="skeleton skeleton-image"></div>
 
-<div class="container">
+<div class="product-content">
 
-<div class="section-header">
+<div class="skeleton skeleton-title"></div>
 
-<div class="section-title">
+<div class="skeleton skeleton-text"></div>
 
-<h2>UMKM Unggulan</h2>
-
-<p>
-
-Kenali pelaku UMKM terbaik di Desa Jabalsari yang menghadirkan produk berkualitas.
-
-</p>
+<div class="skeleton skeleton-text"></div>
 
 </div>
 
-<a href="umkm.html" class="btn btn-secondary">
-
-Lihat Semua
-
-</a>
-
 </div>
 
-<!-- FIREBASE AKAN MENGISI DATA UMKM -->
+<div class="product-card skeleton-card">
 
-<div id="umkmGrid" class="umkm-grid">
+<div class="skeleton skeleton-image"></div>
 
-<div class="umkm-card">
+<div class="product-content">
 
-<img
-src="assets/no-banner.jpg"
-alt="Banner UMKM"
-class="umkm-banner">
+<div class="skeleton skeleton-title"></div>
 
-<img
-src="assets/no-logo.png"
-alt="Logo UMKM"
-class="umkm-logo">
+<div class="skeleton skeleton-text"></div>
 
-<div class="umkm-content">
-
-<h3 class="umkm-name">
-
-Memuat UMKM...
-
-</h3>
-
-<p class="umkm-location">
-
-📍 Desa Jabalsari
-
-</p>
-
-<div class="umkm-rating">
-
-⭐⭐⭐⭐⭐
-
-<span>(0)</span>
-
-</div>
-
-<div class="umkm-action">
-
-<a href="#" class="btn btn-secondary">
-
-Lihat
-
-</a>
-
-<a href="#" class="btn btn-primary">
-
-Kunjungi
-
-</a>
-
-</div>
+<div class="skeleton skeleton-text"></div>
 
 </div>
 
@@ -487,7 +592,7 @@ Kunjungi
 
 </section>
 <!-- =====================================================
-     TENTANG DESA JABALSARI
+     MENGAPA MEMILIH PASARNUSA
 ===================================================== -->
 
 <section class="section">
@@ -498,11 +603,11 @@ Kunjungi
 
 <div class="section-title">
 
-<h2>Tentang Desa Jabalsari</h2>
+<h2>Mengapa Memilih PasarNusa?</h2>
 
 <p>
 
-Mengenal Desa Jabalsari sebagai desa yang memiliki potensi UMKM, pertanian, dan produk lokal berkualitas.
+PasarNusa hadir untuk membantu UMKM Indonesia berkembang melalui platform yang mudah digunakan, terpercaya, dan berorientasi pada potensi daerah.
 
 </p>
 
@@ -510,27 +615,194 @@ Mengenal Desa Jabalsari sebagai desa yang memiliki potensi UMKM, pertanian, dan 
 
 </div>
 
-<div class="grid grid-2">
+<div class="grid grid-4">
 
-<div class="card">
+<!-- CARD 1 -->
 
-<h3>🌿 Potensi Desa</h3>
+<div class="card text-center">
+
+<div class="category-icon">
+
+🌿
+
+</div>
+
+<h3>Produk Lokal</h3>
 
 <p>
 
-Desa Jabalsari memiliki berbagai potensi usaha seperti makanan olahan, kerajinan, pertanian, peternakan, serta usaha rumahan yang terus berkembang. Melalui PasarNusa, produk-produk tersebut dapat dikenal oleh masyarakat yang lebih luas.
+Menampilkan berbagai produk asli dari pelaku UMKM di berbagai daerah Indonesia.
 
 </p>
 
 </div>
 
-<div class="card">
+<!-- CARD 2 -->
 
-<h3>🚀 Visi PasarNusa</h3>
+<div class="card text-center">
+
+<div class="category-icon">
+
+🗺️
+
+</div>
+
+<h3>Jelajah Wilayah</h3>
 
 <p>
 
-PasarNusa hadir sebagai langkah awal digitalisasi UMKM Desa Jabalsari. Platform ini diharapkan dapat membantu pelaku usaha memasarkan produknya secara lebih mudah sekaligus membuka peluang pengembangan ke desa-desa lain di Indonesia.
+Cari produk berdasarkan provinsi, kabupaten, kecamatan hingga desa secara mudah.
+
+</p>
+
+</div>
+
+<!-- CARD 3 -->
+
+<div class="card text-center">
+
+<div class="category-icon">
+
+🔒
+
+</div>
+
+<h3>Aman & Mudah</h3>
+
+<p>
+
+Dirancang agar pengalaman belanja dan pengelolaan UMKM menjadi lebih sederhana.
+
+</p>
+
+</div>
+
+<!-- CARD 4 -->
+
+<div class="card text-center">
+
+<div class="category-icon">
+
+🚀
+
+</div>
+
+<h3>Terus Berkembang</h3>
+
+<p>
+
+PasarNusa dibangun untuk berkembang dari satu desa menjadi platform UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- =====================================================
+     ROADMAP PASARNUSA
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>Roadmap PasarNusa</h2>
+
+<p>
+
+PasarNusa terus berkembang untuk memperluas akses digital bagi UMKM di seluruh Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="grid grid-4">
+
+<!-- STEP 1 -->
+
+<div class="card text-center">
+
+<div class="category-icon">
+
+🚀
+
+</div>
+
+<h3>2026</h3>
+
+<p>
+
+Peluncuran MVP dan implementasi awal di Desa Jabalsari.
+
+</p>
+
+</div>
+
+<!-- STEP 2 -->
+
+<div class="card text-center">
+
+<div class="category-icon">
+
+🏡
+
+</div>
+
+<h3>2027</h3>
+
+<p>
+
+Perluasan ke desa-desa lain dan penambahan UMKM baru.
+
+</p>
+
+</div>
+
+<!-- STEP 3 -->
+
+<div class="card text-center">
+
+<div class="category-icon">
+
+🏛️
+
+</div>
+
+<h3>2028</h3>
+
+<p>
+
+Pengembangan ke tingkat kabupaten dengan lebih banyak kategori produk.
+
+</p>
+
+</div>
+
+<!-- STEP 4 -->
+
+<div class="card text-center">
+
+<div class="category-icon">
+
+🇮🇩
+
+</div>
+
+<h3>Masa Depan</h3>
+
+<p>
+
+Menjadi platform digital UMKM yang dapat diakses oleh berbagai daerah di Indonesia.
 
 </p>
 
@@ -549,35 +821,48 @@ PasarNusa hadir sebagai langkah awal digitalisasi UMKM Desa Jabalsari. Platform 
 
 <div class="container">
 
-<div class="cta">
+<div class="card text-center">
+
+<div class="category-icon">
+
+🚀
+
+</div>
 
 <h2>
 
-Mari Dukung UMKM Desa Jabalsari
+Mari Bergabung Bersama PasarNusa
 
 </h2>
 
-<p>
+<p class="mt-2">
 
-Belanja produk lokal, daftarkan UMKM, atau bergabung sebagai mitra untuk membantu pertumbuhan ekonomi desa.
+Jadilah bagian dari ekosistem digital UMKM Indonesia.
+Temukan produk lokal berkualitas atau mulai kembangkan usahamu bersama PasarNusa.
 
 </p>
 
-<div class="hero-action">
+<div class="hero-action mt-4">
 
 <a href="produk.html" class="btn btn-primary">
 
-🛍️ Belanja Sekarang
+🛍️ Jelajahi Produk
 
 </a>
 
-<a href="register-umkm.html" class="btn btn-secondary">
+<a href="register.html" class="btn btn-secondary">
 
 🏪 Daftarkan UMKM
 
 </a>
 
 </div>
+
+<small class="mt-4">
+
+Mulai dari satu desa, berkembang untuk seluruh Indonesia 🇮🇩
+
+</small>
 
 </div>
 
@@ -598,39 +883,39 @@ Belanja produk lokal, daftarkan UMKM, atau bergabung sebagai mitra untuk membant
 
 <div>
 
-<h2 class="footer-logo">
+<div class="footer-logo">
 
 🌿 PasarNusa
 
-</h2>
+</div>
 
 <p class="footer-desc">
 
-Platform digital UMKM Desa Jabalsari yang menghubungkan pelaku usaha dengan pembeli secara mudah, aman, dan terpercaya.
+Platform digital UMKM Indonesia yang menghubungkan pelaku usaha lokal dengan pembeli melalui sistem wilayah bertingkat.
 
 </p>
 
 </div>
 
-<!-- MENU -->
+<!-- PRODUK -->
 
 <div>
 
 <h3 class="footer-title">
 
-Menu
+Marketplace
 
 </h3>
 
 <div class="footer-links">
 
-<a href="index.html">Beranda</a>
-
 <a href="produk.html">Produk</a>
 
-<a href="umkm.html">UMKM</a>
-
 <a href="kategori.html">Kategori</a>
+
+<a href="wilayah.html">Wilayah</a>
+
+<a href="tentang.html">Tentang</a>
 
 </div>
 
@@ -648,13 +933,13 @@ Layanan
 
 <div class="footer-links">
 
-<a href="register.html">Daftar</a>
-
 <a href="login.html">Masuk</a>
 
-<a href="kontak.html">Kontak</a>
+<a href="register.html">Daftar</a>
 
-<a href="bantuan.html">Bantuan</a>
+<a href="bantuan.html">Pusat Bantuan</a>
+
+<a href="kontak.html">Kontak</a>
 
 </div>
 
@@ -670,15 +955,15 @@ Ikuti Kami
 
 </h3>
 
-<div class="social">
+<div class="footer-links">
 
-<a href="#">📘</a>
+<a href="#">Instagram</a>
 
-<a href="#">📷</a>
+<a href="#">TikTok</a>
 
-<a href="#">🎵</a>
+<a href="#">Facebook</a>
 
-<a href="#">▶️</a>
+<a href="#">YouTube</a>
 
 </div>
 
@@ -692,13 +977,13 @@ Ikuti Kami
 
 <p>
 
-© 2026 PasarNusa. Seluruh Hak Cipta Dilindungi.
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
 
 </p>
 
 <p>
 
-Dibangun ❤️ untuk UMKM Desa Jabalsari.
+Dibangun untuk mendukung pertumbuhan UMKM Indonesia 🇮🇩
 
 </p>
 
@@ -708,27 +993,13 @@ Dibangun ❤️ untuk UMKM Desa Jabalsari.
 
 </footer>
 
-<!-- =========================
-     BACK TO TOP
-========================= -->
+<!-- Back To Top -->
 
-<button class="back-top">
+<button id="backTop" class="back-top">
 
 ↑
 
 </button>
-
-<!-- =========================
-     WHATSAPP
-========================= -->
-
-<a
-href="https://wa.me/6281234567890"
-class="wa-float">
-
-💬
-
-</a>
 
 <script src="script.js"></script>
 
