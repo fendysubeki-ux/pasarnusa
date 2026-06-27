@@ -1,335 +1,373 @@
-// =========================
-// MENU MOBILE
-// =========================
+// ================================
+// PASARNUSA SCRIPT V1
+// ================================
 
-const menuToggle =
-document.querySelector(".menu-toggle");
+document.addEventListener("DOMContentLoaded", () => {
 
-const navLinks =
-document.querySelector(".nav-links");
-
-if(menuToggle && navLinks){
-
-menuToggle.addEventListener(
-"click",
-()=>{
-
-navLinks.classList.toggle(
-"active"
-);
-
+    initMobileMenu();
+    initDarkMode();
+    initNavbarScroll();
+    initBackToTop();
+initSearch();
+initCounter();
+initReveal();
+initLazyImage();
+initToast();
+initRipple();
+initButtonLoading();
 });
 
-}
+// ================================
+// MOBILE MENU
+// ================================
 
-// =========================
-// MODAL LOGIN
-// =========================
+function initMobileMenu() {
 
-const loginBtn =
-document.getElementById(
-"openLogin"
-);
+    const menuToggle = document.getElementById("menuToggle");
+    const navbarMenu = document.querySelector(".navbar-menu");
 
-const modal =
-document.getElementById(
-"loginModal"
-);
+    if (!menuToggle || !navbarMenu) return;
 
-const closeBtn =
-document.querySelector(
-".close"
-);
+    menuToggle.addEventListener("click", () => {
 
-if(loginBtn && modal){
+        navbarMenu.classList.toggle("active");
 
-loginBtn.addEventListener(
-"click",
-()=>{
+    });
 
-modal.style.display =
-"flex";
+    navbarMenu.querySelectorAll("a").forEach(link => {
 
-});
+        link.addEventListener("click", () => {
+
+            navbarMenu.classList.remove("active");
+
+        });
+
+    });
 
 }
 
-if(closeBtn && modal){
+// ================================
+// DARK MODE
+// ================================
 
-closeBtn.addEventListener(
-"click",
-()=>{
+function initDarkMode() {
 
-modal.style.display =
-"none";
+    const button = document.getElementById("themeToggle");
 
-});
+    if (!button) return;
 
-}
+    if (localStorage.getItem("theme") === "dark") {
 
-window.addEventListener(
-"click",
-(e)=>{
+        document.body.classList.add("dark");
+        button.textContent = "☀️";
 
-if(
-e.target === modal
-){
+    }
 
-modal.style.display =
-"none";
+    button.addEventListener("click", () => {
 
-}
+        document.body.classList.toggle("dark");
 
-}
-);
+        if (document.body.classList.contains("dark")) {
 
-// =========================
-// SEARCH PRODUK
-// =========================
+            localStorage.setItem("theme", "dark");
+            button.textContent = "☀️";
 
-const searchInput =
-document.getElementById(
-"searchInput"
-);
+        } else {
 
-if(searchInput){
+            localStorage.setItem("theme", "light");
+            button.textContent = "🌙";
 
-searchInput.addEventListener(
-"input",
-()=>{
+        }
 
-const keyword =
-searchInput.value
-.toLowerCase();
-
-document
-.querySelectorAll(
-".searchable"
-)
-.forEach((card)=>{
-
-const nama =
-card.innerText
-.toLowerCase();
-
-card.style.display =
-nama.includes(keyword)
-? "block"
-: "none";
-
-});
-
-});
+    });
 
 }
 
-// =========================
-// FILTER PRODUK
-// =========================
+// ================================
+// NAVBAR SCROLL
+// ================================
 
-function filterProduk(
-kategori
-){
+function initNavbarScroll() {
 
-document
-.querySelectorAll(
-".searchable"
-)
-.forEach((card)=>{
+    const navbar = document.querySelector(".navbar");
 
-if(
-kategori === "all"
-){
+    if (!navbar) return;
 
-card.style.display =
-"block";
+    window.addEventListener("scroll", () => {
 
-return;
+        navbar.classList.toggle("scrolled", window.scrollY > 40);
+
+    });
 
 }
 
-card.style.display =
-card.dataset.category === kategori
-? "block"
-: "none";
+// ================================
+// BACK TO TOP
+// ================================
 
-});
+function initBackToTop() {
+
+    const button = document.getElementById("backTop");
+
+    if (!button) return;
+
+    window.addEventListener("scroll", () => {
+
+        button.classList.toggle("show", window.scrollY > 400);
+
+    });
+
+    button.addEventListener("click", () => {
+
+        window.scrollTo({
+
+            top: 0,
+            behavior: "smooth"
+
+        });
+
+    });
+
+}
+// ================================
+// SEARCH
+// ================================
+
+function initSearch() {
+
+    const input = document.querySelector(".hero-search input");
+
+    if (!input) return;
+
+    input.addEventListener("keyup", (e) => {
+
+        if (e.key === "Enter") {
+
+            const keyword = input.value.trim();
+
+            if (keyword !== "") {
+
+                window.location.href =
+                `produk.html?search=${encodeURIComponent(keyword)}`;
+
+            }
+
+        }
+
+    });
+
+}
+// ================================
+// COUNTER
+// ================================
+
+function initCounter() {
+
+    const counters = document.querySelectorAll(".stat-value");
+
+    counters.forEach(counter => {
+
+        const target = Number(counter.textContent);
+
+        let current = 0;
+
+        const speed = target / 80;
+
+        function update() {
+
+            current += speed;
+
+            if (current < target) {
+
+                counter.textContent =
+                Math.floor(current);
+
+                requestAnimationFrame(update);
+
+            } else {
+
+                counter.textContent = target;
+
+            }
+
+        }
+
+        update();
+
+    });
+
+}
+// ================================
+// REVEAL
+// ================================
+
+function initReveal() {
+
+    const items =
+    document.querySelectorAll(
+        ".section,.feature-card,.category-card,.product-card,.roadmap-card"
+    );
+
+    const observer =
+    new IntersectionObserver(entries => {
+
+        entries.forEach(entry => {
+
+            if(entry.isIntersecting){
+
+                entry.target.classList.add("show");
+
+            }
+
+        });
+
+    },{
+        threshold:0.15
+    });
+
+    items.forEach(item=>{
+
+        observer.observe(item);
+
+    });
+
+}
+// ================================
+// LAZY IMAGE
+// ================================
+
+function initLazyImage(){
+
+const images=
+document.querySelectorAll("img");
+
+const observer=
+new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+const img=entry.target;
+
+if(img.dataset.src){
+
+img.src=img.dataset.src;
 
 }
 
-window.filterProduk =
-filterProduk;
-
-// =========================
-// KALKULATOR KOMISI
-// =========================
-
-function calculateCommission(){
-
-const sales =
-document.getElementById(
-"sales"
-);
-
-const result =
-document.getElementById(
-"result"
-);
-
-if(
-!sales ||
-!result
-){
-return;
-}
-
-const commission =
-Number(
-sales.value || 0
-) * 0.05;
-
-result.innerHTML =
-"Komisi: Rp " +
-commission.toLocaleString(
-"id-ID"
-);
+observer.unobserve(img);
 
 }
-
-window.calculateCommission =
-calculateCommission;
-
-// =========================
-// COPY LINK AFFILIATE
-// =========================
-
-async function copyAffiliate(){
-
-const link =
-document.getElementById(
-"affiliateLink"
-);
-
-if(!link) return;
-
-try{
-
-await navigator.clipboard
-.writeText(
-link.value
-);
-
-alert(
-"Link affiliate berhasil disalin"
-);
-
-}catch{
-
-alert(
-"Gagal menyalin link"
-);
-
-}
-
-}
-
-window.copyAffiliate =
-copyAffiliate;
-
-// =========================
-// PREVIEW GAMBAR PRODUK
-// =========================
-
-const imageInput =
-document.getElementById(
-"productImage"
-);
-
-const previewContainer =
-document.getElementById(
-"previewContainer"
-);
-
-if(
-imageInput &&
-previewContainer
-){
-
-imageInput.addEventListener(
-"change",
-(e)=>{
-
-previewContainer.innerHTML =
-"";
-
-Array.from(
-e.target.files
-).forEach((file)=>{
-
-const img =
-document.createElement(
-"img"
-);
-
-img.src =
-URL.createObjectURL(
-file
-);
-
-img.style.width =
-"100px";
-
-img.style.height =
-"100px";
-
-img.style.objectFit =
-"cover";
-
-img.style.borderRadius =
-"12px";
-
-img.style.margin =
-"5px";
-
-previewContainer
-.appendChild(img);
 
 });
 
 });
 
-}
+images.forEach(img=>{
 
-// =========================
-// UPDATE JUMLAH KERANJANG
-// =========================
-
-const cart =
-JSON.parse(
-localStorage.getItem(
-"cart"
-)
-) || [];
-
-const cartCount =
-document.getElementById(
-"cartCount"
-);
-
-if(cartCount){
-
-let totalQty = 0;
-
-cart.forEach((item)=>{
-
-totalQty +=
-Number(
-item.qty || 1
-);
+observer.observe(img);
 
 });
 
-cartCount.innerText =
-totalQty;
+}
+
+// ================================
+// TOAST
+// ================================
+
+function initToast(){
+
+window.showToast=function(message){
+
+const toast=document.createElement("div");
+
+toast.className="toast";
+
+toast.textContent=message;
+
+document.body.appendChild(toast);
+
+setTimeout(()=>{
+
+toast.classList.add("show");
+
+},100);
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+setTimeout(()=>{
+
+toast.remove();
+
+},300);
+
+},3000);
+
+}
+
+}
+// ================================
+// RIPPLE
+// ================================
+
+function initRipple(){
+
+document.querySelectorAll(".btn").forEach(button=>{
+
+button.addEventListener("click",function(e){
+
+const circle=document.createElement("span");
+
+circle.className="ripple";
+
+const rect=this.getBoundingClientRect();
+
+circle.style.left=(e.clientX-rect.left)+"px";
+
+circle.style.top=(e.clientY-rect.top)+"px";
+
+this.appendChild(circle);
+
+setTimeout(()=>{
+
+circle.remove();
+
+},600);
+
+});
+
+});
+
+}
+// ================================
+// BUTTON LOADING
+// ================================
+
+function initButtonLoading(){
+
+document.querySelectorAll(".btn-loading").forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+const text=button.innerHTML;
+
+button.disabled=true;
+
+button.innerHTML="⏳ Memuat...";
+
+setTimeout(()=>{
+
+button.disabled=false;
+
+button.innerHTML=text;
+
+},1500);
+
+});
+
+});
 
 }
