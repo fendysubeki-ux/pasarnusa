@@ -1,621 +1,616 @@
-<!DOCTYPE html>  <html lang="id">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Detail Produk - PasarNusa</title>  
-    <link rel="preconnect" href="https://fonts.googleapis.com">  
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">  
-    <link rel="stylesheet" href="style.css">  
-    <meta name="description" content="Detail Produk UMKM Indonesia - PasarNusa">  
-    <meta name="theme-color" content="#16a34a">  
-</head>  
-<body>  
-    <!-- Loading State -->  
-    <div id="loadingScreen" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; padding:20px;">  
-        <div style="font-size:48px; margin-bottom:20px;">🔄</div>  
-        <h2>Memuat Detail Produk...</h2>  
-        <p style="color:#6b7280; margin-top:8px;">Tunggu sebentar ya...</p>  
-    </div>  <!-- Konten Utama (Sembunyi Awalnya) -->  
-<div id="mainContent" style="display:none;">  
-    <section class="product-detail">  
-        <div class="detail-wrapper">  
-            <div class="detail-image">  
-                <img id="gambarProduk" src="" alt="Gambar Produk" loading="lazy">  
-                <div id="galleryProduk" class="gallery-produk"></div>  
-            </div>  
+<!DOCTYPE html>
+<html lang="id">
 
-            <div class="detail-info">  
-                <span class="category" id="kategoriProduk">Loading...</span>  
-                <h1 id="namaProduk">Loading...</h1>  
-                <p>  
-                    🏪 <a id="linkToko" href="#">Lihat Toko</a>  
-                </p>  
-                <h2 id="hargaProduk">Loading...</h2>  
-                <p id="stokProduk">Loading Stok...</p>  
-                <p id="ratingInfo">Loading Rating...</p>  
-                <p>🔥 Terjual: <span id="terjualProduk">0</span></p>  
-                <p id="deskripsiProduk">Loading...</p>  
+<head>
 
-                <!-- Ulasan Pembeli -->  
-                <div class="cart-card review-section">  
-                    <h3>💬 Ulasan Pembeli</h3>  
-                    <div id="reviewContainer" style="margin-bottom:20px;">  
-                        <p style="color:#6b7280; text-align:center;">Belum ada ulasan untuk produk ini</p>  
-                    </div>  
-                    <div style="display:flex; flex-direction:column; gap:10px;">  
-                        <input type="text" id="namaReviewer" placeholder="Nama Anda" disabled>  
-                        <textarea id="isiReview" maxlength="500" placeholder="Tulis ulasan (maksimal 500 karakter)" disabled></textarea>  
-                        <select id="ratingProduk" disabled>  
-                            <option value="5">⭐⭐⭐⭐⭐</option>  
-                            <option value="4">⭐⭐⭐⭐</option>  
-                            <option value="3">⭐⭐⭐</option>  
-                            <option value="2">⭐⭐</option>  
-                            <option value="1">⭐</option>  
-                        </select>  
-                        <button class="btn-secondary">  
-                            📝 Ulasan Akan Segera Hadir  
-                        </button>  
-                    </div>  
-                </div>  
-            </div>  
+<meta charset="UTF-8">
 
-            <div class="detail-action">  
-                <div class="action-buttons">  
-                    <button id="btnFavorit" class="btn-secondary">  
-                        ❤️ Simpan ke Favorit  
-                    </button>  
-                    <button id="shareProduk" class="btn-secondary">  
-                        📤 Bagikan Produk  
-                    </button>  
-                    <a href="#" id="chatFirebase" class="btn-secondary" style="display:none;">  
-                        💬 Chat Penjual  
-                    </a>  
-                    <a id="chatWA" target="_blank" rel="noopener noreferrer" class="btn-secondary">  
-                        📱 Hubungi via WhatsApp  
-                    </a>  
-                    <button id="addToCart" class="btn-primary">  
-                        🛒 Masukkan Keranjang  
-                    </button>  
-                    <button id="buyNow" class="btn-primary">  
-                        ⚡ Beli Sekarang  
-                    </button>  
-                </div>  
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-                <!-- Link Affiliate -->  
-                <div class="affiliate-box">  
-                    <label>🔗 Link Affiliate:</label>  
-                    <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">  
-                        <input type="text" id="affiliateLink" readonly placeholder="Link affiliate akan muncul disini">  
-                        <button class="btn-secondary" onclick="copyAffiliate()">  
-                            📋 Salin Link  
-                        </button>  
-                    </div>  
-                </div>  
-            </div>  
-        </div>  
-    </section>  
+<title>Detail Produk | PasarNusa</title>
 
-    <!-- Produk Terkait -->  
-    <section class="products related-products">  
-        <h2>🤝 Produk Terkait</h2>  
-        <div id="produkTerkait" class="product-grid">  
-            <p style="text-align:center; color:#6b7280; padding:20px;">Memuat produk terkait...</p>  
-        </div>  
-    </section>  
-</div>  
+<meta
+name="description"
+content="Lihat informasi lengkap produk UMKM Indonesia di PasarNusa.">
 
-<!-- Script -->  
-<script src="script.js"></script>  
-<script type="module">  
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";  
-    import { getFirestore, doc, getDoc, collection, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";  
+<meta
+name="theme-color"
+content="#16a34a">
 
-    // Firebase Konfigurasi  
-    const firebaseConfig = {  
-        apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",  
-        authDomain:"pasarnusa-18aa0.firebaseapp.com",  
-        projectId:"pasarnusa-18aa0",  
-        storageBucket:"pasarnusa-18aa0.firebasestorage.app",  
-        messagingSenderId:"866998011671",  
-        appId:"1:866998011671:web:5555115feb82741ab55952"  
-    };  
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
 
-    // Inisialisasi Firebase  
-    const app = initializeApp(firebaseConfig);  
-    const db = getFirestore(app);  
-    const auth = getAuth(app);  
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-    // Elemen DOM  
-    const loadingScreen = document.getElementById("loadingScreen");  
-    const mainContent = document.getElementById("mainContent");  
-    const produkTerkait = document.getElementById("produkTerkait");  
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 
-    // Fungsi Format Rupiah  
-    const formatRupiah = (angka) => {  
-        return "Rp " + Number(angka || 0).toLocaleString("id-ID");  
-    };  
+<link rel="stylesheet"
+href="style.css">
 
-    // Fungsi Tampilkan Notifikasi  
-    const showNotification = (message, type = "info") => {  
-        const notification = document.createElement("div");  
-        notification.style.position = "fixed";  
-        notification.style.bottom = "20px";  
-        notification.style.right = "20px";  
-        notification.style.padding = "15px 25px";  
-        notification.style.borderRadius = "12px";  
-        notification.style.color = "white";  
-        notification.style.zIndex = "9999";  
-        notification.style.opacity = "0";  
-        notification.style.transform = "translateY(20px)";  
-        notification.style.transition = "all 0.3s ease";  
+<link rel="stylesheet"
+href="detail.css">
 
-        if (type === "success") notification.style.background = "#22c55e";  
-        if (type === "error") notification.style.background = "#ef4444";  
-        if (type === "info") notification.style.background = "#06b6d4";  
+<link
+rel="icon"
+href="assets/logo.png">
 
-        notification.innerText = message;  
-        document.body.appendChild(notification);  
+</head>
 
-        setTimeout(() => {  
-            notification.style.opacity = "1";  
-            notification.style.transform = "translateY(0)";  
-        }, 10);  
+<body>
+<header class="navbar">
 
-        setTimeout(() => {  
-            notification.style.opacity = "0";  
-            notification.style.transform = "translateY(20px)";  
-            setTimeout(() => notification.remove(), 300);  
-        }, 3000);  
-    };
+<div class="container">
 
-let produkData = null;
-const loadProductDetail = async () => {
-try {
-// Ambil ID Produk dari URL
-const params = new URLSearchParams(window.location.search);
+<div class="navbar-content">
 
-const ref = params.get("ref");
+<a href="index.html" class="logo">
 
-if(ref){
-    localStorage.setItem("affiliate", ref);
-}
-const produkId = params.get("id");
+🌿
 
-// Cek Apakah ID Ada  
-            if (!produkId) {  
-                throw new Error("ID produk tidak ditemukan di URL");  
-            }  
+<span>PasarNusa</span>
 
-            // Ambil Data Produk dari Firestore  
-            const produkDoc = await getDoc(doc(db, "produk", produkId));  
-            if (!produkDoc.exists()) {  
-                throw new Error("Produk tidak ditemukan di database");  
-            }
-
-produkData = produkDoc.data();
-
-const produk = produkData;
-
-// Cek Status Produk  
-            if (String(produk.status).toLowerCase() !== "aktif") {  
-                throw new Error("Produk ini tidak tersedia atau sudah tidak aktif");  
-            }  
-
-            // Isi Data Produk ke Halaman  
-            document.getElementById("namaProduk").innerText = produk.namaProduk || "Nama Produk Tidak Tersedia";  
-            document.getElementById("kategoriProduk").innerText = produk.kategori || "Produk Lainnya";  
-            document.getElementById("hargaProduk").innerText = formatRupiah(produk.harga);  
-            document.getElementById("terjualProduk").innerText = produk.terjual || 0;  
-            document.getElementById("ratingInfo").innerText = `⭐ ${produk.rating || 0} (${produk.totalReview || 0} ulasan)`;  
-            document.getElementById("deskripsiProduk").innerText = produk.deskripsi || "Belum ada deskripsi produk";  
-
-            // Isi Gambar Produk  
-            const gambarUtama = produk.gambar?.[0] || "https://picsum.photos/600/400";  
-            document.getElementById("gambarProduk").src = gambarUtama;  
-            document.getElementById("gambarProduk").alt = produk.namaProduk || "Gambar Produk";  
-
-            // Isi Galeri Gambar  
-            const gallery = document.getElementById("galleryProduk");  
-            gallery.innerHTML = "";  
-            (produk.gambar || [gambarUtama]).forEach((img, index) => {  
-                const imgElement = document.createElement("img");  
-                imgElement.src = img;  
-                imgElement.alt = `${produk.namaProduk} - Gambar ${index + 1}`;  
-                imgElement.style.width = "80px";  
-                imgElement.style.height = "80px";  
-                imgElement.style.objectFit = "cover";  
-                imgElement.style.borderRadius = "10px";  
-                imgElement.style.cursor = "pointer";  
-                imgElement.style.margin = "5px";  
-                imgElement.style.border = index === 0 ? "2px solid #16a34a" : "2px solid transparent";  
-                  
-                imgElement.addEventListener("click", () => {  
-                    document.getElementById("gambarProduk").src = img;  
-                    // Ubah border aktif pada galeri  
-                    gallery.querySelectorAll("img").forEach(el => el.style.border = "2px solid transparent");  
-                    imgElement.style.border = "2px solid #16a34a";  
-                });  
-                  
-                gallery.appendChild(imgElement);  
-            });  
-
-            // Isi Stok Produk  
-            const stokElement = document.getElementById("stokProduk");  
-            const addToCartBtn = document.getElementById("addToCart");  
-            const buyNowBtn = document.getElementById("buyNow");  
-              
-            if (Number(produk.stok || 0) <= 0) {  
-                stokElement.innerText = "❌ Stok Habis";  
-                stokElement.style.color = "#ef4444";  
-                addToCartBtn.disabled = true;  
-                buyNowBtn.disabled = true;  
-                addToCartBtn.style.opacity = "0.6";  
-                buyNowBtn.style.opacity = "0.6";  
-            } else {  
-                stokElement.innerText = `📦 Stok: ${produk.stok}`;  
-                stokElement.style.color = "#16a34a";  
-                addToCartBtn.disabled = false;  
-                buyNowBtn.disabled = false;  
-                addToCartBtn.style.opacity = "1";  
-                buyNowBtn.style.opacity = "1";  
-            }  
-
-            // Isi Link Toko  
-            document.getElementById("linkToko").href = `profil-umkm.html?uid=${produk.uid || ""}`;  
-            document.getElementById("linkToko").innerText = produk.namaToko || "Lihat Toko";  
-
-            // Isi Link WhatsApp  
-            const waNumber = String(produk.whatsapp || "").replace(/^0/, "62");  
-            if (waNumber) {  
-                const waMessage = `Halo, saya tertarik dengan produk *${produk.namaProduk}* (${window.location.href})`;  
-                document.getElementById("chatWA").href = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`;  
-            } else {  
-                document.getElementById("chatWA").style.display = "none";  
-            }  
-
-            // Isi Link Affiliate  
-            const affiliateLinkElement = document.getElementById("affiliateLink");  
-            const currentUser = auth.currentUser;  
-            const affiliateId = localStorage.getItem("role") === "affiliate" ? localStorage.getItem("uid") : params.get("ref") || "";  
-              
-            const baseLink = `${window.location.origin}/produk-detail.html?id=${produkId}`;  
-            affiliateLinkElement.value = affiliateId ? `${baseLink}&ref=${affiliateId}` : baseLink;  
-
-            // Muat Produk Terkait  
-            await loadRelatedProducts(produk.kategori, produkId);  
-
-            // Tampilkan Konten Utama, Sembunyikan Loading  
-            loadingScreen.style.display = "none";  
-            mainContent.style.display = "block";  
-
-        } catch (error) {  
-            console.error("Error memuat detail produk:", error);  
-              
-            // Tampilkan Halaman Error  
-            loadingScreen.style.display = "none";  
-            document.body.innerHTML = `  
-                <div class="register-card" style="max-width:500px; margin:50px auto; padding:30px;">  
-                    <div style="font-size:64px; text-align:center; margin-bottom:20px;">⚠️</div>  
-                    <h2>Oops, Ada Masalah!</h2>  
-                    <p style="font-size:16px; color:#6b7280; margin:20px 0;">${error.message || "Gagal memuat detail produk"}</p>  
-                    <a href="index.html" class="btn-primary" style="display:block; text-align:center;">  
-                        🏠 Kembali ke Beranda  
-                    </a>  
-                    <a href="produk.html" class="btn-secondary" style="display:block; text-align:center; margin-top:10px;">  
-                        📦 Lihat Semua Produk  
-                    </a>  
-                </div>  
-            `;  
-        }  
-    };  
-
-    // Fungsi Muat Produk Terkait  
-    const loadRelatedProducts = async (kategori, excludeId) => {  
-        try {  
-            if (!kategori) {  
-                produkTerkait.innerHTML = `<p style="text-align:center; color:#6b7280; padding:20px;">Tidak ada produk terkait yang ditemukan</p>`;  
-                return;  
-            }  
-
-            // Ambil maksimal 6 produk terkait  
-            const relatedQuery = query(  
-                collection(db, "produk"),  
-                where("kategori", "==", kategori),  
-                where("status", "==", "Aktif"),  
-                limit(6)  
-            );  
-
-            const relatedSnap = await getDocs(relatedQuery);  
-
-            if (relatedSnap.empty) {  
-                produkTerkait.innerHTML = `<p style="text-align:center; color:#6b7280; padding:20px;">Tidak ada produk terkait yang ditemukan</p>`;  
-                return;  
-            }  
-const ref = new URLSearchParams(window.location.search).get("ref") || "";
-            produkTerkait.innerHTML = "";  
-            relatedSnap.forEach((docItem) => {  
-                const data = docItem.data();  
-                  
-                // Jangan tampilkan produk yang sama dengan yang sedang dilihat  
-                if (docItem.id === excludeId) return;  
-
-                produkTerkait.innerHTML += `  
-                    <div class="product-card searchable" data-category="${data.kategori || ''}">  
-                        <img src="${Array.isArray(data.gambar)
-
-? data.gambar[0]
-: (data.gambar || 'https://picsum.photos/400/300')}"
-alt="${data.namaProduk || 'Produk UMKM'}"
-loading="lazy">
-<div class="product-info">
-<span class="category">${data.kategori || 'Produk'}</span>
-<h3>${String(data.namaProduk || "").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</h3>
-<p class="price">Rp ${Number(data.harga || 0).toLocaleString("id-ID")}</p>
-<p>📦 Stok: ${data.stok || 0}</p>
-<a
-href="produk-detail.html?id=${docItem.id}&ref=${ref}"
-class="btn-primary">
-Lihat Detail
 </a>
+
+<nav class="navbar-menu">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<a href="kategori.html">
+
+Kategori
+
+</a>
+
+<a href="wilayah.html">
+
+Wilayah
+
+</a>
+
+<a href="tentang.html">
+
+Tentang
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
+
+<button
+id="themeToggle"
+class="btn btn-secondary">
+
+🌙
+
+</button>
+
+<a
+href="login.html"
+class="btn btn-secondary">
+
+Masuk
+
+</a>
+
+<a
+href="register.html"
+class="btn btn-primary">
+
+Daftar
+
+</a>
+
+</div>
+
+<button
+id="menuToggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+🛍️ Detail Produk
+
+</div>
+
+<h1 id="namaProduk">
+
+Memuat Produk...
+
+</h1>
+
+<p>
+
+Informasi lengkap produk UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="breadcrumb">
+
+<div class="container">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<span>/</span>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<span>/</span>
+
+<span id="breadcrumbNama">
+
+Detail Produk
+
+</span>
+
+</div>
+
+</section>
+<!-- ==========================================
+DETAIL PRODUK
+========================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="detail-grid">
+<!-- =========================
+GALERI
+========================= -->
+
+<div class="detail-gallery">
+
+<div class="main-image">
+
+<img
+id="gambarProduk"
+src="assets/no-image.png"
+alt="Produk"
+loading="lazy">
+
+<div
+id="badgeProduk"
+class="product-badge">
+
+✨ Baru
+
+</div>
+
+</div>
+
+<div
+id="galleryProduk"
+class="thumbnail-list">
+
+<!-- Thumbnail otomatis -->
+
+</div>
+
+</div>
+<!-- =========================
+INFO PRODUK
+========================= -->
+
+<div class="detail-content">
+
+<div
+id="kategoriProduk"
+class="product-category">
+
+Kategori
+
+</div>
+
+<h1
+id="judulProduk"
+class="detail-title">
+
+Memuat Produk...
+
+</h1>
+
+<div class="detail-meta">
+
+<span id="ratingProduk">
+
+⭐ 0
+
+</span>
+
+<span id="terjualProduk">
+
+🔥 0 Terjual
+
+</span>
+
+<span id="stokProduk">
+
+📦 0
+
+</span>
+
+</div>
+
+<div
+id="hargaProduk"
+class="detail-price">
+
+Rp 0
+
+</div>
+
+<div
+id="lokasiProduk"
+class="detail-location">
+
+📍 Indonesia
+
+</div>
+
+<div
+id="namaToko"
+class="detail-store">
+
+🏪 Nama UMKM
+
+</div>
+
+<div
+id="deskripsiProduk"
+class="detail-description">
+
+Memuat deskripsi...
+
+</div>
+
+</div>
+<!-- =========================
+BUY BOX
+========================= -->
+
+<div class="buy-box">
+
+<h3>
+
+Ringkasan Pembelian
+
+</h3>
+
+<div class="buy-price">
+
+<span id="buyHarga">
+
+Rp 0
+
+</span>
+
+</div>
+
+<button
+id="addToCart"
+class="btn btn-primary">
+
+🛒 Masukkan Keranjang
+
+</button>
+
+<button
+id="buyNow"
+class="btn btn-secondary">
+
+⚡ Beli Sekarang
+
+</button>
+
+<button
+id="btnFavorit"
+class="btn btn-secondary">
+
+❤️ Simpan Favorit
+
+</button>
+
+<a
+id="chatWA"
+target="_blank"
+class="btn btn-secondary">
+
+💬 Hubungi Penjual
+
+</a>
+
+<button
+id="shareProduk"
+class="btn btn-secondary">
+
+📤 Bagikan Produk
+
+</button>
+
 </div>
 </div>
-`;
-});
-
-} catch (error) {  
-            console.error("Error memuat produk terkait:", error);  
-            produkTerkait.innerHTML = `<p style="text-align:center; color:#6b7280; padding:20px;">Gagal memuat produk terkait</p>`;  
-        }  
-    };  
-
-    // Fungsi Copy Affiliate Link  
-    window.copyAffiliate = () => {  
-        const affiliateLink = document.getElementById("affiliateLink");  
-        if (!affiliateLink.value) {  
-            showNotification("Link affiliate tidak tersedia!", "error");  
-            return;  
-        }  
-
-        navigator.clipboard.writeText(affiliateLink.value)  
-            .then(() => showNotification("Link affiliate berhasil disalin!", "success"))  
-            .catch(() => {  
-                // Fallback jika clipboard tidak tersedia  
-                affiliateLink.select();  
-                try{
-
-document.execCommand("copy");
-}catch(e){
-showNotification("Gagal menyalin link","error");
-}
-showNotification("Link berhasil disalin!", "success");
-});
-};
-
-// Event Listener Tombol Favorit  
-    document.getElementById("btnFavorit").addEventListener("click", () => {
-
-const params = new URLSearchParams(window.location.search);
-
-const produkId = params.get("id");
-
-const ref = params.get("ref");
-
-if(ref){
-
-localStorage.setItem(
-"affiliate",
-ref
-);
-
-}
-const produk = document.getElementById("namaProduk").innerText;
-const gambar = document.getElementById("gambarProduk").src;
-const harga = document.getElementById("hargaProduk").innerText;
-const kategori = document.getElementById("kategoriProduk").innerText;
-
-let favorit = JSON.parse(localStorage.getItem("favorit")) || [];  
-          
-        if (favorit.find(item => item.id === produkId)) {  
-            showNotification("Produk sudah ada di favorit!", "info");  
-            return;  
-        }  
-
-        favorit.push({  
-            id: produkId,  
-            namaProduk: produk,  
-            gambar: gambar,  
-            harga: harga,  
-            kategori: kategori  
-        });  
-
-        localStorage.setItem("favorit", JSON.stringify(favorit));  
-        showNotification("Produk berhasil disimpan ke favorit!", "success");  
-    });  
-
-    // Event Listener Tombol Bagikan  
-    document.getElementById("shareProduk").addEventListener("click", () => {  
-        const produkLink = window.location.href;  
-          
-        // Cek apakah browser mendukung Web Share API  
-        if (navigator.share) {  
-            navigator.share({  
-                title: document.getElementById("namaProduk").innerText,  
-                url: produkLink  
-            }).catch(() => {  
-                // Fallback ke copy link  
-                navigator.clipboard.writeText(produkLink);  
-                showNotification("Link produk berhasil disalin!", "success");  
-            });  
-        } else {  
-            // Copy link jika Web Share tidak tersedia  
-            navigator.clipboard.writeText(produkLink);  
-            showNotification("Link produk berhasil disalin!", "success");  
-        }  
-    });
-
-document.getElementById("addToCart")
-.addEventListener("click",()=>{
-
-const params =
-new URLSearchParams(
-window.location.search
-);
 
-const produkId =
-params.get("id");
+</div>
 
-let cart =
-JSON.parse(
-localStorage.getItem("cart")
-) || [];
+</section>
+<!-- ==========================================
+INFORMASI PENGIRIMAN
+========================================== -->
 
-const existingItem =
-cart.find(
-item => item.id === produkId
-);
+<section class="section">
 
-if(existingItem){
+<div class="container">
 
-if(
-existingItem.qty >=
-Number(produkData.stok || 0)
-){
+<div class="info-card">
 
-showNotification(
-"Jumlah melebihi stok",
-"error"
-);
+<h2>
 
-return;
+📦 Informasi Pengiriman
 
-}
+</h2>
 
-existingItem.qty++;
+<div class="info-grid">
 
-}else{
+<div class="info-item">
 
-cart.push({
+<h4>Berat Produk</h4>
 
-id: produkId,
+<p id="beratProduk">
 
-uidUmkm:
-produkData.uidUmkm ||
-produkData.uid ||
-"",
+0 Gram
 
-uid:
-produkData.uid || "",
+</p>
 
-namaToko:
-produkData.namaToko || "",
+</div>
 
-namaProduk:
-produkData.namaProduk || "",
+<div class="info-item">
 
-gambar:
-Array.isArray(produkData.gambar)
-? produkData.gambar[0]
-: produkData.gambar,
+<h4>Asal Pengiriman</h4>
 
-harga:
-Number(produkData.harga || 0),
+<p id="asalProduk">
 
-stok:
-Number(produkData.stok || 0),
+Indonesia
 
-berat:
-Number(produkData.berat || 0),
+</p>
 
-kategori:
-produkData.kategori || "",
+</div>
 
-qty:1
+<div class="info-item">
 
-});
+<h4>Estimasi</h4>
 
-}
+<p>
 
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
+2 - 5 Hari
 
-showNotification(
-"Produk masuk keranjang",
-"success"
-);
+</p>
 
-});
-document.getElementById("buyNow")
-.addEventListener("click",()=>{
+</div>
 
-const params =
-new URLSearchParams(
-window.location.search
-);
+<div class="info-item">
 
-const produkId =
-params.get("id");
+<h4>Kurir</h4>
 
-const cart = [
+<p>
 
-{
+JNE • J&T • SiCepat
 
-id: produkId,
+</p>
 
-uidUmkm:
-produkData.uidUmkm ||
-produkData.uid ||
-"",
+</div>
 
-uid:
-produkData.uid || "",
+</div>
 
-namaToko:
-produkData.namaToko || "",
+</div>
 
-namaProduk:
-produkData.namaProduk || "",
+</div>
 
-gambar:
-Array.isArray(produkData.gambar)
-? produkData.gambar[0]
-: produkData.gambar,
+</section>
+<!-- ==========================================
+PROFIL UMKM
+========================================== -->
 
-harga:
-Number(produkData.harga || 0),
+<section class="section">
 
-stok:
-Number(produkData.stok || 0),
+<div class="container">
 
-berat:
-Number(produkData.berat || 0),
+<div class="store-card">
 
-kategori:
-produkData.kategori || "",
+<div class="store-header">
 
-qty:1
+<div class="store-logo">
 
-}
+🏪
 
-];
+</div>
 
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
+<div>
 
-window.location.href =
-"checkout.html";
+<h2 id="storeName">
 
-});
-onAuthStateChanged(auth, (user) => {
-// Load Detail Produk Setelah User Diketahui
-loadProductDetail();
-});
+Nama UMKM
+
+</h2>
+
+<p id="storeLocation">
+
+Indonesia
+
+</p>
+
+</div>
+
+</div>
+
+<div class="store-action">
+
+<a
+id="linkToko"
+href="#"
+class="btn btn-primary">
+
+Kunjungi Toko
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================================
+PRODUK TERKAIT
+========================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>
+
+Produk Terkait
+
+</h2>
+
+<p>
+
+Produk lain dari kategori yang sama.
+
+</p>
+
+</div>
+
+</div>
+
+<div
+id="produkTerkait"
+class="product-grid">
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================================
+ULASAN
+========================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="review-card">
+
+<h2>
+
+⭐ Ulasan Pembeli
+
+</h2>
+
+<div
+id="reviewContainer">
+
+<p>
+
+Belum ada ulasan.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+<button
+id="backTop"
+class="back-top">
+
+↑
+
+</button>
+<script src="script.js"></script>
+
+<script
+type="module"
+src="detail.js">
+
 </script>
 
-</body>  
-</html>  
+</body>
+
+</html>
