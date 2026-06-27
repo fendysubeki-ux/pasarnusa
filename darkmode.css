@@ -1,0 +1,106 @@
+body.dark{
+
+--color-background:#0f172a;
+
+--color-surface:#1e293b;
+
+--color-text:#f8fafc;
+
+--color-muted:#94a3b8;
+
+--color-border:#334155;
+
+--color-primary:#22c55e;
+
+--color-primary-dark:#16a34a;
+
+background:var(--color-background);
+
+color:var(--color-text);
+
+}
+
+/* Background */
+
+body.dark .navbar,
+body.dark .card,
+body.dark .category-card,
+body.dark .wilayah-card,
+body.dark .feature-card,
+body.dark .roadmap-card,
+body.dark .product-card,
+body.dark .stat-card,
+body.dark .footer{
+
+background:var(--color-surface);
+
+border-color:var(--color-border);
+
+}
+
+/* Typography */
+
+body.dark p,
+body.dark small,
+body.dark .footer-links a,
+body.dark .stat-label{
+
+color:var(--color-muted);
+
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6,
+body.dark .logo span{
+
+color:var(--color-text);
+
+}
+
+/* Search */
+
+body.dark input,
+body.dark textarea,
+body.dark select{
+
+background:var(--color-surface);
+
+color:var(--color-text);
+
+border-color:var(--color-border);
+
+}
+
+/* Secondary Button */
+
+body.dark .btn-secondary{
+
+background:var(--color-surface);
+
+color:var(--color-text);
+
+border-color:var(--color-border);
+
+}
+
+/* Footer Social */
+
+body.dark .social a{
+
+background:#334155;
+
+color:var(--color-text);
+
+}
+
+body.dark .social a:hover{
+
+background:var(--color-primary);
+
+color:#fff;
+
+}
