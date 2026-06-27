@@ -9,7 +9,7 @@
 
 <title>PasarNusa | Marketplace UMKM Indonesia</title>
 
-<meta name="description" content="Marketplace UMKM Indonesia">
+<meta name="description" content="Marketplace UMKM Indonesia yang menghubungkan UMKM dengan pembeli melalui sistem wilayah bertingkat.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -17,15 +17,15 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
 
-<!-- =====================================================
-     NAVBAR
-===================================================== -->
+<!-- ==========================================
+NAVBAR
+========================================== -->
 
 <header class="navbar">
 
@@ -35,15 +35,19 @@
 
 <a href="index.html" class="logo">
 
-🌿 <span>PasarNusa</span>
+🌿
+
+<span>PasarNusa</span>
 
 </a>
 
 <nav class="navbar-menu">
 
-<a href="index.html">Beranda</a>
+<a href="index.html" class="active">Beranda</a>
 
 <a href="produk.html">Produk</a>
+
+<a href="kategori.html">Kategori</a>
 
 <a href="wilayah.html">Wilayah</a>
 
@@ -53,23 +57,36 @@
 
 <div class="navbar-action">
 
-<button id="themeToggle" class="btn btn-secondary">
+<button
+id="themeToggle"
+class="btn btn-secondary"
+aria-label="Dark Mode">
 
 🌙
 
 </button>
 
-<a href="login.html" class="btn btn-secondary">
+<a
+href="login.html"
+class="btn btn-secondary">
 
 Masuk
 
 </a>
 
-<a href="register.html" class="btn btn-primary">
+<a
+href="register.html"
+class="btn btn-primary">
 
 Daftar
 
 </a>
+
+</div>
+
+<div class="menu-toggle">
+
+☰
 
 </div>
 
@@ -78,9 +95,10 @@ Daftar
 </div>
 
 </header>
-<!-- =====================================================
-     HERO
-===================================================== -->
+
+<!-- ==========================================
+HERO
+========================================== -->
 
 <section class="hero">
 
@@ -88,13 +106,11 @@ Daftar
 
 <div class="hero-grid">
 
-<!-- HERO CONTENT -->
-
 <div class="hero-content">
 
 <div class="hero-badge">
 
-🇮🇩 Platform Digital UMKM Indonesia
+🇮🇩 Marketplace UMKM Indonesia
 
 </div>
 
@@ -106,7 +122,7 @@ Temukan Produk Lokal Terbaik dari Seluruh Indonesia
 
 <p>
 
-PasarNusa menghubungkan pembeli dengan pelaku UMKM melalui sistem wilayah bertingkat, mulai dari provinsi hingga desa.
+PasarNusa membantu masyarakat menemukan produk UMKM berdasarkan provinsi, kabupaten, kecamatan, hingga desa dengan pengalaman belanja yang sederhana dan modern.
 
 </p>
 
@@ -114,7 +130,7 @@ PasarNusa menghubungkan pembeli dengan pelaku UMKM melalui sistem wilayah bertin
 
 <input
 type="text"
-placeholder="Cari produk, UMKM, atau wilayah...">
+placeholder="Cari produk, UMKM, kategori atau wilayah...">
 
 <button>
 
@@ -126,15 +142,19 @@ placeholder="Cari produk, UMKM, atau wilayah...">
 
 <div class="hero-action">
 
-<a href="produk.html" class="btn btn-primary">
+<a
+href="produk.html"
+class="btn btn-primary">
 
-Jelajahi Produk
+🛍️ Jelajahi Produk
 
 </a>
 
-<a href="register.html" class="btn btn-secondary">
+<a
+href="register.html"
+class="btn btn-secondary">
 
-Daftarkan UMKM
+🏪 Daftarkan UMKM
 
 </a>
 
@@ -142,9 +162,7 @@ Daftarkan UMKM
 
 </div>
 
-<!-- HERO IMAGE -->
-
-<div class="hero-image">
+<div class="hero-image float">
 
 <img
 src="assets/hero.webp"
@@ -157,9 +175,9 @@ alt="Marketplace UMKM Indonesia">
 </div>
 
 </section>
-<!-- <!-- =====================================================
-     KATEGORI PRODUK
-===================================================== -->
+<!-- ==========================================
+KATEGORI PRODUK
+========================================== -->
 
 <section class="section">
 
@@ -187,66 +205,78 @@ Lihat Semua
 
 </div>
 
-<div id="categoryGrid" class="grid grid-4">
+<div id="categoryGrid" class="category-grid">
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🍜</div>
 <h3>Makanan</h3>
+<p>Makanan khas dan olahan.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🥤</div>
 <h3>Minuman</h3>
+<p>Minuman tradisional dan modern.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🌾</div>
 <h3>Pertanian</h3>
+<p>Hasil pertanian berkualitas.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🐟</div>
 <h3>Perikanan</h3>
+<p>Produk hasil perikanan.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🐄</div>
 <h3>Peternakan</h3>
+<p>Produk peternakan lokal.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🧺</div>
 <h3>Kerajinan</h3>
+<p>Kerajinan tangan UMKM.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">👕</div>
 <h3>Fashion</h3>
+<p>Pakaian dan aksesoris.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">💄</div>
 <h3>Kecantikan</h3>
+<p>Perawatan tubuh dan kosmetik.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🏠</div>
 <h3>Rumah Tangga</h3>
+<p>Peralatan rumah tangga.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🌱</div>
 <h3>Tanaman</h3>
+<p>Tanaman hias dan bibit.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">🎁</div>
 <h3>Souvenir</h3>
+<p>Oleh-oleh dan cendera mata.</p>
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="category-card">
 <div class="category-icon">📦</div>
 <h3>Lainnya</h3>
+<p>Berbagai produk UMKM lainnya.</p>
 </a>
 
 </div>
@@ -254,9 +284,10 @@ Lihat Semua
 </div>
 
 </section>
-<!-- =====================================================
-     JELAJAHI WILAYAH
-===================================================== -->
+
+<!-- ==========================================
+JELAJAHI WILAYAH
+========================================== -->
 
 <section class="section">
 
@@ -270,7 +301,7 @@ Lihat Semua
 
 <p>
 
-Temukan produk dan UMKM melalui sistem wilayah bertingkat, mulai dari provinsi hingga desa.
+Cari produk UMKM berdasarkan lokasi, mulai dari provinsi hingga desa.
 
 </p>
 
@@ -278,47 +309,47 @@ Temukan produk dan UMKM melalui sistem wilayah bertingkat, mulai dari provinsi h
 
 <a href="wilayah.html" class="btn btn-secondary">
 
-Jelajahi Wilayah
+Lihat Wilayah
 
 </a>
 
 </div>
 
-<div class="grid grid-4">
+<div class="wilayah-grid">
 
-<a href="#" class="card text-center">
+<a href="#" class="wilayah-card">
 
-<div class="category-icon">🌍</div>
+<div class="wilayah-icon">🌍</div>
 
 <h3>Provinsi</h3>
 
-<p>Pilih provinsi tujuan.</p>
+<p>Mulai pencarian dari tingkat provinsi.</p>
 
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="wilayah-card">
 
-<div class="category-icon">🏛️</div>
+<div class="wilayah-icon">🏛️</div>
 
 <h3>Kabupaten</h3>
 
-<p>Temukan UMKM di berbagai kabupaten.</p>
+<p>Pilih kabupaten atau kota tujuan.</p>
 
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="wilayah-card">
 
-<div class="category-icon">🏘️</div>
+<div class="wilayah-icon">🏘️</div>
 
 <h3>Kecamatan</h3>
 
-<p>Jelajahi produk berdasarkan kecamatan.</p>
+<p>Jelajahi UMKM berdasarkan kecamatan.</p>
 
 </a>
 
-<a href="#" class="card text-center">
+<a href="#" class="wilayah-card">
 
-<div class="category-icon">🏡</div>
+<div class="wilayah-icon">🏡</div>
 
 <h3>Desa</h3>
 
@@ -328,48 +359,34 @@ Jelajahi Wilayah
 
 </div>
 
-<!-- SISTEM BERTINGKAT -->
-
-<div class="card mt-5 text-center">
+<div class="roadmap-card mt-5 text-center">
 
 <h3>Sistem Wilayah Bertingkat</h3>
 
 <p class="mt-2">
 
-Produk ditampilkan berdasarkan lokasi sehingga pencarian menjadi lebih mudah dan terarah.
+PasarNusa mempermudah pencarian produk dengan alur wilayah yang sederhana dan terstruktur.
 
 </p>
 
-<div class="hero-action mt-4">
+<div class="wilayah-flow mt-4">
 
-<span class="btn btn-secondary">🌍 Provinsi</span>
+<div class="flow-item">🌍 Provinsi</div>
 
-<span>→</span>
+<div class="flow-arrow">→</div>
 
-<span class="btn btn-secondary">🏛️ Kabupaten</span>
+<div class="flow-item">🏛️ Kabupaten</div>
 
-<span>→</span>
+<div class="flow-arrow">→</div>
 
-<span class="btn btn-secondary">🏘️ Kecamatan</span>
+<div class="flow-item">🏘️ Kecamatan</div>
 
-<span>→</span>
+<div class="flow-arrow">→</div>
 
-<span class="btn btn-secondary">🏡 Desa</span>
-
-<span>→</span>
-
-<span class="btn btn-primary">🛍️ Produk</span>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- =====================================================
-     ANGKA & DAMPAK
-===================================================== -->
+<div class="flow-item">🏡 Desa</
+<!-- ==========================================
+ANGKA & DAMPAK
+========================================== -->
 
 <section class="section">
 
@@ -383,7 +400,7 @@ Produk ditampilkan berdasarkan lokasi sehingga pencarian menjadi lebih mudah dan
 
 <p>
 
-Bersama membangun ekosistem digital yang mendukung pertumbuhan UMKM Indonesia.
+Perkembangan ekosistem PasarNusa diperbarui secara otomatis dari data yang tersedia.
 
 </p>
 
@@ -391,26 +408,20 @@ Bersama membangun ekosistem digital yang mendukung pertumbuhan UMKM Indonesia.
 
 </div>
 
-<div class="dashboard-stats">
+<div class="stats-grid">
 
 <div class="stat-card">
 
 <div class="stat-icon">
-
 🏪
-
 </div>
 
 <div id="totalUmkm" class="stat-value">
-
 0
-
 </div>
 
 <div class="stat-label">
-
 UMKM Terdaftar
-
 </div>
 
 </div>
@@ -418,21 +429,15 @@ UMKM Terdaftar
 <div class="stat-card">
 
 <div class="stat-icon">
-
 📦
-
 </div>
 
 <div id="totalProduk" class="stat-value">
-
 0
-
 </div>
 
 <div class="stat-label">
-
 Produk
-
 </div>
 
 </div>
@@ -440,21 +445,15 @@ Produk
 <div class="stat-card">
 
 <div class="stat-icon">
-
 👥
-
 </div>
 
 <div id="totalPengguna" class="stat-value">
-
 0
-
 </div>
 
 <div class="stat-label">
-
 Pengguna
-
 </div>
 
 </div>
@@ -462,21 +461,15 @@ Pengguna
 <div class="stat-card">
 
 <div class="stat-icon">
-
 🤝
-
 </div>
 
 <div id="totalTransaksi" class="stat-value">
-
 0
-
 </div>
 
 <div class="stat-label">
-
 Transaksi
-
 </div>
 
 </div>
@@ -486,9 +479,10 @@ Transaksi
 </div>
 
 </section>
-<!-- =====================================================
-     GALERI PRODUK
-===================================================== -->
+
+<!-- ==========================================
+GALERI PRODUK
+========================================== -->
 
 <section class="section">
 
@@ -502,7 +496,7 @@ Transaksi
 
 <p>
 
-Jelajahi berbagai produk UMKM dari berbagai daerah di Indonesia.
+Lihat berbagai produk UMKM pilihan dari seluruh Indonesia.
 
 </p>
 
@@ -516,15 +510,17 @@ Lihat Semua
 
 </div>
 
-<!-- FIREBASE PRODUCT -->
-
 <div id="productGrid" class="product-grid">
 
-<!-- Skeleton / Loading -->
+<!-- Skeleton Loading -->
 
-<div class="product-card skeleton-card">
+<div class="product-card">
+
+<div class="product-image">
 
 <div class="skeleton skeleton-image"></div>
+
+</div>
 
 <div class="product-content">
 
@@ -534,13 +530,19 @@ Lihat Semua
 
 <div class="skeleton skeleton-text"></div>
 
-</div>
+<div class="skeleton skeleton-text"></div>
 
 </div>
 
-<div class="product-card skeleton-card">
+</div>
+
+<div class="product-card">
+
+<div class="product-image">
 
 <div class="skeleton skeleton-image"></div>
+
+</div>
 
 <div class="product-content">
 
@@ -550,13 +552,19 @@ Lihat Semua
 
 <div class="skeleton skeleton-text"></div>
 
-</div>
+<div class="skeleton skeleton-text"></div>
 
 </div>
 
-<div class="product-card skeleton-card">
+</div>
+
+<div class="product-card">
+
+<div class="product-image">
 
 <div class="skeleton skeleton-image"></div>
+
+</div>
 
 <div class="product-content">
 
@@ -566,13 +574,19 @@ Lihat Semua
 
 <div class="skeleton skeleton-text"></div>
 
-</div>
+<div class="skeleton skeleton-text"></div>
 
 </div>
 
-<div class="product-card skeleton-card">
+</div>
+
+<div class="product-card">
+
+<div class="product-image">
 
 <div class="skeleton skeleton-image"></div>
+
+</div>
 
 <div class="product-content">
 
@@ -582,18 +596,30 @@ Lihat Semua
 
 <div class="skeleton skeleton-text"></div>
 
+<div class="skeleton skeleton-text"></div>
+
 </div>
 
 </div>
+
+</div>
+
+<div class="text-center mt-5">
+
+<a href="produk.html" class="btn btn-primary">
+
+Lihat Semua Produk
+
+</a>
 
 </div>
 
 </div>
 
 </section>
-<!-- =====================================================
-     MENGAPA MEMILIH PASARNUSA
-===================================================== -->
+<!-- ==========================================
+MENGAPA MEMILIH PASARNUSA
+========================================== -->
 
 <section class="section">
 
@@ -607,7 +633,7 @@ Lihat Semua
 
 <p>
 
-PasarNusa hadir untuk membantu UMKM Indonesia berkembang melalui platform yang mudah digunakan, terpercaya, dan berorientasi pada potensi daerah.
+PasarNusa dibangun untuk memudahkan UMKM berkembang secara digital sekaligus mempermudah masyarakat menemukan produk lokal berkualitas.
 
 </p>
 
@@ -615,83 +641,67 @@ PasarNusa hadir untuk membantu UMKM Indonesia berkembang melalui platform yang m
 
 </div>
 
-<div class="grid grid-4">
+<div class="feature-grid">
 
-<!-- CARD 1 -->
+<div class="feature-card">
 
-<div class="card text-center">
-
-<div class="category-icon">
-
+<div class="feature-icon">
 🌿
-
 </div>
 
 <h3>Produk Lokal</h3>
 
 <p>
 
-Menampilkan berbagai produk asli dari pelaku UMKM di berbagai daerah Indonesia.
+Produk berasal langsung dari pelaku UMKM sehingga lebih autentik dan berkualitas.
 
 </p>
 
 </div>
 
-<!-- CARD 2 -->
+<div class="feature-card">
 
-<div class="card text-center">
-
-<div class="category-icon">
-
+<div class="feature-icon">
 🗺️
-
 </div>
 
 <h3>Jelajah Wilayah</h3>
 
 <p>
 
-Cari produk berdasarkan provinsi, kabupaten, kecamatan hingga desa secara mudah.
+Cari produk berdasarkan provinsi, kabupaten, kecamatan hingga desa.
 
 </p>
 
 </div>
 
-<!-- CARD 3 -->
+<div class="feature-card">
 
-<div class="card text-center">
-
-<div class="category-icon">
-
+<div class="feature-icon">
 🔒
-
 </div>
 
 <h3>Aman & Mudah</h3>
 
 <p>
 
-Dirancang agar pengalaman belanja dan pengelolaan UMKM menjadi lebih sederhana.
+Antarmuka sederhana sehingga mudah digunakan oleh pembeli maupun pelaku UMKM.
 
 </p>
 
 </div>
 
-<!-- CARD 4 -->
+<div class="feature-card">
 
-<div class="card text-center">
-
-<div class="category-icon">
-
+<div class="feature-icon">
 🚀
-
 </div>
 
 <h3>Terus Berkembang</h3>
 
 <p>
 
-PasarNusa dibangun untuk berkembang dari satu desa menjadi platform UMKM Indonesia.
+Dirancang agar dapat berkembang dari satu desa menjadi marketplace UMKM nasional.
 
 </p>
 
@@ -702,9 +712,10 @@ PasarNusa dibangun untuk berkembang dari satu desa menjadi platform UMKM Indones
 </div>
 
 </section>
-<!-- =====================================================
-     ROADMAP PASARNUSA
-===================================================== -->
+
+<!-- ==========================================
+ROADMAP PASARNUSA
+========================================== -->
 
 <section class="section">
 
@@ -718,7 +729,7 @@ PasarNusa dibangun untuk berkembang dari satu desa menjadi platform UMKM Indones
 
 <p>
 
-PasarNusa terus berkembang untuk memperluas akses digital bagi UMKM di seluruh Indonesia.
+Tahapan pengembangan PasarNusa menuju marketplace UMKM Indonesia.
 
 </p>
 
@@ -726,83 +737,83 @@ PasarNusa terus berkembang untuk memperluas akses digital bagi UMKM di seluruh I
 
 </div>
 
-<div class="grid grid-4">
+<div class="roadmap-grid">
 
-<!-- STEP 1 -->
+<div class="roadmap-card">
 
-<div class="card text-center">
+<div class="roadmap-year">
+2026
+</div>
 
-<div class="category-icon">
-
+<div class="roadmap-icon">
 🚀
-
 </div>
 
-<h3>2026</h3>
+<h3>Peluncuran MVP</h3>
 
 <p>
 
-Peluncuran MVP dan implementasi awal di Desa Jabalsari.
+Implementasi awal PasarNusa sebagai platform digital UMKM.
 
 </p>
 
 </div>
 
-<!-- STEP 2 -->
+<div class="roadmap-card">
 
-<div class="card text-center">
+<div class="roadmap-year">
+2027
+</div>
 
-<div class="category-icon">
-
+<div class="roadmap-icon">
 🏡
-
 </div>
 
-<h3>2027</h3>
+<h3>Ekspansi Desa</h3>
 
 <p>
 
-Perluasan ke desa-desa lain dan penambahan UMKM baru.
+Menambah desa dan pelaku UMKM dari berbagai wilayah.
 
 </p>
 
 </div>
 
-<!-- STEP 3 -->
+<div class="roadmap-card">
 
-<div class="card text-center">
+<div class="roadmap-year">
+2028
+</div>
 
-<div class="category-icon">
-
+<div class="roadmap-icon">
 🏛️
-
 </div>
 
-<h3>2028</h3>
+<h3>Ekspansi Kabupaten</h3>
 
 <p>
 
-Pengembangan ke tingkat kabupaten dengan lebih banyak kategori produk.
+Perluasan ke tingkat kabupaten dengan kategori produk yang lebih lengkap.
 
 </p>
 
 </div>
 
-<!-- STEP 4 -->
+<div class="roadmap-card">
 
-<div class="card text-center">
-
-<div class="category-icon">
-
-🇮🇩
-
+<div class="roadmap-year">
+Masa Depan
 </div>
 
-<h3>Masa Depan</h3>
+<div class="roadmap-icon">
+🇮🇩
+</div>
+
+<h3>Marketplace Nasional</h3>
 
 <p>
 
-Menjadi platform digital UMKM yang dapat diakses oleh berbagai daerah di Indonesia.
+Menjadi platform digital yang menghubungkan UMKM dari seluruh Indonesia.
 
 </p>
 
@@ -813,44 +824,41 @@ Menjadi platform digital UMKM yang dapat diakses oleh berbagai daerah di Indones
 </div>
 
 </section>
-<!-- =====================================================
-     CALL TO ACTION
-===================================================== -->
+<!-- ==========================================
+CALL TO ACTION
+========================================== -->
 
 <section class="section">
 
 <div class="container">
 
-<div class="card text-center">
-
-<div class="category-icon">
-
-🚀
-
-</div>
+<div class="cta">
 
 <h2>
 
-Mari Bergabung Bersama PasarNusa
+Siap Mendukung UMKM Indonesia?
 
 </h2>
 
-<p class="mt-2">
+<p>
 
-Jadilah bagian dari ekosistem digital UMKM Indonesia.
-Temukan produk lokal berkualitas atau mulai kembangkan usahamu bersama PasarNusa.
+Mulai jelajahi ribuan produk lokal, daftarkan usahamu, atau bergabung menjadi bagian dari ekosistem PasarNusa.
 
 </p>
 
-<div class="hero-action mt-4">
+<div class="cta-action">
 
-<a href="produk.html" class="btn btn-primary">
+<a
+href="produk.html"
+class="btn btn-primary">
 
 🛍️ Jelajahi Produk
 
 </a>
 
-<a href="register.html" class="btn btn-secondary">
+<a
+href="register.html"
+class="btn btn-secondary">
 
 🏪 Daftarkan UMKM
 
@@ -858,20 +866,15 @@ Temukan produk lokal berkualitas atau mulai kembangkan usahamu bersama PasarNusa
 
 </div>
 
-<small class="mt-4">
-
-Mulai dari satu desa, berkembang untuk seluruh Indonesia 🇮🇩
-
-</small>
-
 </div>
 
 </div>
 
 </section>
-<!-- =====================================================
-     FOOTER
-===================================================== -->
+
+<!-- ==========================================
+FOOTER
+========================================== -->
 
 <footer class="footer">
 
@@ -885,19 +888,49 @@ Mulai dari satu desa, berkembang untuk seluruh Indonesia 🇮🇩
 
 <div class="footer-logo">
 
-🌿 PasarNusa
+🌿
+
+<span>PasarNusa</span>
 
 </div>
 
 <p class="footer-desc">
 
-Platform digital UMKM Indonesia yang menghubungkan pelaku usaha lokal dengan pembeli melalui sistem wilayah bertingkat.
+Platform digital yang menghubungkan pelaku UMKM dengan pembeli melalui sistem wilayah bertingkat dari provinsi hingga desa.
 
 </p>
 
+<div class="social">
+
+<a href="#" aria-label="Instagram">
+
+📷
+
+</a>
+
+<a href="#" aria-label="TikTok">
+
+🎵
+
+</a>
+
+<a href="#" aria-label="Facebook">
+
+📘
+
+</a>
+
+<a href="#" aria-label="YouTube">
+
+▶️
+
+</a>
+
 </div>
 
-<!-- PRODUK -->
+</div>
+
+<!-- MARKETPLACE -->
 
 <div>
 
@@ -909,13 +942,29 @@ Marketplace
 
 <div class="footer-links">
 
-<a href="produk.html">Produk</a>
+<a href="produk.html">
 
-<a href="kategori.html">Kategori</a>
+Produk
 
-<a href="wilayah.html">Wilayah</a>
+</a>
 
-<a href="tentang.html">Tentang</a>
+<a href="kategori.html">
+
+Kategori
+
+</a>
+
+<a href="wilayah.html">
+
+Wilayah
+
+</a>
+
+<a href="affiliate.html">
+
+Affiliate
+
+</a>
 
 </div>
 
@@ -933,37 +982,69 @@ Layanan
 
 <div class="footer-links">
 
-<a href="login.html">Masuk</a>
+<a href="login.html">
 
-<a href="register.html">Daftar</a>
+Masuk
 
-<a href="bantuan.html">Pusat Bantuan</a>
+</a>
 
-<a href="kontak.html">Kontak</a>
+<a href="register.html">
+
+Daftar
+
+</a>
+
+<a href="bantuan.html">
+
+Pusat Bantuan
+
+</a>
+
+<a href="kontak.html">
+
+Hubungi Kami
+
+</a>
 
 </div>
 
 </div>
 
-<!-- SOSIAL -->
+<!-- PERUSAHAAN -->
 
 <div>
 
 <h3 class="footer-title">
 
-Ikuti Kami
+Perusahaan
 
 </h3>
 
 <div class="footer-links">
 
-<a href="#">Instagram</a>
+<a href="tentang.html">
 
-<a href="#">TikTok</a>
+Tentang Kami
 
-<a href="#">Facebook</a>
+</a>
 
-<a href="#">YouTube</a>
+<a href="kebijakan.html">
+
+Kebijakan Privasi
+
+</a>
+
+<a href="syarat.html">
+
+Syarat & Ketentuan
+
+</a>
+
+<a href="faq.html">
+
+FAQ
+
+</a>
 
 </div>
 
@@ -971,7 +1052,7 @@ Ikuti Kami
 
 </div>
 
-<div class="divider"></div>
+<div class="footer-divider"></div>
 
 <div class="footer-bottom">
 
@@ -983,7 +1064,7 @@ Ikuti Kami
 
 <p>
 
-Dibangun untuk mendukung pertumbuhan UMKM Indonesia 🇮🇩
+Dibangun dengan ❤️ untuk UMKM Indonesia 🇮🇩
 
 </p>
 
@@ -993,9 +1074,14 @@ Dibangun untuk mendukung pertumbuhan UMKM Indonesia 🇮🇩
 
 </footer>
 
-<!-- Back To Top -->
+<!-- ==========================================
+BACK TO TOP
+========================================== -->
 
-<button id="backTop" class="back-top">
+<button
+id="backTop"
+class="back-top"
+aria-label="Kembali ke Atas">
 
 ↑
 
