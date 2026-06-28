@@ -1,528 +1,553 @@
 <!DOCTYPE html>
+
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tambah Produk - PasarNusa</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Tambah Produk | PasarNusa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta
+name="description"
+content="Tambah produk baru ke PasarNusa">
 
-<link rel="stylesheet" href="style.css">
+<meta
+name="theme-color"
+content="#16a34a">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="tambah-produk.css">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
 </head>
 
 <body>
+<header class="navbar">
 
-<section class="product-form">
+<div class="container">
 
-<h1>➕ Tambah Produk</h1>
+<div class="navbar-content">
 
-<div class="form-card">
+<a
+href="index.html"
+class="logo">
 
-<input
-type="text"
-id="namaProduk"
-placeholder="Nama Produk">
+🌿
 
-<input
-type="number"
-id="hargaProduk"
-placeholder="Harga Produk">
-<input
-type="number"
-id="stokProduk"
-placeholder="Jumlah Stok">
-<input
-type="number"
-id="beratProduk"
-placeholder="Berat Produk (gram)">
+<span>PasarNusa</span>
 
-<select id="kategoriProduk">
+</a>
 
-<option value="">
-Pilih Kategori
-</option>
+<nav class="navbar-menu">
 
-<option value="Makanan">
-Makanan
-</option>
+<a href="dashboard-umkm.html">
 
-<option value="Minuman">
-Minuman
-</option>
+Dashboard
 
-<option value="Kerajinan">
-Kerajinan
-</option>
+</a>
 
-<option value="Fashion">
-Fashion
-</option>
+<a
+href="tambah-produk.html"
+class="active">
 
-<option value="Lainnya">
-Lainnya
-</option>
+Tambah Produk
 
-</select>
+</a>
 
-<select id="statusProduk">
+<a href="produk-saya.html">
 
-<option value="Aktif">
-Aktif
-</option>
+Produk Saya
 
-<option value="Nonaktif">
-Nonaktif
-</option>
+</a>
 
-</select>
+<a href="pesanan-masuk.html">
 
-<textarea
-id="deskripsiProduk"
-placeholder="Deskripsi Produk">
-</textarea>
+Pesanan
 
-<input
-type="file"
-id="productImage"
-multiple>
+</a>
 
-<p>
-Maksimal 5 foto dan 2MB per foto
-</p>
+<a href="profil-toko.html">
 
-<div id="previewContainer"></div>
+Profil
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
 
 <button
-id="simpanProduk"
-class="btn-primary">
+id="themeToggle"
+class="btn btn-secondary">
 
-Simpan Produk
+🌙
 
 </button>
 
 </div>
 
+<button
+id="menuToggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+📦 Produk Baru
+
+</div>
+
+<h1>
+
+Tambah Produk UMKM
+
+</h1>
+
+<p>
+
+Lengkapi informasi produk agar pelanggan dapat menemukan dan membeli produk Anda dengan mudah.
+
+</p>
+
+</div>
+
+</div>
+
 </section>
+<section class="breadcrumb">
 
-<script type="module">
+<div class="container">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+<a href="dashboard-umkm.html">
 
-import {
-getFirestore,
-collection,
-addDoc,
-doc,
-getDoc,
-serverTimestamp,
-query,
-where,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain: "pasarnusa-18aa0.firebaseapp.com",
-projectId: "pasarnusa-18aa0",
-storageBucket: "pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId: "866998011671",
-appId: "1:866998011671:web:5555115feb82741ab55952"
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-const auth = getAuth(app);
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href =
-"login.html";
-
-}
-const imageInput =
-document.getElementById("productImage");
+Dashboard
 
-const previewContainer =
-document.getElementById("previewContainer");
+</a>
 
-imageInput.addEventListener(
-"change",
-(e)=>{
+<span>
 
-previewContainer.innerHTML = "";
+/
 
-Array.from(e.target.files)
-.forEach((file)=>{
+</span>
 
-const img =
-document.createElement("img");
+<span>
 
-img.src =
-URL.createObjectURL(file);
+Tambah Produk
 
-img.style.width = "100px";
-img.style.height = "100px";
-img.style.objectFit = "cover";
-img.style.borderRadius = "12px";
-img.style.margin = "5px";
+</span>
 
-previewContainer.appendChild(img);
+</div>
 
-});
+</section>
+<section class="section">
 
-});
+<div class="container">
 
-document
-.getElementById("simpanProduk")
-.addEventListener(
-"click",
-async()=>{
+<div class="product-card">
 
-const btn =
-document.getElementById(
-"simpanProduk"
-);
+<form id="produkForm">
+<div class="form-group">
 
-try{
+<label>
 
-const nama =
-document.getElementById(
-"namaProduk"
-).value.trim();
+Nama Produk
 
-const harga =
-document.getElementById(
-"hargaProduk"
-).value;
+</label>
 
-const stok =
-document.getElementById(
-"stokProduk"
-).value;
-const berat =
-document.getElementById(
-"beratProduk"
-).value;
-const kategori =
-document.getElementById(
-"kategoriProduk"
-).value;
-const status =
-document.getElementById(
-"statusProduk"
-).value;
-const deskripsi =
-document.getElementById(
-"deskripsiProduk"
-).value.trim();
+<input
 
-if(
-!nama ||
-!harga ||
-!stok ||
-!berat ||
-!kategori ||
-!deskripsi
-){
+type="text"
 
-alert("Lengkapi semua data");
+id="namaProduk"
 
-return;
+placeholder="Masukkan nama produk"
 
-}
+required>
 
-if(Number(harga) < 1000){
+</div>
 
-alert("Harga minimal Rp1.000");
+<div class="form-group">
 
-return;
+<label>
 
-}
+Kode Produk (SKU)
 
-if(Number(stok) < 1){
+</label>
 
-alert("Stok minimal 1");
+<input
 
-return;
+type="text"
 
-}
+id="sku"
 
-if(Number(berat) < 1){
+placeholder="Contoh: KRP-001">
 
-alert("Berat minimal 1 gram");
+</div>
 
-return;
+<div class="form-group">
 
-}
-const files =
-imageInput.files;
+<label>
 
-if(files.length === 0){
+Kategori
 
-alert(
-"Pilih minimal 1 foto"
-);
+</label>
 
-return;
+<select
 
-}
+id="kategoriProduk"
 
-if(files.length > 5){
+required>
 
-alert(
-"Maksimal 5 foto"
-);
+<option value="">
 
-return;
+Pilih Kategori
 
-}
+</option>
 
-for(const file of files){
+<option value="Makanan">
 
-if(
-!file.type.startsWith(
-"image/"
-)
-){
+Makanan
 
-alert(
-"File harus berupa gambar"
-);
+</option>
 
-return;
+<option value="Minuman">
 
-}
+Minuman
 
-if(
-file.size >
-2 * 1024 * 1024
-){
+</option>
 
-alert(
-"Ukuran foto maksimal 2 MB"
-);
+<option value="Fashion">
 
-return;
+Fashion
 
-}
+</option>
 
-}
+<option value="Kerajinan">
 
-btn.disabled = true;
-btn.innerText = "Mengupload...";
+Kerajinan
 
-const userDoc = await getDoc(
-doc(
-db,
-"users",
-auth.currentUser.uid
-)
-);
+</option>
 
-if(!userDoc.exists()){
+<option value="Kesehatan">
 
-alert("Data User tidak ditemukan");
+Kesehatan
 
-return;
+</option>
 
-}
+<option value="Kecantikan">
 
-const userData = userDoc.data();
-const cekProduk =
-await getDocs(
-query(
-collection(db,"produk"),
-where(
-"uid",
-"==",
-auth.currentUser.uid
-),
-where(
-"namaProduk",
-"==",
-nama
-)
-)
-);
+Kecantikan
 
-if(!cekProduk.empty){
+</option>
 
-alert(
-"Produk dengan nama tersebut sudah ada"
-);
+<option value="Pertanian">
 
-return;
+Pertanian
 
-}
-if(userData.role !== "umkm"){
+</option>
 
-alert(
-"Akses khusus UMKM"
-);
+<option value="Elektronik">
 
-window.location.href =
-"index.html";
+Elektronik
 
-return;
+</option>
 
-}
+<option value="Lainnya">
 
-if(userData.status !== "aktif"){
+Lainnya
 
-alert(
-"Akun UMKM belum diverifikasi"
-);
+</option>
 
-window.location.href =
-"dashboard-umkm.html";
+</select>
 
-return;
+</div>
+<div class="form-row">
 
-}
-let imageUrls = [];
+<div class="form-group">
 
-for(const file of files){
+<label>
 
-const formData =
-new FormData();
+Harga Produk
 
-formData.append(
-"file",
-file
-);
+</label>
 
-formData.append(
-"upload_preset",
-"pasarnusa"
-);
+<input
 
-const response =
-await fetch(
-"https://api.cloudinary.com/v1_1/dq8gha9lv/image/upload",
-{
-method:"POST",
-body:formData
-}
-);
+type="number"
 
-const data =
-await response.json();
+id="hargaProduk"
 
-if(!data.secure_url){
+placeholder="25000"
 
-throw new Error(
-data.error?.message ||
-"Gagal upload gambar"
-);
+required>
 
-}
+</div>
 
-imageUrls.push(
-data.secure_url
-);
+<div class="form-group">
 
-}
+<label>
 
-await addDoc(
-collection(db,"produk"),
-{
+Jumlah Stok
 
-uid: auth.currentUser.uid,
+</label>
 
-uidUmkm: auth.currentUser.uid,
+<input
 
-namaToko:
-userData.namaUmkm ||
-userData.nama,
+type="number"
 
-whatsapp:
-userData.whatsapp || "",
+id="stokProduk"
 
-namaProduk: nama,
+placeholder="100"
 
-harga: Number(harga),
+required>
 
-stok: Number(stok),
+</div>
 
-berat: Number(berat),
+</div>
 
-kotaAsal:
-userData.kota || "",
+<div class="form-row">
 
-provinsiAsal:
-userData.provinsi || "",
+<div class="form-group">
 
-kategori: kategori,
+<label>
 
-deskripsi: deskripsi,
+Berat (gram)
 
-gambar: imageUrls,
+</label>
 
-rating: 0,
+<input
 
-totalReview: 0,
+type="number"
 
-terjual: 0,
+id="beratProduk"
 
-followers: 0,
+placeholder="500"
 
-affiliateAktif: true,
+required>
 
-komisiAffiliate: 5,
+</div>
 
-status:
-Number(stok) <= 0
-? "Stok Habis"
-: status,
+<div class="form-group">
 
-createdAt:
-serverTimestamp()
+<label>
 
-}
-);
+Status Produk
 
-alert(
-"Produk berhasil ditambahkan"
-);
+</label>
 
-window.location.href =
-"produk-saya.html";
-}
+<select
 
-catch(error){
+id="statusProduk">
 
-console.error(error);
+<option value="Aktif">
 
-alert(
-error.message
-);
+Aktif
 
-}
+</option>
 
-finally{
+<option value="Nonaktif">
 
-btn.disabled = false;
-btn.innerText = "Simpan Produk";
+Nonaktif
 
-}
+</option>
 
-});
+</select>
+
+</div>
+
+</div>
+<div class="form-group">
+
+<label>
+
+Deskripsi Produk
+
+</label>
+
+<textarea
+
+id="deskripsiProduk"
+
+rows="6"
+
+placeholder="Jelaskan produk secara lengkap"
+
+required>
+
+</textarea>
+
+</div>
+<div class="form-group">
+
+<label>
+
+Foto Produk
+
+</label>
+
+<input
+
+type="file"
+
+id="productImage"
+
+accept="image/*"
+
+multiple>
+
+<small>
+
+Maksimal 5 foto. Ukuran maksimal 2 MB per foto.
+
+</small>
+
+</div>
+
+<div
+
+id="previewContainer"
+
+class="preview-grid">
+
+</div>
+<div class="form-action">
+
+<button
+
+type="submit"
+
+id="simpanProduk"
+
+class="btn btn-primary">
+
+💾 Simpan Produk
+
+</button>
+
+<a
+
+href="dashboard-umkm.html"
+
+class="btn btn-secondary">
+
+Batal
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="info-card">
+
+<h2>
+
+💡 Tips Menjual Produk
+
+</h2>
+
+<p>
+
+Gunakan foto yang terang dan jelas, tulis nama produk yang mudah dipahami, lengkapi deskripsi, tentukan harga yang sesuai, dan pastikan stok selalu diperbarui agar pembeli lebih percaya.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+<button
+
+id="backTop"
+
+class="back-top"
+
+aria-label="Kembali ke Atas">
+
+↑
+
+</button>
+<script src="script.js"></script>
+
+<script
+
+type="module"
+
+src="tambah-produk.js">
 
 </script>
 
 </body>
+
 </html>
