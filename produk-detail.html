@@ -1,11 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <title>Detail Produk | PasarNusa</title>
@@ -15,13 +17,51 @@ name="description"
 content="Lihat informasi lengkap produk UMKM Indonesia di PasarNusa.">
 
 <meta
+name="keywords"
+content="UMKM, Produk Lokal, Marketplace Indonesia, PasarNusa">
+
+<meta
+name="author"
+content="PasarNusa">
+
+<meta
 name="theme-color"
 content="#16a34a">
 
-<link rel="preconnect"
+<meta
+property="og:title"
+content="Detail Produk | PasarNusa">
+
+<meta
+property="og:description"
+content="Belanja produk UMKM Indonesia dengan mudah di PasarNusa.">
+
+<meta
+property="og:type"
+content="website">
+
+<meta
+property="og:image"
+content="assets/logo.png">
+
+<meta
+property="og:locale"
+content="id_ID">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
+<link
+rel="apple-touch-icon"
+href="assets/logo.png">
+
+<link
+rel="preconnect"
 href="https://fonts.googleapis.com">
 
-<link rel="preconnect"
+<link
+rel="preconnect"
 href="https://fonts.gstatic.com"
 crossorigin>
 
@@ -29,15 +69,13 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<link rel="stylesheet"
+<link
+rel="stylesheet"
 href="style.css">
 
-<link rel="stylesheet"
-href="detail.css">
-
 <link
-rel="icon"
-href="assets/logo.png">
+rel="stylesheet"
+href="detail-produk.css">
 
 </head>
 
@@ -48,11 +86,17 @@ href="assets/logo.png">
 
 <div class="navbar-content">
 
-<a href="index.html" class="logo">
+<a
+href="index.html"
+class="logo">
 
 🌿
 
-<span>PasarNusa</span>
+<span>
+
+PasarNusa
+
+</span>
 
 </a>
 
@@ -64,7 +108,9 @@ Beranda
 
 </a>
 
-<a href="produk.html">
+<a
+href="produk.html"
+class="active">
 
 Produk
 
@@ -101,18 +147,18 @@ class="btn btn-secondary">
 </button>
 
 <a
-href="login.html"
+href="keranjang.html"
 class="btn btn-secondary">
 
-Masuk
+🛒 Keranjang
 
 </a>
 
 <a
-href="register.html"
+href="login.html"
 class="btn btn-primary">
 
-Daftar
+Masuk
 
 </a>
 
@@ -139,11 +185,11 @@ class="menu-toggle">
 
 <div class="badge">
 
-🛍️ Detail Produk
+🛍️ Produk UMKM
 
 </div>
 
-<h1 id="namaProduk">
+<h1 id="heroTitle">
 
 Memuat Produk...
 
@@ -151,7 +197,7 @@ Memuat Produk...
 
 <p>
 
-Informasi lengkap produk UMKM Indonesia.
+Temukan produk terbaik dari UMKM Indonesia dengan kualitas terpercaya.
 
 </p>
 
@@ -170,7 +216,11 @@ Beranda
 
 </a>
 
-<span>/</span>
+<span>
+
+/
+
+</span>
 
 <a href="produk.html">
 
@@ -178,9 +228,14 @@ Produk
 
 </a>
 
-<span>/</span>
+<span>
 
-<span id="breadcrumbNama">
+/
+
+</span>
+
+<span
+id="breadcrumbNama">
 
 Detail Produk
 
@@ -198,47 +253,59 @@ DETAIL PRODUK
 <div class="container">
 
 <div class="detail-grid">
-<!-- =========================
+
+<!-- ==========================================
 GALERI
-========================= -->
+========================================== -->
 
 <div class="detail-gallery">
 
 <div class="main-image">
 
 <img
-id="gambarProduk"
+
+id="gambarUtama"
+
 src="assets/no-image.png"
+
 alt="Produk"
+
 loading="lazy">
 
 <div
+
 id="badgeProduk"
+
 class="product-badge">
 
-✨ Baru
+🔥 Terlaris
 
 </div>
 
 </div>
 
 <div
-id="galleryProduk"
+
+id="thumbnailProduk"
+
 class="thumbnail-list">
 
-<!-- Thumbnail otomatis -->
+<!-- Thumbnail -->
 
 </div>
 
 </div>
-<!-- =========================
-INFO PRODUK
-========================= -->
+
+<!-- ==========================================
+INFORMASI
+========================================== -->
 
 <div class="detail-content">
 
 <div
+
 id="kategoriProduk"
+
 class="product-category">
 
 Kategori
@@ -246,7 +313,9 @@ Kategori
 </div>
 
 <h1
-id="judulProduk"
+
+id="namaProduk"
+
 class="detail-title">
 
 Memuat Produk...
@@ -261,22 +330,24 @@ Memuat Produk...
 
 </span>
 
+<span id="reviewProduk">
+
+0 Review
+
+</span>
+
 <span id="terjualProduk">
 
 🔥 0 Terjual
 
 </span>
 
-<span id="stokProduk">
-
-📦 0
-
-</span>
-
 </div>
 
 <div
+
 id="hargaProduk"
+
 class="detail-price">
 
 Rp 0
@@ -284,7 +355,19 @@ Rp 0
 </div>
 
 <div
+
+id="stokProduk"
+
+class="detail-stock">
+
+📦 Stok : 0
+
+</div>
+
+<div
+
 id="lokasiProduk"
+
 class="detail-location">
 
 📍 Indonesia
@@ -292,7 +375,9 @@ class="detail-location">
 </div>
 
 <div
+
 id="namaToko"
+
 class="detail-store">
 
 🏪 Nama UMKM
@@ -300,17 +385,28 @@ class="detail-store">
 </div>
 
 <div
+
+id="affiliateBadge"
+
+class="affiliate-box">
+
+</div>
+
+<p
+
 id="deskripsiProduk"
+
 class="detail-description">
 
-Memuat deskripsi...
+Memuat deskripsi produk...
+
+</p>
 
 </div>
 
-</div>
-<!-- =========================
+<!-- ==========================================
 BUY BOX
-========================= -->
+========================================== -->
 
 <div class="buy-box">
 
@@ -320,26 +416,64 @@ Ringkasan Pembelian
 
 </h3>
 
-<div class="buy-price">
+<div
 
-<span id="buyHarga">
+id="buyHarga"
+
+class="buy-price">
 
 Rp 0
 
-</span>
+</div>
+
+<div class="qty-box">
+
+<button
+
+id="minusQty"
+
+type="button">
+
+−
+
+</button>
+
+<input
+
+type="number"
+
+id="jumlahProduk"
+
+value="1"
+
+min="1">
+
+<button
+
+id="plusQty"
+
+type="button">
+
++
+
+</button>
 
 </div>
 
 <button
+
 id="addToCart"
+
 class="btn btn-primary">
 
-🛒 Masukkan Keranjang
+🛒 Tambah ke Keranjang
 
 </button>
 
 <button
+
 id="buyNow"
+
 class="btn btn-secondary">
 
 ⚡ Beli Sekarang
@@ -347,7 +481,9 @@ class="btn btn-secondary">
 </button>
 
 <button
+
 id="btnFavorit"
+
 class="btn btn-secondary">
 
 ❤️ Simpan Favorit
@@ -355,8 +491,11 @@ class="btn btn-secondary">
 </button>
 
 <a
+
 id="chatWA"
+
 target="_blank"
+
 class="btn btn-secondary">
 
 💬 Hubungi Penjual
@@ -364,14 +503,27 @@ class="btn btn-secondary">
 </a>
 
 <button
+
 id="shareProduk"
+
 class="btn btn-secondary">
 
-📤 Bagikan Produk
+📤 Bagikan
 
 </button>
 
+<p
+
+id="wishlistCount"
+
+class="wishlist-count">
+
+❤️ Disimpan 0 pengguna
+
+</p>
+
 </div>
+
 </div>
 
 </div>
@@ -397,7 +549,11 @@ INFORMASI PENGIRIMAN
 
 <div class="info-item">
 
-<h4>Berat Produk</h4>
+<h4>
+
+Berat Produk
+
+</h4>
 
 <p id="beratProduk">
 
@@ -409,7 +565,11 @@ INFORMASI PENGIRIMAN
 
 <div class="info-item">
 
-<h4>Asal Pengiriman</h4>
+<h4>
+
+Asal Pengiriman
+
+</h4>
 
 <p id="asalProduk">
 
@@ -421,11 +581,15 @@ Indonesia
 
 <div class="info-item">
 
-<h4>Estimasi</h4>
+<h4>
+
+Estimasi
+
+</h4>
 
 <p>
 
-2 - 5 Hari
+2 - 5 Hari Kerja
 
 </p>
 
@@ -433,11 +597,15 @@ Indonesia
 
 <div class="info-item">
 
-<h4>Kurir</h4>
+<h4>
+
+Kurir
+
+</h4>
 
 <p>
 
-JNE • J&T • SiCepat
+JNE • J&T • SiCepat • POS
 
 </p>
 
@@ -482,6 +650,64 @@ Indonesia
 
 </p>
 
+<p id="storeJoin">
+
+Bergabung sejak 2026
+
+</p>
+
+</div>
+
+</div>
+
+<div class="store-info">
+
+<div>
+
+<h4>
+
+⭐ Rating
+
+</h4>
+
+<p id="storeRating">
+
+0.0
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+🛍 Produk
+
+</h4>
+
+<p id="storeProduk">
+
+0 Produk
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+👥 Followers
+
+</h4>
+
+<p id="storeFollowers">
+
+0
+
+</p>
+
 </div>
 
 </div>
@@ -489,13 +715,61 @@ Indonesia
 <div class="store-action">
 
 <a
+
 id="linkToko"
+
 href="#"
+
 class="btn btn-primary">
 
-Kunjungi Toko
+🏪 Kunjungi Toko
 
 </a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ==========================================
+PRODUK LAIN
+========================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-header">
+
+<div class="section-title">
+
+<h2>
+
+🏪 Produk Lain dari Toko Ini
+
+</h2>
+
+<p>
+
+Temukan produk lainnya dari UMKM yang sama.
+
+</p>
+
+</div>
+
+</div>
+
+<div
+
+id="produkToko"
+
+class="product-grid">
+
+<div class="loading-card">
+
+Memuat produk...
 
 </div>
 
@@ -518,13 +792,13 @@ PRODUK TERKAIT
 
 <h2>
 
-Produk Terkait
+🛍 Produk Terkait
 
 </h2>
 
 <p>
 
-Produk lain dari kategori yang sama.
+Produk lain dengan kategori yang sama.
 
 </p>
 
@@ -533,8 +807,16 @@ Produk lain dari kategori yang sama.
 </div>
 
 <div
+
 id="produkTerkait"
+
 class="product-grid">
+
+<div class="loading-card">
+
+Memuat produk...
+
+</div>
 
 </div>
 
@@ -542,7 +824,7 @@ class="product-grid">
 
 </section>
 <!-- ==========================================
-ULASAN
+ULASAN PEMBELI
 ========================================== -->
 
 <section class="section">
@@ -551,18 +833,47 @@ ULASAN
 
 <div class="review-card">
 
+<div class="section-header">
+
+<div class="section-title">
+
 <h2>
 
 ⭐ Ulasan Pembeli
 
 </h2>
 
+<p>
+
+Pengalaman pelanggan setelah membeli produk ini.
+
+</p>
+
+</div>
+
+</div>
+
 <div
-id="reviewContainer">
+id="reviewContainer"
+class="review-list">
+
+<div class="empty-state">
+
+<div class="empty-icon">
+
+⭐
+
+</div>
+
+<h3>
+
+Belum Ada Ulasan
+
+</h3>
 
 <p>
 
-Belum ada ulasan.
+Jadilah pembeli pertama yang memberikan ulasan.
 
 </p>
 
@@ -572,16 +883,150 @@ Belum ada ulasan.
 
 </div>
 
+</div>
+
 </section>
+<!-- ==========================================
+FOOTER
+========================================== -->
+
 <footer class="footer">
 
 <div class="container">
+
+<div class="footer-content">
+
+<div>
+
+<h3>
+
+🌿 PasarNusa
+
+</h3>
+
+<p>
+
+Marketplace UMKM Indonesia yang menghubungkan penjual lokal dengan pembeli di seluruh Indonesia.
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Navigasi
+
+</h4>
+
+<ul>
+
+<li>
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+</li>
+
+<li>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+</li>
+
+<li>
+
+<a href="kategori.html">
+
+Kategori
+
+</a>
+
+</li>
+
+<li>
+
+<a href="tentang.html">
+
+Tentang
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<div>
+
+<h4>
+
+Bantuan
+
+</h4>
+
+<ul>
+
+<li>
+
+<a href="faq.html">
+
+FAQ
+
+</a>
+
+</li>
+
+<li>
+
+<a href="kontak.html">
+
+Kontak
+
+</a>
+
+</li>
+
+<li>
+
+<a href="kebijakan.html">
+
+Kebijakan Privasi
+
+</a>
+
+</li>
+
+<li>
+
+<a href="syarat.html">
+
+Syarat & Ketentuan
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
 
 <div class="footer-bottom">
 
 <p>
 
-© 2026 <strong>PasarNusa</strong>
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
 
 </p>
 
@@ -597,17 +1042,24 @@ Dibangun ❤️ untuk UMKM Indonesia.
 
 </footer>
 <button
+
 id="backTop"
-class="back-top">
+
+class="back-top"
+
+aria-label="Kembali ke Atas">
 
 ↑
 
 </button>
+
 <script src="script.js"></script>
 
 <script
+
 type="module"
-src="detail.js">
+
+src="detail-produk.js">
 
 </script>
 
