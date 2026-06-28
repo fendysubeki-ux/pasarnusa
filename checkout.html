@@ -1,685 +1,805 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Checkout - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><section class="checkout-section"><div class="form-card"><h1>🛒 Checkout Pesanan</h1><input
-type="text"
-id="namaPembeli"
-placeholder="Nama Lengkap">
+<!DOCTYPE html>
+
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Checkout | PasarNusa</title>
+
+<meta
+name="description"
+content="Checkout pesanan PasarNusa">
+
+<meta
+name="theme-color"
+content="#16a34a">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="checkout.css">
+
+</head>
+
+<body>
+<header class="navbar">
+
+<div class="container">
+
+<div class="navbar-content">
+
+<a
+href="index.html"
+class="logo">
+
+🌿
+
+<span>
+
+PasarNusa
+
+</span>
+
+</a>
+
+<nav class="navbar-menu">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<a href="cart.html">
+
+Keranjang
+
+</a>
+
+<a
+href="checkout.html"
+class="active">
+
+Checkout
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
+
+<button
+id="themeToggle"
+class="btn btn-secondary">
+
+🌙
+
+</button>
+
+<a
+href="profil.html"
+class="btn btn-primary">
+
+👤 Akun
+
+</a>
+
+</div>
+
+<button
+id="menuToggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+💳 Checkout
+
+</div>
+
+<h1>
+
+Selesaikan Pesanan Anda
+
+</h1>
+
+<p>
+
+Pastikan seluruh informasi pengiriman sudah benar sebelum membuat pesanan.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="breadcrumb">
+
+<div class="container">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<a href="cart.html">
+
+Keranjang
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<span>
+
+Checkout
+
+</span>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="checkout-layout">
+<div class="checkout-content">
+
+<div class="form-card">
+
+<h2>
+
+👤 Data Penerima
+
+</h2>
+
+<div class="form-group">
+
+<label>
+
+Nama Lengkap
+
+</label>
 
 <input
+
+type="text"
+
+id="namaPembeli"
+
+placeholder="Masukkan nama lengkap">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Nomor WhatsApp
+
+</label>
+
+<input
+
 type="tel"
+
 id="whatsappPembeli"
-placeholder="Nomor WhatsApp">
+
+placeholder="08xxxxxxxxxx">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Alamat Lengkap
+
+</label>
 
 <textarea
+
 id="alamatPembeli"
-placeholder="Alamat Lengkap">
+
+rows="5"
+
+placeholder="Masukkan alamat lengkap">
+
 </textarea>
-<select id="kotaTujuan">
-<option value="">Pilih Kota Tujuan</option>
 
-<option value="Trenggalek">Trenggalek</option>
-<option value="Tulungagung">Tulungagung</option>
-<option value="Blitar">Blitar</option>
-<option value="Kediri">Kediri</option>
-<option value="Ponorogo">Ponorogo</option>
-<option value="Pacitan">Pacitan</option>
-<option value="Madiun">Madiun</option>
-<option value="Nganjuk">Nganjuk</option>
-<option value="Malang">Malang</option>
-<option value="Batu">Batu</option>
-<option value="Mojokerto">Mojokerto</option>
-<option value="Surabaya">Surabaya</option>
-<option value="Sidoarjo">Sidoarjo</option>
-<option value="Gresik">Gresik</option>
-<option value="Lamongan">Lamongan</option>
-<option value="Bojonegoro">Bojonegoro</option>
-<option value="Tuban">Tuban</option>
-<option value="Probolinggo">Probolinggo</option>
-<option value="Pasuruan">Pasuruan</option>
-<option value="Lumajang">Lumajang</option>
-<option value="Jember">Jember</option>
-<option value="Bondowoso">Bondowoso</option>
-<option value="Situbondo">Situbondo</option>
-<option value="Banyuwangi">Banyuwangi</option>
+</div>
 
-</select></div><div class="cart-card"><h3>🎟 Voucher</h3><input
+<div class="form-group">
+
+<label>
+
+Kota Tujuan
+
+</label>
+
+<select
+
+id="kotaTujuan">
+
+<option value="">
+
+Pilih Kota
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+📦 Produk Checkout
+
+</h2>
+
+<div
+id="checkoutProduk"
+class="checkout-product-list">
+
+<div class="loading-card">
+
+Memuat produk...
+
+</div>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+🎟 Voucher
+
+</h2>
+
+<div class="voucher-box">
+
+<input
+
 type="text"
+
 id="kodeVoucher"
+
 placeholder="Masukkan kode voucher">
 
 <button
+
 id="cekVoucher"
-class="btn-secondary">
 
-Gunakan Voucher
+class="btn btn-secondary">
 
-</button><p id="voucherInfo">
-Belum menggunakan voucher
-</p></div><div class="cart-card"><h3>📦 Ringkasan Belanja</h3><p id="subtotalInfo">
-Subtotal : Rp 0
-</p><p id="ongkirInfo">
-Ongkir : Rp 0
-</p><p id="diskonInfo">
-Diskon : Rp 0
-</p><hr><h2 id="totalBayar">
-Total : Rp 0
-</h2></div><div class="dashboard-card"><h3>💰 Pembagian Pendapatan</h3><p>
-UMKM :
+Gunakan
+
+</button>
+
+</div>
+
+<p
+id="voucherInfo">
+
+Belum menggunakan voucher.
+
+</p>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+🚚 Pengiriman
+
+</h2>
+
+<div class="form-group">
+
+<label>
+
+Pilih Kurir
+
+</label>
+
+<select
+id="kurir">
+
+<option value="JNE">
+
+JNE
+
+</option>
+
+<option value="J&T">
+
+J&T Express
+
+</option>
+
+<option value="SiCepat">
+
+SiCepat
+
+</option>
+
+<option value="POS">
+
+POS Indonesia
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Catatan Untuk Penjual
+
+</label>
+
+<textarea
+
+id="catatan"
+
+rows="4"
+
+placeholder="Contoh: Tolong dikemas dengan aman.">
+
+</textarea>
+
+</div>
+
+</div>
+<div class="checkout-summary">
+
+<div class="summary-card">
+
+<h2>
+
+💰 Ringkasan Pembayaran
+
+</h2>
+
+<div class="summary-item">
+
+<span>
+
+Subtotal
+
+</span>
+
+<b id="subtotalInfo">
+
+Rp 0
+
+</b>
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Ongkir
+
+</span>
+
+<b id="ongkirInfo">
+
+Rp 0
+
+</b>
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Diskon
+
+</span>
+
+<b id="diskonInfo">
+
+Rp 0
+
+</b>
+
+</div>
+
+<hr>
+
+<div class="summary-total">
+
+<span>
+
+Total Bayar
+
+</span>
+
+<h2 id="totalBayar">
+
+Rp 0
+
+</h2>
+
+</div>
+<div class="income-box">
+
+<h3>
+
+📊 Pembagian Pendapatan
+
+</h3>
+
+<div class="summary-item">
+
+<span>
+
+UMKM
+
+</span>
+
 <b id="pendapatanUmkm">
+
 Rp 0
+
 </b>
-</p><p>
-Affiliate :
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Affiliate
+
+</span>
+
 <b id="komisiAffiliate">
+
 Rp 0
+
 </b>
-</p><p>
-Platform :
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Platform
+
+</span>
+
 <b id="pendapatanPlatform">
+
 Rp 0
+
 </b>
-</p></div><button
+
+</div>
+
+</div>
+<button
+
 id="checkoutBtn"
-class="btn-primary">
 
-Buat Pesanan
+class="btn btn-primary">
 
-</button><br><br>
+💳 Buat Pesanan
+
+</button>
 
 <a
+
 href="cart.html"
-class="btn-secondary">
+
+class="btn btn-secondary">
 
 ⬅ Kembali ke Keranjang
 
 </a>
 
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-query,
-where,
-serverTimestamp,
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);
-
-await auth.authStateReady();
-
-const cart =
-JSON.parse(
-localStorage.getItem("cart")
-) || [];
-console.log(cart);
-if(cart.length === 0){
-
-alert("Keranjang kosong");
-
-window.location.href =
-"cart.html";
-
-}
-const uidUmkmPertama =
-cart[0]?.uidUmkm ||
-cart[0]?.uid;
-const tokoSnap =
-await getDoc(
-doc(
-db,
-"users",
-uidUmkmPertama
-)
-);
-
-const tokoData =
-tokoSnap.exists()
-? tokoSnap.data()
-: {};
-const kotaAsal =
-tokoData.kota || "";
-alert("KOTA ASAL = " + kotaAsal);
-const bedaToko =
-cart.some(
-item =>
-(item.uidUmkm || item.uid)
-!== uidUmkmPertama
-);
-
-if(bedaToko){
-
-alert(
-"Saat ini checkout hanya bisa untuk produk dari 1 toko"
-);
-
-window.location.href =
-"cart.html";
-
-throw new Error(
-"Multi toko belum didukung"
-);
-
-}
-
-let ongkir = 0;
-let diskon = 0;
-let voucherDipakai = null;
-const tarifOngkir = {
-
-// Trenggalek
-"Trenggalek-Trenggalek":5000,
-"Trenggalek-Tulungagung":10000,
-"Trenggalek-Blitar":15000,
-"Trenggalek-Kediri":16000,
-"Trenggalek-Ponorogo":12000,
-"Trenggalek-Pacitan":15000,
-"Trenggalek-Madiun":18000,
-"Trenggalek-Nganjuk":18000,
-"Trenggalek-Malang":18000,
-"Trenggalek-Batu":20000,
-"Trenggalek-Mojokerto":22000,
-"Trenggalek-Surabaya":25000,
-"Trenggalek-Sidoarjo":25000,
-"Trenggalek-Gresik":28000,
-"Trenggalek-Lamongan":28000,
-"Trenggalek-Bojonegoro":28000,
-"Trenggalek-Tuban":30000,
-"Trenggalek-Probolinggo":25000,
-"Trenggalek-Pasuruan":23000,
-"Trenggalek-Lumajang":28000,
-"Trenggalek-Jember":28000,
-"Trenggalek-Bondowoso":30000,
-"Trenggalek-Situbondo":32000,
-"Trenggalek-Banyuwangi":35000,
-
-// Tulungagung
-"Tulungagung-Tulungagung":5000,
-"Tulungagung-Trenggalek":10000,
-"Tulungagung-Blitar":10000,
-"Tulungagung-Kediri":12000,
-"Tulungagung-Ponorogo":15000,
-"Tulungagung-Pacitan":18000,
-"Tulungagung-Madiun":18000,
-"Tulungagung-Nganjuk":15000,
-"Tulungagung-Malang":18000,
-"Tulungagung-Batu":18000,
-"Tulungagung-Mojokerto":20000,
-"Tulungagung-Surabaya":22000,
-"Tulungagung-Sidoarjo":22000,
-"Tulungagung-Gresik":25000,
-"Tulungagung-Lamongan":25000,
-"Tulungagung-Bojonegoro":25000,
-"Tulungagung-Tuban":28000,
-"Tulungagung-Probolinggo":22000,
-"Tulungagung-Pasuruan":20000,
-"Tulungagung-Lumajang":25000,
-"Tulungagung-Jember":25000,
-"Tulungagung-Bondowoso":28000,
-"Tulungagung-Situbondo":30000,
-"Tulungagung-Banyuwangi":32000
-
-};
-
-const subtotal =
-cart.reduce(
-(total,item)=>
-total +
-(
-Number(item.harga || 0) *
-Number(item.qty || 1)
-),
-0
-);
-
-function updateTotal(){
-
-const total =
-subtotal +
-ongkir -
-diskon;
-
-document.getElementById(
-"subtotalInfo"
-).innerText =
-"Subtotal : Rp " +
-subtotal.toLocaleString("id-ID");
-
-document.getElementById(
-"ongkirInfo"
-).innerText =
-"Ongkir : Rp " +
-ongkir.toLocaleString("id-ID");
-
-document.getElementById(
-"diskonInfo"
-).innerText =
-"Diskon : Rp " +
-diskon.toLocaleString("id-ID");
-
-document.getElementById(
-"totalBayar"
-).innerText =
-"Total : Rp " +
-total.toLocaleString("id-ID");
-
-document.getElementById(
-"pendapatanUmkm"
-).innerText =
-"Rp " +
-Math.round(
-subtotal * 0.90
-).toLocaleString("id-ID");
-
-document.getElementById(
-"komisiAffiliate"
-).innerText =
-"Rp " +
-Math.round(
-subtotal * 0.05
-).toLocaleString("id-ID");
-
-document.getElementById(
-"pendapatanPlatform"
-).innerText =
-"Rp " +
-Math.round(
-subtotal * 0.05
-).toLocaleString("id-ID");
-
-}
-
-updateTotal();
-
-
-document
-.getElementById("kotaTujuan")
-.addEventListener(
-"change",
-(e)=>{
-
-const key =
-`${tokoData.kota}-${e.target.value}`;
-
-const totalBerat =
-cart.reduce(
-(total,item)=>
-total +
-(
-Number(item.berat || 0) *
-Number(item.qty || 1)
-),
-0
-);
-
-const tarif =
-tarifOngkir[key] || 25000;
-
-alert("KEY = " + key);
-alert("BERAT = " + totalBerat);
-alert("TARIF = " + tarif);
-ongkir =
-Math.ceil(
-totalBerat / 1000
-) * tarif;
-
-updateTotal();
-
-}
-);
-
-document
-.getElementById("cekVoucher")
-.addEventListener(
-"click",
-async()=>{
-
-const kode =
-document.getElementById(
-"kodeVoucher"
-).value.trim();
-
-if(!kode) return;
-
-const voucherSnap =
-await getDocs(
-
-query(
-collection(db,"voucher"),
-where("kode","==",kode),
-where("aktif","==",true)
-)
-
-);
-
-if(voucherSnap.empty){
-
-alert(
-"Voucher tidak ditemukan"
-);
-
-return;
-
-}
-
-const voucher =
-voucherSnap.docs[0].data();
-
-diskon =
-Math.floor(
-subtotal *
-(Number(voucher.diskon || 0) / 100)
-);
-
-voucherDipakai =
-voucher.kode;
-
-document.getElementById(
-"voucherInfo"
-).innerText =
-"Voucher aktif : " +
-voucher.kode;
-
-updateTotal();
-
-alert(
-"Voucher berhasil digunakan"
-);
-
-}
-);
-
-document
-.getElementById("checkoutBtn")
-.addEventListener(
-"click",
-async()=>{
-
-const btn =
-document.getElementById(
-"checkoutBtn"
-);
-
-try{
-
-if(!auth.currentUser){
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
-const nama =
-document.getElementById(
-"namaPembeli"
-).value.trim();
-
-const whatsapp =
-document.getElementById(
-"whatsappPembeli"
-).value.trim();
-
-const alamat =
-document.getElementById(
-"alamatPembeli"
-).value.trim();
-
-const kota =
-document.getElementById(
-"kotaTujuan"
-).value;
-
-if(
-!nama ||
-!whatsapp ||
-!alamat
-){
-
-alert(
-"Lengkapi data pembeli"
-);
-
-return;
-
-}
-
-if(
-!/^(08|628)[0-9]{8,13}$/.test(whatsapp)
-){
-
-alert(
-"Nomor WhatsApp tidak valid"
-);
-
-return;
-
-}
-
-if(!kota){
-
-alert(
-"Pilih kota tujuan"
-);
-
-return;
-
-}
-
-btn.disabled = true;
-
-btn.innerText =
-"Membuat Pesanan...";
-
-const total =
-Math.max(
-0,
-subtotal + ongkir - diskon
-);
-
-const affiliateUid =
-localStorage.getItem("affiliate") || "";
-const komisiAffiliate =
-affiliateUid
-? Math.round(subtotal * 0.05)
-: 0;
-
-const pendapatanPlatform =
-affiliateUid
-? Math.round(subtotal * 0.05)
-: Math.round(subtotal * 0.10);
-const docRef =
-await addDoc(
-collection(db,"pesanan"),
-{
-
-uidPembeli:
-auth.currentUser.uid,
-
-uidUmkm:
-cart[0]?.uidUmkm ||
-cart[0]?.uid ||
-"",
-
-namaUmkm:
-cart[0]?.namaToko ||
-"",
-
-produkId:
-cart[0]?.id || "",
-
-produk:
-cart[0]?.namaProduk || "",
-
-namaPembeli:
-nama,
-
-whatsapp:
-whatsapp,
-
-alamat:
-alamat,
-
-kota:
-kota,
-
-provinsiAsal:
-tokoData.provinsi || "",
-
-kotaAsal:
-tokoData.kota || "",
-
-items:
-cart,
-
-jumlahItem:
-cart.reduce(
-(total,item)=>
-total + Number(item.qty || 1),
-0
-),
-totalBerat:
-cart.reduce(
-(total,item)=>
-total +
-(
-Number(item.berat || 0) *
-Number(item.qty || 1)
-),
-0
-),
-subtotal:
-subtotal,
-
-ongkir:
-ongkir,
-
-diskon:
-diskon,
-
-voucher:
-voucherDipakai || "",
-
-affiliateUid:
-affiliateUid || "",
-
-pendapatanUmkm:
-Math.round(subtotal * 0.90),
-
-komisiAffiliate:
-komisiAffiliate,
-
-pendapatanPlatform:
-pendapatanPlatform,
-
-resi:"",
-
-status:
-"Belum Bayar",
-
-statusUmkm:
-"Pesanan Baru",
-
-statusPembayaran:
-"Belum Bayar",
-
-total:
-total,
-
-totalBayar:
-total,
-
-createdAt:
-serverTimestamp()
-
-}
-);
-
-localStorage.removeItem(
-"cart"
-);
-if (affiliateUid) {
-
-    // Simpan komisi affiliate
-    await addDoc(collection(db, "affiliate_commissions"), {
-        affiliateUid: affiliateUid,
-        pesananId: docRef.id,
-        namaProduk: cart[0]?.namaProduk || "",
-        klik: 1,
-        penjualan: 1,
-        komisi: komisiAffiliate,
-        status: "Pending",
-        createdAt: serverTimestamp()
-    });
-
-    // Tambah data klik affiliate
-    await addDoc(collection(db, "affiliate_clicks"), {
-        affiliateUid: affiliateUid,
-        pesananId: docRef.id,
-        produkId: cart[0]?.id || "",
-        createdAt: serverTimestamp()
-    });
-
-}
-alert(
-"Pesanan berhasil dibuat"
-);
-
-window.location.href =
-"upload-bukti.html?id=" +
-docRef.id;
-
-}
-catch(error){
-
-console.error(error);
-
-alert(
-error.message
-);
-
-btn.disabled = false;
-
-btn.innerText =
-"Buat Pesanan";
-
-}
-
-}
-);
-
-</script></section></body>
+</div>
+
+</div>
+
+</section>
+<div
+id="emptyCheckout"
+class="empty-state"
+style="display:none;">
+
+<div class="empty-icon">
+
+🛒
+
+</div>
+
+<h2>
+
+Tidak Ada Produk
+
+</h2>
+
+<p>
+
+Silakan tambahkan produk ke keranjang terlebih dahulu.
+
+</p>
+
+<a
+
+href="produk.html"
+
+class="btn btn-primary">
+
+Mulai Belanja
+
+</a>
+
+</div>
+<template id="loadingCheckout">
+
+<div class="checkout-item skeleton">
+
+<div class="image-skeleton">
+
+</div>
+
+<div class="content-skeleton">
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+</div>
+
+</div>
+
+</template>
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-content">
+
+<div>
+
+<h3>
+
+🌿 PasarNusa
+
+</h3>
+
+<p>
+
+Marketplace UMKM Indonesia yang membantu produk lokal menjangkau seluruh Indonesia.
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Menu
+
+</h4>
+
+<ul>
+
+<li>
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+</li>
+
+<li>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+</li>
+
+<li>
+
+<a href="cart.html">
+
+Keranjang
+
+</a>
+
+</li>
+
+<li>
+
+<a href="checkout.html">
+
+Checkout
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<div>
+
+<h4>
+
+Bantuan
+
+</h4>
+
+<ul>
+
+<li>
+
+<a href="faq.html">
+
+FAQ
+
+</a>
+
+</li>
+
+<li>
+
+<a href="kontak.html">
+
+Kontak
+
+</a>
+
+</li>
+
+<li>
+
+<a href="kebijakan.html">
+
+Privasi
+
+</a>
+
+</li>
+
+<li>
+
+<a href="syarat.html">
+
+Syarat
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+<button
+
+id="backTop"
+
+class="back-top"
+
+aria-label="Kembali ke Atas">
+
+↑
+
+</button>
+<script src="script.js"></script>
+
+<script
+type="module"
+src="checkout.js">
+
+</script>
+
+</body>
+
 </html>
