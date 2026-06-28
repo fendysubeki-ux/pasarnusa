@@ -1,106 +1,365 @@
 <!DOCTYPE html>
+
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Beri Ulasan - PasarNusa</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Review Produk | PasarNusa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta
+name="description"
+content="Berikan rating dan review produk">
 
-<link rel="stylesheet" href="style.css">
+<meta
+name="theme-color"
+content="#16a34a">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="review.css">
 
 </head>
+
 <body>
+<header class="navbar">
 
-<section class="dashboard">
+<div class="container">
 
-<h1>⭐ Beri Ulasan Produk</h1>
+<div class="navbar-content">
 
-<p>
-Bagikan pengalaman Anda setelah menerima produk.
-</p>
+<a
+href="index.html"
+class="logo">
 
-<div class="form-card">
+🌿
 
-<img
-id="gambarProduk"
-src="https://picsum.photos/400/300"
-style="
-width:100%;
-max-width:300px;
-border-radius:12px;
-margin:auto;
-display:block;
-">
+<span>
 
-<h2 id="namaProduk">
-Memuat Produk...
-</h2>
+PasarNusa
 
-<p id="namaToko">
-Memuat UMKM...
-</p>
+</span>
 
-<br>
+</a>
 
-<h3>Pilih Rating</h3>
+<nav class="navbar-menu">
 
-<div
-style="
-display:flex;
-gap:10px;
-justify-content:center;
-font-size:35px;
-cursor:pointer;
-">
+<a href="index.html">
 
-<span class="star" data-rating="1">⭐</span>
-<span class="star" data-rating="2">⭐</span>
-<span class="star" data-rating="3">⭐</span>
-<span class="star" data-rating="4">⭐</span>
-<span class="star" data-rating="5">⭐</span>
+Beranda
 
-</div>
+</a>
 
-<p
-id="ratingText"
-style="
-text-align:center;
-margin-top:10px;
-font-weight:700;
-">
+<a href="pesanan-saya.html">
 
-Belum memilih rating
+Pesanan Saya
 
-</p>
+</a>
 
-<br>
+<a
+href="review.html"
+class="active">
 
-<textarea
-id="ulasan"
-rows="6"
-placeholder="Tulis pengalaman Anda menggunakan produk ini..."
-></textarea>
+Review
 
-<br><br>
+</a>
+
+</nav>
+
+<div class="navbar-action">
 
 <button
-id="btnKirim"
-class="btn-primary">
+id="themeToggle"
+class="btn btn-secondary">
 
-⭐ Kirim Ulasan
+🌙
 
 </button>
 
-<br><br>
+<a
+href="profil.html"
+class="btn btn-primary">
+
+👤 Akun
+
+</a>
+
+</div>
+
+<button
+id="menuToggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+⭐ Review Produk
+
+</div>
+
+<h1>
+
+Bagikan Pengalaman Anda
+
+</h1>
+
+<p>
+
+Review Anda membantu pelanggan lain menemukan produk UMKM terbaik.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="breadcrumb">
+
+<div class="container">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<span>
+
+/</span>
+
+<a href="pesanan-saya.html">
+
+Pesanan Saya
+
+</a>
+
+<span>
+
+/</span>
+
+<span>
+
+Review Produk
+
+</span>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="review-layout">
+
+<div class="review-content">
+<div class="form-card">
+
+<h2>
+
+🛍 Produk
+
+</h2>
+
+<div
+id="produkContainer">
+
+<div class="loading-card">
+
+Memuat produk...
+
+</div>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+⭐ Rating
+
+</h2>
+
+<div
+id="ratingBox"
+class="rating-box">
+
+<span class="star" data-rating="1">★</span>
+
+<span class="star" data-rating="2">★</span>
+
+<span class="star" data-rating="3">★</span>
+
+<span class="star" data-rating="4">★</span>
+
+<span class="star" data-rating="5">★</span>
+
+</div>
+
+<p id="ratingText">
+
+Pilih rating Anda
+
+</p>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+📝 Tulis Review
+
+</h2>
+
+<div class="form-group">
+
+<label>
+
+Bagaimana pengalaman Anda?
+
+</label>
+
+<textarea
+
+id="reviewText"
+
+rows="6"
+
+placeholder="Ceritakan kualitas produk, pelayanan penjual, pengiriman, atau pengalaman Anda menggunakan produk ini...">
+
+</textarea>
+
+<small>
+
+Minimal 10 karakter.
+
+</small>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+📷 Foto Review
+
+</h2>
+
+<div class="upload-box">
+
+<input
+
+type="file"
+
+id="fotoReview"
+
+accept="image/png,image/jpeg,image/webp"
+
+multiple>
+
+<label
+
+for="fotoReview"
+
+class="upload-area">
+
+<div class="upload-icon">
+
+📸
+
+</div>
+
+<h3>
+
+Tambah Foto
+
+</h3>
+
+<p>
+
+Opsional • Maksimal 5 foto
+
+</p>
+
+</label>
+
+</div>
+
+<div
+
+id="previewFoto"
+
+class="preview-grid">
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+✅ Selesai
+
+</h2>
+
+<button
+
+id="kirimReview"
+
+class="btn btn-primary">
+
+⭐ Kirim Review
+
+</button>
 
 <a
+
 href="pesanan-saya.html"
-class="btn-secondary">
+
+class="btn btn-secondary">
 
 ⬅ Kembali
 
@@ -108,270 +367,245 @@ class="btn-secondary">
 
 </div>
 
+</div>
+<div class="review-summary">
+
+<div class="summary-card">
+
+<h2>
+
+📊 Ringkasan
+
+</h2>
+
+<div class="summary-item">
+
+<span>
+
+Produk
+
+</span>
+
+<b id="summaryProduk">
+
+-
+
+</b>
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Toko
+
+</span>
+
+<b id="summaryToko">
+
+-
+
+</b>
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Rating
+
+</span>
+
+<b id="summaryRating">
+
+0 / 5
+
+</b>
+
+</div>
+
+<p class="summary-note">
+
+Review yang jujur akan membantu pembeli lain memilih produk yang tepat.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
 </section>
+<div
 
-<script type="module">
+id="emptyReview"
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+class="empty-state"
 
-import {
-getFirestore,
-doc,
-getDoc,
-addDoc,
-collection,
-query,
-where,
-getDocs,
-updateDoc,
-serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+style="display:none;">
 
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+<div class="empty-icon">
 
-const firebaseConfig = {
+⭐
 
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
+</div>
 
-};
+<h2>
 
-const app = initializeApp(firebaseConfig);
+Produk Tidak Ditemukan
 
-const db = getFirestore(app);
+</h2>
 
-const auth = getAuth(app);
+<p>
 
-await auth.authStateReady();
+Produk atau pesanan yang akan direview tidak tersedia.
 
-if(!auth.currentUser){
+</p>
 
-window.location.href = "login.html";
+<a
 
-}
+href="pesanan-saya.html"
 
-const produkId =
-new URLSearchParams(
-window.location.search
-).get("id");
+class="btn btn-primary">
 
-if(!produkId){
+Kembali ke Pesanan
 
-alert("Produk tidak ditemukan");
+</a>
 
-window.location.href =
-"pesanan-saya.html";
+</div>
+<template id="loadingReview">
 
-}
+<div class="form-card skeleton">
 
-const produkRef =
-doc(db,"produk",produkId);
+<div class="image-skeleton">
 
-const produkSnap =
-await getDoc(produkRef);
+</div>
 
-if(!produkSnap.exists()){
+<div class="content-skeleton">
 
-alert("Produk tidak ditemukan");
+<div></div>
 
-window.location.href =
-"pesanan-saya.html";
+<div></div>
 
-}
+<div></div>
 
-const produk =
-produkSnap.data();
+</div>
 
-document.getElementById(
-"namaProduk"
-).innerText =
-produk.namaProduk || "-";
+</div>
 
-document.getElementById(
-"namaToko"
-).innerText =
-produk.namaToko || "UMKM";
+</template>
+<footer class="footer">
 
-document.getElementById(
-"gambarProduk"
-).src =
-produk.gambar?.[0] ||
-"https://picsum.photos/400/300";
+<div class="container">
 
-let rating = 0;
+<div class="footer-content">
 
-document
-.querySelectorAll(".star")
-.forEach((star)=>{
+<div>
 
-star.addEventListener(
-"click",
-()=>{
+<h3>
 
-rating =
-Number(
-star.dataset.rating
-);
+🌿 PasarNusa
 
-document.getElementById(
-"ratingText"
-).innerText =
-rating + " / 5 Bintang";
+</h3>
 
-});
+<p>
 
-});
+Marketplace UMKM Indonesia yang membantu produk lokal berkembang hingga ke seluruh Indonesia.
 
-document
-.getElementById("btnKirim")
-.addEventListener(
-"click",
-async()=>{
+</p>
 
-const ulasan =
-document.getElementById(
-"ulasan"
-).value.trim();
+</div>
 
-if(rating === 0){
+<div>
 
-alert(
-"Pilih rating terlebih dahulu"
-);
+<h4>
 
-return;
+Menu
 
-}
+</h4>
 
-if(ulasan.length < 10){
+<ul>
 
-alert(
-"Minimal 10 karakter"
-);
+<li><a href="index.html">Beranda</a></li>
 
-return;
+<li><a href="produk.html">Produk</a></li>
 
-}
+<li><a href="pesanan-saya.html">Pesanan Saya</a></li>
 
-try{
+<li><a href="review.html">Review</a></li>
 
-const cekUlasan =
-await getDocs(
-query(
-collection(db,"ulasan"),
-where(
-"uid",
-"==",
-auth.currentUser.uid
-),
-where(
-"produkId",
-"==",
-produkId
-)
-)
-);
+</ul>
 
-if(!cekUlasan.empty){
+</div>
 
-alert(
-"Anda sudah memberi ulasan"
-);
+<div>
 
-return;
+<h4>
 
-}
+Bantuan
 
-await addDoc(
-collection(db,"ulasan"),
-{
+</h4>
 
-uid:
-auth.currentUser.uid,
+<ul>
 
-produkId:
-produkId,
+<li><a href="faq.html">FAQ</a></li>
 
-nama:
-auth.currentUser.displayName ||
-"Pembeli",
+<li><a href="kontak.html">Kontak</a></li>
 
-rating:
-rating,
+<li><a href="kebijakan.html">Privasi</a></li>
 
-ulasan:
-ulasan,
+<li><a href="syarat.html">Syarat</a></li>
 
-createdAt:
-serverTimestamp()
+</ul>
 
-}
-);
+</div>
 
-const totalReview =
-Number(
-produk.totalReview || 0
-) + 1;
+</div>
 
-const totalRating =
-(
-Number(produk.rating || 0)
-*
-Number(produk.totalReview || 0)
-)
-+
-rating;
+<div class="footer-bottom">
 
-const ratingBaru =
-(
-totalRating /
-totalReview
-).toFixed(1);
+<p>
 
-await updateDoc(
-produkRef,
-{
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
 
-rating:
-Number(ratingBaru),
+</p>
 
-totalReview:
-totalReview
+<p>
 
-}
-);
+Dibangun ❤️ untuk UMKM Indonesia.
 
-alert(
-"Ulasan berhasil dikirim"
-);
+</p>
 
-window.location.href =
-"produk-detail.html?id=" +
-produkId;
+</div>
 
-}
-catch(error){
+</div>
 
-console.error(error);
+</footer>
+<button
 
-alert(
-error.message
-);
+id="backTop"
 
-}
+class="back-top"
 
-});
+aria-label="Kembali ke Atas">
+
+↑
+
+</button>
+
+<script src="script.js"></script>
+
+<script
+
+type="module"
+
+src="review.js">
 
 </script>
 
 </body>
+
 </html>
