@@ -813,6 +813,22 @@ statusPembayaran:
 
 "Belum Bayar",
 
+paymentMethod:"transfer",
+
+paymentStatus:"Belum Dibayar",
+
+paymentToken:"",
+
+paymentUrl:"",
+
+paymentReference:"",
+
+paidAt:null,
+
+expiredAt:null,
+
+updatedAt:serverTimestamp()
+
 createdAt:
 
 serverTimestamp()
@@ -831,7 +847,7 @@ setTimeout(()=>{
 
 window.location.href=
 
-`upload-bukti.html?id=${docRef.id}`;
+`payment.html?id=${docRef.id}`;
 
 },1000);
 
