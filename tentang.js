@@ -1,318 +1,139 @@
-// ======================================
-// PASARNUSA TENTANG
-// tentang.js
-// ======================================
+// =============================================================================
+// PasarNusa — tentang.js
+// Mengambil data produk dari Firestore dan menampilkan statistik halaman Tentang.
+// =============================================================================
 
-// Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-
-getFirestore,
-
-collection,
-
-getDocs
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-// ======================================
-// FIREBASE
-// ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+// -----------------------------------------------------------------------------
+// Konfigurasi Firebase
+// -----------------------------------------------------------------------------
+const firebaseConfig = {
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952",
 };
 
-const app=
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
 
-initializeApp(firebaseConfig);
+// -----------------------------------------------------------------------------
+// Referensi elemen DOM
+// Hero stats (atas halaman) dan ringkasan stats (seksi Angka)
+// -----------------------------------------------------------------------------
+const els = {
+  totalUmkm:   document.getElementById("totalUmkm"),
+  totalProduk:  document.getElementById("totalProduk"),
+  totalWilayah: document.getElementById("totalWilayah"),
+  statUmkm:    document.getElementById("statUmkm"),
+  statProduk:   document.getElementById("statProduk"),
+  statWilayah:  document.getElementById("statWilayah"),
+};
 
-const db=
-
-getFirestore(app);
-
-
-// ======================================
-// ELEMENT
-// ======================================
-
-const totalUmkm=
-
-document.getElementById(
-"totalUmkm"
-);
-
-const totalProduk=
-
-document.getElementById(
-"totalProduk"
-);
-
-const totalWilayah=
-
-document.getElementById(
-"totalWilayah"
-);
-
-const statUmkm=
-
-document.getElementById(
-"statUmkm"
-);
-
-const statProduk=
-
-document.getElementById(
-"statProduk"
-);
-
-const statWilayah=
-
-document.getElementById(
-"statWilayah"
-);
-
-
-// ======================================
-// VARIABLE
-// ======================================
-
-let semuaProduk=[];
-// ======================================
-// START
-// ======================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-()=>{
-
-loadStatistik();
-
-});
-// ======================================
-// LOAD DATA
-// ======================================
-
-async function loadStatistik(){
-
-try{
-
-const snapshot=
-
-await getDocs(
-
-collection(db,"produk")
-
-);
-
-semuaProduk=[];
-
-snapshot.forEach(doc=>{
-
-const data=doc.data();
-
-if(data.status!=="Aktif") return;
-
-if(Number(data.stok||0)<=0) return;
-
-semuaProduk.push(data);
-
+// -----------------------------------------------------------------------------
+// Inisialisasi halaman
+// -----------------------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  setFooterYear();
+  loadStatistik();
 });
 
-updateStatistik();
+// Tandai halaman sudah selesai dimuat (untuk animasi CSS fade-in)
+document.body.classList.add("page-loaded");
 
-}catch(error){
+// -----------------------------------------------------------------------------
+// Ambil & proses data produk dari Firestore
+// Hanya produk dengan status "Aktif" dan stok > 0 yang dihitung.
+// -----------------------------------------------------------------------------
+async function loadStatistik() {
+  try {
+    const snapshot = await getDocs(collection(db, "produk"));
 
-console.error(error);
+    const produkAktif = [];
 
-showError();
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const stokValid = Number(data.stok ?? 0) > 0;
 
+      if (data.status !== "Aktif" || !stokValid) return;
+
+      produkAktif.push(data);
+    });
+
+    updateStatistik(produkAktif);
+  } catch (error) {
+    console.error("[PasarNusa] Gagal memuat statistik:", error);
+    showError();
+  }
 }
 
-}
-// ======================================
-// UPDATE STATISTIK
-// ======================================
+// -----------------------------------------------------------------------------
+// Hitung & tampilkan statistik dengan animasi angka
+// -----------------------------------------------------------------------------
+function updateStatistik(produk) {
+  const umkm    = new Set(produk.map((p) => p.uid).filter(Boolean));
+  const wilayah = new Set(produk.map((p) => p.provinsi).filter(Boolean));
 
-function updateStatistik(){
+  const stats = {
+    produk:  produk.length,
+    umkm:    umkm.size,
+    wilayah: wilayah.size,
+  };
 
-const umkm=new Set();
-
-const wilayah=new Set();
-
-semuaProduk.forEach(item=>{
-
-if(item.uid){
-
-umkm.add(item.uid);
-
-}
-
-if(item.provinsi){
-
-wilayah.add(item.provinsi);
-
+  animateNumber(els.totalProduk,  stats.produk);
+  animateNumber(els.totalUmkm,    stats.umkm);
+  animateNumber(els.totalWilayah, stats.wilayah);
+  animateNumber(els.statProduk,   stats.produk);
+  animateNumber(els.statUmkm,     stats.umkm);
+  animateNumber(els.statWilayah,  stats.wilayah);
 }
 
-});
+// -----------------------------------------------------------------------------
+// Animasi count-up dari 0 ke target
+// Durasi tetap ±1 detik terlepas dari besarnya angka target.
+// -----------------------------------------------------------------------------
+function animateNumber(element, target) {
+  if (!element || target <= 0) {
+    if (element) element.textContent = target;
+    return;
+  }
 
-animateNumber(
-totalProduk,
-semuaProduk.length
-);
+  const DURATION_MS  = 1000;
+  const INTERVAL_MS  = 20;
+  const steps        = DURATION_MS / INTERVAL_MS;           // ~50 langkah
+  const increment    = Math.max(1, Math.ceil(target / steps));
 
-animateNumber(
-totalUmkm,
-umkm.size
-);
+  let current = 0;
 
-animateNumber(
-totalWilayah,
-wilayah.size
-);
+  const timer = setInterval(() => {
+    current += increment;
 
-animateNumber(
-statProduk,
-semuaProduk.length
-);
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
 
-animateNumber(
-statUmkm,
-umkm.size
-);
-
-animateNumber(
-statWilayah,
-wilayah.size
-);
-
+    element.textContent = current.toLocaleString("id-ID");  // format angka lokal
+  }, INTERVAL_MS);
 }
 
-// ======================================
-// COUNT UP
-// ======================================
-
-function animateNumber(element,target){
-
-if(!element)return;
-
-let current=0;
-
-const increment=
-
-Math.max(
-
-1,
-
-Math.ceil(target/50)
-
-);
-
-const timer=
-
-setInterval(()=>{
-
-current+=increment;
-
-if(current>=target){
-
-current=target;
-
-clearInterval(timer);
-
+// -----------------------------------------------------------------------------
+// Tampilkan tanda "-" di semua elemen statistik saat terjadi error
+// -----------------------------------------------------------------------------
+function showError() {
+  Object.values(els).forEach((el) => {
+    if (el) el.textContent = "-";
+  });
 }
 
-element.innerText=current;
-
-},20);
-
+// -----------------------------------------------------------------------------
+// Perbarui tahun di footer secara otomatis
+// -----------------------------------------------------------------------------
+function setFooterYear() {
+  const elTahun = document.querySelector(".footer-bottom strong");
+  if (elTahun) elTahun.textContent = new Date().getFullYear();
 }
-// ======================================
-// ERROR
-// ======================================
-
-function showError(){
-
-if(totalProduk){
-
-totalProduk.innerText="-";
-
-}
-
-if(totalUmkm){
-
-totalUmkm.innerText="-";
-
-}
-
-if(totalWilayah){
-
-totalWilayah.innerText="-";
-
-}
-
-if(statProduk){
-
-statProduk.innerText="-";
-
-}
-
-if(statUmkm){
-
-statUmkm.innerText="-";
-
-}
-
-if(statWilayah){
-
-statWilayah.innerText="-";
-
-}
-
-}
-// ======================================
-// FOOTER YEAR
-// ======================================
-
-const tahun=
-
-document.querySelector(
-".footer-bottom strong"
-);
-
-if(tahun){
-
-tahun.innerText=
-
-new Date().getFullYear();
-
-}
-// ======================================
-// FADE PAGE
-// ======================================
-
-document.body.classList.add(
-
-"page-loaded"
-
-);
