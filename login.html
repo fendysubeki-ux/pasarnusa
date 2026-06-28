@@ -1,83 +1,426 @@
 <!DOCTYPE html>
+
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login PasarNusa</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="style.css">
+<title>Login | PasarNusa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta
+name="description"
+content="Masuk ke akun PasarNusa untuk berbelanja, mengelola UMKM, atau menjalankan affiliate.">
+
+<meta
+name="theme-color"
+content="#16a34a">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="login.css">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
 </head>
 
 <body>
+<header class="navbar">
 
-<section class="auth-section">
+<div class="container">
 
-<div class="register-card">
+<div class="navbar-content">
 
-<h1>🔐 Login PasarNusa</h1>
+<a
+href="index.html"
+class="logo">
 
-<p>
-Masuk untuk berbelanja, mengelola UMKM, atau menjalankan affiliate.
-</p>
+🌿
 
-<input
-type="email"
-id="email"
-placeholder="Masukkan Email">
+<span>PasarNusa</span>
 
-<input
-type="password"
-id="password"
-placeholder="Masukkan Password">
+</a>
+
+<nav class="navbar-menu">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<a href="kategori.html">
+
+Kategori
+
+</a>
+
+<a href="wilayah.html">
+
+Wilayah
+
+</a>
+
+<a href="tentang.html">
+
+Tentang
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
 
 <button
-id="btnLogin"
-class="btn-primary">
+id="themeToggle"
+class="btn btn-secondary">
 
-Masuk
+🌙
 
 </button>
 
-<div style="margin-top:20px;text-align:center;">
+<a
+href="login.html"
+class="btn btn-primary">
 
-<a href="reset-password.html">
-Lupa Password?
+Masuk
+
 </a>
 
-<br><br>
+</div>
 
-<a href="register-user.html">
-Daftar Pembeli
-</a>
+<button
+id="menuToggle"
+class="menu-toggle">
 
-|
+☰
 
-<a href="register.html">
-Daftar UMKM
-</a>
+</button>
 
-|
+</div>
 
-<a href="register-affiliate.html">
-Daftar Affiliate
-</a>
+</div>
 
-<br><br>
+</header>
+<section class="hero-page">
 
-<a href="index.html">
-⬅ Kembali ke Beranda
-</a>
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+🔐 Login PasarNusa
+
+</div>
+
+<h1>
+
+Selamat Datang Kembali
+
+</h1>
+
+<p>
+
+Masuk ke akun Anda untuk berbelanja, mengelola UMKM, atau menjalankan program affiliate PasarNusa.
+
+</p>
 
 </div>
 
 </div>
 
 </section>
+<section class="breadcrumb">
 
-<script type="module" src="login.js"></script>
+<div class="container">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<span>
+
+Login
+
+</span>
+
+</div>
+
+</section>
+<!-- ==========================================
+LOGIN
+========================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="login-wrapper">
+
+<div class="login-card">
+
+<div class="login-header">
+
+<div class="login-icon">
+
+🌿
+
+</div>
+
+<h2>
+
+Masuk ke Akun
+
+</h2>
+
+<p>
+
+Silakan masuk menggunakan email dan password yang telah didaftarkan.
+
+</p>
+
+</div>
+<form id="loginForm">
+
+<div class="form-group">
+
+<label for="email">
+
+Email
+
+</label>
+
+<input
+
+type="email"
+
+id="email"
+
+placeholder="Masukkan email"
+
+required>
+
+</div>
+
+<div class="form-group">
+
+<label for="password">
+
+Password
+
+</label>
+
+<div class="password-box">
+
+<input
+
+type="password"
+
+id="password"
+
+placeholder="Masukkan password"
+
+required>
+
+<button
+
+type="button"
+
+id="togglePassword"
+
+class="password-toggle">
+
+👁️
+
+</button>
+
+</div>
+
+</div>
+<div class="login-option">
+
+<label class="remember">
+
+<input
+
+type="checkbox"
+
+id="rememberMe">
+
+<span>
+
+Ingat Saya
+
+</span>
+
+</label>
+
+<a
+
+href="reset-password.html">
+
+Lupa Password?
+
+</a>
+
+</div>
+<button
+
+type="submit"
+
+id="btnLogin"
+
+class="btn btn-primary login-btn">
+
+Masuk
+
+</button>
+
+</form>
+<button
+
+type="submit"
+
+id="btnLogin"
+
+class="btn btn-primary login-btn">
+
+Masuk
+
+</button>
+
+</form>
+<div class="register-box">
+
+<p>
+
+Belum punya akun?
+
+</p>
+
+<div class="register-action">
+
+<a
+href="register-user.html"
+class="btn btn-secondary">
+
+👤 Daftar Pembeli
+
+</a>
+
+<a
+href="register.html"
+class="btn btn-secondary">
+
+🏪 Daftar UMKM
+
+</a>
+
+<a
+href="register-affiliate.html"
+class="btn btn-secondary">
+
+🤝 Daftar Affiliate
+
+</a>
+
+</div>
+
+</div>
+<div class="login-footer">
+
+<a
+href="index.html">
+
+← Kembali ke Beranda
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+<button
+
+id="backTop"
+
+class="back-top"
+
+aria-label="Kembali ke Atas">
+
+↑
+
+</button>
+<script src="script.js"></script>
+
+<script
+type="module"
+src="login.js">
+
+</script>
 
 </body>
+
 </html>
