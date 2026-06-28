@@ -1,261 +1,449 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Daftar Pembeli - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><meta name="description" content="Daftar akun pembeli PasarNusa">
-<meta name="theme-color" content="#16a34a"></head><body><div class="register-card"><h1>🛒 Daftar Pembeli</h1><p style="text-align:center;margin-bottom:20px;">
-Buat akun pembeli untuk mulai berbelanja produk UMKM Indonesia.
-</p><input
-type="text"
-id="nama"
-placeholder="Nama Lengkap">
+<!DOCTYPE html>
 
-<input
-type="email"
-id="email"
-placeholder="Email">
+<html lang="id">
 
-<input
-type="tel"
-id="whatsapp"
-placeholder="Nomor WhatsApp">
+<head>
 
-<input
-type="password"
-id="password"
-placeholder="Password (Minimal 6 Karakter)">
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Daftar Pembeli | PasarNusa</title>
+
+<meta
+name="description"
+content="Daftar akun pembeli PasarNusa dan mulai berbelanja produk UMKM Indonesia.">
+
+<meta
+name="theme-color"
+content="#16a34a">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="register-user.css">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
+</head>
+
+<body>
+<header class="navbar">
+
+<div class="container">
+
+<div class="navbar-content">
+
+<a
+href="index.html"
+class="logo">
+
+🌿
+
+<span>PasarNusa</span>
+
+</a>
+
+<nav class="navbar-menu">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<a href="kategori.html">
+
+Kategori
+
+</a>
+
+<a href="wilayah.html">
+
+Wilayah
+
+</a>
+
+<a href="tentang.html">
+
+Tentang
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
 
 <button
-id="btnDaftar"
-class="btn-primary">
+id="themeToggle"
+class="btn btn-secondary">
+
+🌙
+
+</button>
+
+<a
+href="login.html"
+class="btn btn-secondary">
+
+Masuk
+
+</a>
+
+<a
+href="register-user.html"
+class="btn btn-primary">
 
 Daftar
 
-</button><p style="text-align:center;margin-top:20px;">Sudah punya akun?
+</a>
 
-<a href="login.html">
-Login
-</a></p><p style="text-align:center;margin-top:10px;"><a href="index.html">
-⬅ Kembali ke Beranda
-</a></p></div><script type="module">
+</div>
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+<button
+id="menuToggle"
+class="menu-toggle">
 
-import {
-getFirestore,
-doc,
-setDoc,
-serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+☰
 
-import {
-getAuth,
-createUserWithEmailAndPassword,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+</button>
 
-const firebaseConfig = {
+</div>
 
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
+</div>
 
-};
+</header>
+<section class="hero-page">
 
-const app = initializeApp(firebaseConfig);
+<div class="container">
 
-const auth = getAuth(app);
+<div class="hero-page-content">
 
-const db = getFirestore(app);
+<div class="badge">
 
-async function daftar(){
+🛒 Daftar Pembeli
 
-const btn =
-document.getElementById("btnDaftar");
+</div>
 
-const nama =
-document.getElementById("nama")
-.value.trim();
+<h1>
 
-const email =
-document.getElementById("email")
-.value.trim();
+Buat Akun PasarNusa
 
-const whatsapp =
-document.getElementById("whatsapp")
-.value.trim();
+</h1>
 
-const password =
-document.getElementById("password")
-.value;
+<p>
 
-if(
-!nama ||
-!email ||
-!whatsapp ||
-!password
-){
+Daftarkan akun pembeli untuk mulai berbelanja berbagai produk UMKM Indonesia dengan mudah dan aman.
 
-alert(
-"Lengkapi semua data terlebih dahulu"
-);
+</p>
 
-return;
+</div>
 
-}
+</div>
 
-if(password.length < 6){
+</section>
+<section class="breadcrumb">
 
-alert(
-"Password minimal 6 karakter"
-);
+<div class="container">
 
-return;
+<a href="index.html">
 
-}
+Beranda
 
-if(
-!whatsapp.startsWith("08")
-){
+</a>
 
-alert(
-"Nomor WhatsApp harus diawali 08"
-);
+<span>
 
-return;
+/
 
-}
+</span>
 
-try{
+<span>
 
-btn.disabled = true;
+Daftar Pembeli
 
-btn.innerText =
-"Mendaftarkan...";
+</span>
 
-const userCredential =
-await createUserWithEmailAndPassword(
-auth,
-email,
-password
-);
+</div>
 
-await setDoc(
-doc(
-db,
-"users",
-userCredential.user.uid
-),
-{
-uid:
-userCredential.user.uid,
+</section>
+<!-- ==========================================
+REGISTER
+========================================== -->
 
-nama:
-nama,
+<section class="section">
 
-email:
-email,
+<div class="container">
 
-whatsapp:
-whatsapp,
+<div class="register-wrapper">
 
-role:
-"user",
+<div class="register-card">
 
-status:
-"aktif",
+<div class="register-header">
 
-createdAt:
-serverTimestamp()
-}
-);
+<div class="register-icon">
 
-alert(
-"Pendaftaran berhasil"
-);
+🛒
 
-await signOut(auth);
+</div>
 
-window.location.href =
-"login.html";
+<h2>
 
-}
-catch(error){
+Daftar Sebagai Pembeli
 
-console.error(error);
+</h2>
 
-let pesan =
-"Pendaftaran gagal";
+<p>
 
-if(
-error.code ===
-"auth/email-already-in-use"
-){
+Lengkapi data di bawah ini untuk membuat akun PasarNusa.
 
-pesan =
-"Email sudah digunakan";
+</p>
 
-}
+</div>
+<form id="registerForm">
 
-if(
-error.code ===
-"auth/invalid-email"
-){
+<div class="form-group">
 
-pesan =
-"Format email tidak valid";
+<label for="nama">
 
-}
+Nama Lengkap
 
-if(
-error.code ===
-"auth/weak-password"
-){
+</label>
 
-pesan =
-"Password terlalu lemah";
+<input
 
-}
+type="text"
 
-alert(pesan);
+id="nama"
 
-}
-finally{
+placeholder="Masukkan nama lengkap"
 
-btn.disabled = false;
+required>
 
-btn.innerText =
-"Daftar";
+</div>
 
-}
+<div class="form-group">
 
-}
+<label for="email">
 
-document
-.getElementById("btnDaftar")
-.addEventListener(
-"click",
-daftar
-);
+Email
 
-document
-.addEventListener(
-"keypress",
-(e)=>{
+</label>
 
-if(e.key === "Enter"){
+<input
 
-daftar();
+type="email"
 
-}
+id="email"
 
-}
-);
+placeholder="Masukkan email"
 
-</script></body>
+required>
+
+</div>
+
+<div class="form-group">
+
+<label for="whatsapp">
+
+Nomor WhatsApp
+
+</label>
+
+<input
+
+type="tel"
+
+id="whatsapp"
+
+placeholder="08xxxxxxxxxx"
+
+required>
+
+</div>
+<div class="form-group">
+
+<label for="password">
+
+Password
+
+</label>
+
+<div class="password-box">
+
+<input
+
+type="password"
+
+id="password"
+
+placeholder="Minimal 6 karakter"
+
+required>
+
+<button
+
+type="button"
+
+id="togglePassword"
+
+class="password-toggle">
+
+👁️
+
+</button>
+
+</div>
+
+<small>
+
+Gunakan minimal 6 karakter.
+
+</small>
+
+</div>
+<button
+
+type="submit"
+
+id="btnDaftar"
+
+class="btn btn-primary register-btn">
+
+Daftar Sekarang
+
+</button>
+
+</form>
+<div class="login-box">
+
+<p>
+
+Sudah punya akun?
+
+</p>
+
+<a
+href="login.html"
+class="btn btn-secondary">
+
+🔐 Login Sekarang
+
+</a>
+
+</div>
+
+<div class="register-option">
+
+<p>
+
+Ingin mendaftar sebagai?
+
+</p>
+
+<div class="register-action">
+
+<a
+href="register.html"
+class="btn btn-secondary">
+
+🏪 UMKM
+
+</a>
+
+<a
+href="register-affiliate.html"
+class="btn btn-secondary">
+
+🤝 Affiliate
+
+</a>
+
+</div>
+
+</div>
+<div class="register-footer">
+
+<a
+href="index.html">
+
+← Kembali ke Beranda
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+<button
+
+id="backTop"
+
+class="back-top"
+
+aria-label="Kembali ke Atas">
+
+↑
+
+</button>
+<script src="script.js"></script>
+
+<script
+type="module"
+src="register-user.js">
+
+</script>
+
+</body>
+
 </html>
