@@ -1,51 +1,244 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Keranjang Belanja - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><header class="navbar"><div class="logo">
-PASAR<span>NUSA</span>
-</div><a
-href="index.html"
-class="btn-secondary">
+<!DOCTYPE html>
 
-🏠 Beranda
+<html lang="id">
 
-</a></header><section class="cart-section"><h1>🛒 Keranjang Belanja</h1><p>
-Periksa kembali produk sebelum checkout.
-</p><div id="cartContainer"></div></section><script>
+<head>
 
-let cart =
-JSON.parse(
-localStorage.getItem("cart")
-) || [];
+<meta charset="UTF-8">
 
-const cartContainer =
-document.getElementById(
-"cartContainer"
-);
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-renderCart();
+<title>Keranjang Belanja | PasarNusa</title>
 
-function renderCart(){
+<meta
+name="description"
+content="Keranjang belanja PasarNusa">
 
-cartContainer.innerHTML = "";
+<meta
+name="theme-color"
+content="#16a34a">
 
-if(cart.length === 0){
+<link
+rel="icon"
+href="assets/logo.png">
 
-cartContainer.innerHTML = `
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
 
-<div class="cart-card">
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-<h2>🛒 Keranjang Kosong</h2>
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 
-<p>
-Belum ada produk di keranjang.
-</p>
+<link
+rel="stylesheet"
+href="style.css">
 
-<br>
+<link
+rel="stylesheet"
+href="cart.css">
+
+</head>
+
+<body>
+<header class="navbar">
+
+<div class="container">
+
+<div class="navbar-content">
 
 <a
-href="index.html#produk"
-class="btn-primary">
+href="index.html"
+class="logo">
+
+🌿
+
+<span>
+
+PasarNusa
+
+</span>
+
+</a>
+
+<nav class="navbar-menu">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<a
+href="cart.html"
+class="active">
+
+Keranjang
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
+
+<button
+id="themeToggle"
+class="btn btn-secondary">
+
+🌙
+
+</button>
+
+<a
+href="profil.html"
+class="btn btn-primary">
+
+👤 Akun
+
+</a>
+
+</div>
+
+<button
+id="menuToggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+🛒 Keranjang Belanja
+
+</div>
+
+<h1>
+
+Keranjang Anda
+
+</h1>
+
+<p>
+
+Periksa kembali produk sebelum melanjutkan ke proses checkout.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="breadcrumb">
+
+<div class="container">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<span>
+
+Keranjang
+
+</span>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="cart-layout">
+<div class="cart-content">
+
+<div class="cart-header">
+
+<label>
+
+<input
+type="checkbox"
+id="pilihSemua">
+
+Pilih Semua
+
+</label>
+
+<button
+id="hapusDipilih"
+class="btn btn-secondary">
+
+🗑 Hapus Dipilih
+
+</button>
+
+</div>
+
+<div
+id="cartContainer">
+
+</div>
+
+<div
+id="emptyCart"
+class="empty-state"
+style="display:none;">
+
+<div class="empty-icon">
+
+🛒
+
+</div>
+
+<h2>
+
+Keranjang Masih Kosong
+
+</h2>
+
+<p>
+
+Yuk mulai belanja produk UMKM Indonesia.
+
+</p>
+
+<a
+href="produk.html"
+class="btn btn-primary">
 
 Mulai Belanja
 
@@ -53,337 +246,232 @@ Mulai Belanja
 
 </div>
 
-`;
+</div>
+<div class="cart-summary">
 
-return;
+<div class="summary-card">
 
-}
+<h2>
 
-let totalBelanja = 0;
-let totalItem = 0;
+Ringkasan Belanja
 
-cart.forEach((produk,index)=>{
+</h2>
 
-const qty =
-Number(produk.qty || 1);
+<div class="summary-item">
 
-const subtotal =
-Number(produk.harga || 0)
-* qty;
+<span>
 
-totalBelanja += subtotal;
-totalItem += qty;
+Total Produk
 
-cartContainer.innerHTML += `
-
-<div class="product-card">
-
-<img
-src="${
-Array.isArray(produk.gambar)
-? produk.gambar[0]
-: produk.gambar ||
-'https://picsum.photos/400/300'
-}"
-alt="${produk.namaProduk}">
-
-<div class="product-info">
-
-<span class="category">
-${produk.kategori || "Produk"}
 </span>
 
-<h3>
-${String(produk.namaProduk || "")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")}
-</h3>
+<b id="totalProduk">
 
-<p class="price">
-Rp ${Number(
-produk.harga || 0
-).toLocaleString("id-ID")}
-</p>
+0
 
-<p>
-Jumlah :
-<b>${qty}</b>
-</p>
-
-<p>
-Subtotal :
-<b>
-Rp ${subtotal.toLocaleString("id-ID")}
 </b>
-</p>
-
-<div
-style="
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:10px;
-">
-
-<button
-onclick="kurangiQty(${index})"
-class="btn-secondary">
-
-➖
-
-</button>
-
-<button
-onclick="tambahQty(${index})"
-class="btn-primary">
-
-➕
-
-</button>
-
-<button
-onclick="hapusItem(${index})"
-class="btn-secondary">
-
-🗑 Hapus
-
-</button>
 
 </div>
 
-</div>
+<div class="summary-item">
+
+<span>
+
+Total Item
+
+</span>
+
+<b id="totalItem">
+
+0
+
+</b>
 
 </div>
 
-`;
+<div class="summary-item">
 
-});
+<span>
 
-const ongkir = 0;
+Subtotal
 
-cartContainer.innerHTML += `
+</span>
 
-<div class="cart-card">
+<b id="subtotal">
 
-<h3>
-Total Produk : ${cart.length}
-</h3>
+Rp 0
 
-<h3>
-Total Item : ${totalItem}
-</h3>
-<p>
-🏪 UMKM :
-${cart[0]?.namaToko || "-"}
-</p>
-<p>
-Subtotal :
-Rp ${totalBelanja.toLocaleString("id-ID")}
-</p>
+</b>
 
-<p>
-Estimasi Ongkir :
-Dihitung saat checkout
-</p>
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Estimasi Ongkir
+
+</span>
+
+<b>
+
+Dihitung saat Checkout
+
+</b>
+
+</div>
 
 <hr>
 
-<h2>Total Bayar</h2>
+<div class="summary-total">
 
-<h1>
-Rp ${(totalBelanja + ongkir)
-.toLocaleString("id-ID")}
-</h1>
+<span>
 
-<p>
-Termasuk estimasi ongkir
-</p>
+Total Bayar
 
-<br>
+</span>
 
-<div
-style="
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-justify-content:center;
-">
+<h2 id="totalBayar">
+
+Rp 0
+
+</h2>
+
+</div>
+
+<button
+
+id="checkoutBtn"
+
+class="btn btn-primary">
+
+💳 Checkout
+
+</button>
 
 <a
-href="index.html#produk"
-class="btn-secondary">
+
+href="produk.html"
+
+class="btn btn-secondary">
 
 🛍 Lanjut Belanja
 
 </a>
 
 <button
-onclick="kosongkanKeranjang()"
-class="btn-secondary">
 
-🗑 Kosongkan
+id="kosongkanCart"
+
+class="btn btn-danger">
+
+🗑 Kosongkan Keranjang
 
 </button>
+
+</div>
+
+</div>
+<template id="loadingCart">
+
+<div class="cart-item skeleton">
+
+<div class="image-skeleton"></div>
+
+<div class="content-skeleton">
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+</div>
+
+</div>
+
+</template>
+<template id="emptyTemplate">
+
+<div class="empty-state">
+
+<div class="empty-icon">
+
+🛒
+
+</div>
+
+<h2>
+
+Keranjang Kosong
+
+</h2>
+
+<p>
+
+Belum ada produk yang ditambahkan.
+
+</p>
+
+<a
+
+href="produk.html"
+
+class="btn btn-primary">
+
+Mulai Belanja
+
+</a>
+
+</div>
+
+</template>
+</div>
+
+</section>
+
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
 
 <button
-onclick="cekCheckout()"
-class="btn-primary">
 
-💳 Checkout
+id="backTop"
+
+class="back-top">
+
+↑
 
 </button>
 
-</div>
+<script src="script.js"></script>
 
-</div>
-
-`;
-
-}
-
-window.tambahQty = function(index){
-
-const stok =
-Number(cart[index].stok || 999);
-
-const qty =
-Number(cart[index].qty || 1);
-
-if(qty >= stok){
-
-alert("Stok tidak mencukupi");
-
-return;
-
-}
-
-cart[index].qty = qty + 1;
-
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
-
-renderCart();
-
-};
-
-window.kurangiQty = function(index){
-
-if(
-(cart[index].qty || 1) > 1
-){
-
-cart[index].qty--;
-
-}else{
-
-cart.splice(index,1);
-
-}
-
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
-
-renderCart();
-
-};
-
-window.hapusItem = function(index){
-
-if(
-confirm(
-"Hapus produk ini?"
-)
-){
-
-cart.splice(index,1);
-
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
-
-renderCart();
-
-}
-
-};
-
-window.kosongkanKeranjang =
-function(){
-
-if(
-confirm(
-"Kosongkan seluruh keranjang?"
-)
-){
-
-localStorage.removeItem(
-"cart"
-);
-
-cart = [];
-
-renderCart();
-
-}
-
-};
-
-window.cekCheckout =
-function(){
-
-const uid =
-localStorage.getItem("uid");
-
-if(!uid){
-
-alert(
-"Silakan login terlebih dahulu"
-);
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
-if(
-cart.length > 0
-){
-
-const uidUmkm =
-cart[0].uidUmkm ||
-cart[0].uid;
-
-const bedaUmkm =
-cart.some(
-(item)=>
-(item.uidUmkm || item.uid)
-!== uidUmkm
-);
-
-if(bedaUmkm){
-
-alert(
-"Saat ini checkout hanya mendukung produk dari 1 UMKM dalam 1 pesanan"
-);
-
-return;
-
-}
-
-}
-
-window.location.href =
-"checkout.html";
-
-};
+<script
+type="module"
+src="cart.js">
 
 </script>
+
 </body>
+
 </html>
