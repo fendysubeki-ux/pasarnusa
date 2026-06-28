@@ -1,374 +1,1054 @@
 <!DOCTYPE html>
+
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tentang PasarNusa</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Tentang | PasarNusa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta
+name="description"
+content="Kenali PasarNusa, marketplace digital yang mendukung UMKM Indonesia.">
 
-<link rel="stylesheet" href="style.css">
+<meta
+name="theme-color"
+content="#16a34a">
 
-<meta name="description" content="Tentang PasarNusa - Marketplace UMKM dan Affiliate Marketing Indonesia">
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="tentang.css">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
 </head>
 
 <body>
+<!-- ==========================================
+NAVBAR
+========================================== -->
 
-<!-- HERO -->
+<header class="navbar">
 
-<section class="hero">
+<div class="container">
 
-<div class="hero-left">
+<div class="navbar-content">
 
-<span class="badge">
-🇮🇩 Marketplace UMKM Indonesia
-</span>
+<a
+href="index.html"
+class="logo">
+
+🌿
+
+<span>PasarNusa</span>
+
+</a>
+
+<nav class="navbar-menu">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<a href="kategori.html">
+
+Kategori
+
+</a>
+
+<a href="wilayah.html">
+
+Wilayah
+
+</a>
+
+<a
+href="tentang.html"
+class="active">
+
+Tentang
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
+
+<button
+id="themeToggle"
+class="btn btn-secondary"
+aria-label="Dark Mode">
+
+🌙
+
+</button>
+
+<a
+href="login.html"
+class="btn btn-secondary">
+
+Masuk
+
+</a>
+
+<a
+href="register.html"
+class="btn btn-primary">
+
+Daftar
+
+</a>
+
+</div>
+
+<button
+id="menuToggle"
+class="menu-toggle"
+aria-label="Menu">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<!-- ==========================================
+HERO
+========================================== -->
+
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+🌿 Tentang PasarNusa
+
+</div>
 
 <h1>
-Membantu UMKM Indonesia Tumbuh Digital
+
+Marketplace Digital untuk UMKM Indonesia
+
 </h1>
 
 <p>
-PasarNusa adalah marketplace UMKM Indonesia yang menghubungkan pelaku usaha, affiliate, dan pelanggan dalam satu ekosistem digital yang modern, aman, dan mudah digunakan.
+
+PasarNusa hadir untuk membantu pelaku UMKM berkembang melalui teknologi digital. Kami menghubungkan penjual dan pembeli dari seluruh Indonesia dengan sistem kategori dan wilayah yang terstruktur.
+
 </p>
 
-<div class="hero-action">
+<div class="hero-stat">
 
-<a href="register-umkm.html" class="btn-primary">
-Daftar UMKM
-</a>
+<div class="hero-stat-item">
 
-<a href="index.html" class="btn-secondary">
-⬅ Kembali ke Beranda
-</a>
+<h3 id="totalUmkm">
+
+0
+
+</h3>
+
+<span>
+
+UMKM
+
+</span>
+
+</div>
+
+<div class="hero-stat-item">
+
+<h3 id="totalProduk">
+
+0
+
+</h3>
+
+<span>
+
+Produk
+
+</span>
+
+</div>
+
+<div class="hero-stat-item">
+
+<h3 id="totalWilayah">
+
+0
+
+</h3>
+
+<span>
+
+Wilayah
+
+</span>
 
 </div>
 
 </div>
 
-<div class="mockup-card">
-
-<h3>📊 Statistik PasarNusa</h3>
-
-<div class="stat-item">
-<span>UMKM Bergabung</span>
-<h2 id="jumlahUmkm">0</h2>
-</div>
-
-<div class="stat-item">
-<span>Produk Lokal</span>
-<h2 id="jumlahProduk">0</h2>
-</div>
-
-<div class="stat-item">
-<span>Affiliate Aktif</span>
-<h2 id="jumlahAffiliate">0</h2>
-</div>
-
-<div class="stat-item">
-<span>Provinsi Terjangkau</span>
-<h2>34</h2>
 </div>
 
 </div>
 
 </section>
+<!-- ==========================================
+BREADCRUMB
+========================================== -->
 
-<!-- PENDIRI -->
+<section class="breadcrumb">
 
-<section class="dashboard">
+<div class="container">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<span>
+
+Tentang
+
+</span>
+
+</div>
+
+</section>
+<!-- ==========================================
+TENTANG PASARNUSA
+========================================== -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="about-grid">
+
+<div class="about-content">
 
 <div class="section-title">
 
-<h2>Tentang Pendiri</h2>
+<h2>
+
+Apa itu PasarNusa?
+
+</h2>
+
+</div>
 
 <p>
-Orang di balik lahirnya PasarNusa
+
+PasarNusa adalah marketplace digital yang dirancang untuk membantu pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) memasarkan produknya secara lebih luas melalui platform berbasis web.
+
+</p>
+
+<p>
+
+Berbeda dengan marketplace pada umumnya, PasarNusa mengelompokkan produk berdasarkan wilayah mulai dari provinsi, kabupaten, kecamatan hingga desa. Dengan sistem ini, pembeli dapat menemukan produk lokal dengan lebih mudah sekaligus mendukung pertumbuhan ekonomi daerah.
+
+</p>
+
+<p>
+
+PasarNusa juga menyediakan berbagai fitur pendukung seperti pencarian produk, kategori, profil UMKM, affiliate, keranjang belanja, hingga sistem transaksi yang dirancang untuk mempermudah penjual maupun pembeli.
+
 </p>
 
 </div>
 
-<div class="dashboard-card">
+<div class="about-image">
 
-<h3>👨‍💻 Fendy Bagus Subeki</h3>
+<div class="about-icon">
+
+🌿
+
+</div>
+
+<h3>
+
+Mendukung UMKM Indonesia
+
+</h3>
 
 <p>
-Pendiri PasarNusa yang memiliki visi membantu UMKM Indonesia berkembang melalui teknologi digital, marketplace modern, dan sistem affiliate marketing yang dapat meningkatkan penjualan produk lokal.
+
+Membantu UMKM Go Digital dan menjangkau pasar yang lebih luas.
+
 </p>
+
+</div>
+
+</div>
 
 </div>
 
 </section>
+<!-- ==========================================
+VISI MISI
+========================================== -->
 
-<!-- VISI MISI -->
+<section class="section">
 
-<section class="dashboard">
+<div class="container">
+
+<div class="section-header">
 
 <div class="section-title">
 
-<h2>Visi & Misi</h2>
+<h2>
 
-</div>
+Visi & Misi
 
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-
-<h3>🎯 Visi</h3>
+</h2>
 
 <p>
-Menjadi ekosistem digital UMKM terbesar di Indonesia yang menghubungkan produsen, affiliate, dan konsumen dalam satu platform.
+
+Komitmen PasarNusa dalam mendukung perkembangan UMKM Indonesia.
+
 </p>
 
 </div>
 
-<div class="dashboard-card">
+</div>
 
-<h3>🚀 Misi</h3>
+<div class="vision-grid">
+
+<div class="vision-card">
+
+<div class="vision-icon">
+
+🎯
+
+</div>
+
+<h3>
+
+Visi
+
+</h3>
 
 <p>
-Membantu UMKM meningkatkan penjualan melalui teknologi digital, pemasaran online, dan affiliate marketing yang transparan.
+
+Menjadi marketplace digital terpercaya yang mampu menghubungkan seluruh UMKM Indonesia dengan masyarakat secara mudah, aman, dan berkelanjutan.
+
 </p>
+
+</div>
+
+<div class="vision-card">
+
+<div class="vision-icon">
+
+🚀
+
+</div>
+
+<h3>
+
+Misi
+
+</h3>
+
+<ul>
+
+<li>Mendukung digitalisasi UMKM Indonesia.</li>
+
+<li>Mempermudah promosi produk lokal.</li>
+
+<li>Menghubungkan penjual dan pembeli secara langsung.</li>
+
+<li>Mendorong pertumbuhan ekonomi daerah.</li>
+
+<li>Menyediakan platform yang mudah digunakan.</li>
+
+</ul>
+
+</div>
 
 </div>
 
 </div>
 
 </section>
+<!-- ==========================================
+KEUNGGULAN
+========================================== -->
 
-<!-- KEUNGGULAN -->
+<section class="section">
 
-<section class="dashboard">
+<div class="container">
+
+<div class="section-header">
 
 <div class="section-title">
 
-<h2>Mengapa PasarNusa?</h2>
+<h2>
 
-</div>
+Mengapa Memilih PasarNusa?
 
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-
-<h3>🏪 Untuk UMKM</h3>
+</h2>
 
 <p>
-Membuka peluang penjualan ke seluruh Indonesia dengan biaya terjangkau.
+
+Berbagai keunggulan yang menjadikan PasarNusa sebagai platform digital untuk mendukung perkembangan UMKM Indonesia.
+
 </p>
 
 </div>
 
-<div class="dashboard-card">
+</div>
 
-<h3>💰 Untuk Affiliate</h3>
+<div class="feature-grid">
+
+<div class="feature-card">
+
+<div class="feature-icon">
+
+🛍️
+
+</div>
+
+<h3>
+
+Marketplace UMKM
+
+</h3>
 
 <p>
-Mendapatkan komisi dari setiap penjualan yang berhasil melalui link referral.
+
+Seluruh produk berasal dari pelaku UMKM Indonesia yang telah terdaftar di PasarNusa.
+
 </p>
 
 </div>
 
-<div class="dashboard-card">
+<div class="feature-card">
 
-<h3>🛒 Untuk Pembeli</h3>
+<div class="feature-icon">
+
+🗺️
+
+</div>
+
+<h3>
+
+Berbasis Wilayah
+
+</h3>
 
 <p>
-Menemukan produk UMKM berkualitas langsung dari pelaku usaha lokal.
+
+Produk dapat dicari berdasarkan provinsi, kabupaten, kecamatan hingga desa.
+
 </p>
 
 </div>
 
-<div class="dashboard-card">
+<div class="feature-card">
 
-<h3>📈 Pertumbuhan Bersama</h3>
+<div class="feature-icon">
+
+📂
+
+</div>
+
+<h3>
+
+Kategori Lengkap
+
+</h3>
 
 <p>
-UMKM, affiliate, dan pelanggan berkembang bersama dalam satu ekosistem.
+
+Produk dikelompokkan dalam berbagai kategori sehingga lebih mudah ditemukan.
+
 </p>
+
+</div>
+
+<div class="feature-card">
+
+<div class="feature-icon">
+
+🤝
+
+</div>
+
+<h3>
+
+Mendukung UMKM
+
+</h3>
+
+<p>
+
+Memberikan kesempatan yang sama bagi setiap UMKM untuk berkembang secara digital.
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div class="feature-icon">
+
+🔒
+
+</div>
+
+<h3>
+
+Aman & Mudah
+
+</h3>
+
+<p>
+
+Dirancang dengan antarmuka sederhana sehingga mudah digunakan oleh semua pengguna.
+
+</p>
+
+</div>
+
+<div class="feature-card">
+
+<div class="feature-icon">
+
+📈
+
+</div>
+
+<h3>
+
+Terus Berkembang
+
+</h3>
+
+<p>
+
+PasarNusa akan terus menghadirkan fitur baru untuk mendukung pertumbuhan UMKM Indonesia.
+
+</p>
+
+</div>
 
 </div>
 
 </div>
 
 </section>
+<!-- ==========================================
+STATISTIK
+========================================== -->
 
-<!-- CARA KERJA -->
+<section class="section">
 
-<section class="dashboard">
+<div class="container">
+
+<div class="section-header">
 
 <div class="section-title">
 
-<h2>Cara Kerja PasarNusa</h2>
+<h2>
 
-</div>
+PasarNusa dalam Angka
 
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-
-<h3>1️⃣ UMKM Daftar</h3>
+</h2>
 
 <p>
-Pelaku usaha membuat akun dan membuka toko online.
+
+Perkembangan platform PasarNusa dalam mendukung digitalisasi UMKM Indonesia.
+
 </p>
 
 </div>
 
-<div class="dashboard-card">
+</div>
 
-<h3>2️⃣ Upload Produk</h3>
+<div class="about-stat-grid">
+
+<div class="about-stat-card">
+
+<h3 id="statUmkm">
+
+0
+
+</h3>
 
 <p>
-Produk diunggah lengkap dengan foto, harga, dan deskripsi.
+
+UMKM Terdaftar
+
 </p>
 
 </div>
 
-<div class="dashboard-card">
+<div class="about-stat-card">
 
-<h3>3️⃣ Affiliate Promosi</h3>
+<h3 id="statProduk">
+
+0
+
+</h3>
 
 <p>
-Affiliate membagikan link produk melalui media sosial.
+
+Produk Aktif
+
 </p>
 
 </div>
 
-<div class="dashboard-card">
+<div class="about-stat-card">
 
-<h3>4️⃣ Penjualan Terjadi</h3>
+<h3 id="statWilayah">
+
+0
+
+</h3>
 
 <p>
-Pelanggan melakukan pembelian dan affiliate memperoleh komisi.
+
+Wilayah Terjangkau
+
 </p>
+
+</div>
+
+<div class="about-stat-card">
+
+<h3>
+
+24/7
+
+</h3>
+
+<p>
+
+Layanan Platform
+
+</p>
+
+</div>
 
 </div>
 
 </div>
 
 </section>
+<!-- ==========================================
+NILAI PASARNUSA
+========================================== -->
 
-<!-- KONTAK -->
+<section class="section">
 
-<section class="dashboard">
+<div class="container">
 
-<div class="dashboard-card" style="text-align:center;">
+<div class="section-header">
 
-<h2>📞 Hubungi Kami</h2>
+<div class="section-title">
 
-<p>📧 admin@pasarnusa.id</p>
+<h2>
 
-<p>📱 0858-xxxx-xxxx</p>
+Nilai-Nilai PasarNusa
 
-<p>📍 Trenggalek, Jawa Timur</p>
+</h2>
+
+<p>
+
+Prinsip yang menjadi landasan dalam mengembangkan platform PasarNusa.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="value-grid">
+
+<div class="value-card">
+
+<div class="value-icon">
+
+🤝
+
+</div>
+
+<h3>
+
+Kolaborasi
+
+</h3>
+
+<p>
+
+Membangun kerja sama antara UMKM, pembeli, komunitas, dan pemerintah untuk menciptakan ekosistem digital yang saling mendukung.
+
+</p>
+
+</div>
+
+<div class="value-card">
+
+<div class="value-icon">
+
+💡
+
+</div>
+
+<h3>
+
+Inovasi
+
+</h3>
+
+<p>
+
+Terus menghadirkan teknologi dan fitur baru yang mempermudah aktivitas jual beli produk UMKM.
+
+</p>
+
+</div>
+
+<div class="value-card">
+
+<div class="value-icon">
+
+🌱
+
+</div>
+
+<h3>
+
+Keberlanjutan
+
+</h3>
+
+<p>
+
+Mendukung pertumbuhan UMKM secara berkelanjutan agar mampu bersaing di era digital.
+
+</p>
+
+</div>
+
+<div class="value-card">
+
+<div class="value-icon">
+
+❤️
+
+</div>
+
+<h3>
+
+Kepercayaan
+
+</h3>
+
+<p>
+
+Menciptakan lingkungan transaksi yang aman, nyaman, dan terpercaya bagi seluruh pengguna.
+
+</p>
+
+</div>
+
+</div>
 
 </div>
 
 </section>
+<!-- ==========================================
+CTA
+========================================== -->
 
-<!-- CTA -->
+<section class="section">
 
-<section class="dashboard">
+<div class="container">
 
-<div class="dashboard-card" style="text-align:center;">
+<div class="cta">
 
-<h2>🚀 Bergabung Sekarang</h2>
+<div class="cta-icon">
+
+🚀
+
+</div>
+
+<h2>
+
+Siap Bergabung Bersama PasarNusa?
+
+</h2>
 
 <p>
-Jadilah bagian dari gerakan digitalisasi UMKM Indonesia bersama PasarNusa.
+
+Daftarkan UMKM Anda sekarang dan mulai memperkenalkan produk lokal ke pasar yang lebih luas melalui PasarNusa.
+
 </p>
 
-<br>
+<div class="cta-action">
 
-<a href="register-umkm.html" class="btn-primary">
-Daftar UMKM
+<a
+href="register.html"
+class="btn btn-primary">
+
+🏪 Daftarkan UMKM
+
 </a>
 
-<a href="register-affiliate.html" class="btn-secondary">
-Daftar Affiliate
+<a
+href="produk.html"
+class="btn btn-secondary">
+
+🛍️ Jelajahi Produk
+
 </a>
 
 </div>
 
+</div>
+
+</div>
+
 </section>
+<!-- ==========================================
+FOOTER
+========================================== -->
 
-<footer>
+<footer class="footer">
 
-<div class="copyright">
+<div class="container">
 
-© 2026 PasarNusa - Marketplace UMKM Indonesia
+<div class="footer-top">
+
+<div>
+
+<div class="footer-logo">
+
+🌿
+
+<span>PasarNusa</span>
+
+</div>
+
+<p class="footer-desc">
+
+Marketplace digital UMKM Indonesia yang menghubungkan pelaku usaha lokal dengan pembeli melalui sistem wilayah bertingkat.
+
+</p>
+
+</div>
+
+<div>
+
+<h3 class="footer-title">
+
+Marketplace
+
+</h3>
+
+<div class="footer-links">
+
+<a href="produk.html">
+
+Produk
+
+</a>
+
+<a href="kategori.html">
+
+Kategori
+
+</a>
+
+<a href="wilayah.html">
+
+Wilayah
+
+</a>
+
+<a href="affiliate.html">
+
+Affiliate
+
+</a>
+
+</div>
+
+</div>
+
+<div>
+
+<h3 class="footer-title">
+
+Layanan
+
+</h3>
+
+<div class="footer-links">
+
+<a href="login.html">
+
+Masuk
+
+</a>
+
+<a href="register.html">
+
+Daftar
+
+</a>
+
+<a href="kontak.html">
+
+Kontak
+
+</a>
+
+<a href="bantuan.html">
+
+Pusat Bantuan
+
+</a>
+
+</div>
+
+</div>
+
+<div>
+
+<h3 class="footer-title">
+
+Perusahaan
+
+</h3>
+
+<div class="footer-links">
+
+<a href="tentang.html">
+
+Tentang Kami
+
+</a>
+
+<a href="faq.html">
+
+FAQ
+
+</a>
+
+<a href="syarat.html">
+
+Syarat & Ketentuan
+
+</a>
+
+<a href="kebijakan.html">
+
+Kebijakan Privasi
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer-divider"></div>
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
+</p>
+
+</div>
 
 </div>
 
 </footer>
+<!-- ==========================================
+BACK TO TOP
+========================================== -->
 
-<script type="module">
+<button
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+id="backTop"
 
-import {
-getFirestore,
-collection,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+class="back-top"
 
-const firebaseConfig = {
+aria-label="Kembali ke Atas">
 
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-};
+↑
 
-try{
+</button>
+<!-- ==========================================
+SCRIPT
+========================================== -->
 
-const app = initializeApp(firebaseConfig);
+<script src="script.js"></script>
 
-const db = getFirestore(app);
+<script
+type="module"
+src="tentang.js">
 
-const umkmSnap =
-await getDocs(
-collection(db,"umkm")
-);
-
-document.getElementById(
-"jumlahUmkm"
-).innerText =
-umkmSnap.size;
-
-const produkSnap =
-await getDocs(
-collection(db,"produk")
-);
-
-document.getElementById(
-"jumlahProduk"
-).innerText =
-produkSnap.size;
-const affiliateSnap =
-await getDocs(
-collection(db,"affiliate")
-);
-
-document.getElementById(
-"jumlahAffiliate"
-).innerText =
-affiliateSnap.size;
-}
-catch(error){
-
-console.error(error);
-
-}
 </script>
 
 </body>
+
 </html>
