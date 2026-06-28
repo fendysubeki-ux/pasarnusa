@@ -1,50 +1,104 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard Admin - PasarNusa</title>
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Dashboard Admin | PasarNusa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta
+name="description"
+content="Dashboard Admin PasarNusa">
 
-<link rel="stylesheet" href="style.css">
+<meta
+name="theme-color"
+content="#16a34a">
 
-<meta name="theme-color" content="#16a34a">
-<meta name="description" content="Dashboard Admin PasarNusa">
+<link
+rel="icon"
+href="assets/logo.png">
+
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="dashboard-admin.css">
 
 </head>
 
 <body>
+<header class="navbar">
 
-<section class="dashboard">
+<div class="container">
 
-<div class="dashboard-header">
+<div class="navbar-content">
 
-<div>
+<a
+href="index.html"
+class="logo">
 
-<h1>🛠 Dashboard Admin</h1>
+🌿
 
-<p>
-Pusat kontrol Marketplace UMKM Indonesia
-</p>
+<span>
 
-</div>
+PasarNusa
 
-<div style="display:flex;gap:10px;flex-wrap:wrap;">
+</span>
 
-<a href="index.html" class="btn-secondary">
-🏠 Beranda
 </a>
+
+<nav class="navbar-menu">
+
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<a
+href="dashboard-admin.html"
+class="active">
+
+Dashboard Admin
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
+
+<button
+id="themeToggle"
+class="btn btn-secondary">
+
+🌙
+
+</button>
 
 <button
 id="logoutBtn"
-class="btn-primary">
+class="btn btn-primary">
 
 🚪 Logout
 
@@ -52,13 +106,85 @@ class="btn-primary">
 
 </div>
 
+<button
+id="menuToggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+🛠 Admin Panel
+
+</div>
+
+<h1>
+
+Dashboard Admin
+
+</h1>
+
+<p>
+
+Kelola seluruh aktivitas Marketplace PasarNusa dalam satu tempat.
+
+</p>
+
+</div>
+
 </div>
 
 </section>
+<section class="breadcrumb">
 
-<section class="dashboard">
+<div class="container">
 
-<h2>📊 Ringkasan Marketplace</h2>
+<a href="index.html">
+
+Beranda
+
+</a>
+
+<span>
+
+/</span>
+
+<span>
+
+Dashboard Admin
+
+</span>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="admin-layout">
+
+<div class="admin-content">
+<div class="form-card">
+
+<h2>
+
+📊 Ringkasan Marketplace
+
+</h2>
 
 <div class="dashboard-grid">
 
@@ -134,139 +260,198 @@ class="btn-primary">
 
 </div>
 
-</section>
-<section class="dashboard">
+</div>
+<div class="form-card">
 
-<h2>⚙ Menu Admin</h2>
+<h2>
+
+⚙️ Menu Admin
+
+</h2>
 
 <div class="dashboard-grid">
 
 <a href="pesanan-admin.html" class="dashboard-card">
 <h3>📦 Kelola Pesanan</h3>
-<p>Kelola seluruh transaksi marketplace</p>
+<p>Kelola seluruh transaksi marketplace.</p>
 </a>
 
 <a href="verifikasi-pembayaran.html" class="dashboard-card">
 <h3>💳 Verifikasi Pembayaran</h3>
-<p>Cek bukti transfer pelanggan</p>
+<p>Periksa bukti pembayaran pelanggan.</p>
 </a>
 
 <a href="produk-admin.html" class="dashboard-card">
 <h3>🛍 Kelola Produk</h3>
-<p>Semua produk UMKM</p>
+<p>Semua produk UMKM.</p>
 </a>
 
 <a href="umkm-admin.html" class="dashboard-card">
 <h3>🏪 Kelola UMKM</h3>
-<p>Verifikasi dan kelola UMKM</p>
+<p>Verifikasi dan kelola UMKM.</p>
 </a>
 
 <a href="affiliate-admin.html" class="dashboard-card">
-<h3>🤝 Kelola Affiliate</h3>
-<p>Kelola seluruh affiliate</p>
-</a>
-
-<a href="komisi-admin.html" class="dashboard-card">
-<h3>💰 Komisi Affiliate</h3>
-<p>Verifikasi pencairan komisi</p>
-</a>
-
-<a href="voucher-admin.html" class="dashboard-card">
-<h3>🎟 Kelola Voucher</h3>
-<p>Buat dan edit voucher</p>
+<h3>🤝 Affiliate</h3>
+<p>Kelola affiliate marketplace.</p>
 </a>
 
 <a href="laporan-admin.html" class="dashboard-card">
 <h3>📊 Laporan</h3>
-<p>Laporan penjualan marketplace</p>
-</a>
-
-<a href="notifikasi-admin.html" class="dashboard-card">
-<h3>🔔 Notifikasi</h3>
-<p>Kirim pengumuman</p>
+<p>Laporan penjualan.</p>
 </a>
 
 <a href="kategori-admin.html" class="dashboard-card">
 <h3>📂 Kategori</h3>
-<p>Kelola kategori produk</p>
+<p>Kelola kategori produk.</p>
 </a>
 
 <a href="pengaturan-admin.html" class="dashboard-card">
-<h3>⚙ Pengaturan</h3>
-<p>Pengaturan sistem</p>
-</a>
-
-<a href="backup-admin.html" class="dashboard-card">
-<h3>💾 Backup Data</h3>
-<p>Backup marketplace</p>
+<h3>⚙️ Pengaturan</h3>
+<p>Pengaturan sistem.</p>
 </a>
 
 </div>
 
-</section>
+</div>
+<div class="form-card">
 
-<section class="dashboard">
+<h2>
 
-<h2>📈 Monitoring Marketplace</h2>
+📈 Monitoring Marketplace
+
+</h2>
 
 <div class="dashboard-grid">
 
 <div class="dashboard-card">
 
-<h3>🟢 Sistem</h3>
+<h3>
+
+🟢 Status Server
+
+</h3>
 
 <p id="statusServer">
+
 Normal
+
 </p>
 
 </div>
 
 <div class="dashboard-card">
 
-<h3>👥 User Online</h3>
+<h3>
 
-<p>
+👥 User Online
+
+</h3>
+
+<p id="onlineUser">
+
 Realtime
+
 </p>
 
 </div>
 
 <div class="dashboard-card">
 
-<h3>🛒 Marketplace</h3>
+<h3>
+
+🛒 Marketplace
+
+</h3>
 
 <p>
+
 Semua layanan aktif
+
 </p>
 
 </div>
 
 <div class="dashboard-card">
 
-<h3>🔥 PasarNusa</h3>
+<h3>
+
+🚀 Versi
+
+</h3>
 
 <p>
-Versi Beta
+
+Beta
+
 </p>
+
+</div>
+
+</div>
+
+</div>
+<div class="admin-sidebar">
+
+<div class="summary-card">
+
+<h2>
+
+👨‍💼 Admin
+
+</h2>
+
+<p>
+
+Kelola seluruh aktivitas marketplace melalui menu di bawah ini.
+
+</p>
+
+<ul class="summary-list">
+
+<li>👥 Pengguna</li>
+
+<li>🏪 UMKM</li>
+
+<li>🛍 Produk</li>
+
+<li>📦 Pesanan</li>
+
+<li>💳 Pembayaran</li>
+
+<li>📊 Laporan</li>
+
+<li>⚙️ Pengaturan</li>
+
+</ul>
+
+</div>
+
+</div>
 
 </div>
 
 </div>
 
 </section>
+<section class="section">
 
-<section class="dashboard">
+<div class="container">
 
-<h2>⚡ Quick Action</h2>
+<div class="form-card">
 
-<div style="
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-">
+<h2>
+
+⚡ Quick Action
+
+</h2>
+
+<div class="action-box">
 
 <button
-class="btn-primary"
+
+class="btn btn-primary"
+
 onclick="location.reload()">
 
 🔄 Refresh Dashboard
@@ -274,18 +459,162 @@ onclick="location.reload()">
 </button>
 
 <a
+
 href="index.html"
-class="btn-secondary">
+
+class="btn btn-secondary">
 
 🏠 Lihat Marketplace
 
 </a>
 
+<a
+
+href="produk-admin.html"
+
+class="btn btn-secondary">
+
+🛍 Kelola Produk
+
+</a>
+
+<a
+
+href="pesanan-admin.html"
+
+class="btn btn-secondary">
+
+📦 Kelola Pesanan
+
+</a>
+
+</div>
+
+</div>
+
 </div>
 
 </section>
+<template id="loadingDashboard">
 
-<script type="module" src="dashboard-admin.js"></script>
+<div class="form-card skeleton">
+
+<div class="content-skeleton">
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+</div>
+
+</div>
+
+</template>
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-content">
+
+<div>
+
+<h3>
+
+🌿 PasarNusa
+
+</h3>
+
+<p>
+
+Panel administrasi Marketplace UMKM Indonesia.
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Admin Menu
+
+</h4>
+
+<ul>
+
+<li><a href="dashboard-admin.html">Dashboard</a></li>
+
+<li><a href="produk-admin.html">Produk</a></li>
+
+<li><a href="pesanan-admin.html">Pesanan</a></li>
+
+<li><a href="laporan-admin.html">Laporan</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<h4>
+
+Sistem
+
+</h4>
+
+<ul>
+
+<li><a href="pengaturan-admin.html">Pengaturan</a></li>
+
+<li><a href="backup-admin.html">Backup</a></li>
+
+<li><a href="notifikasi-admin.html">Notifikasi</a></li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>. Admin Panel.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+<button
+
+id="backTop"
+
+class="back-top"
+
+aria-label="Kembali ke Atas">
+
+↑
+
+</button>
+
+<script src="script.js"></script>
+
+<script
+
+type="module"
+
+src="dashboard-admin.js">
+
+</script>
 
 </body>
+
 </html>
