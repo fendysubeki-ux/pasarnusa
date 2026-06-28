@@ -1,420 +1,691 @@
+// ======================================
+// PASARNUSA PESANAN SAYA
+// pesanan-saya.js
+// ======================================
+
+// Firebase
+
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
+
 getFirestore,
+
 collection,
+
 query,
+
 where,
-getDocs,
-doc,
-updateDoc
+
+orderBy,
+
+getDocs
+
 }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-const firebaseConfig = {
+getAuth
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+// ======================================
+// FIREBASE
+// ======================================
+
+const firebaseConfig={
 
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
+
 projectId:"pasarnusa-18aa0",
+
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+
 messagingSenderId:"866998011671",
+
 appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const app=
 
-const container =
+initializeApp(firebaseConfig);
+
+const db=
+
+getFirestore(app);
+
+const auth=
+
+getAuth(app);
+// ======================================
+// ELEMENT
+// ======================================
+
+const pesananContainer=
+
 document.getElementById("pesananContainer");
 
-let semuaPesanan = [];
+const totalPesanan=
 
-function renderPesanan(data){
+document.getElementById("totalPesanan");
 
-container.innerHTML = "";
+const belumBayar=
 
-if(data.length === 0){
+document.getElementById("belumBayar");
 
-container.innerHTML = `
+const menungguVerifikasi=
 
-<div class="dashboard-card">
+document.getElementById("menungguVerifikasi");
 
-<h3>Belum Ada Pesanan</h3>
+const diproses=
 
-<p>
-Pesanan Anda akan muncul di sini
-</p>
+document.getElementById("diproses");
 
-<a
-href="index.html"
-class="btn-primary">
+const dikirim=
 
-Belanja Sekarang
+document.getElementById("dikirim");
 
-</a>
+const selesai=
 
-</div>
+document.getElementById("selesai");
 
-`;
+const totalBelanja=
 
-return;
+document.getElementById("totalBelanja");
 
-}
+const searchPesanan=
 
-data.forEach((item)=>{
+document.getElementById("searchPesanan");
 
-container.innerHTML += `
+const filterStatus=
 
-<div class="dashboard-card">
+document.getElementById("filterStatus");
+// ======================================
+// VARIABLE
+// ======================================
 
-<h3>
-Pesanan #${item.id.substring(0,8)}
-</h3>
+let uid="";
 
-<p>
-🏪 ${item.namaUmkm || "-"}
-</p>
+let semuaPesanan=[];
+// ======================================
+// START
+// ======================================
 
-<p>
-📦 Status :
-<b>${item.status || "Belum Bayar"}</b>
-</p>
+document.addEventListener(
 
-<p>
-💰 Rp ${Number(
-item.totalBayar || 0
-).toLocaleString("id-ID")}
-</p>
+"DOMContentLoaded",
 
-<p>
-📅 ${
-item.createdAt?.seconds
-?
-new Date(
-item.createdAt.seconds * 1000
-).toLocaleDateString("id-ID")
-:
-"-"
-}
-</p>
+initPage
 
-${
-item.resi
-?
-`
-<p>
-🚚 Resi :
-<b>${item.resi}</b>
-</p>
-`
-:
-""
-}
-
-<div
-style="
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:15px;
-">
-
-<a
-href="detail-pesanan.html?id=${item.id}"
-class="btn-secondary">
-
-Detail
-
-</a>
-
-${
-item.status === "Belum Bayar"
-?
-`
-<a
-href="upload-bukti.html?id=${item.id}"
-class="btn-primary">
-
-💳 Upload Bukti
-
-</a>
-`
-:
-""
-}
-
-${
-item.status === "Dikirim"
-?
-`
-<button
-onclick="pesananDiterima('${item.id}')"
-class="btn-primary">
-
-✔️ Pesanan Diterima
-
-</button>
-`
-:
-""
-}
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-
-window.pesananDiterima =
-async(id)=>{
-
-if(
-!confirm(
-"Pesanan sudah diterima?"
-)
-){
-return;
-}
-
-await updateDoc(
-doc(db,"pesanan",id),
-{
-status:"Selesai"
-}
 );
 
-alert(
-"Pesanan selesai"
-);
+async function initPage(){
 
-location.reload();
+await checkLogin();
 
-};
+showLoading();
 
-onAuthStateChanged(
-auth,
-async(user)=>{
+await loadPesanan();
 
-if(!user){
+initSearch();
 
-window.location.href =
+initFilter();
+
+}
+// ======================================
+// LOGIN
+// ======================================
+
+async function checkLogin(){
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+window.location.href=
+
 "login.html";
 
 return;
 
 }
 
+uid=
+
+auth.currentUser.uid;
+
+}
+// ======================================
+// LOADING
+// ======================================
+
+function showLoading(){
+
+const template=
+
+document.getElementById(
+
+"loadingPesanan"
+
+);
+
+pesananContainer.innerHTML="";
+
+for(let i=0;i<4;i++){
+
+pesananContainer.appendChild(
+
+template.content.cloneNode(true)
+
+);
+
+}
+
+}
+// ======================================
+// LOAD PESANAN
+// ======================================
+
+async function loadPesanan(){
+
 try{
 
-const snapshot =
+const snapshot=
+
 await getDocs(
 
 query(
+
 collection(db,"pesanan"),
+
 where(
+
 "uidPembeli",
+
 "==",
-user.uid
+
+uid
+
+),
+
+orderBy(
+
+"createdAt",
+
+"desc"
+
 )
+
 )
 
 );
 
-semuaPesanan = [];
+semuaPesanan=[];
 
-let totalPesanan = 0;
-let belumBayar = 0;
-let menungguVerifikasi = 0;
-let diproses = 0;
-let dikirim = 0;
-let selesai = 0;
-let totalBelanja = 0;
-
-snapshot.forEach((docSnap)=>{
-
-const data =
-docSnap.data();
+snapshot.forEach(doc=>{
 
 semuaPesanan.push({
-id:docSnap.id,
-...data
-});
 
-totalPesanan++;
+id:doc.id,
 
-totalBelanja +=
-Number(
-data.totalBayar || 0
-);
-
-if(
-data.status ===
-"Belum Bayar"
-){
-belumBayar++;
-}
-
-if(
-data.status ===
-"Menunggu Verifikasi"
-){
-menungguVerifikasi++;
-}
-
-if(
-data.status ===
-"Diproses"
-){
-diproses++;
-}
-
-if(
-data.status ===
-"Dikirim"
-){
-dikirim++;
-}
-
-if(
-data.status ===
-"Selesai"
-){
-selesai++;
-}
+...doc.data()
 
 });
 
-document.getElementById(
-"totalPesanan"
-).innerText =
-totalPesanan;
+});
 
-document.getElementById(
-"belumBayar"
-).innerText =
-belumBayar;
-
-document.getElementById(
-"menungguVerifikasi"
-).innerText =
-menungguVerifikasi;
-
-document.getElementById(
-"diproses"
-).innerText =
-diproses;
-
-document.getElementById(
-"dikirim"
-).innerText =
-dikirim;
-
-document.getElementById(
-"selesai"
-).innerText =
-selesai;
-
-document.getElementById(
-"totalBelanja"
-).innerText =
-"Rp " +
-totalBelanja.toLocaleString("id-ID");
+updateStatistik();
 
 renderPesanan(
+
 semuaPesanan
+
 );
 
-}
-catch(error){
+}catch(error){
 
 console.error(error);
 
-container.innerHTML = `
+showError();
 
-<div class="dashboard-card">
+}
 
-<h3>Error</h3>
+}
+// ======================================
+// STATISTIK
+// ======================================
 
-<p>${error.message}</p>
+function updateStatistik(){
+
+totalPesanan.innerText=
+
+semuaPesanan.length;
+
+belumBayar.innerText=
+
+semuaPesanan.filter(item=>
+
+item.status==="Belum Bayar"
+
+).length;
+
+menungguVerifikasi.innerText=
+
+semuaPesanan.filter(item=>
+
+item.status==="Menunggu Verifikasi"
+
+).length;
+
+diproses.innerText=
+
+semuaPesanan.filter(item=>
+
+item.status==="Diproses"
+
+).length;
+
+dikirim.innerText=
+
+semuaPesanan.filter(item=>
+
+item.status==="Dikirim"
+
+).length;
+
+selesai.innerText=
+
+semuaPesanan.filter(item=>
+
+item.status==="Selesai"
+
+).length;
+
+const total=
+
+semuaPesanan.reduce(
+
+(sum,item)=>
+
+sum+
+
+Number(item.totalBayar||0),
+
+0
+
+);
+
+totalBelanja.innerText=
+
+formatRupiah(total);
+
+}
+// ======================================
+// RENDER
+// ======================================
+
+function renderPesanan(data){
+
+pesananContainer.innerHTML="";
+
+if(data.length===0){
+
+document.getElementById(
+
+"emptyPesanan"
+
+).style.display="block";
+
+return;
+
+}
+
+document.getElementById(
+
+"emptyPesanan"
+
+).style.display="none";
+
+data.forEach(item=>{
+
+pesananContainer.innerHTML+=
+
+createCard(item);
+
+});
+
+}
+// ======================================
+// CARD
+// ======================================
+
+function createCard(item){
+
+const gambar=
+
+item.items?.[0]?.gambar?.[0]||
+
+item.items?.[0]?.gambar||
+
+"assets/no-image.png";
+
+const namaProduk=
+
+item.items?.[0]?.namaProduk||
+
+"Produk";
+
+const jumlah=
+
+item.items?.length||0;
+
+return`
+
+<div class="order-card">
+
+<img
+
+src="${gambar}"
+
+loading="lazy">
+
+<div class="order-info">
+
+<h3>
+
+${namaProduk}
+
+</h3>
+
+<p>
+
+🏪 ${item.namaUmkm||"-"}
+
+</p>
+
+<p>
+
+🆔 ${item.id.substring(0,8)}
+
+</p>
+
+<p>
+
+🛍 ${jumlah} Produk
+
+</p>
+
+<p class="harga">
+
+${formatRupiah(item.totalBayar)}
+
+</p>
+
+<span class="status-badge ${statusClass(item.status)}">
+
+${item.status}
+
+</span>
+
+</div>
+
+<div class="order-action">
+
+<a
+
+href="detail-pesanan.html?id=${item.id}"
+
+class="btn btn-primary">
+
+Detail
+
+</a>
+
+${item.status==="Belum Bayar"
+
+?`
+
+<a
+
+href="upload-bukti.html?id=${item.id}"
+
+class="btn btn-secondary">
+
+Upload Bukti
+
+</a>
+
+`
+
+:""}
+
+</div>
 
 </div>
 
 `;
 
 }
+// ======================================
+// STATUS
+// ======================================
+
+function statusClass(status){
+
+switch(status){
+
+case"Belum Bayar":
+
+return"status-belum";
+
+case"Menunggu Verifikasi":
+
+return"status-verifikasi";
+
+case"Diproses":
+
+return"status-proses";
+
+case"Dikirim":
+
+return"status-kirim";
+
+case"Selesai":
+
+return"status-selesai";
+
+default:
+
+return"status-ditolak";
 
 }
+
+}
+// ======================================
+// SEARCH
+// ======================================
+
+function initSearch(){
+
+searchPesanan.addEventListener(
+
+"input",
+
+filterPesanan
+
 );
 
-document
-.getElementById("searchPesanan")
-.addEventListener(
-"input",
-(e)=>{
+}
+// ======================================
+// FILTER
+// ======================================
 
-const keyword =
-e.target.value.toLowerCase();
+function initFilter(){
 
-renderPesanan(
+filterStatus.addEventListener(
 
-semuaPesanan.filter(
-item=>
+"change",
+
+filterPesanan
+
+);
+
+}
+
+function filterPesanan(){
+
+const keyword=
+
+searchPesanan.value
+
+.toLowerCase()
+
+.trim();
+
+const status=
+
+filterStatus.value;
+
+const hasil=
+
+semuaPesanan.filter(item=>{
+
+const nomor=
 
 item.id
-.toLowerCase()
-.includes(keyword)
+
+.toLowerCase();
+
+const toko=
+
+(item.namaUmkm||"")
+
+.toLowerCase();
+
+const cocokKeyword=
+
+nomor.includes(keyword)
 
 ||
 
-(item.namaUmkm || "")
-.toLowerCase()
-.includes(keyword)
+toko.includes(keyword);
 
-)
+const cocokStatus=
 
-);
+status==="all"
+
+||
+
+item.status===status;
+
+return cocokKeyword
+
+&&
+
+cocokStatus;
 
 });
 
-document
-.getElementById("filterStatus")
-.addEventListener(
-"change",
-(e)=>{
-
-const status =
-e.target.value;
-
-if(status === "all"){
-
 renderPesanan(
-semuaPesanan
-);
 
-return;
+hasil
+
+);
 
 }
+// ======================================
+// FORMAT
+// ======================================
 
-renderPesanan(
+function formatRupiah(angka){
 
-semuaPesanan.filter(
-item =>
-item.status === status
+return "Rp "+
+
+Number(
+
+angka||0
+
 )
+
+.toLocaleString(
+
+"id-ID"
 
 );
 
-});
+}
+// ======================================
+// ERROR
+// ======================================
+
+function showError(){
+
+pesananContainer.innerHTML=`
+
+<div class="empty-state">
+
+<div class="empty-icon">
+
+⚠️
+
+</div>
+
+<h2>
+
+Terjadi Kesalahan
+
+</h2>
+
+<p>
+
+Gagal memuat data pesanan.
+
+</p>
+
+</div>
+
+`;
+
+}
+// ======================================
+// TOAST
+// ======================================
+
+function showToast(message){
+
+const toast=
+
+document.createElement("div");
+
+toast.className="toast";
+
+toast.innerText=message;
+
+document.body.appendChild(toast);
+
+setTimeout(()=>{
+
+toast.classList.add("show");
+
+},100);
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+setTimeout(()=>{
+
+toast.remove();
+
+},300);
+
+},3000);
+
+}
