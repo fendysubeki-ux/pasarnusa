@@ -1,106 +1,81 @@
-body{
+/* ==========================================================================
+   PasarNusa — Typography
+   typography.css
+   Skala tipografi global. Bergantung pada token di variables.css.
+   Jangan tambahkan warna atau layout di sini — hanya teks.
+   ========================================================================== */
 
-font-family:"Plus Jakarta Sans",sans-serif;
-
-font-size:16px;
-
-font-weight:400;
-
-line-height:1.7;
-
-background:var(--color-background);
-
-color:var(--color-text);
-
--webkit-font-smoothing:antialiased;
-
-text-rendering:optimizeLegibility;
-
+/* --------------------------------------------------------------------------
+   Body
+-------------------------------------------------------------------------- */
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1rem;          /* 16px — gunakan rem agar ikut skala root */
+  font-weight: 400;
+  line-height: 1.7;
+  background: var(--color-background);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;   /* konsisten dengan reset.css */
+  text-rendering: optimizeLegibility;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6{
-
-font-weight:700;
-
-line-height:1.2;
-
-color:var(--color-text);
-
+/* --------------------------------------------------------------------------
+   Heading
+   Skala modular — setiap level turun ~1 langkah dari yang di atasnya.
+-------------------------------------------------------------------------- */
+h1, h2, h3,
+h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text);
 }
 
-h1{
+h1 { font-size: 3.5rem; }
+h2 { font-size: 2.5rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
 
-font-size:3.5rem;
-
+/* --------------------------------------------------------------------------
+   Paragraf & Teks Pendukung
+-------------------------------------------------------------------------- */
+p {
+  color: var(--color-muted);
+  margin-top: 12px;
 }
 
-h2{
-
-font-size:2.5rem;
-
+small {
+  font-size: 0.875rem;
+  color: var(--color-muted);
 }
 
-h3{
-
-font-size:1.75rem;
-
+strong {
+  font-weight: 700;
 }
 
-h4{
-
-font-size:1.25rem;
-
+/* --------------------------------------------------------------------------
+   Tautan
+   Warna dasar diwarisi dari elemen induk; hover memakai warna brand.
+-------------------------------------------------------------------------- */
+a {
+  color: inherit;
+  transition: color var(--transition);   /* animasikan hanya 'color', bukan 'all' */
 }
 
-h5{
-
-font-size:1.125rem;
-
+a:hover {
+  color: var(--color-primary);
 }
 
-h6{
-
-font-size:1rem;
-
-}
-
-p{
-
-color:var(--color-muted);
-
-margin-top:12px;
-
-}
-
-small{
-
-font-size:.875rem;
-
-color:var(--color-muted);
-
-}
-
-strong{
-
-font-weight:700;
-
-}
-
-a{
-
-color:inherit;
-
-transition:var(--transition);
-
-}
-
-a:hover{
-
-color:var(--color-primary);
-
+/* --------------------------------------------------------------------------
+   Fokus Keyboard
+   Mengembalikan outline yang dihapus reset.css khusus untuk navigasi
+   keyboard — penting untuk aksesibilitas (WCAG 2.4.7).
+-------------------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
