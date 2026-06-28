@@ -2,612 +2,304 @@
 <html lang="id">
 
 <head>
+  <!-- =============================================
+    META & KONFIGURASI DASAR
+  ============================================= -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO -->
+  <title>Kategori | PasarNusa</title>
+  <meta name="description" content="Jelajahi seluruh kategori produk UMKM Indonesia di PasarNusa.">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <!-- PWA / Browser -->
+  <meta name="theme-color" content="#16a34a">
 
-<title>Kategori | PasarNusa</title>
+  <!-- Favicon -->
+  <link rel="icon" href="assets/logo.png">
 
-<meta
-name="description"
-content="Jelajahi seluruh kategori produk UMKM Indonesia di PasarNusa.">
+  <!-- =============================================
+    FONT — Plus Jakarta Sans via Google Fonts
+    display=swap mencegah FOIT (Flash of Invisible Text)
+  ============================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="kategori.css">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
+  <!-- =============================================
+    STYLESHEET — urutan penting: global dulu, lalu halaman
+  ============================================= -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="kategori.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>PasarNusa</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<a
-href="kategori.html"
-class="active">
-
-Kategori
-
-</a>
-
-<a href="wilayah.html">
-
-Wilayah
-
-</a>
-
-<a href="tentang.html">
-
-Tentang
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="login.html"
-class="btn btn-secondary">
-
-Masuk
-
-</a>
-
-<a
-href="register.html"
-class="btn btn-primary">
-
-Daftar
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-📂 Kategori Produk UMKM
-
-</div>
-
-<h1>
-
-Temukan Produk Berdasarkan Kategori
-
-</h1>
-
-<p>
-
-Pilih kategori favoritmu dan jelajahi ribuan produk UMKM Indonesia dari berbagai daerah.
-
-</p>
-
-<div class="hero-search">
-
-<input
-id="searchKategori"
-type="search"
-placeholder="Cari kategori...">
-
-<button>
-
-🔍 Cari
-
-</button>
-
-</div>
-
-<div class="hero-stat">
-
-<div class="hero-stat-item">
-
-<h3 id="totalKategori">
-
-0
-
-</h3>
-
-<span>
-
-Kategori
-
-</span>
-
-</div>
-
-<div class="hero-stat-item">
-
-<h3 id="totalProduk">
-
-0
-
-</h3>
-
-<span>
-
-Produk
-
-</span>
-
-</div>
-
-<div class="hero-stat-item">
-
-<h3 id="totalUmkm">
-
-0
-
-</h3>
-
-<span>
-
-UMKM
-
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-BREADCRUMB
-========================================== -->
-
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Kategori
-
-</span>
-
-</div>
-
-</section>
-<!-- ==========================================
-SEMUA KATEGORI
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="section-title">
-
-<h2>
-
-Semua Kategori
-
-</h2>
-
-<p>
-
-Jelajahi berbagai kategori produk UMKM dari seluruh Indonesia.
-
-</p>
-
-</div>
-
-</div>
-<div class="category-toolbar">
-
-<input
-
-type="search"
-
-id="kategoriSearch"
-
-placeholder="Cari kategori...">
-
-<select id="sortKategori">
-
-<option value="popular">
-
-Kategori Populer
-
-</option>
-
-<option value="az">
-
-A - Z
-
-</option>
-
-<option value="za">
-
-Z - A
-
-</option>
-
-</select>
-
-</div>
-<div
-
-id="kategoriGrid"
-
-class="category-grid">
-<div class="category-card skeleton-card">
-
-<div class="category-icon skeleton"></div>
-
-<div class="skeleton skeleton-title"></div>
-
-<div class="skeleton skeleton-text"></div>
-
-</div>
-<div class="category-card skeleton-card">
-
-<div class="category-icon skeleton"></div>
-
-<div class="skeleton skeleton-title"></div>
-
-<div class="skeleton skeleton-text"></div>
-
-</div>
-<div class="category-card skeleton-card">
-
-<div class="category-icon skeleton"></div>
-
-<div class="skeleton skeleton-title"></div>
-
-<div class="skeleton skeleton-text"></div>
-
-</div>
-<div class="category-card skeleton-card">
-
-<div class="category-icon skeleton"></div>
-
-<div class="skeleton skeleton-title"></div>
-
-<div class="skeleton skeleton-text"></div>
-
-</div>
-<div class="category-card skeleton-card">
-
-<div class="category-icon skeleton"></div>
-
-<div class="skeleton skeleton-title"></div>
-
-<div class="skeleton skeleton-text"></div>
-
-</div>
-<div class="category-card skeleton-card">
-
-<div class="category-icon skeleton"></div>
-
-<div class="skeleton skeleton-title"></div>
-
-<div class="skeleton skeleton-text"></div>
-
-</div>
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-KATEGORI POPULER
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="section-title">
-
-<h2>
-
-🔥 Kategori Populer
-
-</h2>
-
-<p>
-
-Kategori yang paling banyak diminati oleh pengguna PasarNusa.
-
-</p>
-
-</div>
-
-</div>
-
-<div class="popular-category-grid">
-
-<div class="popular-category-card">
-
-<div class="popular-icon">
-
-🍜
-
-</div>
-
-<h3>
-
-Makanan
-
-</h3>
-
-<p>
-
-0 Produk
-
-</p>
-
-</div>
-
-<div class="popular-category-card">
-
-<div class="popular-icon">
-
-🥤
-
-</div>
-
-<h3>
-
-Minuman
-
-</h3>
-
-<p>
-
-0 Produk
-
-</p>
-
-</div>
-
-<div class="popular-category-card">
-
-<div class="popular-icon">
-
-👕
-
-</div>
-
-<h3>
-
-Fashion
-
-</h3>
-
-<p>
-
-0 Produk
-
-</p>
-
-</div>
-
-<div class="popular-category-card">
-
-<div class="popular-icon">
-
-🧺
-
-</div>
-
-<h3>
-
-Kerajinan
-
-</h3>
-
-<p>
-
-0 Produk
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-CTA
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="cta">
-
-<div class="cta-icon">
-
-🚀
-
-</div>
-
-<h2>
-
-Belum Menemukan Kategori yang Dicari?
-
-</h2>
-
-<p>
-
-Daftarkan UMKM Anda dan tampilkan produk pada kategori yang sesuai agar lebih mudah ditemukan pembeli.
-
-</p>
-
-<div class="cta-action">
-
-<a
-
-href="register.html"
-
-class="btn btn-primary">
-
-🏪 Daftarkan UMKM
-
-</a>
-
-<a
-
-href="produk.html"
-
-class="btn btn-secondary">
-
-🛍️ Lihat Produk
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top">
-
-↑
-
-</button>
-
-<script src="script.js"></script>
-
-<script
-type="module"
-src="kategori.js">
-
-</script>
+  <!-- =============================================
+    NAVBAR — navigasi utama situs
+  ============================================= -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Menu Navigasi -->
+        <nav class="navbar-menu" aria-label="Navigasi Utama">
+          <a href="index.html">Beranda</a>
+          <a href="produk.html">Produk</a>
+          <a href="kategori.html" class="active" aria-current="page">Kategori</a>
+          <a href="wilayah.html">Wilayah</a>
+          <a href="tentang.html">Tentang</a>
+        </nav>
+
+        <!-- Aksi Navbar: tema, masuk, daftar -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="login.html" class="btn btn-secondary">Masuk</a>
+          <a href="register.html" class="btn btn-primary">Daftar</a>
+        </div>
+
+        <!-- Tombol hamburger untuk mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+
+  <!-- =============================================
+    HERO — judul halaman + pencarian + statistik
+  ============================================= -->
+  <section class="hero-page" aria-labelledby="heroHeading">
+    <div class="container">
+      <div class="hero-page-content">
+
+        <div class="badge">📂 Kategori Produk UMKM</div>
+
+        <h1 id="heroHeading">Temukan Produk Berdasarkan Kategori</h1>
+
+        <p>Pilih kategori favoritmu dan jelajahi ribuan produk UMKM Indonesia dari berbagai daerah.</p>
+
+        <!-- Kotak pencarian hero — hanya hiasan visual;
+             pencarian fungsional ada di toolbar di bawah (#kategoriSearch) -->
+        <div class="hero-search" role="search">
+          <label for="searchKategori" class="sr-only">Cari kategori</label>
+          <input
+            id="searchKategori"
+            type="search"
+            placeholder="Cari kategori..."
+            autocomplete="off"
+          >
+          <button type="button" aria-label="Cari">🔍 Cari</button>
+        </div>
+
+        <!-- Statistik ringkas — diisi oleh kategori.js -->
+        <div class="hero-stat" aria-live="polite">
+          <div class="hero-stat-item">
+            <h2 id="totalKategori">0</h2>
+            <span>Kategori</span>
+          </div>
+          <div class="hero-stat-item">
+            <h2 id="totalProduk">0</h2>
+            <span>Produk</span>
+          </div>
+          <div class="hero-stat-item">
+            <h2 id="totalUmkm">0</h2>
+            <span>UMKM</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+    BREADCRUMB — penanda posisi halaman
+  ============================================= -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Kategori</span>
+    </div>
+  </nav>
+
+
+  <!-- =============================================
+    SEMUA KATEGORI — grid utama + toolbar filter
+  ============================================= -->
+  <section class="section" aria-labelledby="semuaKategoriHeading">
+    <div class="container">
+
+      <header class="section-header">
+        <div class="section-title">
+          <h2 id="semuaKategoriHeading">Semua Kategori</h2>
+          <p>Jelajahi berbagai kategori produk UMKM dari seluruh Indonesia.</p>
+        </div>
+      </header>
+
+      <!-- Toolbar: pencarian & pengurutan -->
+      <div class="category-toolbar">
+        <label for="kategoriSearch" class="sr-only">Cari kategori</label>
+        <input
+          type="search"
+          id="kategoriSearch"
+          placeholder="Cari kategori..."
+          autocomplete="off"
+        >
+
+        <label for="sortKategori" class="sr-only">Urutkan kategori</label>
+        <select id="sortKategori">
+          <option value="popular">Kategori Populer</option>
+          <option value="az">A – Z</option>
+          <option value="za">Z – A</option>
+        </select>
+      </div>
+
+      <!-- Grid kategori — diisi oleh kategori.js.
+           Skeleton di bawah akan digantikan setelah data dimuat. -->
+      <div id="kategoriGrid" class="category-grid" aria-live="polite" aria-busy="true">
+
+        <!-- Skeleton loading — 6 kartu placeholder -->
+        <div class="category-card skeleton-card" aria-hidden="true">
+          <div class="category-icon skeleton"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+        </div>
+        <div class="category-card skeleton-card" aria-hidden="true">
+          <div class="category-icon skeleton"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+        </div>
+        <div class="category-card skeleton-card" aria-hidden="true">
+          <div class="category-icon skeleton"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+        </div>
+        <div class="category-card skeleton-card" aria-hidden="true">
+          <div class="category-icon skeleton"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+        </div>
+        <div class="category-card skeleton-card" aria-hidden="true">
+          <div class="category-icon skeleton"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+        </div>
+        <div class="category-card skeleton-card" aria-hidden="true">
+          <div class="category-icon skeleton"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+    KATEGORI POPULER — 4 kategori unggulan
+    Catatan: jumlah produk diisi ulang oleh kategori.js
+  ============================================= -->
+  <section class="section" aria-labelledby="popularHeading">
+    <div class="container">
+
+      <header class="section-header">
+        <div class="section-title">
+          <h2 id="popularHeading">🔥 Kategori Populer</h2>
+          <p>Kategori yang paling banyak diminati oleh pengguna PasarNusa.</p>
+        </div>
+      </header>
+
+      <div class="popular-category-grid">
+
+        <div class="popular-category-card">
+          <div class="popular-icon" aria-hidden="true">🍜</div>
+          <h3>Makanan</h3>
+          <p data-category="makanan">0 Produk</p>
+        </div>
+
+        <div class="popular-category-card">
+          <div class="popular-icon" aria-hidden="true">🥤</div>
+          <h3>Minuman</h3>
+          <p data-category="minuman">0 Produk</p>
+        </div>
+
+        <div class="popular-category-card">
+          <div class="popular-icon" aria-hidden="true">👕</div>
+          <h3>Fashion</h3>
+          <p data-category="fashion">0 Produk</p>
+        </div>
+
+        <div class="popular-category-card">
+          <div class="popular-icon" aria-hidden="true">🧺</div>
+          <h3>Kerajinan</h3>
+          <p data-category="kerajinan">0 Produk</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+    CTA — ajakan daftar UMKM
+  ============================================= -->
+  <section class="section" aria-labelledby="ctaHeading">
+    <div class="container">
+      <div class="cta">
+
+        <div class="cta-icon" aria-hidden="true">🚀</div>
+
+        <h2 id="ctaHeading">Belum Menemukan Kategori yang Dicari?</h2>
+
+        <p>
+          Daftarkan UMKM Anda dan tampilkan produk pada kategori yang sesuai
+          agar lebih mudah ditemukan pembeli.
+        </p>
+
+        <div class="cta-action">
+          <a href="register.html" class="btn btn-primary">🏪 Daftarkan UMKM</a>
+          <a href="produk.html" class="btn btn-secondary">🛍️ Lihat Produk</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+    FOOTER
+  ============================================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong></p>
+        <p>Dibangun dengan ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Tombol kembali ke atas -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+
+  <!-- =============================================
+    SCRIPT
+    script.js — utilitas global (tema, scroll, hamburger)
+    kategori.js — logika khusus halaman kategori (type="module")
+  ============================================= -->
+  <script src="script.js"></script>
+  <script type="module" src="kategori.js"></script>
 
 </body>
-
 </html>
