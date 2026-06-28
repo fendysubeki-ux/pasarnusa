@@ -1,786 +1,308 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <title>Wilayah | PasarNusa</title>
+  <meta name="description" content="Jelajahi produk UMKM berdasarkan provinsi, kabupaten, kecamatan dan desa di seluruh Indonesia.">
+  <meta name="theme-color" content="#16a34a">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<title>Wilayah | PasarNusa</title>
+  <link rel="icon" href="assets/logo.png" type="image/png">
 
-<meta
-name="description"
-content="Jelajahi produk UMKM berdasarkan provinsi, kabupaten, kecamatan dan desa di seluruh Indonesia.">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="wilayah.css">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="wilayah.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>PasarNusa</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<a href="kategori.html">
-
-Kategori
-
-</a>
-
-<a
-href="wilayah.html"
-class="active">
-
-Wilayah
-
-</a>
-
-<a href="tentang.html">
-
-Tentang
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="login.html"
-class="btn btn-secondary">
-
-Masuk
-
-</a>
-
-<a
-href="register.html"
-class="btn btn-primary">
-
-Daftar
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-🗺️ Wilayah UMKM Indonesia
-
-</div>
-
-<h1>
-
-Temukan Produk Berdasarkan Wilayah
-
-</h1>
-
-<p>
-
-Jelajahi UMKM dari seluruh Indonesia mulai dari provinsi, kabupaten, kecamatan hingga desa.
-
-</p>
-
-<div class="hero-search">
-
-<input
-
-id="searchWilayah"
-
-type="search"
-
-placeholder="Cari provinsi, kabupaten, kecamatan atau desa...">
-
-<button>
-
-🔍 Cari
-
-</button>
-
-</div>
-
-<div class="hero-stat">
-
-<div class="hero-stat-item">
-
-<h3 id="totalProvinsi">
-
-0
-
-</h3>
-
-<span>
-
-Provinsi
-
-</span>
-
-</div>
-
-<div class="hero-stat-item">
-
-<h3 id="totalKabupaten">
-
-0
-
-</h3>
-
-<span>
-
-Kabupaten
-
-</span>
-
-</div>
-
-<div class="hero-stat-item">
-
-<h3 id="totalUmkm">
-
-0
-
-</h3>
-
-<span>
-
-UMKM
-
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-BREADCRUMB
-========================================== -->
-
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Wilayah
-
-</span>
-
-</div>
-
-</section>
-<!-- ==========================================
-STATISTIK
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="section-title">
-
-<h2>
-
-Jelajahi UMKM Indonesia
-
-</h2>
-
-<p>
-
-Cari produk UMKM berdasarkan lokasi asalnya.
-
-</p>
-
-</div>
-
-</div>
-
-<div class="wilayah-stat-grid">
-
-<div class="stat-card">
-
-<h3 id="totalProvinsiCard">
-
-0
-
-</h3>
-
-<p>
-
-Provinsi
-
-</p>
-
-</div>
-
-<div class="stat-card">
-
-<h3 id="totalKabupatenCard">
-
-0
-
-</h3>
-
-<p>
-
-Kabupaten
-
-</p>
-
-</div>
-
-<div class="stat-card">
-
-<h3 id="totalKecamatan">
-
-0
-
-</h3>
-
-<p>
-
-Kecamatan
-
-</p>
-
-</div>
-
-<div class="stat-card">
-
-<h3 id="totalDesa">
-
-0
-
-</h3>
-
-<p>
-
-Desa
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-SEMUA WILAYAH
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="section-title">
-
-<h2>
-
-Semua Wilayah
-
-</h2>
-
-<p>
-
-Pilih wilayah untuk melihat produk UMKM yang tersedia.
-
-</p>
-
-</div>
-
-</div>
-
-<div
-
-id="wilayahGrid"
-
-class="wilayah-grid">
-<div class="wilayah-card skeleton-card">
-
-<div class="wilayah-icon skeleton"></div>
-
-<div class="skeleton skeleton-title"></div>
-
-<div class="skeleton skeleton-text"></div>
-
-</div>
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-WILAYAH POPULER
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="section-title">
-
-<h2>
-
-🔥 Wilayah Populer
-
-</h2>
-
-<p>
-
-Wilayah dengan aktivitas UMKM terbanyak.
-
-</p>
-
-</div>
-
-</div>
-
-<div class="popular-wilayah-grid">
-
-<div class="popular-wilayah-card">
-
-<div class="popular-icon">
-
-🏙️
-
-</div>
-
-<h3>
-
-Jawa Timur
-
-</h3>
-
-<p>
-
-0 UMKM
-
-</p>
-
-</div>
-
-<div class="popular-wilayah-card">
-
-<div class="popular-icon">
-
-🌋
-
-</div>
-
-<h3>
-
-Jawa Tengah
-
-</h3>
-
-<p>
-
-0 UMKM
-
-</p>
-
-</div>
-
-<div class="popular-wilayah-card">
-
-<div class="popular-icon">
-
-🌆
-
-</div>
-
-<h3>
-
-Jawa Barat
-
-</h3>
-
-<p>
-
-0 UMKM
-
-</p>
-
-</div>
-
-<div class="popular-wilayah-card">
-
-<div class="popular-icon">
-
-🏝️
-
-</div>
-
-<h3>
-
-Bali
-
-</h3>
-
-<p>
-
-0 UMKM
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-CTA
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="cta">
-
-<div class="cta-icon">
-
-🌍
-
-</div>
-
-<h2>
-
-UMKM Anda Belum Terdaftar?
-
-</h2>
-
-<p>
-
-Daftarkan UMKM Anda agar produk dapat ditemukan berdasarkan provinsi, kabupaten, kecamatan hingga desa di seluruh Indonesia.
-
-</p>
-
-<div class="cta-action">
-
-<a
-href="register.html"
-class="btn btn-primary">
-
-🏪 Daftarkan UMKM
-
-</a>
-
-<a
-href="produk.html"
-class="btn btn-secondary">
-
-🛍️ Lihat Produk
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-FOOTER
-========================================== -->
-
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-top">
-
-<div>
-
-<div class="footer-logo">
-
-🌿
-
-<span>PasarNusa</span>
-
-</div>
-
-<p class="footer-desc">
-
-Marketplace digital UMKM Indonesia yang menghubungkan pelaku usaha lokal dengan pembeli di seluruh Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h3 class="footer-title">
-
-Marketplace
-
-</h3>
-
-<div class="footer-links">
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<a href="kategori.html">
-
-Kategori
-
-</a>
-
-<a href="wilayah.html">
-
-Wilayah
-
-</a>
-
-<a href="affiliate.html">
-
-Affiliate
-
-</a>
-
-</div>
-
-</div>
-
-<div>
-
-<h3 class="footer-title">
-
-Layanan
-
-</h3>
-
-<div class="footer-links">
-
-<a href="login.html">
-
-Masuk
-
-</a>
-
-<a href="register.html">
-
-Daftar
-
-</a>
-
-<a href="kontak.html">
-
-Kontak
-
-</a>
-
-<a href="bantuan.html">
-
-Pusat Bantuan
-
-</a>
-
-</div>
-
-</div>
-
-<div>
-
-<h3 class="footer-title">
-
-Perusahaan
-
-</h3>
-
-<div class="footer-links">
-
-<a href="tentang.html">
-
-Tentang Kami
-
-</a>
-
-<a href="faq.html">
-
-FAQ
-
-</a>
-
-<a href="syarat.html">
-
-Syarat & Ketentuan
-
-</a>
-
-<a href="kebijakan.html">
-
-Kebijakan Privasi
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="footer-divider"></div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<!-- ==========================================
-BACK TO TOP
-========================================== -->
-
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-<!-- ==========================================
-SCRIPT
-========================================== -->
-
-<script src="script.js"></script>
-
-<script
-type="module"
-src="wilayah.js">
-
-</script>
+  <!-- =====================================================================
+       NAVBAR
+  ====================================================================== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="produk.html">Produk</a>
+          <a href="kategori.html">Kategori</a>
+          <a href="wilayah.html" class="active">Wilayah</a>
+          <a href="tentang.html">Tentang</a>
+        </nav>
+
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Aktifkan dark mode">
+            🌙
+          </button>
+          <a href="login.html" class="btn btn-secondary">Masuk</a>
+          <a href="register.html" class="btn btn-primary">Daftar</a>
+        </div>
+
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false" aria-controls="navbar-menu">
+          ☰
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+
+  <!-- =====================================================================
+       HERO
+  ====================================================================== -->
+  <section class="hero-page">
+    <div class="container">
+      <div class="hero-page-content">
+
+        <div class="badge">🗺️ Wilayah UMKM Indonesia</div>
+
+        <h1>Temukan Produk Berdasarkan Wilayah</h1>
+
+        <p>
+          Jelajahi UMKM dari seluruh Indonesia mulai dari provinsi, kabupaten,
+          kecamatan hingga desa.
+        </p>
+
+        <!-- role="search" membantu screen reader mengidentifikasi form pencarian -->
+        <form class="hero-search" role="search">
+          <input
+            id="searchWilayah"
+            type="search"
+            placeholder="Cari provinsi, kabupaten, kecamatan atau desa..."
+            aria-label="Cari wilayah">
+          <button type="submit">🔍 Cari</button>
+        </form>
+
+        <div class="hero-stat" aria-label="Statistik ringkas wilayah">
+          <div class="hero-stat-item">
+            <h3 id="totalProvinsi">0</h3>
+            <span>Provinsi</span>
+          </div>
+          <div class="hero-stat-item">
+            <h3 id="totalKabupaten">0</h3>
+            <span>Kabupaten</span>
+          </div>
+          <div class="hero-stat-item">
+            <h3 id="totalUmkm">0</h3>
+            <span>UMKM</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================================
+       BREADCRUMB
+  ====================================================================== -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Wilayah</span>
+    </div>
+  </nav>
+
+
+  <!-- =====================================================================
+       STATISTIK WILAYAH
+  ====================================================================== -->
+  <section class="section" aria-labelledby="heading-stats">
+    <div class="container">
+
+      <div class="section-header">
+        <div class="section-title">
+          <h2 id="heading-stats">Jelajahi UMKM Indonesia</h2>
+          <p>Cari produk UMKM berdasarkan lokasi asalnya.</p>
+        </div>
+      </div>
+
+      <div class="wilayah-stat-grid">
+        <div class="stat-card">
+          <h3 id="totalProvinsiCard">0</h3>
+          <p>Provinsi</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="totalKabupatenCard">0</h3>
+          <p>Kabupaten</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="totalKecamatan">0</h3>
+          <p>Kecamatan</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="totalDesa">0</h3>
+          <p>Desa</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================================
+       SEMUA WILAYAH
+  ====================================================================== -->
+  <section class="section" aria-labelledby="heading-wilayah">
+    <div class="container">
+
+      <div class="section-header">
+        <div class="section-title">
+          <h2 id="heading-wilayah">Semua Wilayah</h2>
+          <p>Pilih wilayah untuk melihat produk UMKM yang tersedia.</p>
+        </div>
+      </div>
+
+      <!-- Diisi oleh wilayah.js; skeleton awal ditampilkan saat data dimuat -->
+      <div id="wilayahGrid" class="wilayah-grid" aria-live="polite" aria-busy="true">
+        <div class="wilayah-card skeleton-card" aria-hidden="true">
+          <div class="wilayah-icon skeleton"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================================
+       WILAYAH POPULER
+       Nilai UMKM diisi oleh wilayah.js setelah data Firestore dimuat.
+  ====================================================================== -->
+  <section class="section" aria-labelledby="heading-populer">
+    <div class="container">
+
+      <div class="section-header">
+        <div class="section-title">
+          <h2 id="heading-populer">🔥 Wilayah Populer</h2>
+          <p>Wilayah dengan aktivitas UMKM terbanyak.</p>
+        </div>
+      </div>
+
+      <div class="popular-wilayah-grid">
+        <div class="popular-wilayah-card">
+          <div class="popular-icon">🏙️</div>
+          <h3>Jawa Timur</h3>
+          <p id="umkmJatim">0 UMKM</p>
+        </div>
+        <div class="popular-wilayah-card">
+          <div class="popular-icon">🌋</div>
+          <h3>Jawa Tengah</h3>
+          <p id="umkmJateng">0 UMKM</p>
+        </div>
+        <div class="popular-wilayah-card">
+          <div class="popular-icon">🌆</div>
+          <h3>Jawa Barat</h3>
+          <p id="umkmJabar">0 UMKM</p>
+        </div>
+        <div class="popular-wilayah-card">
+          <div class="popular-icon">🏝️</div>
+          <h3>Bali</h3>
+          <p id="umkmBali">0 UMKM</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================================
+       CALL TO ACTION
+  ====================================================================== -->
+  <section class="section" aria-labelledby="heading-cta">
+    <div class="container">
+      <div class="cta">
+        <div class="cta-icon">🌍</div>
+        <h2 id="heading-cta">UMKM Anda Belum Terdaftar?</h2>
+        <p>
+          Daftarkan UMKM Anda agar produk dapat ditemukan berdasarkan provinsi,
+          kabupaten, kecamatan hingga desa di seluruh Indonesia.
+        </p>
+        <div class="cta-action">
+          <a href="register.html" class="btn btn-primary">🏪 Daftarkan UMKM</a>
+          <a href="produk.html" class="btn btn-secondary">🛍️ Lihat Produk</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================================
+       FOOTER
+  ====================================================================== -->
+  <footer class="footer">
+    <div class="container">
+
+      <div class="footer-top">
+
+        <div>
+          <div class="footer-logo">🌿 <span>PasarNusa</span></div>
+          <p class="footer-desc">
+            Marketplace digital UMKM Indonesia yang menghubungkan pelaku usaha lokal
+            dengan pembeli di seluruh Indonesia.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Marketplace</h3>
+          <div class="footer-links">
+            <a href="produk.html">Produk</a>
+            <a href="kategori.html">Kategori</a>
+            <a href="wilayah.html">Wilayah</a>
+            <a href="affiliate.html">Affiliate</a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Layanan</h3>
+          <div class="footer-links">
+            <a href="login.html">Masuk</a>
+            <a href="register.html">Daftar</a>
+            <a href="kontak.html">Kontak</a>
+            <a href="bantuan.html">Pusat Bantuan</a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Perusahaan</h3>
+          <div class="footer-links">
+            <a href="tentang.html">Tentang Kami</a>
+            <a href="faq.html">FAQ</a>
+            <a href="syarat.html">Syarat &amp; Ketentuan</a>
+            <a href="kebijakan.html">Kebijakan Privasi</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun ❤️ untuk UMKM Indonesia.</p>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- Tombol kembali ke atas -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas halaman">↑</button>
+
+  <script src="script.js"></script>
+  <script type="module" src="wilayah.js"></script>
 
 </body>
-
 </html>
