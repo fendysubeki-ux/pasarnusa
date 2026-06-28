@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Detail Pesanan | UMKM PasarNusa</title>
+
+<meta
+name="description"
+content="Kelola detail pesanan pelanggan">
+
+<meta
+name="theme-color"
+content="#16a34a">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="detail-pesanan-umkm.css">
+
+</head>
+
+<body>
+<header class="navbar">
+
+<div class="container">
+
+<div class="navbar-content">
+
+<a
+href="dashboard-umkm.html"
+class="logo">
+
+🌿
+
+<span>
+
+PasarNusa
+
+</span>
+
+</a>
+
+<nav class="navbar-menu">
+
+<a href="dashboard-umkm.html">
+
+Dashboard
+
+</a>
+
+<a href="pesanan-masuk.html">
+
+Pesanan Masuk
+
+</a>
+
+<a
+href="#"
+class="active">
+
+Detail Pesanan
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
+
+<button
+id="themeToggle"
+class="btn btn-secondary">
+
+🌙
+
+</button>
+
+<a
+href="profil-umkm.html"
+class="btn btn-primary">
+
+🏪 Profil
+
+</a>
+
+</div>
+
+<button
+id="menuToggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+📦 Detail Pesanan
+
+</div>
+
+<h1>
+
+Kelola Pesanan Pelanggan
+
+</h1>
+
+<p>
+
+Verifikasi pembayaran, ubah status pesanan, dan input nomor resi pengiriman.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="breadcrumb">
+
+<div class="container">
+
+<a href="dashboard-umkm.html">
+
+Dashboard
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<a href="pesanan-masuk.html">
+
+Pesanan Masuk
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<span>
+
+Detail Pesanan
+
+</span>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="detail-layout">
+
+<div class="detail-content">
+<div class="form-card">
+
+<h2>
+
+📦 Informasi Pesanan
+
+</h2>
+
+<div class="info-item">
+
+<span>
+
+Nomor Pesanan
+
+</span>
+
+<b id="nomorPesanan">
+
+-
+
+</b>
+
+</div>
+
+<div class="info-item">
+
+<span>
+
+Tanggal
+
+</span>
+
+<b id="tanggalPesanan">
+
+-
+
+</b>
+
+</div>
+
+<div class="info-item">
+
+<span>
+
+Status
+
+</span>
+
+<b id="statusPesanan">
+
+-
+
+</b>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+👤 Data Pembeli
+
+</h2>
+
+<div class="info-item">
+
+<span>
+
+Nama
+
+</span>
+
+<b id="namaPembeli">
+
+-
+
+</b>
+
+</div>
+
+<div class="info-item">
+
+<span>
+
+WhatsApp
+
+</span>
+
+<b id="whatsappPembeli">
+
+-
+
+</b>
+
+</div>
+
+<div class="info-item">
+
+<span>
+
+Alamat
+
+</span>
+
+<b id="alamatPembeli">
+
+-
+
+</b>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+🛍 Produk Pesanan
+
+</h2>
+
+<div
+
+id="produkContainer"
+
+class="produk-list">
+
+<div class="loading-card">
+
+Memuat produk...
+
+</div>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+💳 Bukti Pembayaran
+
+</h2>
+
+<div
+
+id="buktiContainer">
+
+<div class="empty-state-mini">
+
+Belum ada bukti pembayaran.
+
+</div>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+🚚 Informasi Pengiriman
+
+</h2>
+
+<div class="form-group">
+
+<label>
+
+Kurir
+
+</label>
+
+<select id="kurir">
+
+<option value="JNE">
+
+JNE
+
+</option>
+
+<option value="J&T">
+
+J&T Express
+
+</option>
+
+<option value="SiCepat">
+
+SiCepat
+
+</option>
+
+<option value="POS">
+
+POS Indonesia
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Nomor Resi
+
+</label>
+
+<input
+
+type="text"
+
+id="nomorResi"
+
+placeholder="Masukkan nomor resi">
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+📦 Status Pesanan
+
+</h2>
+
+<div class="form-group">
+
+<label>
+
+Status
+
+</label>
+
+<select id="statusBaru">
+
+<option value="Menunggu Verifikasi">
+
+Menunggu Verifikasi
+
+</option>
+
+<option value="Diproses">
+
+Diproses
+
+</option>
+
+<option value="Dikirim">
+
+Dikirim
+
+</option>
+
+<option value="Selesai">
+
+Selesai
+
+</option>
+
+<option value="Ditolak">
+
+Ditolak
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+<div class="form-card">
+
+<h2>
+
+⚡ Aksi
+
+</h2>
+
+<div class="action-box">
+
+<button
+
+id="verifikasiBtn"
+
+class="btn btn-primary">
+
+✅ Verifikasi Pembayaran
+
+</button>
+
+<button
+
+id="tolakBtn"
+
+class="btn btn-secondary">
+
+❌ Tolak Pembayaran
+
+</button>
+
+<button
+
+id="simpanBtn"
+
+class="btn btn-primary">
+
+💾 Simpan Perubahan
+
+</button>
+
+<a
+
+id="chatPembeli"
+
+target="_blank"
+
+class="btn btn-secondary">
+
+💬 Hubungi Pembeli
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+<div class="detail-summary">
+
+<div class="summary-card">
+
+<h2>
+
+💰 Ringkasan Pembayaran
+
+</h2>
+
+<div class="summary-item">
+
+<span>
+
+Subtotal
+
+</span>
+
+<b id="subtotal">
+
+Rp 0
+
+</b>
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Ongkir
+
+</span>
+
+<b id="ongkir">
+
+Rp 0
+
+</b>
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Diskon
+
+</span>
+
+<b id="diskon">
+
+Rp 0
+
+</b>
+
+</div>
+
+<hr>
+
+<div class="summary-total">
+
+<span>
+
+Total Bayar
+
+</span>
+
+<h2 id="totalBayar">
+
+Rp 0
+
+</h2>
+
+</div>
+
+<div class="summary-item">
+
+<span>
+
+Status Pembayaran
+
+</span>
+
+<b id="statusPembayaran">
+
+Belum Bayar
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<div
+
+id="emptyDetail"
+
+class="empty-state"
+
+style="display:none;">
+
+<div class="empty-icon">
+
+📦
+
+</div>
+
+<h2>
+
+Pesanan Tidak Ditemukan
+
+</h2>
+
+<p>
+
+Pesanan tidak tersedia atau sudah dihapus.
+
+</p>
+
+<a
+
+href="pesanan-masuk.html"
+
+class="btn btn-primary">
+
+Kembali ke Pesanan
+
+</a>
+
+</div>
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+
+<button
+
+id="backTop"
+
+class="back-top"
+
+aria-label="Kembali ke Atas">
+
+↑
+
+</button>
+
+<script src="script.js"></script>
+
+<script
+
+type="module"
+
+src="detail-pesanan-umkm.js">
+
+</script>
+
+</body>
+
+</html>
