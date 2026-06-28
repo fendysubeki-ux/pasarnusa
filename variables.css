@@ -1,36 +1,76 @@
-:root{
+/* ==========================================================================
+   PasarNusa — Design Tokens
+   variables.css
+   Semua custom property global didefinisikan di sini.
+   Jangan override langsung; gunakan token turunan di komponen masing-masing.
+   ========================================================================== */
 
---color-primary:#16a34a;
---color-primary-dark:#15803d;
---color-primary-light:#dcfce7;
+:root {
 
---color-white:#ffffff;
---color-background:#f8fafc;
---color-surface:#ffffff;
+  /* --------------------------------------------------------------------------
+     Warna Utama (Brand)
+     Hijau PasarNusa — mencerminkan kesegaran produk lokal & kepercayaan.
+  -------------------------------------------------------------------------- */
+  --color-primary:        #16a34a;
+  --color-primary-dark:   #15803d;
+  --color-primary-light:  #dcfce7;
 
---color-text:#0f172a;
---color-muted:#64748b;
+  /* --------------------------------------------------------------------------
+     Warna Permukaan & Latar
+  -------------------------------------------------------------------------- */
+  --color-white:          #ffffff;
+  --color-background:     #f8fafc;
+  --color-surface:        #ffffff;
 
---color-border:#e2e8f0;
+  /* --------------------------------------------------------------------------
+     Warna Teks
+  -------------------------------------------------------------------------- */
+  --color-text:           #0f172a;   /* teks utama — kontras tinggi */
+  --color-muted:          #64748b;   /* teks sekunder / placeholder */
 
---color-success:#22c55e;
---color-warning:#f59e0b;
---color-danger:#ef4444;
---color-info:#3b82f6;
+  /* --------------------------------------------------------------------------
+     Warna Garis Tepi
+  -------------------------------------------------------------------------- */
+  --color-border:         #e2e8f0;
 
---radius-xs:8px;
---radius-sm:12px;
---radius-md:18px;
---radius-lg:24px;
---radius-xl:32px;
+  /* --------------------------------------------------------------------------
+     Warna Status (Semantik)
+  -------------------------------------------------------------------------- */
+  --color-success:        #22c55e;
+  --color-warning:        #f59e0b;
+  --color-danger:         #ef4444;
+  --color-info:           #3b82f6;
 
---shadow-xs:0 2px 8px rgba(15,23,42,.05);
---shadow-sm:0 8px 20px rgba(15,23,42,.06);
---shadow-md:0 16px 40px rgba(15,23,42,.08);
---shadow-lg:0 28px 60px rgba(15,23,42,.12);
+  /* --------------------------------------------------------------------------
+     Radius Sudut
+     Skala konsisten dari xs (komponen kecil) hingga xl (card besar / modal).
+  -------------------------------------------------------------------------- */
+  --radius-xs:            8px;
+  --radius-sm:            12px;
+  --radius-md:            18px;
+  --radius-lg:            24px;
+  --radius-xl:            32px;
 
---transition:.3s ease;
+  /* --------------------------------------------------------------------------
+     Bayangan (Shadow)
+     Berbasis rgba(15,23,42, …) agar tetap harmonis di atas latar terang.
+  -------------------------------------------------------------------------- */
+  --shadow-xs:  0 2px  8px  rgba(15, 23, 42, 0.05);
+  --shadow-sm:  0 8px  20px rgba(15, 23, 42, 0.06);
+  --shadow-md:  0 16px 40px rgba(15, 23, 42, 0.08);
+  --shadow-lg:  0 28px 60px rgba(15, 23, 42, 0.12);
 
---container:1280px;
+  /* --------------------------------------------------------------------------
+     Transisi
+     Gunakan --transition sebagai shorthand standar (property & duration).
+     Tambahkan --transition-fast untuk interaksi cepat (hover ringan, dll.).
+  -------------------------------------------------------------------------- */
+  --transition:       0.3s ease;
+  --transition-fast:  0.15s ease;
+
+  /* --------------------------------------------------------------------------
+     Layout
+  -------------------------------------------------------------------------- */
+  --container-max:    1280px;   /* lebar maksimum konten utama */
 
 }
