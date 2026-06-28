@@ -1,201 +1,97 @@
-.container{
+/* ==========================================================================
+   PasarNusa — Layout
+   layout.css
+   Sistem grid, container, dan section. Bergantung pada token di variables.css.
+   Catatan: class flex/text/margin/hidden juga ada di utilities.css —
+   pilih satu file sebagai sumber tunggal dan hapus duplikasi di file lainnya.
+   ========================================================================== */
 
-width:min(var(--container),92%);
-
-margin-inline:auto;
-
+/* --------------------------------------------------------------------------
+   Container
+   Menggunakan --container-max dari variables.css.
+   min() memastikan lebar tidak melebihi max dan tetap responsif.
+-------------------------------------------------------------------------- */
+.container {
+  width: min(var(--container-max), 92%);
+  margin-inline: auto;
 }
 
-.container-sm{
-
-width:min(1080px,92%);
-
-margin-inline:auto;
-
+.container-sm {
+  width: min(1080px, 92%);
+  margin-inline: auto;
 }
 
-.section{
-
-padding:90px 0;
-
-position:relative;
-
+/* --------------------------------------------------------------------------
+   Section
+-------------------------------------------------------------------------- */
+.section {
+  padding: 90px 0;
+  position: relative;
 }
 
-.section-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:end;
-
-gap:24px;
-
-margin-bottom:48px;
-
-flex-wrap:wrap;
-
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;   /* bug fix: 'end' bukan nilai valid — harus 'flex-end' */
+  gap: 24px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
 }
 
-.section-title{
-
-max-width:650px;
-
+.section-title {
+  max-width: 650px;
 }
 
-.grid{
-
-display:grid;
-
-gap:24px;
-
-}
-
-.grid-2{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
-.grid-3{
-
-grid-template-columns:repeat(3,1fr);
-
-}
-
-.grid-4{
-
-grid-template-columns:repeat(4,1fr);
-
-}
-
-.grid-auto{
-
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-
-}
-
-.flex{
-
-display:flex;
-
-}
-
-.flex-center{
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-}
-
-.flex-between{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-}
-
-.flex-column{
-
-display:flex;
-
-flex-direction:column;
-
-}
-
-.text-center{
-
-text-align:center;
-
-}
-
-.text-left{
-
-text-align:left;
-
-}
-
-.text-right{
-
-text-align:right;
-
-}
-
-.w-100{
-
-width:100%;
-
-}
-
-.hidden{
-
-display:none;
-
-}
-
-.mt-1{
-
-margin-top:8px;
-
-}
-
-.mt-2{
-
-margin-top:16px;
-
-}
-
-.mt-3{
-
-margin-top:24px;
-
-}
-
-.mt-4{
-
-margin-top:32px;
-
-}
-
-.mt-5{
-
-margin-top:48px;
-
-}
-
-.mb-1{
-
-margin-bottom:8px;
-
-}
-
-.mb-2{
-
-margin-bottom:16px;
-
-}
-
-.mb-3{
-
-margin-bottom:24px;
-
-}
-
-.mb-4{
-
-margin-bottom:32px;
-
-}
-
-.mb-5{
-
-margin-bottom:48px;
-
-}
+/* --------------------------------------------------------------------------
+   Grid — skala kolom tetap
+-------------------------------------------------------------------------- */
+.grid      { display: grid; gap: 24px; }
+.grid-2    { grid-template-columns: repeat(2, 1fr); }
+.grid-3    { grid-template-columns: repeat(3, 1fr); }
+.grid-4    { grid-template-columns: repeat(4, 1fr); }
+.grid-auto { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+/* --------------------------------------------------------------------------
+   Flexbox — shorthand umum
+   Catatan: .flex dan .flex-column juga ada di utilities.css.
+   Pertahankan di sini jika utilities.css tidak diimpor di semua halaman.
+-------------------------------------------------------------------------- */
+.flex         { display: flex; }
+.flex-center  { display: flex; justify-content: center; align-items: center; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-column  { display: flex; flex-direction: column; }
+
+/* --------------------------------------------------------------------------
+   Text Align
+-------------------------------------------------------------------------- */
+.text-left   { text-align: left; }
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+
+/* --------------------------------------------------------------------------
+   Lebar
+-------------------------------------------------------------------------- */
+.w-100 { width: 100%; }
+
+/* --------------------------------------------------------------------------
+   Visibility
+-------------------------------------------------------------------------- */
+.hidden { display: none; }
+
+/* --------------------------------------------------------------------------
+   Margin Top — skala 8px
+-------------------------------------------------------------------------- */
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mt-4 { margin-top: 32px; }
+.mt-5 { margin-top: 48px; }
+
+/* --------------------------------------------------------------------------
+   Margin Bottom — skala 8px
+-------------------------------------------------------------------------- */
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.mb-4 { margin-bottom: 32px; }
+.mb-5 { margin-bottom: 48px; }
