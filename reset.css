@@ -1,58 +1,106 @@
+/* ==========================================================================
+   PasarNusa — CSS Reset
+   reset.css
+   Menormalkan tampilan antar-browser dan menghapus style bawaan yang
+   tidak konsisten. Jangan tambahkan style dekoratif di sini — hanya reset.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Box Model Universal
+   border-box memastikan padding & border tidak menambah lebar elemen.
+-------------------------------------------------------------------------- */
 *,
 *::before,
-*::after{
-margin:0;
-padding:0;
-box-sizing:border-box;
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html{
-scroll-behavior:smooth;
+/* --------------------------------------------------------------------------
+   Dokumen
+-------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%; /* cegah perbesaran teks otomatis di iOS */
+  tab-size: 4;
 }
 
-body{
-overflow-x:hidden;
+/* --------------------------------------------------------------------------
+   Halaman
+-------------------------------------------------------------------------- */
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;   /* rendering teks lebih tajam (WebKit) */
+  -moz-osx-font-smoothing: grayscale;    /* rendering teks lebih tajam (Firefox/macOS) */
 }
 
+/* --------------------------------------------------------------------------
+   Elemen Media
+   display:block menghilangkan spasi bawah bawaan (inline gap).
+-------------------------------------------------------------------------- */
 img,
 picture,
 video,
 canvas,
-svg{
-display:block;
-max-width:100%;
+svg {
+  display: block;
+  max-width: 100%;
 }
 
-a{
-text-decoration:none;
-color:inherit;
+/* --------------------------------------------------------------------------
+   Tautan
+-------------------------------------------------------------------------- */
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
+/* --------------------------------------------------------------------------
+   Daftar
+-------------------------------------------------------------------------- */
 ul,
-ol{
-list-style:none;
+ol {
+  list-style: none;
 }
 
+/* --------------------------------------------------------------------------
+   Elemen Form
+   font:inherit memastikan input mengikuti tipografi halaman, bukan default browser.
+   outline:none dihapus di sini; tambahkan kembali :focus-visible di base.css
+   agar aksesibilitas keyboard tetap terjaga.
+-------------------------------------------------------------------------- */
 button,
 input,
 textarea,
-select{
-font:inherit;
-border:none;
-outline:none;
-background:none;
+select {
+  font: inherit;
+  border: none;
+  background: none;
 }
 
-button{
-cursor:pointer;
+button {
+  cursor: pointer;
 }
 
-table{
-border-collapse:collapse;
-border-spacing:0;
+textarea {
+  resize: vertical; /* hanya izinkan resize vertikal — lebih terkontrol */
 }
 
-::selection{
-background:#16a34a;
-color:#fff;
+/* --------------------------------------------------------------------------
+   Tabel
+-------------------------------------------------------------------------- */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Teks Terseleksi
+   Gunakan token warna dari variables.css jika sudah diimpor sebelumnya,
+   atau hardcode di sini sebagai fallback aman.
+-------------------------------------------------------------------------- */
+::selection {
+  background: var(--color-primary, #16a34a);
+  color: var(--color-white, #ffffff);
 }
