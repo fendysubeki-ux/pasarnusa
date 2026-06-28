@@ -1,11 +1,27 @@
-@import url("reset.css");
+/* ==========================================================================
+   PasarNusa — style.css
+   Entry point utama. File ini hanya berisi @import — tidak ada CSS langsung
+   di sini. Urutan import penting: token → reset → tipografi → layout →
+   komponen → utilitas → animasi → tema → responsif.
+   ========================================================================== */
+
+/* --- 1. Token desain (harus pertama — semua file lain bergantung padanya) --- */
 @import url("variables.css");
+
+/* --- 2. Reset (setelah token agar ::selection bisa pakai var()) ------------- */
+@import url("reset.css");
+
+/* --- 3. Tipografi & layout dasar ------------------------------------------- */
 @import url("typography.css");
 @import url("layout.css");
+
+/* --- 4. Komponen UI --------------------------------------------------------- */
 @import url("buttons.css");
 @import url("cards.css");
 @import url("forms.css");
 @import url("navbar.css");
+
+/* --- 5. Seksi halaman ------------------------------------------------------- */
 @import url("hero.css");
 @import url("category.css");
 @import url("wilayah.css");
@@ -15,7 +31,13 @@
 @import url("roadmap.css");
 @import url("cta.css");
 @import url("footer.css");
+
+/* --- 6. Utilitas (setelah komponen agar bisa override jika perlu) ----------- */
 @import url("utilities.css");
+
+/* --- 7. Animasi & tema ------------------------------------------------------ */
 @import url("animation.css");
 @import url("darkmode.css");
+
+/* --- 8. Responsif (selalu terakhir — override semua yang di atas) ----------- */
 @import url("responsive.css");
