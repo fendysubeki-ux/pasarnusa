@@ -1,307 +1,124 @@
 <!DOCTYPE html>
+
 <html lang="id">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Produk Saya - PasarNusa</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Produk Saya | PasarNusa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta
+name="description"
+content="Kelola seluruh produk UMKM Anda">
 
-<link rel="stylesheet" href="style.css">
+<meta
+name="theme-color"
+content="#16a34a">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="produk-saya.css">
+
+<link
+rel="icon"
+href="assets/logo.png">
 
 </head>
 
 <body>
+<header class="navbar">
 
-<section class="my-products">
+<div class="container">
 
-<div class="shop-header">
-
-<h1>📦 Produk Saya</h1>
-
-<p>
-Kelola seluruh produk UMKM Anda
-</p>
-
-<div class="hero-action">
+<div class="navbar-content">
 
 <a
-href="tambah-produk.html"
-class="btn-primary">
+href="index.html"
+class="logo">
 
-+ Tambah Produk
+🌿
+
+<span>PasarNusa</span>
 
 </a>
 
-<a
-href="dashboard-umkm.html"
-class="btn-secondary">
+<nav class="navbar-menu">
+
+<a href="dashboard-umkm.html">
 
 Dashboard
 
 </a>
-<a
-href="index.html"
-class="btn-secondary">
 
-🏠 Beranda
+<a href="tambah-produk.html">
 
-</a>
-</div>
-
-</div>
-
-<div class="stats-grid">
-
-<div class="stat">
-<h2 id="totalProduk">0</h2>
-<p>Total Produk</p>
-</div>
-
-<div class="stat">
-<h2 id="produkAktif">0</h2>
-<p>Produk Aktif</p>
-</div>
-
-<div class="stat">
-<h2 id="totalTerjual">0</h2>
-<p>Total Terjual</p>
-</div>
-
-<div class="stat">
-<h2 id="totalStok">0</h2>
-<p>Total Stok</p>
-</div>
-
-</div>
-
-<div class="search-box">
-
-<input
-type="text"
-id="searchProduk"
-placeholder="Cari produk...">
-
-</div>
-
-<div id="produkSaya"
-class="product-grid">
-
-<p>Memuat produk...</p>
-
-</div>
-
-</section>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-deleteDoc,
-doc,
-query,
-where
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);
-
-await auth.authStateReady();
-
-const role =
-localStorage.getItem("role");
-
-console.log("Role:", role);
-
-if(!auth.currentUser){
-
-window.location.href =
-"login.html";
-
-throw new Error(
-"Belum login"
-);
-
-}
-
-const container =
-document.getElementById(
-"produkSaya"
-);
-
-let totalProduk = 0;
-let totalStok = 0;
-let totalTerjual = 0;
-let produkAktif = 0;
-
-try{
-
-const snapshot =
-await getDocs(
-
-query(
-collection(db,"produk"),
-where(
-"uid",
-"==",
-auth.currentUser.uid
-)
-)
-
-);
-
-container.innerHTML = "";
-
-snapshot.forEach((item)=>{
-
-const produk =
-item.data();
-if(
-Number(produk.stok || 0) <= 0 &&
-produk.status === "Aktif"
-){
-
-produk.status =
-"Stok Habis";
-
-}
-totalProduk++;
-
-totalStok +=
-Number(
-produk.stok || 0
-);
-
-totalTerjual +=
-Number(
-produk.terjual || 0
-);
-
-if(
-String(produk.status)
-.toLowerCase() ===
-"aktif"
-){
-
-produkAktif++;
-
-}
-
-container.innerHTML += `
-
-<div
-class="product-card searchable">
-
-<img
-src="${
-produk.gambar?.[0] ||
-"https://picsum.photos/400/300"
-}">
-
-<div class="product-info">
-
-<span class="category">
-
-${produk.kategori || "Produk"}
-
-</span>
-
-<h3>
-
-${String(
-produk.namaProduk || ""
-)
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")}
-
-</h3>
-
-<p class="price">
-
-Rp ${Number(
-produk.harga || 0
-).toLocaleString("id-ID")}
-
-</p>
-
-<p>
-📦 Stok:
-${produk.stok || 0}
-</p>
-
-<p>
-⭐ ${produk.rating || 0}
-</p>
-
-<p>
-🔥 Terjual:
-${produk.terjual || 0}
-</p>
-
-<p>
-
-<span class="status-produk">
-
-${produk.status || "Aktif"}
-
-</span>
-
-</p>
-
-<div class="action-buttons">
-
-<a
-href="produk-detail.html?id=${item.id}"
-class="btn-secondary">
-
-Lihat
+Tambah Produk
 
 </a>
 
 <a
-href="edit-produk.html?id=${item.id}"
-class="btn-secondary">
+href="produk-saya.html"
+class="active">
 
-Edit
+Produk Saya
 
 </a>
+
+<a href="pesanan-masuk.html">
+
+Pesanan
+
+</a>
+
+<a href="profil-toko.html">
+
+Profil
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
 
 <button
-onclick="hapusProduk('${item.id}')"
-class="delete-btn">
 
-Hapus
+id="themeToggle"
+
+class="btn btn-secondary">
+
+🌙
+
+</button>
+
+</div>
+
+<button
+
+id="menuToggle"
+
+class="menu-toggle">
+
+☰
 
 </button>
 
@@ -309,156 +126,326 @@ Hapus
 
 </div>
 
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+📦 Produk Saya
+
 </div>
 
-`;
+<h1>
 
-});
+Kelola Produk UMKM
 
-if(totalProduk === 0){
+</h1>
 
-container.innerHTML = `
+<p>
 
-<div class="dashboard-card">
+Lihat, edit, dan kelola seluruh produk yang telah Anda tambahkan ke PasarNusa.
 
-<h3>
+</p>
+
+<div class="hero-action">
+
+<a
+
+href="tambah-produk.html"
+
+class="btn btn-primary">
+
+➕ Tambah Produk
+
+</a>
+
+<a
+
+href="dashboard-umkm.html"
+
+class="btn btn-secondary">
+
+📊 Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<section class="breadcrumb">
+
+<div class="container">
+
+<a href="dashboard-umkm.html">
+
+Dashboard
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<span>
+
+Produk Saya
+
+</span>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h2 id="totalProduk">
+
+0
+
+</h2>
+
+<p>
+
+Total Produk
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="produkAktif">
+
+0
+
+</h2>
+
+<p>
+
+Produk Aktif
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="totalTerjual">
+
+0
+
+</h2>
+
+<p>
+
+Total Terjual
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="totalStok">
+
+0
+
+</h2>
+
+<p>
+
+Total Stok
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="toolbar">
+
+<div class="search-box">
+
+<input
+
+type="text"
+
+id="searchProduk"
+
+placeholder="Cari nama produk...">
+
+</div>
+
+<div class="filter-box">
+
+<select id="filterStatus">
+
+<option value="Semua">
+
+Semua Status
+
+</option>
+
+<option value="Aktif">
+
+Aktif
+
+</option>
+
+<option value="Nonaktif">
+
+Nonaktif
+
+</option>
+
+<option value="Stok Habis">
+
+Stok Habis
+
+</option>
+
+<option value="Stok Menipis">
+
+Stok Menipis
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div
+
+id="produkSaya"
+
+class="product-grid">
+
+<div class="loading-grid">
+
+<div class="product-skeleton"></div>
+
+<div class="product-skeleton"></div>
+
+<div class="product-skeleton"></div>
+
+<div class="product-skeleton"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<template id="emptyProduk">
+
+<div class="empty-state">
+
+<div class="empty-icon">
+
+📦
+
+</div>
+
+<h2>
+
 Belum Ada Produk
-</h3>
+
+</h2>
 
 <p>
-Tambahkan produk pertama Anda.
+
+Tambahkan produk pertama Anda agar mulai tampil di marketplace PasarNusa.
+
+</p>
+
+<a
+
+href="tambah-produk.html"
+
+class="btn btn-primary">
+
+➕ Tambah Produk
+
+</a>
+
+</div>
+
+</template>
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 <strong>PasarNusa</strong>.
+
+Seluruh Hak Cipta Dilindungi.
+
+</p>
+
+<p>
+
+Dibangun ❤️ untuk UMKM Indonesia.
+
 </p>
 
 </div>
 
-`;
-
-}
-
-document.getElementById(
-"totalProduk"
-).innerText =
-totalProduk;
-
-document.getElementById(
-"produkAktif"
-).innerText =
-produkAktif;
-
-document.getElementById(
-"totalTerjual"
-).innerText =
-totalTerjual;
-
-document.getElementById(
-"totalStok"
-).innerText =
-totalStok;
-
-}catch(error){
-
-console.error(error);
-
-container.innerHTML = `
-
-<div class="dashboard-card">
-
-<h3>Gagal Memuat Produk</h3>
-
-<p>
-${error.message}
-</p>
-
 </div>
 
-`;
+</footer>
+<button
 
-}
+id="backTop"
 
-window.hapusProduk =
-async(id)=>{
+class="back-top"
 
-const yakin =
-confirm(
-"Hapus produk ini?"
-);
+aria-label="Back To Top">
 
-if(!yakin) return;
-const cekPesanan =
-await getDocs(
-query(
-collection(db,"pesanan"),
-where("uidUmkm","==",auth.currentUser.uid)
-)
-);
+↑
 
-let pernahDibeli = false;
+</button>
+<script src="script.js"></script>
 
-cekPesanan.forEach((item)=>{
+<script
 
-const data = item.data();
+type="module"
 
-(data.items || []).forEach((produk)=>{
-
-if(produk.id === id){
-
-pernahDibeli = true;
-
-}
-
-});
-
-});
-
-if(pernahDibeli){
-
-alert(
-"Produk sudah memiliki riwayat transaksi dan tidak dapat dihapus"
-);
-
-return;
-
-}
-await deleteDoc(
-doc(db,"produk",id)
-);
-
-alert(
-"Produk berhasil dihapus"
-);
-
-location.reload();
-
-};
-
-document
-.getElementById("searchProduk")
-.addEventListener(
-"input",
-(e)=>{
-
-const keyword =
-e.target.value
-.toLowerCase();
-
-document
-.querySelectorAll(
-".searchable"
-)
-.forEach((card)=>{
-
-card.style.display =
-
-card.innerText
-.toLowerCase()
-.includes(keyword)
-
-? "block"
-: "none";
-
-});
-
-});
+src="produk-saya.js">
 
 </script>
 
