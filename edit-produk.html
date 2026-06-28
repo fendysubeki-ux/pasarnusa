@@ -1,480 +1,608 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+
+<html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Edit Produk - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
-</head><body><section class="dashboard"><h1>✏️ Edit Produk</h1><p style="margin-bottom:30px;">
-Perbarui informasi produk UMKM Anda.
-</p><div class="dashboard-grid"><div class="dashboard-card">
-<h3 id="ratingProduk">0</h3>
-<p>Rating Produk</p>
-</div><div class="dashboard-card">
-<h3 id="totalReview">0</h3>
-<p>Total Review</p>
-</div><div class="dashboard-card">
-<h3 id="produkTerjual">0</h3>
-<p>Total Terjual</p>
-</div><div class="dashboard-card">
-<h3 id="statusInfo">Aktif</h3>
-<p>Status Produk</p>
-</div></div><div class="form-card"><h2>Informasi Produk</h2><label>Nama Produk</label>
 
-<input
-type="text"
-id="namaProduk"
-placeholder="Nama Produk">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<label>Harga Produk</label>
+<title>Edit Produk | PasarNusa</title>
 
-<input
-type="number"
-id="hargaProduk"
-placeholder="Harga Produk">
+<meta
+name="description"
+content="Perbarui informasi produk UMKM">
 
-<label>Stok Produk</label>
+<meta
+name="theme-color"
+content="#16a34a">
 
-<input
-type="number"
-id="stokProduk"
-placeholder="Jumlah Stok">
-<label>Berat Produk (gram)</label>
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
 
-<input
-type="number"
-id="beratProduk"
-placeholder="Berat Produk">
-<label>Kategori Produk</label>
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-<select id="kategoriProduk"><option value="Makanan">Makanan</option>
-<option value="Minuman">Minuman</option>
-<option value="Snack">Snack</option>
-<option value="Kerajinan">Kerajinan</option>
-<option value="Fashion">Fashion</option>
-<option value="Lainnya">Lainnya</option></select><label>Status Produk</label>
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 
-<select id="statusProduk"><option value="Aktif">
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="edit-produk.css">
+
+<link
+rel="icon"
+href="assets/logo.png">
+
+</head>
+
+<body>
+<header class="navbar">
+
+<div class="container">
+
+<div class="navbar-content">
+
+<a
+href="index.html"
+class="logo">
+
+🌿
+
+<span>PasarNusa</span>
+
+</a>
+
+<nav class="navbar-menu">
+
+<a href="dashboard-umkm.html">
+
+Dashboard
+
+</a>
+
+<a href="produk-saya.html">
+
+Produk Saya
+
+</a>
+
+<a
+href="#"
+
+class="active">
+
+Edit Produk
+
+</a>
+
+<a href="pesanan-masuk.html">
+
+Pesanan
+
+</a>
+
+<a href="profil-toko.html">
+
+Profil
+
+</a>
+
+</nav>
+
+<div class="navbar-action">
+
+<button
+id="themeToggle"
+class="btn btn-secondary">
+
+🌙
+
+</button>
+
+</div>
+
+<button
+id="menuToggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+<section class="hero-page">
+
+<div class="container">
+
+<div class="hero-page-content">
+
+<div class="badge">
+
+✏️ Edit Produk
+
+</div>
+
+<h1>
+
+Perbarui Produk
+
+</h1>
+
+<p>
+
+Ubah informasi produk agar tetap akurat dan menarik bagi pelanggan.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="breadcrumb">
+
+<div class="container">
+
+<a href="dashboard-umkm.html">
+
+Dashboard
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<a href="produk-saya.html">
+
+Produk Saya
+
+</a>
+
+<span>
+
+/
+
+</span>
+
+<span>
+
+Edit Produk
+
+</span>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h2 id="ratingProduk">
+
+0
+
+</h2>
+
+<p>
+
+⭐ Rating
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="totalReview">
+
+0
+
+</h2>
+
+<p>
+
+Total Review
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="produkTerjual">
+
+0
+
+</h2>
+
+<p>
+
+Terjual
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="statusInfo">
+
 Aktif
-</option><option value="Nonaktif">
+
+</h2>
+
+<p>
+
+Status
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<section class="section">
+
+<div class="container">
+
+<div class="product-card">
+
+<form id="editProdukForm">
+
+<div class="form-group">
+
+<label>
+
+Nama Produk
+
+</label>
+
+<input
+
+type="text"
+
+id="namaProduk"
+
+placeholder="Masukkan nama produk"
+
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Kode Produk (SKU)
+
+</label>
+
+<input
+
+type="text"
+
+id="sku"
+
+placeholder="Contoh: KRP-001">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Kategori
+
+</label>
+
+<select
+
+id="kategoriProduk"
+
+required>
+
+<option value="Makanan">Makanan</option>
+
+<option value="Minuman">Minuman</option>
+
+<option value="Fashion">Fashion</option>
+
+<option value="Kerajinan">Kerajinan</option>
+
+<option value="Kesehatan">Kesehatan</option>
+
+<option value="Kecantikan">Kecantikan</option>
+
+<option value="Pertanian">Pertanian</option>
+
+<option value="Elektronik">Elektronik</option>
+
+<option value="Lainnya">Lainnya</option>
+
+</select>
+
+</div>
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label>
+
+Harga Produk
+
+</label>
+
+<input
+
+type="number"
+
+id="hargaProduk"
+
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Stok Produk
+
+</label>
+
+<input
+
+type="number"
+
+id="stokProduk"
+
+required>
+
+</div>
+
+</div>
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label>
+
+Berat (gram)
+
+</label>
+
+<input
+
+type="number"
+
+id="beratProduk"
+
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Status Produk
+
+</label>
+
+<select id="statusProduk">
+
+<option value="Aktif">
+
+Aktif
+
+</option>
+
+<option value="Nonaktif">
+
 Nonaktif
-</option><option value="Stok Habis">
-Stok Habis
-</option></select><label>Deskripsi Produk</label>
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Deskripsi Produk
+
+</label>
 
 <textarea
+
 id="deskripsiProduk"
+
 rows="6"
-placeholder="Deskripsi lengkap produk">
-</textarea><h3>📸 Foto Produk</h3><div
-id="previewContainer"
-class="product-grid">
-</div><input
+
+required>
+
+</textarea>
+
+</div>
+<div class="form-group">
+
+<label>
+
+Foto Produk
+
+</label>
+
+<input
+
 type="file"
+
 id="gambarProduk"
+
 accept="image/*"
+
+capture="environment"
+
 multiple>
 
-<br><br>
+<small>
+
+Kosongkan jika tidak ingin mengganti foto.
+
+</small>
+
+</div>
 
 <div
-style="
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-"><button
+
+id="previewContainer"
+
+class="preview-grid">
+
+</div>
+<div class="form-action">
+
+<button
+
+type="submit"
+
 id="updateProduk"
-class="btn-primary">
+
+class="btn btn-primary">
 
 💾 Simpan Perubahan
 
-</button><button
+</button>
+
+<button
+
+type="button"
+
 id="hapusProduk"
-class="btn-secondary">
 
-🗑️ Hapus Produk
+class="btn btn-danger">
 
-</button><a
+🗑 Hapus Produk
+
+</button>
+
+<a
+
 href="produk-saya.html"
-class="btn-secondary">
 
-⬅️ Kembali
+class="btn btn-secondary">
 
-</a></div></div><div class="dashboard-grid" style="margin-top:30px;"><div class="dashboard-card"><h3>Tips Produk Laris</h3><p>
-Gunakan foto terang, deskripsi lengkap,
-dan stok selalu diperbarui.
-</p></div><div class="dashboard-card"><h3>Affiliate Aktif</h3><p>
-Produk yang aktif dapat dipromosikan affiliate.
-</p></div><div class="dashboard-card"><h3>Optimasi SEO</h3><p>
-Gunakan nama produk yang mudah dicari pembeli.
-</p></div></div></section>
-<script type="module">
+Batal
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+</a>
 
-import {
-getFirestore,
-doc,
-getDoc,
-updateDoc,
-deleteDoc
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+</div>
 
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+</form>
 
-const firebaseConfig = {
+</div>
 
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
+</div>
 
-};
+</section>
+<section class="section">
 
-const app =
-initializeApp(firebaseConfig);
+<div class="container">
 
-const db =
-getFirestore(app);
+<div class="info-card">
 
-const auth =
-getAuth(app);
+<h2>
 
-await auth.authStateReady();
+💡 Tips Mengoptimalkan Produk
 
-if(!auth.currentUser){
+</h2>
 
-window.location.href =
-"login.html";
+<p>
 
-throw new Error(
-"Belum login"
-);
+Perbarui foto secara berkala, gunakan nama produk yang jelas, isi deskripsi lengkap, dan pastikan stok selalu sesuai agar produk lebih dipercaya pembeli.
 
-}
+</p>
 
-const id =
-new URLSearchParams(
-window.location.search
-).get("id");
+</div>
 
-if(!id){
+</div>
 
-window.location.href =
-"dashboard-produk.html";
+</section>
+<footer class="footer">
 
-throw new Error(
-"ID produk tidak ditemukan"
-);
+<div class="container">
 
-}
+<div class="footer-bottom">
 
-let produkData = null;
+<p>
 
-try{
+© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
 
-const snap =
-await getDoc(
-doc(db,"produk",id)
-);
+</p>
 
-if(!snap.exists()){
+<p>
 
-throw new Error(
-"Produk tidak ditemukan"
-);
+Dibangun ❤️ untuk UMKM Indonesia.
 
-}
+</p>
 
-const produk =
-snap.data();
+</div>
 
-if(
-produk.uid !==
-auth.currentUser.uid
-){
-
-alert(
-"Akses ditolak"
-);
-
-window.location.href =
-"dashboard-produk.html";
-
-throw new Error(
-"Bukan pemilik produk"
-);
-
-}
-
-produkData =
-produk;
-
-document.getElementById(
-"namaProduk"
-).value =
-produk.namaProduk || "";
-
-document.getElementById(
-"hargaProduk"
-).value =
-produk.harga || 0;
-
-document.getElementById(
-"stokProduk"
-).value =
-produk.stok || 0;
-
-document.getElementById(
-"beratProduk"
-).value =
-produk.berat || 0;
-
-document.getElementById(
-"kategoriProduk"
-).value =
-produk.kategori || "Lainnya";
-
-document.getElementById(
-"statusProduk"
-).value =
-produk.status || "Aktif";
-
-document.getElementById(
-"deskripsiProduk"
-).value =
-produk.deskripsi || "";
-
-document.getElementById(
-"ratingProduk"
-).innerText =
-produk.rating || 0;
-
-document.getElementById(
-"totalReview"
-).innerText =
-produk.totalReview || 0;
-
-document.getElementById(
-"produkTerjual"
-).innerText =
-produk.terjual || 0;
-
-document.getElementById(
-"statusInfo"
-).innerText =
-produk.status || "Aktif";
-
-const preview =
-document.getElementById(
-"previewContainer"
-);
-
-preview.innerHTML = "";
-
-(produk.gambar || [])
-.forEach((img)=>{
-
-preview.innerHTML += `
-<img
-src="${img}"
-style="
-width:120px;
-height:120px;
-object-fit:cover;
-border-radius:12px;
-">
-`;
-
-});
-
-}
-catch(error){
-
-console.error(error);
-
-alert(
-error.message
-);
-
-}
-
-document
-.getElementById(
-"updateProduk"
-)
-.addEventListener(
-"click",
-async()=>{
-
-try{
+</div>
 
-const nama =
-document.getElementById(
-"namaProduk"
-).value.trim();
+</footer>
 
-const harga =
-Number(
-document.getElementById(
-"hargaProduk"
-).value
-);
+<button
 
-const stok =
-Number(
-document.getElementById(
-"stokProduk"
-).value
-);
-if(stok < 0){
+id="backTop"
 
-alert(
-"Stok tidak boleh negatif"
-);
+class="back-top"
 
-return;
+aria-label="Kembali ke Atas">
 
-}
-const berat =
-Number(
-document.getElementById(
-"beratProduk"
-).value
-);
-if(berat < 0){
+↑
 
-alert(
-"Berat tidak valid"
-);
+</button>
 
-return;
+<script src="script.js"></script>
 
-}
-const kategori =
-document.getElementById(
-"kategoriProduk"
-).value;
+<script
 
-const deskripsi =
-document.getElementById(
-"deskripsiProduk"
-).value.trim();
+type="module"
 
-if(
-!nama ||
-!harga ||
-!kategori ||
-!deskripsi
-){
-
-alert(
-"Lengkapi semua data"
-);
-
-return;
-
-}
-
-const status =
-
-stok <= 0
-
-? "Stok Habis"
-
-: document.getElementById(
-"statusProduk"
-).value;
-
-await updateDoc(
-doc(db,"produk",id),
-{
-
-namaProduk:nama,
-
-harga:harga,
-
-stok:stok,
-
-berat:berat,
-
-kategori:kategori,
-
-status:status,
-
-deskripsi:deskripsi
-
-}
-);
-
-alert(
-"Produk berhasil diperbarui"
-);
-
-window.location.href =
-"dashboard-produk.html";
-
-}
-catch(error){
-
-console.error(error);
-
-alert(
-error.message
-);
-
-}
-
-}
-);
-
-document
-.getElementById(
-"hapusProduk"
-)
-.addEventListener(
-"click",
-async()=>{
-
-const yakin =
-confirm(
-"Hapus produk ini?"
-);
-
-if(!yakin) return;
-
-try{
-
-await deleteDoc(
-doc(db,"produk",id)
-);
-
-alert(
-"Produk berhasil dihapus"
-);
-
-window.location.href =
-"dashboard-produk.html";
-
-}
-catch(error){
-
-console.error(error);
-
-alert(
-error.message
-);
-
-}
-
-}
-);
+src="edit-produk.js">
 
 </script>
+
 </body>
+
 </html>
