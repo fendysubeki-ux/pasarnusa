@@ -1,168 +1,448 @@
+// ======================================
+// PASARNUSA LOGIN
+// login.js
+// ======================================
+
+// Firebase
+
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
+
 getAuth,
-signInWithEmailAndPassword
+
+signInWithEmailAndPassword,
+
+setPersistence,
+
+browserLocalPersistence,
+
+browserSessionPersistence
+
 }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-getFirestore,
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const firebaseConfig = {
+getFirestore,
+
+doc,
+
+getDoc
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// ======================================
+// FIREBASE
+// ======================================
+
+const firebaseConfig={
 
 apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+
 authDomain:"pasarnusa-18aa0.firebaseapp.com",
+
 projectId:"pasarnusa-18aa0",
+
 storageBucket:"pasarnusa-18aa0.firebasestorage.app",
+
 messagingSenderId:"866998011671",
+
 appId:"1:866998011671:web:5555115feb82741ab55952"
 
 };
 
-const app = initializeApp(firebaseConfig);
+const app=
 
-const auth = getAuth(app);
+initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+const auth=
 
-async function login(){
+getAuth(app);
 
-const email =
-document.getElementById("email")
-.value.trim();
+const db=
 
-const password =
-document.getElementById("password")
-.value;
+getFirestore(app);
+// ======================================
+// ELEMENT
+// ======================================
 
-if(!email || !password){
+const form=
 
-alert("Email dan password wajib diisi");
+document.getElementById(
+"loginForm"
+);
+
+const email=
+
+document.getElementById(
+"email"
+);
+
+const password=
+
+document.getElementById(
+"password"
+);
+
+const btnLogin=
+
+document.getElementById(
+"btnLogin"
+);
+
+const remember=
+
+document.getElementById(
+"rememberMe"
+);
+
+const togglePassword=
+
+document.getElementById(
+"togglePassword"
+);
+// ======================================
+// SHOW PASSWORD
+// ======================================
+
+togglePassword.addEventListener(
+
+"click",
+
+()=>{
+
+if(
+
+password.type==="password"
+
+){
+
+password.type="text";
+
+togglePassword.innerText="🙈";
+
+}else{
+
+password.type="password";
+
+togglePassword.innerText="👁️";
+
+}
+
+});
+// ======================================
+// START
+// ======================================
+
+form.addEventListener(
+
+"submit",
+
+loginUser
+
+);
+// ======================================
+// LOGIN
+// ======================================
+
+async function loginUser(e){
+
+e.preventDefault();
+
+const userEmail=
+
+email.value.trim();
+
+const userPassword=
+
+password.value;
+
+if(
+
+userEmail===""||
+
+userPassword===""
+
+){
+
+alert(
+
+"Lengkapi email dan password."
+
+);
 
 return;
 
 }
 
-const btn =
-document.getElementById("btnLogin");
+btnLogin.disabled=true;
+
+btnLogin.innerText=
+
+"Memproses...";
 
 try{
 
-btn.disabled = true;
-btn.innerText = "Memproses...";
+await setPersistence(
 
-const credential =
-await signInWithEmailAndPassword(
 auth,
-email,
-password
+
+remember.checked
+
+?
+
+browserLocalPersistence
+
+:
+
+browserSessionPersistence
+
 );
 
-const uid =
-credential.user.uid;
+const credential=
 
-const userSnap =
+await signInWithEmailAndPassword(
+
+auth,
+
+userEmail,
+
+userPassword
+
+);
+
+const user=
+
+credential.user;
+
+loadRole(user.uid);
+
+}catch(error){
+
+console.error(error);
+
+showError(error.code);
+
+btnLogin.disabled=false;
+
+btnLogin.innerText="Masuk";
+
+}
+
+}
+// ======================================
+// LOAD ROLE
+// ======================================
+
+async function loadRole(uid){
+
+try{
+
+const snapshot=
+
 await getDoc(
+
 doc(db,"users",uid)
+
 );
 
-if(!userSnap.exists()){
+if(!snapshot.exists()){
 
-alert("Data user tidak ditemukan");
+throw new Error(
 
-return;
+"DATA_NOT_FOUND"
+
+);
 
 }
 
-const user =
-userSnap.data();
+const data=
+
+snapshot.data();
 
 localStorage.setItem(
+
 "uid",
+
 uid
+
 );
 
 localStorage.setItem(
+
 "role",
-user.role || "user"
+
+data.role||"user"
+
 );
 
 localStorage.setItem(
+
 "nama",
-user.nama || ""
+
+data.nama||""
+
 );
 
-localStorage.setItem(
-"namaUmkm",
-user.namaUmkm || ""
+redirectRole(
+
+data.role
+
 );
 
-if(user.role === "admin"){
+}catch(error){
 
-window.location.href =
-"admin.html";
+console.error(error);
+
+alert(
+
+"Gagal mengambil data pengguna."
+
+);
+
+btnLogin.disabled=false;
+
+btnLogin.innerText="Masuk";
 
 }
-else if(user.role === "umkm"){
 
-window.location.href =
+}
+// ======================================
+// REDIRECT
+// ======================================
+
+function redirectRole(role){
+
+switch(role){
+
+case "admin":
+
+window.location.href=
+
+"admin/dashboard.html";
+
+break;
+
+case "umkm":
+
+window.location.href=
+
 "dashboard-umkm.html";
 
-}
-else if(user.role === "affiliate"){
+break;
 
-window.location.href =
-"affiliate-dashboard.html";
+case "affiliate":
 
-}
-else{
+window.location.href=
 
-window.location.href =
+"dashboard-affiliate.html";
+
+break;
+
+default:
+
+window.location.href=
+
 "index.html";
 
 }
 
 }
-catch(error){
+// ======================================
+// ERROR
+// ======================================
 
-console.error(error);
+function showError(code){
 
-alert("Email atau password salah");
+let message="Terjadi kesalahan.";
+
+switch(code){
+
+case "auth/invalid-email":
+
+message="Format email tidak valid.";
+
+break;
+
+case "auth/user-not-found":
+
+message="Email belum terdaftar.";
+
+break;
+
+case "auth/wrong-password":
+
+message="Password yang dimasukkan salah.";
+
+break;
+
+case "auth/invalid-credential":
+
+message="Email atau password salah.";
+
+break;
+
+case "auth/too-many-requests":
+
+message="Terlalu banyak percobaan login. Coba beberapa saat lagi.";
+
+break;
+
+case "auth/network-request-failed":
+
+message="Periksa koneksi internet Anda.";
+
+break;
+
+default:
+
+message="Login gagal. Silakan coba lagi.";
 
 }
-finally{
 
-btn.disabled = false;
+showToast(message);
 
-btn.innerText = "Masuk";
+btnLogin.disabled=false;
 
-}
-
-}
-
-document
-.getElementById("btnLogin")
-.addEventListener(
-"click",
-login
-);
-
-document
-.addEventListener(
-"keydown",
-(e)=>{
-
-if(e.key === "Enter"){
-
-login();
+btnLogin.innerText="Masuk";
 
 }
+// ======================================
+// TOAST
+// ======================================
+
+function showToast(message){
+
+const toast=
+
+document.createElement("div");
+
+toast.className="toast";
+
+toast.innerText=message;
+
+document.body.appendChild(toast);
+
+setTimeout(()=>{
+
+toast.classList.add("show");
+
+},100);
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+setTimeout(()=>{
+
+toast.remove();
+
+},300);
+
+},3000);
 
 }
-);
