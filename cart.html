@@ -1,477 +1,197 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & Metadata -->
+  <title>Keranjang Belanja | PasarNusa</title>
+  <meta name="description" content="Periksa dan kelola produk di keranjang belanja PasarNusa sebelum checkout.">
+  <meta name="theme-color" content="#16a34a">
 
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/logo.png">
 
-<title>Keranjang Belanja | PasarNusa</title>
+  <!-- Google Fonts — preconnect dulu baru stylesheet -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
-<meta
-name="description"
-content="Keranjang belanja PasarNusa">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="cart.css">
-
+  <!-- Stylesheet global lalu stylesheet spesifik halaman -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cart.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<a
-href="cart.html"
-class="active">
-
-Keranjang
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-🛒 Keranjang Belanja
-
-</div>
-
-<h1>
-
-Keranjang Anda
-
-</h1>
-
-<p>
-
-Periksa kembali produk sebelum melanjutkan ke proses checkout.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Keranjang
-
-</span>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="cart-layout">
-<div class="cart-content">
-
-<div class="cart-header">
-
-<label>
-
-<input
-type="checkbox"
-id="pilihSemua">
-
-Pilih Semua
-
-</label>
-
-<button
-id="hapusDipilih"
-class="btn btn-secondary">
-
-🗑 Hapus Dipilih
-
-</button>
-
-</div>
-
-<div
-id="cartContainer">
-
-</div>
-
-<div
-id="emptyCart"
-class="empty-state"
-style="display:none;">
-
-<div class="empty-icon">
-
-🛒
-
-</div>
-
-<h2>
-
-Keranjang Masih Kosong
-
-</h2>
-
-<p>
-
-Yuk mulai belanja produk UMKM Indonesia.
-
-</p>
-
-<a
-href="produk.html"
-class="btn btn-primary">
-
-Mulai Belanja
-
-</a>
-
-</div>
-
-</div>
-<div class="cart-summary">
-
-<div class="summary-card">
-
-<h2>
-
-Ringkasan Belanja
-
-</h2>
-
-<div class="summary-item">
-
-<span>
-
-Total Produk
-
-</span>
-
-<b id="totalProduk">
-
-0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Total Item
-
-</span>
-
-<b id="totalItem">
-
-0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Subtotal
-
-</span>
-
-<b id="subtotal">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Estimasi Ongkir
-
-</span>
-
-<b>
-
-Dihitung saat Checkout
-
-</b>
-
-</div>
-
-<hr>
-
-<div class="summary-total">
-
-<span>
-
-Total Bayar
-
-</span>
-
-<h2 id="totalBayar">
-
-Rp 0
-
-</h2>
-
-</div>
-
-<button
-
-id="checkoutBtn"
-
-class="btn btn-primary">
-
-💳 Checkout
-
-</button>
-
-<a
-
-href="produk.html"
-
-class="btn btn-secondary">
-
-🛍 Lanjut Belanja
-
-</a>
-
-<button
-
-id="kosongkanCart"
-
-class="btn btn-danger">
-
-🗑 Kosongkan Keranjang
-
-</button>
-
-</div>
-
-</div>
-<template id="loadingCart">
-
-<div class="cart-item skeleton">
-
-<div class="image-skeleton"></div>
-
-<div class="content-skeleton">
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-</div>
-
-</div>
-
-</template>
-<template id="emptyTemplate">
-
-<div class="empty-state">
-
-<div class="empty-icon">
-
-🛒
-
-</div>
-
-<h2>
-
-Keranjang Kosong
-
-</h2>
-
-<p>
-
-Belum ada produk yang ditambahkan.
-
-</p>
-
-<a
-
-href="produk.html"
-
-class="btn btn-primary">
-
-Mulai Belanja
-
-</a>
-
-</div>
-
-</template>
-</div>
-
-</section>
-
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-
-<button
-
-id="backTop"
-
-class="back-top">
-
-↑
-
-</button>
-
-<script src="script.js"></script>
-
-<script
-type="module"
-src="cart.js">
-
-</script>
+  <!-- ===========================
+       NAVBAR
+  ============================ -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Navigasi utama -->
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="produk.html">Produk</a>
+          <a href="cart.html" class="active" aria-current="page">Keranjang</a>
+        </nav>
+
+        <!-- Aksi navbar -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+        <!-- Tombol menu mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ===========================
+       HERO HALAMAN
+  ============================ -->
+  <section class="hero-page" aria-label="Judul halaman">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">🛒 Keranjang Belanja</div>
+        <h1>Keranjang Anda</h1>
+        <p>Periksa kembali produk sebelum melanjutkan ke proses checkout.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       BREADCRUMB
+  ============================ -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Keranjang</span>
+    </div>
+  </nav>
+
+  <!-- ===========================
+       KONTEN UTAMA
+  ============================ -->
+  <main class="section">
+    <div class="container">
+      <div class="cart-layout">
+
+        <!-- ---- Daftar Item Keranjang ---- -->
+        <div class="cart-content">
+
+          <!-- Header: pilih semua & hapus dipilih -->
+          <div class="cart-header">
+            <label>
+              <input type="checkbox" id="pilihSemua">
+              Pilih Semua
+            </label>
+            <button id="hapusDipilih" class="btn btn-secondary">🗑 Hapus Dipilih</button>
+          </div>
+
+          <!-- Kontainer item keranjang (diisi oleh cart.js) -->
+          <div id="cartContainer" aria-live="polite"></div>
+
+          <!-- State kosong — tersembunyi secara default, ditampilkan via JS -->
+          <div id="emptyCart" class="empty-state" hidden>
+            <div class="empty-icon" aria-hidden="true">🛒</div>
+            <h2>Keranjang Masih Kosong</h2>
+            <p>Yuk mulai belanja produk UMKM Indonesia.</p>
+            <a href="produk.html" class="btn btn-primary">Mulai Belanja</a>
+          </div>
+
+        </div>
+
+        <!-- ---- Ringkasan Belanja ---- -->
+        <aside class="cart-summary" aria-label="Ringkasan belanja">
+          <div class="summary-card">
+            <h2>Ringkasan Belanja</h2>
+
+            <dl class="summary-list">
+              <div class="summary-item">
+                <dt>Total Produk</dt>
+                <dd id="totalProduk">0</dd>
+              </div>
+              <div class="summary-item">
+                <dt>Total Item</dt>
+                <dd id="totalItem">0</dd>
+              </div>
+              <div class="summary-item">
+                <dt>Subtotal</dt>
+                <dd id="subtotal">Rp 0</dd>
+              </div>
+              <div class="summary-item">
+                <dt>Estimasi Ongkir</dt>
+                <dd>Dihitung saat Checkout</dd>
+              </div>
+            </dl>
+
+            <hr>
+
+            <div class="summary-total">
+              <span>Total Bayar</span>
+              <strong id="totalBayar">Rp 0</strong>
+            </div>
+
+            <!-- Aksi checkout -->
+            <button id="checkoutBtn" class="btn btn-primary">💳 Checkout</button>
+            <a href="produk.html" class="btn btn-secondary">🛍 Lanjut Belanja</a>
+            <button id="kosongkanCart" class="btn btn-danger">🗑 Kosongkan Keranjang</button>
+          </div>
+        </aside>
+
+      </div><!-- /.cart-layout -->
+    </div><!-- /.container -->
+  </main>
+
+  <!-- ===========================
+       TEMPLATE: Loading Skeleton
+       Digunakan sementara data keranjang dimuat dari storage.
+  ============================ -->
+  <template id="loadingCart">
+    <div class="cart-item skeleton" aria-hidden="true">
+      <div class="image-skeleton"></div>
+      <div class="content-skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ===========================
+       FOOTER
+  ============================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong></p>
+        <p>Dibangun dengan ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Tombol kembali ke atas -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- Script global (non-module) dimuat lebih dulu -->
+  <script src="script.js"></script>
+
+  <!-- Script khusus halaman keranjang (ES module) -->
+  <script type="module" src="cart.js"></script>
 
 </body>
-
 </html>
