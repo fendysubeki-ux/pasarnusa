@@ -1,105 +1,23 @@
-/* ============================================================
-   responsive.css — PasarNusa
-   Breakpoint strategy (mobile-first overrides tidak dipakai di
-   sini; file ini adalah layer responsif dari atas ke bawah):
-     1200px  → Desktop lebar (container lebih sempit)
-      992px  → Tablet landscape / navigasi mobile aktif
-      768px  → Tablet portrait / penyesuaian tipografi
-      576px  → Ponsel kecil / semua grid menjadi 1 kolom
-   ============================================================ */
+/* responsive.css */
 
+@media (max-width:1200px){
 
-/* ============================================================
-   1. DESKTOP LEBAR  (≤ 1200px)
-   Mengecilkan lebar container agar konten tidak terlalu meregang
-   pada layar ultrawide.
-   ============================================================ */
-
-@media (max-width: 1200px) {
-  .container {
-    width: 94%;
+  .container{
+    width:94%;
   }
 
-  .hero-grid {
-    gap: 48px;
+  .hero-grid{
+    gap:48px;
   }
+
 }
 
+@media (max-width:992px){
 
-/* ============================================================
-   2. TABLET LANDSCAPE  (≤ 992px)
-   - Navbar berubah menjadi drawer (off-canvas kiri)
-   - Hero & grid utama menyesuaikan ke 2 kolom
-   - Footer menjadi 2 kolom
-   ============================================================ */
-
-@media (max-width: 992px) {
-
-  /* --- Layout umum --- */
-  .section {
-    padding: 80px 0;
+  .section{
+    padding:80px 0;
   }
 
-
-  /* --- Navbar: drawer off-canvas --- */
-  .menu-toggle {
-    display: block;                  /* Tampilkan tombol hamburger */
-  }
-
-  .navbar-menu {
-    position: fixed;
-    top: 80px;                       /* Tinggi navbar; sesuaikan jika berubah */
-    left: -100%;                     /* Tersembunyi di luar viewport */
-    width: 280px;
-    height: calc(100vh - 80px);
-    padding: 30px;
-    background: var(--color-surface);
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-    box-shadow: var(--shadow-md);
-    transition: var(--transition);
-  }
-
-  /* Kelas .active ditambahkan via JavaScript saat menu dibuka */
-  .navbar-menu.active {
-    left: 0;
-  }
-
-  .navbar-action {
-    display: none;                   /* CTA di navbar disembunyikan; ada di drawer */
-  }
-
-
-  /* --- Hero --- */
-  .hero {
-    padding: 140px 0 80px;
-  }
-
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  /* Teks & search bar dipusatkan secara horizontal */
-  .hero h1,
-  .hero p,
-  .hero-search {
-    margin-inline: auto;
-  }
-
-  /* Kelompok tombol aksi dipusatkan */
-  .hero-action,
-  .cta-action {
-    justify-content: center;
-  }
-
-  .hero-image {
-    margin-top: 40px;
-  }
-
-
-  /* --- Grid konten: 4 / 3 kolom → 2 kolom --- */
   .grid-4,
   .grid-3,
   .feature-grid,
@@ -107,105 +25,36 @@
   .wilayah-grid,
   .product-grid,
   .stats-grid,
-  .roadmap-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .roadmap-grid{
+    grid-template-columns:repeat(2,1fr);
   }
 
-
-  /* --- Footer --- */
-  .footer-top {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
+@media (max-width:768px){
 
-/* ============================================================
-   3. TABLET PORTRAIT / PONSEL BESAR  (≤ 768px)
-   - Padding seksi sedikit dikurangi
-   - Ukuran heading diperkecil
-   - Search bar & form row menjadi 1 kolom
-   - Footer bottom ditumpuk vertikal
-   ============================================================ */
-
-@media (max-width: 768px) {
-
-  /* --- Layout umum --- */
-  .section {
-    padding: 70px 0;
+  .section{
+    padding:70px 0;
   }
 
-
-  /* --- Tipografi --- */
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem;   }
-
-
-  /* --- Hero search: input & tombol ditumpuk --- */
-  .hero-search {
-    flex-direction: column;
-  }
-
-  .hero-search button {
-    width: 100%;
-  }
-
-
-  /* --- Form: field menjadi 1 kolom --- */
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-
-  /* --- Footer bottom: logo & hak cipta ditumpuk & dipusatkan --- */
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-  }
 }
 
+@media (max-width:576px){
 
-/* ============================================================
-   4. PONSEL KECIL  (≤ 576px)
-   - Semua grid menjadi 1 kolom penuh
-   - Tombol melebar ke full-width
-   - Elemen footer & sosial dipusatkan
-   ============================================================ */
-
-@media (max-width: 576px) {
-
-  /* --- Semua grid → 1 kolom --- */
-  .grid-4,
-  .grid-3,
   .grid-2,
+  .grid-3,
+  .grid-4,
   .feature-grid,
   .category-grid,
   .wilayah-grid,
   .product-grid,
   .stats-grid,
-  .roadmap-grid {
-    grid-template-columns: 1fr;
+  .roadmap-grid{
+    grid-template-columns:1fr;
   }
 
-
-  /* --- Footer top: 1 kolom, dipusatkan --- */
-  .footer-top {
-    grid-template-columns: 1fr;
-    text-align: center;
+  .btn-block{
+    width:100%;
   }
 
-  .footer-logo,
-  .social {
-    justify-content: center;
-  }
-
-
-  /* --- Tombol & grup aksi: full-width & ditumpuk --- */
-  .btn {
-    width: 100%;
-  }
-
-  .hero-action,
-  .cta-action {
-    flex-direction: column;
-  }
 }
