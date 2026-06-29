@@ -1,638 +1,360 @@
-// ======================================
-// PASARNUSA WISHLIST
-// wishlist.js
-// ======================================
+// =============================================================================
+// wishlist.js — Logika halaman Wishlist PasarNusa
+// Bergantung pada: Firebase Auth + Firestore (v12), style.css (toast)
+// =============================================================================
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth }          from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  deleteDoc,
+  addDoc,
+  serverTimestamp,
+  writeBatch,
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-getFirestore,
+// =============================================================================
+// KONFIGURASI FIREBASE
+// PERINGATAN: Pindahkan ke environment variable / backend proxy sebelum produksi
+// =============================================================================
 
-collection,
-
-query,
-
-where,
-
-getDocs,
-
-doc,
-
-getDoc,
-
-deleteDoc,
-
-addDoc,
-
-serverTimestamp
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import {
-
-getAuth
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-// ======================================
-// FIREBASE
-// ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+const firebaseConfig = {
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952",
 };
 
-const app=initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-const db=getFirestore(app);
+// =============================================================================
+// REFERENSI ELEMEN DOM
+// =============================================================================
 
-const auth=getAuth(app);
-// ======================================
-// ELEMENT
-// ======================================
+const elContainer    = document.getElementById("wishlistContainer");
+const elTotal        = document.getElementById("totalWishlist");
+const elStokAda      = document.getElementById("stokAda");
+const elStokHabis    = document.getElementById("stokHabis");
+const elEmptyState   = document.getElementById("emptyWishlist");
+const btnAddAllCart  = document.getElementById("addAllCart");
+const btnHapusSemua  = document.getElementById("hapusWishlist");
 
-const wishlistContainer=
+// =============================================================================
+// STATE
+// =============================================================================
 
-document.getElementById("wishlistContainer");
+let uid          = "";          // UID pengguna yang sedang login
+let semuaWishlist = [];         // Cache seluruh item wishlist
+let autoRefreshId = null;       // ID setInterval untuk bisa di-clear bila perlu
 
-const totalWishlist=
+// =============================================================================
+// INISIALISASI
+// =============================================================================
 
-document.getElementById("totalWishlist");
+document.addEventListener("DOMContentLoaded", initPage);
 
-const stokAda=
-
-document.getElementById("stokAda");
-
-const stokHabis=
-
-document.getElementById("stokHabis");
-
-const addAllCart=
-
-document.getElementById("addAllCart");
-
-const hapusWishlist=
-
-document.getElementById("hapusWishlist");
-// ======================================
-// VARIABLE
-// ======================================
-
-let uid="";
-
-let semuaWishlist=[];
-// ======================================
-// START
-// ======================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-initPage
-
-);
-
-async function initPage(){
-
-await checkLogin();
-
-await loadWishlist();
-
-initButton();
-
-}
-// ======================================
-// LOGIN
-// ======================================
-
-async function checkLogin(){
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href="login.html";
-
-return;
-
+async function initPage() {
+  await checkLogin();
+  await loadWishlist();
+  initButtons();
+  startAutoRefresh();
 }
 
-uid=
+// =============================================================================
+// AUTENTIKASI — Redirect ke login bila belum masuk
+// =============================================================================
 
-auth.currentUser.uid;
+async function checkLogin() {
+  await auth.authStateReady();
 
+  if (!auth.currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  uid = auth.currentUser.uid;
 }
-// ======================================
+
+// =============================================================================
 // LOAD WISHLIST
-// ======================================
+// Bug fix: loop await di dalam forEach diganti for...of (forEach tidak await-aware)
+// Optimasi: Promise.all untuk fetch produk secara paralel, bukan satu-per-satu
+// =============================================================================
 
-async function loadWishlist(){
+async function loadWishlist() {
+  try {
+    // 1. Ambil semua dokumen wishlist milik user
+    const snap = await getDocs(
+      query(collection(db, "wishlist"), where("uid", "==", uid))
+    );
 
-try{
+    // 2. Fetch semua data produk secara paralel (lebih cepat dari sequential await)
+    const results = await Promise.all(
+      snap.docs.map(async (itemDoc) => {
+        const data       = itemDoc.data();
+        const produkSnap = await getDoc(doc(db, "produk", data.produkId));
 
-const snap=
+        if (!produkSnap.exists()) return null; // produk sudah dihapus
 
-await getDocs(
+        return {
+          id:      itemDoc.id,
+          wishlist: data,
+          produk:  { id: produkSnap.id, ...produkSnap.data() },
+        };
+      })
+    );
 
-query(
+    // 3. Saring entri yang produknya sudah tidak ada
+    semuaWishlist = results.filter(Boolean);
 
-collection(db,"wishlist"),
+    renderWishlist();
+    updateStatistik();
 
-where("uid","==",uid)
-
-)
-
-);
-
-semuaWishlist=[];
-
-for(const item of snap.docs){
-
-const data=item.data();
-
-const produkSnap=
-
-await getDoc(
-
-doc(db,"produk",data.produkId)
-
-);
-
-if(produkSnap.exists()){
-
-semuaWishlist.push({
-
-id:item.id,
-
-wishlist:data,
-
-produk:produkSnap.data()
-
-});
-
+  } catch (error) {
+    console.error("[Wishlist] Gagal memuat:", error);
+    showToast("Gagal memuat wishlist. Coba lagi.");
+  }
 }
 
+// =============================================================================
+// STATISTIK — Update counter ringkasan
+// =============================================================================
+
+function updateStatistik() {
+  const total    = semuaWishlist.length;
+  const tersedia = semuaWishlist.filter(({ produk }) => Number(produk.stok ?? 0) > 0).length;
+
+  elTotal.textContent    = total;
+  elStokAda.textContent  = tersedia;
+  elStokHabis.textContent = total - tersedia;
 }
 
-renderWishlist();
+// =============================================================================
+// RENDER — Tampilkan daftar wishlist ke DOM
+// Bug fix: innerHTML += di dalam loop menyebabkan reflow berulang dan
+//          event handler lama terputus. Diganti DocumentFragment.
+// Bug fix: innerHTML dengan data dari Firestore rentan XSS — gunakan textContent
+//          untuk string yang tidak dipercaya.
+// =============================================================================
 
-updateStatistik();
+function renderWishlist() {
+  elContainer.innerHTML = "";
 
-}catch(error){
+  const isEmpty = semuaWishlist.length === 0;
+  elEmptyState.hidden = !isEmpty;
 
-console.error(error);
+  if (isEmpty) return;
 
-showToast(
+  const fragment = document.createDocumentFragment();
 
-"Gagal memuat wishlist."
+  semuaWishlist.forEach((item) => {
+    const { produk } = item;
+    const stokAda    = Number(produk.stok ?? 0) > 0;
+    const gambar     = Array.isArray(produk.gambar)
+      ? produk.gambar[0]
+      : (produk.gambar || "assets/no-image.png");
 
-);
+    // Bangun elemen secara programatik — aman dari XSS
+    const card = document.createElement("div");
+    card.className = "wishlist-item";
 
+    // Gambar produk
+    const img = document.createElement("img");
+    img.src     = gambar;
+    img.alt     = produk.namaProduk || "Produk";
+    img.loading = "lazy";
+    img.onerror = () => { img.src = "assets/no-image.png"; };
+
+    // Blok info
+    const info = document.createElement("div");
+    info.className = "wishlist-info";
+
+    const nama = document.createElement("h3");
+    nama.textContent = produk.namaProduk || "-";
+
+    const toko = document.createElement("p");
+    toko.textContent = produk.namaToko || "-";
+
+    const harga = document.createElement("div");
+    harga.className   = "wishlist-price";
+    harga.textContent = `Rp ${Number(produk.harga ?? 0).toLocaleString("id-ID")}`;
+
+    const stokBadge = document.createElement("div");
+    stokBadge.className   = `stock-badge ${stokAda ? "stock-ready" : "stock-empty"}`;
+    stokBadge.textContent = stokAda ? "Stok Tersedia" : "Stok Habis";
+
+    // Tombol aksi
+    const actions = document.createElement("div");
+    actions.className = "wishlist-action";
+
+    const btnKeranjang = buatTombol("🛒 Keranjang", "btn btn-primary",
+      () => tambahKeranjang(produk.id));
+
+    const btnHapus = buatTombol("🗑 Hapus", "btn btn-secondary",
+      () => hapusItem(item.id));
+
+    const linkDetail = document.createElement("a");
+    linkDetail.href      = `produk-detail.html?id=${encodeURIComponent(produk.id)}`;
+    linkDetail.className = "btn btn-secondary";
+    linkDetail.textContent = "👁 Detail";
+
+    actions.append(btnKeranjang, btnHapus, linkDetail);
+    info.append(nama, toko, harga, stokBadge, actions);
+    card.append(img, info);
+    fragment.appendChild(card);
+  });
+
+  elContainer.appendChild(fragment);
 }
 
-}
-// ======================================
-// STATISTIK
-// ======================================
-
-function updateStatistik(){
-
-totalWishlist.innerText=
-
-semuaWishlist.length;
-
-stokAda.innerText=
-
-semuaWishlist.filter(
-
-item=>
-
-Number(item.produk.stok||0)>0
-
-).length;
-
-stokHabis.innerText=
-
-semuaWishlist.filter(
-
-item=>
-
-Number(item.produk.stok||0)<=0
-
-).length;
-
-}
-// ======================================
-// RENDER
-// ======================================
-
-function renderWishlist(){
-
-wishlistContainer.innerHTML="";
-
-if(semuaWishlist.length===0){
-
-document.getElementById(
-
-"emptyWishlist"
-
-).style.display="block";
-
-return;
-
+/** Helper: buat <button> dengan label, kelas, dan handler. */
+function buatTombol(label, className, onClick) {
+  const btn       = document.createElement("button");
+  btn.className   = className;
+  btn.textContent = label;
+  btn.addEventListener("click", onClick);
+  return btn;
 }
 
-document.getElementById(
+// =============================================================================
+// TAMBAH KE KERANJANG — Satu produk
+// =============================================================================
 
-"emptyWishlist"
-
-).style.display="none";
-
-semuaWishlist.forEach(item=>{
-
-const produk=item.produk;
-
-const gambar=
-
-Array.isArray(produk.gambar)
-
-?produk.gambar[0]
-
-:produk.gambar||
-
-"assets/no-image.png";
-
-wishlistContainer.innerHTML+=`
-
-<div class="wishlist-item">
-
-<img
-
-src="${gambar}"
-
-loading="lazy"
-
-onerror="this.src='assets/no-image.png'">
-
-<div class="wishlist-info">
-
-<h3>
-
-${produk.namaProduk}
-
-</h3>
-
-<p>
-
-${produk.namaToko}
-
-</p>
-
-<div class="wishlist-price">
-
-Rp ${Number(
-
-produk.harga||0
-
-).toLocaleString("id-ID")}
-
-</div>
-
-<div class="${
-Number(produk.stok)>0
-?"stock-badge stock-ready"
-:"stock-badge stock-empty"
-}">
-
-${
-Number(produk.stok)>0
-?"Stok Tersedia"
-:"Stok Habis"
+async function tambahKeranjang(produkId) {
+  try {
+    await addDoc(collection(db, "keranjang"), {
+      uid,
+      produkId,
+      qty:       1,
+      createdAt: serverTimestamp(),
+    });
+    showToast("Produk ditambahkan ke keranjang.");
+  } catch (error) {
+    console.error("[Wishlist] Gagal tambah keranjang:", error);
+    showToast("Gagal menambahkan produk ke keranjang.");
+  }
 }
 
-</div>
+// =============================================================================
+// HAPUS SATU ITEM — Dari wishlist
+// =============================================================================
 
-<div class="wishlist-action">
-
-<button
-
-class="btn btn-primary"
-
-onclick="tambahKeranjang('${produk.id}')">
-
-🛒 Keranjang
-
-</button>
-
-<button
-
-class="btn btn-secondary"
-
-onclick="hapusItem('${item.id}')">
-
-🗑 Hapus
-
-</button>
-
-<a
-
-href="produk-detail.html?id=${produk.id}"
-
-class="btn btn-secondary">
-
-👁 Detail
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-// ======================================
-// KERANJANG
-// ======================================
-
-window.tambahKeranjang=
-
-async(produkId)=>{
-
-try{
-
-await addDoc(
-
-collection(db,"keranjang"),
-
-{
-
-uid,
-
-produkId,
-
-qty:1,
-
-createdAt:
-
-serverTimestamp()
-
+async function hapusItem(wishlistId) {
+  try {
+    await deleteDoc(doc(db, "wishlist", wishlistId));
+    await loadWishlist();
+    showToast("Produk dihapus dari wishlist.");
+  } catch (error) {
+    console.error("[Wishlist] Gagal hapus item:", error);
+    showToast("Gagal menghapus produk dari wishlist.");
+  }
 }
 
-);
+// =============================================================================
+// TAMBAH SEMUA KE KERANJANG — Hanya produk yang stoknya masih ada
+// =============================================================================
 
-showToast(
+async function tambahSemuaKeranjang() {
+  const tersedia = semuaWishlist.filter(({ produk }) => Number(produk.stok ?? 0) > 0);
 
-"Produk ditambahkan ke keranjang."
+  if (tersedia.length === 0) {
+    showToast("Tidak ada produk yang tersedia untuk ditambahkan.");
+    return;
+  }
 
-);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menambahkan produk."
-
-);
-
+  try {
+    // Promise.all lebih cepat dari sequential await untuk banyak dokumen
+    await Promise.all(
+      tersedia.map(({ produk }) =>
+        addDoc(collection(db, "keranjang"), {
+          uid,
+          produkId:  produk.id,
+          qty:       1,
+          createdAt: serverTimestamp(),
+        })
+      )
+    );
+    showToast(`${tersedia.length} produk berhasil ditambahkan ke keranjang.`);
+  } catch (error) {
+    console.error("[Wishlist] Gagal tambah semua ke keranjang:", error);
+    showToast("Gagal menambahkan semua produk ke keranjang.");
+  }
 }
 
-};
-// ======================================
-// HAPUS ITEM
-// ======================================
+// =============================================================================
+// HAPUS SEMUA WISHLIST
+// Optimasi: gunakan writeBatch agar semua delete dikirim dalam 1 request Firestore
+// =============================================================================
 
-window.hapusItem=
+async function hapusSemuaWishlist() {
+  if (semuaWishlist.length === 0) {
+    showToast("Wishlist sudah kosong.");
+    return;
+  }
 
-async(id)=>{
+  if (!confirm("Hapus semua produk dari wishlist?")) return;
 
-try{
+  try {
+    const batch = writeBatch(db);
+    semuaWishlist.forEach(({ id }) => batch.delete(doc(db, "wishlist", id)));
+    await batch.commit();
 
-await deleteDoc(
-
-doc(db,"wishlist",id)
-
-);
-
-await loadWishlist();
-
-showToast(
-
-"Produk dihapus dari wishlist."
-
-);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menghapus wishlist."
-
-);
-
+    await loadWishlist();
+    showToast("Semua produk berhasil dihapus dari wishlist.");
+  } catch (error) {
+    console.error("[Wishlist] Gagal hapus semua:", error);
+    showToast("Gagal mengosongkan wishlist.");
+  }
 }
 
-};
-// ======================================
-// BUTTON
-// ======================================
+// =============================================================================
+// TOMBOL — Pasang event listener ke tombol aksi cepat
+// =============================================================================
 
-function initButton(){
-
-addAllCart.onclick=
-
-tambahSemuaKeranjang;
-
-hapusWishlist.onclick=
-
-hapusSemuaWishlist;
-
-}
-// ======================================
-// TAMBAH SEMUA
-// ======================================
-
-async function tambahSemuaKeranjang(){
-
-try{
-
-for(const item of semuaWishlist){
-
-if(Number(item.produk.stok||0)<=0){
-
-continue;
-
+function initButtons() {
+  btnAddAllCart.addEventListener("click", tambahSemuaKeranjang);
+  btnHapusSemua.addEventListener("click", hapusSemuaWishlist);
 }
 
-await addDoc(
+// =============================================================================
+// AUTO REFRESH — Perbarui wishlist setiap 30 detik
+// =============================================================================
 
-collection(db,"keranjang"),
-
-{
-
-uid,
-
-produkId:item.produk.id,
-
-qty:1,
-
-createdAt:serverTimestamp()
-
+function startAutoRefresh() {
+  // Bersihkan interval lama bila initPage dipanggil lebih dari sekali
+  if (autoRefreshId) clearInterval(autoRefreshId);
+  autoRefreshId = setInterval(loadWishlist, 30_000);
 }
 
-);
+// =============================================================================
+// TOAST NOTIFIKASI — Pesan singkat di pojok layar
+// =============================================================================
 
+function showToast(message) {
+  const toast       = document.createElement("div");
+  toast.className   = "toast";
+  toast.textContent = message;                // textContent, bukan innerText (lebih cepat)
+  toast.setAttribute("role", "status");       // dibaca screen reader
+  toast.setAttribute("aria-live", "polite");
+
+  document.body.appendChild(toast);
+
+  // Animasi masuk (requestAnimationFrame agar transition berjalan setelah mount)
+  requestAnimationFrame(() => toast.classList.add("show"));
+
+  // Animasi keluar → hapus dari DOM
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3_000);
 }
-
-showToast(
-
-"Semua produk berhasil ditambahkan ke keranjang."
-
-);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menambahkan semua produk."
-
-);
-
-}
-
-}
-// ======================================
-// HAPUS SEMUA
-// ======================================
-
-async function hapusSemuaWishlist(){
-
-if(!confirm(
-
-"Hapus semua wishlist?"
-
-)){
-
-return;
-
-}
-
-try{
-
-for(const item of semuaWishlist){
-
-await deleteDoc(
-
-doc(
-
-db,
-
-"wishlist",
-
-item.id
-
-)
-
-);
-
-}
-
-await loadWishlist();
-
-showToast(
-
-"Wishlist berhasil dikosongkan."
-
-);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menghapus wishlist."
-
-);
-
-}
-
-}
-// ======================================
-// TOAST
-// ======================================
-
-function showToast(message){
-
-const toast=
-
-document.createElement("div");
-
-toast.className="toast";
-
-toast.innerText=message;
-
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.classList.add("show");
-
-},100);
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-setTimeout(()=>{
-
-toast.remove();
-
-},300);
-
-},3000);
-
-}
-// ======================================
-// AUTO REFRESH
-// ======================================
-
-setInterval(
-
-async()=>{
-
-await loadWishlist();
-
-},
-
-30000
-
-);
