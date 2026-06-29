@@ -2,436 +2,235 @@
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kecamatan – PasarNusa</title>
 
-<meta charset="UTF-8">
+  <!-- Font: Plus Jakarta Sans dari Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
-
-<title>Kecamatan - PasarNusa</title>
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link rel="stylesheet"
-href="style.css">
-
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<section class="hero">
-
-<img
-
-id="bannerKecamatan"
-
-src="https://placehold.co/1200x400"
-
-style="
-width:100%;
-height:260px;
-object-fit:cover;
-border-radius:20px;
-">
-
-</section>
-
-<section class="dashboard">
-
-<h1 id="namaKecamatan">
-
-Memuat...
-
-</h1>
-
-<p id="lokasiKecamatan">
-
-Kabupaten
-
-</p>
-
-</section>
-
-<section class="dashboard">
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-
-<h3 id="jumlahDesa">
-
-0
-
-</h3>
-
-<p>Desa</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="jumlahUmkm">
-
-0
-
-</h3>
-
-<p>UMKM</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="jumlahProduk">
-
-0
-
-</h3>
-
-<p>Produk</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="produkUnggulan">
-
-0
-
-</h3>
-
-<p>Unggulan</p>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="dashboard">
-
-<h2>
-
-📖 Tentang Kecamatan
-
-</h2>
-
-<div class="dashboard-card">
-
-<p id="deskripsiKecamatan">
-
-Memuat informasi...
-
-</p>
-
-</div>
-
-</section>
-
-<section class="dashboard">
-
-<h2>
-
-🏘 Daftar Desa
-
-</h2>
-
-<div
-
-id="desaContainer"
-
-class="dashboard-grid">
-
-<div class="dashboard-card">
-
-Memuat desa...
-
-</div>
-
-</div>
-
-</section>
-
-<script type="module">
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
-import {
-
-getFirestore,
-collection,
-getDocs
-
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
-};
-
-const app=
-initializeApp(firebaseConfig);
-
-const db=
-getFirestore(app);
-
-const params=
-new URLSearchParams(
-window.location.search
-);
-
-const namaKecamatan=
-params.get("kecamatan");
-
-const desaContainer=
-document.getElementById(
-"desaContainer"
-);
-
-let semuaDesa=[];
-
-async function loadKecamatan(){
-
-const kecamatanSnap=
-await getDocs(
-collection(db,"kecamatan")
-);
-
-kecamatanSnap.forEach((doc)=>{
-
-const data=
-doc.data();
-
-if(
-data.nama!==namaKecamatan
-){
-
-return;
-
-}
-
-document.getElementById(
-"namaKecamatan"
-).innerText=
-data.nama;
-
-document.getElementById(
-"lokasiKecamatan"
-).innerText=
-`${data.kabupaten}, ${data.provinsi}`;
-
-document.getElementById(
-"deskripsiKecamatan"
-).innerText=
-data.deskripsi||"-";
-
-document.getElementById(
-"bannerKecamatan"
-).src=
-data.banner||
-"https://placehold.co/1200x400";
-
-});
-
-await loadDesa();
-
-}
-async function loadDesa(){
-
-const desaSnap=
-await getDocs(
-collection(db,"desa")
-);
-
-const produkSnap=
-await getDocs(
-collection(db,"produk")
-);
-
-semuaDesa=[];
-
-let jumlahDesa=0;
-
-let jumlahProduk=0;
-
-let jumlahUnggulan=0;
-
-const umkmSet=
-new Set();
-
-desaSnap.forEach((docSnap)=>{
-
-const data=
-docSnap.data();
-
-if(
-data.kecamatan!==namaKecamatan
-){
-
-return;
-
-}
-
-jumlahDesa++;
-
-semuaDesa.push({
-
-id:docSnap.id,
-
-...data
-
-});
-
-});
-
-produkSnap.forEach((docSnap)=>{
-
-const data=
-docSnap.data();
-
-if(
-data.kecamatan!==namaKecamatan
-){
-
-return;
-
-}
-
-jumlahProduk++;
-
-if(data.uidUmkm){
-
-umkmSet.add(
-data.uidUmkm
-);
-
-}
-
-if(data.unggulan===true){
-
-jumlahUnggulan++;
-
-}
-
-});
-
-document.getElementById(
-"jumlahDesa"
-).innerText=
-jumlahDesa;
-
-document.getElementById(
-"jumlahUmkm"
-).innerText=
-umkmSet.size;
-
-document.getElementById(
-"jumlahProduk"
-).innerText=
-jumlahProduk;
-
-document.getElementById(
-"produkUnggulan"
-).innerText=
-jumlahUnggulan;
-
-renderDesa();
-
-}
-function renderDesa(){
-
-desaContainer.innerHTML="";
-
-if(
-semuaDesa.length===0
-){
-
-desaContainer.innerHTML=`
-
-<div class="dashboard-card">
-
-<h3>
-
-Belum Ada Desa
-
-</h3>
-
-<p>
-
-Belum ada desa yang ditambahkan.
-
-</p>
-
-</div>
-
-`;
-
-return;
-
-}
-
-semuaDesa.forEach((desa)=>{
-
-desaContainer.innerHTML+=`
-
-<div class="dashboard-card">
-
-<img
-src="${desa.banner||'https://placehold.co/600x300'}"
-style="
-width:100%;
-height:180px;
-object-fit:cover;
-border-radius:15px;
-">
-
-<h3>
-
-🏘 ${desa.nama}
-
-</h3>
-
-<p>
-
-${desa.deskripsi||"-"}
-
-</p>
-
-<a
-href="desa.html?desa=${encodeURIComponent(desa.nama)}"
-class="btn-primary">
-
-Lihat Desa
-
-</a>
-
-</div>
-
-`;
-
-});
-
-}
-
-loadKecamatan();
-
-</script>
+  <!-- ===== BANNER KECAMATAN ===== -->
+  <section class="hero">
+    <img
+      id="bannerKecamatan"
+      src="https://placehold.co/1200x400"
+      alt="Banner Kecamatan"
+      style="width:100%; height:260px; object-fit:cover; border-radius:20px;"
+    >
+  </section>
+
+  <!-- ===== NAMA & LOKASI KECAMATAN ===== -->
+  <section class="dashboard">
+    <h1 id="namaKecamatan">Memuat...</h1>
+    <p id="lokasiKecamatan">Kabupaten</p>
+  </section>
+
+  <!-- ===== STATISTIK RINGKAS ===== -->
+  <section class="dashboard">
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <h3 id="jumlahDesa">0</h3>
+        <p>Desa</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="jumlahUmkm">0</h3>
+        <p>UMKM</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="jumlahProduk">0</h3>
+        <p>Produk</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="produkUnggulan">0</h3>
+        <p>Unggulan</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DESKRIPSI KECAMATAN ===== -->
+  <section class="dashboard">
+    <h2>📖 Tentang Kecamatan</h2>
+    <div class="dashboard-card">
+      <p id="deskripsiKecamatan">Memuat informasi...</p>
+    </div>
+  </section>
+
+  <!-- ===== DAFTAR DESA ===== -->
+  <section class="dashboard">
+    <h2>🏘 Daftar Desa</h2>
+    <div id="desaContainer" class="dashboard-grid">
+      <div class="dashboard-card">Memuat desa...</div>
+    </div>
+  </section>
+
+  <!-- ===== FIREBASE + LOGIKA HALAMAN ===== -->
+  <script type="module">
+    import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs }
+                                from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    // ----- Konfigurasi Firebase -----
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+      authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+      projectId:         "pasarnusa-18aa0",
+      storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+      messagingSenderId: "866998011671",
+      appId:             "1:866998011671:web:5555115feb82741ab55952",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // ----- Ambil parameter kecamatan dari URL -----
+    const namaKecamatan = new URLSearchParams(window.location.search).get("kecamatan");
+
+    // Jika parameter tidak ada, tampilkan pesan error langsung
+    if (!namaKecamatan) {
+      document.getElementById("namaKecamatan").innerText   = "Kecamatan tidak ditemukan";
+      document.getElementById("lokasiKecamatan").innerText = "Parameter URL tidak valid";
+      throw new Error("Parameter ?kecamatan tidak ditemukan di URL.");
+    }
+
+    // ----- Referensi elemen DOM (di-cache agar tidak berulang query) -----
+    const el = {
+      banner:      document.getElementById("bannerKecamatan"),
+      nama:        document.getElementById("namaKecamatan"),
+      lokasi:      document.getElementById("lokasiKecamatan"),
+      deskripsi:   document.getElementById("deskripsiKecamatan"),
+      jumlahDesa:  document.getElementById("jumlahDesa"),
+      jumlahUmkm:  document.getElementById("jumlahUmkm"),
+      jumlahProduk:document.getElementById("jumlahProduk"),
+      unggulan:    document.getElementById("produkUnggulan"),
+      desaContainer: document.getElementById("desaContainer"),
+    };
+
+    // ----- Fungsi utama: muat semua data secara paralel -----
+    async function init() {
+      try {
+        // Ambil ketiga koleksi sekaligus untuk efisiensi
+        const [kecamatanSnap, desaSnap, produkSnap] = await Promise.all([
+          getDocs(collection(db, "kecamatan")),
+          getDocs(collection(db, "desa")),
+          getDocs(collection(db, "produk")),
+        ]);
+
+        isiInfoKecamatan(kecamatanSnap);
+        hitungDanRenderDesa(desaSnap, produkSnap);
+
+      } catch (err) {
+        console.error("Gagal memuat data kecamatan:", err);
+        el.desaContainer.innerHTML = `
+          <div class="dashboard-card">
+            <h3>Gagal Memuat Data</h3>
+            <p>Terjadi kesalahan saat mengambil data. Silakan coba lagi.</p>
+          </div>`;
+      }
+    }
+
+    // ----- Isi header: nama, lokasi, banner, deskripsi -----
+    function isiInfoKecamatan(snap) {
+      const doc = snap.docs.find(d => d.data().nama === namaKecamatan);
+
+      if (!doc) {
+        el.nama.innerText   = "Kecamatan Tidak Ditemukan";
+        el.lokasi.innerText = "–";
+        return;
+      }
+
+      const data = doc.data();
+      el.nama.innerText      = data.nama;
+      el.lokasi.innerText    = `${data.kabupaten}, ${data.provinsi}`;
+      el.deskripsi.innerText = data.deskripsi || "Belum ada deskripsi.";
+      el.banner.src          = data.banner    || "https://placehold.co/1200x400";
+      el.banner.alt          = `Banner ${data.nama}`;
+
+      // Perbarui judul tab browser
+      document.title = `${data.nama} – PasarNusa`;
+    }
+
+    // ----- Hitung statistik & render kartu desa -----
+    function hitungDanRenderDesa(desaSnap, produkSnap) {
+      // Filter desa milik kecamatan ini
+      const desaList = desaSnap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(d => d.kecamatan === namaKecamatan);
+
+      // Hitung statistik produk
+      let jumlahProduk   = 0;
+      let jumlahUnggulan = 0;
+      const umkmSet      = new Set();
+
+      produkSnap.docs.forEach(d => {
+        const data = d.data();
+        if (data.kecamatan !== namaKecamatan) return;
+
+        jumlahProduk++;
+        if (data.uidUmkm)       umkmSet.add(data.uidUmkm);
+        if (data.unggulan === true) jumlahUnggulan++;
+      });
+
+      // Perbarui angka statistik di UI
+      el.jumlahDesa.innerText   = desaList.length;
+      el.jumlahUmkm.innerText   = umkmSet.size;
+      el.jumlahProduk.innerText = jumlahProduk;
+      el.unggulan.innerText     = jumlahUnggulan;
+
+      renderKartuDesa(desaList);
+    }
+
+    // ----- Render kartu desa ke dalam grid -----
+    function renderKartuDesa(desaList) {
+      if (desaList.length === 0) {
+        el.desaContainer.innerHTML = `
+          <div class="dashboard-card">
+            <h3>Belum Ada Desa</h3>
+            <p>Belum ada desa yang ditambahkan untuk kecamatan ini.</p>
+          </div>`;
+        return;
+      }
+
+      // Gunakan DocumentFragment agar DOM hanya diubah sekali (lebih cepat)
+      const fragment = document.createDocumentFragment();
+
+      desaList.forEach(desa => {
+        const card = document.createElement("div");
+        card.className = "dashboard-card";
+
+        // Escaping nama untuk keamanan URL
+        const urlDesa = encodeURIComponent(desa.nama);
+
+        card.innerHTML = `
+          <img
+            src="${desa.banner || 'https://placehold.co/600x300'}"
+            alt="Banner ${desa.nama}"
+            loading="lazy"
+            style="width:100%; height:180px; object-fit:cover; border-radius:15px;"
+          >
+          <h3>🏘 ${desa.nama}</h3>
+          <p>${desa.deskripsi || "Belum ada deskripsi."}</p>
+          <a href="desa.html?desa=${urlDesa}" class="btn-primary">Lihat Desa</a>`;
+
+        fragment.appendChild(card);
+      });
+
+      el.desaContainer.innerHTML = "";
+      el.desaContainer.appendChild(fragment);
+    }
+
+    // ----- Jalankan -----
+    init();
+  </script>
 
 </body>
-
 </html>
