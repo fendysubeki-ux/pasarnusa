@@ -1,754 +1,299 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & PWA meta -->
+  <title>Upload Bukti Pembayaran | PasarNusa</title>
+  <meta name="description" content="Upload bukti transfer agar pembayaran dapat diverifikasi oleh UMKM.">
+  <meta name="theme-color" content="#16a34a">
 
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/logo.png">
 
-<title>Upload Bukti Pembayaran | PasarNusa</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<meta
-name="description"
-content="Upload bukti pembayaran pesanan PasarNusa">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="upload-bukti.css">
-
+  <!-- Stylesheet global & halaman ini -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="upload-bukti.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="pesanan-saya.html">
-
-Pesanan Saya
-
-</a>
-
-<a
-href="upload-bukti.html"
-class="active">
-
-Upload Bukti
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-💳 Pembayaran
-
-</div>
-
-<h1>
-
-Upload Bukti Pembayaran
-
-</h1>
-
-<p>
-
-Unggah bukti transfer agar pembayaran dapat diverifikasi oleh UMKM.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<a href="pesanan-saya.html">
-
-Pesanan Saya
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Upload Bukti
-
-</span>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="upload-layout">
-<div class="upload-content">
-
-<div class="form-card">
-
-<h2>
-
-🏦 Informasi Pembayaran
-
-</h2>
-
-<div class="info-item">
-
-<span>
-
-Bank
-
-</span>
-
-<b id="namaBank">
-
--
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Nomor Rekening
-
-</span>
-
-<b id="nomorRekening">
-
--
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Atas Nama
-
-</span>
-
-<b id="atasNama">
-
--
-
-</b>
-
-</div>
-
-<button
-
-id="copyRekening"
-
-class="btn btn-secondary">
-
-📋 Salin Nomor Rekening
-
-</button>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-📦 Informasi Pesanan
-
-</h2>
-
-<div class="info-item">
-
-<span>
-
-Nomor Pesanan
-
-</span>
-
-<b id="nomorPesanan">
-
--
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Total Pembayaran
-
-</span>
-
-<b id="totalBayar">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Status
-
-</span>
-
-<b id="statusPesanan">
-
-Menunggu Pembayaran
-
-</b>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-📤 Upload Bukti Transfer
-
-</h2>
-
-<div class="upload-box">
-
-<input
-
-type="file"
-
-id="buktiTransfer"
-
-accept="image/png,image/jpeg,image/webp">
-
-<label
-
-for="buktiTransfer"
-
-class="upload-area">
-
-<div class="upload-icon">
-
-📷
-
-</div>
-
-<h3>
-
-Pilih Bukti Transfer
-
-</h3>
-
-<p>
-
-Format JPG, PNG atau WEBP
-
-<br>
-
-Maksimal 2 MB
-
-</p>
-
-</label>
-
-</div>
-
-<div
-id="previewWrapper"
-class="preview-wrapper"
-style="display:none;">
-
-<img
-
-id="previewBukti"
-
-alt="Preview Bukti">
-
-<p
-id="infoFile">
-
-Belum ada file
-
-</p>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-📈 Status Upload
-
-</h2>
-
-<div class="progress-box">
-
-<div class="progress-bar">
-
-<div
-id="uploadProgress"
-class="progress-fill">
-
-</div>
-
-</div>
-
-<p
-id="progressText">
-
-Belum ada upload.
-
-</p>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-ℹ️ Catatan
-
-</h2>
-
-<ul class="payment-note">
-
-<li>
-
-Transfer sesuai total pembayaran.
-
-</li>
-
-<li>
-
-Pastikan bukti transfer terlihat jelas.
-
-</li>
-
-<li>
-
-Verifikasi biasanya membutuhkan waktu beberapa saat.
-
-</li>
-
-<li>
-
-Jangan mengunggah bukti pembayaran lebih dari satu kali.
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
-<div class="upload-summary">
-
-<div class="summary-card">
-
-<h2>
-
-💰 Ringkasan
-
-</h2>
-
-<div class="summary-item">
-
-<span>
-
-Total Bayar
-
-</span>
-
-<b id="summaryTotal">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Status
-
-</span>
-
-<b id="summaryStatus">
-
-Belum Bayar
-
-</b>
-
-</div>
-
-<button
-
-id="uploadBtn"
-
-class="btn btn-primary">
-
-📤 Upload Bukti
-
-</button>
-
-<a
-
-href="pesanan-saya.html"
-
-class="btn btn-secondary">
-
-⬅ Kembali
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<div
-
-id="emptyUpload"
-
-class="empty-state"
-
-style="display:none;">
-
-<div class="empty-icon">
-
-📄
-
-</div>
-
-<h2>
-
-Pesanan Tidak Ditemukan
-
-</h2>
-
-<p>
-
-Pesanan yang Anda cari tidak tersedia atau sudah tidak dapat diproses.
-
-</p>
-
-<a
-
-href="pesanan-saya.html"
-
-class="btn btn-primary">
-
-Kembali ke Pesanan
-
-</a>
-
-</div>
-<template id="loadingUpload">
-
-<div class="form-card skeleton">
-
-<div class="image-skeleton"></div>
-
-<div class="content-skeleton">
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-</div>
-
-</div>
-
-</template>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-
-🌿 PasarNusa
-
-</h3>
-
-<p>
-
-Marketplace UMKM Indonesia untuk membantu produk lokal berkembang dan menjangkau seluruh Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-Menu
-
-</h4>
-
-<ul>
-
-<li>
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-</li>
-
-<li>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-</li>
-
-<li>
-
-<a href="pesanan-saya.html">
-
-Pesanan Saya
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kontak.html">
-
-Kontak
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>
-
-Bantuan
-
-</h4>
-
-<ul>
-
-<li>
-
-<a href="faq.html">
-
-FAQ
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kebijakan.html">
-
-Kebijakan Privasi
-
-</a>
-
-</li>
-
-<li>
-
-<a href="syarat.html">
-
-Syarat & Ketentuan
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-<script src="script.js"></script>
-
-<script
-type="module"
-src="upload-bukti.js">
-
-</script>
+  <!-- ========================================================
+       NAVIGASI UTAMA
+  ======================================================== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Menu navigasi desktop -->
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="pesanan-saya.html">Pesanan Saya</a>
+          <a href="upload-bukti.html" class="active" aria-current="page">Upload Bukti</a>
+        </nav>
+
+        <!-- Tombol aksi (tema & akun) -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+        <!-- Tombol hamburger untuk mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       HERO — judul halaman
+  ======================================================== -->
+  <section class="hero-page" aria-label="Judul halaman">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">💳 Pembayaran</div>
+        <h1>Upload Bukti Pembayaran</h1>
+        <p>Unggah bukti transfer agar pembayaran dapat diverifikasi oleh UMKM.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       BREADCRUMB — navigasi konteks
+  ======================================================== -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <a href="pesanan-saya.html">Pesanan Saya</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Upload Bukti</span>
+    </div>
+  </nav>
+
+  <!-- ========================================================
+       KONTEN UTAMA — form upload & ringkasan
+  ======================================================== -->
+  <main class="section" id="main-content">
+    <div class="container">
+      <div class="upload-layout">
+
+        <!-- ── Kolom kiri: form & informasi ── -->
+        <div class="upload-content">
+
+          <!-- Informasi rekening tujuan -->
+          <div class="form-card">
+            <h2>🏦 Informasi Pembayaran</h2>
+            <dl>
+              <div class="info-item">
+                <dt>Bank</dt>
+                <dd id="namaBank">-</dd>
+              </div>
+              <div class="info-item">
+                <dt>Nomor Rekening</dt>
+                <dd id="nomorRekening">-</dd>
+              </div>
+              <div class="info-item">
+                <dt>Atas Nama</dt>
+                <dd id="atasNama">-</dd>
+              </div>
+            </dl>
+            <!-- Tombol salin nomor rekening ke clipboard -->
+            <button id="copyRekening" class="btn btn-secondary" type="button">
+              📋 Salin Nomor Rekening
+            </button>
+          </div>
+
+          <!-- Ringkasan data pesanan -->
+          <div class="form-card">
+            <h2>📦 Informasi Pesanan</h2>
+            <dl>
+              <div class="info-item">
+                <dt>Nomor Pesanan</dt>
+                <dd id="nomorPesanan">-</dd>
+              </div>
+              <div class="info-item">
+                <dt>Total Pembayaran</dt>
+                <dd id="totalBayar">Rp 0</dd>
+              </div>
+              <div class="info-item">
+                <dt>Status</dt>
+                <dd id="statusPesanan">Menunggu Pembayaran</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Area unggah file bukti transfer -->
+          <div class="form-card">
+            <h2>📤 Upload Bukti Transfer</h2>
+
+            <div class="upload-box">
+              <!--
+                Input file disembunyikan secara visual;
+                label bertindak sebagai tombol klik yang terlihat.
+                accept dibatasi ke format gambar yang diizinkan.
+              -->
+              <input
+                type="file"
+                id="buktiTransfer"
+                class="visually-hidden"
+                accept="image/png, image/jpeg, image/webp"
+                aria-label="Pilih file bukti transfer"
+              >
+              <label for="buktiTransfer" class="upload-area">
+                <div class="upload-icon" aria-hidden="true">📷</div>
+                <h3>Pilih Bukti Transfer</h3>
+                <p>Format JPG, PNG, atau WEBP · Maksimal 2 MB</p>
+              </label>
+            </div>
+
+            <!-- Preview gambar setelah file dipilih (tersembunyi secara default) -->
+            <div id="previewWrapper" class="preview-wrapper" hidden>
+              <img id="previewBukti" alt="Preview bukti transfer yang dipilih">
+              <p id="infoFile">Belum ada file</p>
+            </div>
+          </div>
+
+          <!-- Progress bar status upload -->
+          <div class="form-card">
+            <h2>📈 Status Upload</h2>
+            <div class="progress-box" role="status" aria-live="polite">
+              <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress upload">
+                <div id="uploadProgress" class="progress-fill"></div>
+              </div>
+              <p id="progressText">Belum ada upload.</p>
+            </div>
+          </div>
+
+          <!-- Catatan penting untuk pengguna -->
+          <div class="form-card">
+            <h2>ℹ️ Catatan Penting</h2>
+            <ul class="payment-note">
+              <li>Transfer sesuai total pembayaran yang tertera.</li>
+              <li>Pastikan bukti transfer terlihat jelas dan tidak terpotong.</li>
+              <li>Verifikasi biasanya membutuhkan waktu beberapa saat.</li>
+              <li>Jangan mengunggah bukti pembayaran lebih dari satu kali.</li>
+            </ul>
+          </div>
+
+        </div><!-- /upload-content -->
+
+        <!-- ── Kolom kanan: ringkasan & tombol aksi ── -->
+        <aside class="upload-summary" aria-label="Ringkasan pembayaran">
+          <div class="summary-card">
+            <h2>💰 Ringkasan</h2>
+
+            <dl>
+              <div class="summary-item">
+                <dt>Total Bayar</dt>
+                <dd id="summaryTotal">Rp 0</dd>
+              </div>
+              <div class="summary-item">
+                <dt>Status</dt>
+                <dd id="summaryStatus">Belum Bayar</dd>
+              </div>
+            </dl>
+
+            <!-- Tombol kirim; dinonaktifkan sampai file dipilih (lewat JS) -->
+            <button id="uploadBtn" class="btn btn-primary" type="button">
+              📤 Upload Bukti
+            </button>
+            <a href="pesanan-saya.html" class="btn btn-secondary">⬅ Kembali</a>
+          </div>
+        </aside>
+
+      </div><!-- /upload-layout -->
+    </div>
+  </main>
+
+  <!-- ========================================================
+       STATE KOSONG — ditampilkan oleh JS jika pesanan tidak ada
+  ======================================================== -->
+  <div id="emptyUpload" class="empty-state" hidden aria-live="polite">
+    <div class="empty-icon" aria-hidden="true">📄</div>
+    <h2>Pesanan Tidak Ditemukan</h2>
+    <p>Pesanan yang Anda cari tidak tersedia atau sudah tidak dapat diproses.</p>
+    <a href="pesanan-saya.html" class="btn btn-primary">Kembali ke Pesanan</a>
+  </div>
+
+  <!-- ========================================================
+       TEMPLATE SKELETON — digunakan JS sebagai placeholder loading
+  ======================================================== -->
+  <template id="loadingUpload">
+    <div class="form-card skeleton" aria-hidden="true">
+      <div class="image-skeleton"></div>
+      <div class="content-skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ========================================================
+       FOOTER
+  ======================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+
+        <div>
+          <h3>🌿 PasarNusa</h3>
+          <p>Marketplace UMKM Indonesia untuk membantu produk lokal berkembang dan menjangkau seluruh Nusantara.</p>
+        </div>
+
+        <nav aria-label="Tautan menu">
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+            <li><a href="pesanan-saya.html">Pesanan Saya</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Tautan bantuan">
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kebijakan.html">Kebijakan Privasi</a></li>
+            <li><a href="syarat.html">Syarat &amp; Ketentuan</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun dengan ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       TOMBOL KEMBALI KE ATAS
+  ======================================================== -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- ========================================================
+       SCRIPT
+       - script.js   : utilitas global (tema, back-to-top, dll.)
+       - upload-bukti.js : logika khusus halaman ini (ES module)
+  ======================================================== -->
+  <script src="script.js"></script>
+  <script type="module" src="upload-bukti.js"></script>
 
 </body>
-
 </html>
