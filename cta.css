@@ -1,141 +1,131 @@
-.cta{
+/* ==========================================================================
+   CTA (Call-to-Action) Component — PasarNusa
+   Komponen banner ajakan bertindak dengan latar gradasi dan efek dekoratif.
+   ========================================================================== */
 
-padding:60px 40px;
 
-text-align:center;
-
-background:linear-gradient(
-135deg,
-var(--color-primary),
-var(--color-primary-dark)
-);
-
-border-radius:var(--radius-xl);
-
-color:var(--color-white);
-
-box-shadow:var(--shadow-lg);
-
-overflow:hidden;
-
-position:relative;
-
+/* --------------------------------------------------------------------------
+   Kontainer Utama CTA
+   - Menggunakan position: relative agar pseudo-elemen dekoratif bisa
+     diposisikan secara absolut di dalamnya.
+   - overflow: hidden memastikan lingkaran dekoratif tidak keluar batas.
+   -------------------------------------------------------------------------- */
+.cta {
+  position: relative;
+  overflow: hidden;
+  padding: 60px 40px;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
+  border-radius: var(--radius-xl);
+  color: var(--color-white);
+  box-shadow: var(--shadow-lg);
 }
 
-.cta::before{
 
-content:"";
+/* --------------------------------------------------------------------------
+   Dekorasi Latar — Lingkaran Kanan Atas
+   Elemen visual halus untuk memberi kedalaman pada latar gradasi.
+   -------------------------------------------------------------------------- */
+.cta::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 220px;
+  height: 220px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
 
-position:absolute;
-
-top:-80px;
-
-right:-80px;
-
-width:220px;
-
-height:220px;
-
-background:rgba(255,255,255,.08);
-
-border-radius:50%;
-
+  /* Pastikan dekorasi selalu berada di bawah konten */
+  z-index: 0;
 }
 
-.cta::after{
 
-content:"";
+/* --------------------------------------------------------------------------
+   Dekorasi Latar — Lingkaran Kiri Bawah
+   -------------------------------------------------------------------------- */
+.cta::after {
+  content: "";
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 260px;
+  height: 260px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
 
-position:absolute;
-
-bottom:-100px;
-
-left:-100px;
-
-width:260px;
-
-height:260px;
-
-background:rgba(255,255,255,.06);
-
-border-radius:50%;
-
+  /* Pastikan dekorasi selalu berada di bawah konten */
+  z-index: 0;
 }
 
-.cta h2{
 
-color:var(--color-white);
-
-margin-bottom:16px;
-
-font-size:2.2rem;
-
-position:relative;
-
-z-index:2;
-
+/* --------------------------------------------------------------------------
+   Judul CTA
+   Semua elemen konten diberi z-index: 1 agar tampil di atas pseudo-elemen.
+   -------------------------------------------------------------------------- */
+.cta h2 {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 16px;
+  color: var(--color-white);
+  font-size: 2.2rem;
 }
 
-.cta p{
 
-max-width:680px;
-
-margin:0 auto 32px;
-
-color:rgba(255,255,255,.9);
-
-line-height:1.8;
-
-position:relative;
-
-z-index:2;
-
+/* --------------------------------------------------------------------------
+   Paragraf / Deskripsi CTA
+   -------------------------------------------------------------------------- */
+.cta p {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto 32px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
 }
 
-.cta-action{
 
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-gap:16px;
-
-flex-wrap:wrap;
-
-position:relative;
-
-z-index:2;
-
+/* --------------------------------------------------------------------------
+   Grup Tombol Aksi
+   Menggunakan Flexbox untuk menyusun tombol secara responsif dan terpusat.
+   -------------------------------------------------------------------------- */
+.cta-action {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 }
 
-.cta .btn-primary{
 
-background:var(--color-white);
-
-color:var(--color-primary);
-
+/* --------------------------------------------------------------------------
+   Tombol Primer — Tampil terang di atas latar gelap CTA
+   -------------------------------------------------------------------------- */
+.cta .btn-primary {
+  background: var(--color-white);
+  color: var(--color-primary);
 }
 
-.cta .btn-primary:hover{
-
-background:#f1f5f9;
-
+.cta .btn-primary:hover {
+  background: #f1f5f9;
 }
 
-.cta .btn-secondary{
 
-background:transparent;
-
-border:1px solid rgba(255,255,255,.3);
-
-color:var(--color-white);
-
+/* --------------------------------------------------------------------------
+   Tombol Sekunder — Transparan dengan batas tipis
+   -------------------------------------------------------------------------- */
+.cta .btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--color-white);
 }
 
-.cta .btn-secondary:hover{
-
-background:rgba(255,255,255,.12);
-
+.cta .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
