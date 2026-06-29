@@ -1,495 +1,766 @@
-/* =============================================================================
-   kategori.css — Halaman Kategori PasarNusa
-   Bergantung pada variabel CSS global dari style.css:
-     --color-primary, --color-heading, --color-text, --color-border
-============================================================================= */
+/* ==========================================================================
+   kategori.css
+   Part 1 — Hero, Breadcrumb, Toolbar
+   ========================================================================== */
 
 
-/* =============================================================================
+/* ==========================================================================
    HERO
-============================================================================= */
+   ========================================================================== */
 
-.hero-page {
-  padding: 150px 0 90px;
-  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-  text-align: center;
-  overflow: hidden;
-}
-
-.hero-page-content {
-  max-width: 850px;
-  margin: auto;
-}
-
-.hero-page h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  line-height: 1.2;
-  margin: 25px 0;
-  color: var(--color-heading);
-}
-
-.hero-page > .hero-page-content > p {
-  max-width: 700px;
-  margin: 0 auto;
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: var(--color-text);
-}
-
-/* Badge label di atas judul hero */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border-radius: 999px;
-  background: #dcfce7;
-  color: #166534;
-  font-weight: 700;
-}
-
-
-/* =============================================================================
-   HERO — PENCARIAN
-============================================================================= */
-
-.hero-search {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 35px;
-  flex-wrap: wrap;
-}
-
-.hero-search input {
-  width: 100%;
-  max-width: 520px;
-  padding: 18px 22px;
-  border-radius: 16px;
-  border: 1px solid var(--color-border);
-  background: #fff;
-  font-size: 1rem;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.hero-search input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.15);
-}
-
-
-/* =============================================================================
-   HERO — STATISTIK RINGKAS
-   Diisi secara dinamis oleh kategori.js
-============================================================================= */
-
-.hero-stat {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-}
-
-.hero-stat-item h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--color-primary);
-  margin: 0 0 4px;
-}
-
-.hero-stat-item span {
-  font-size: 0.95rem;
-  color: var(--color-text);
-}
-
-
-/* =============================================================================
-   BREADCRUMB
-============================================================================= */
-
-.breadcrumb {
-  padding: 25px 0;
-  background: #fafafa;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.breadcrumb .container {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font-size: 0.95rem;
-  flex-wrap: wrap;
-}
-
-.breadcrumb a {
-  color: var(--color-primary);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.breadcrumb a:hover {
-  text-decoration: underline;
-}
-
-
-/* =============================================================================
-   TOOLBAR — PENCARIAN & PENGURUTAN KATEGORI
-============================================================================= */
-
-.category-toolbar {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  margin: 35px 0;
-  flex-wrap: wrap;
-}
-
-.category-toolbar input,
-.category-toolbar select {
-  padding: 16px 20px;
-  border-radius: 14px;
-  border: 1px solid var(--color-border);
-  background: #fff;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-.category-toolbar input {
-  flex: 1;
-  min-width: 250px;
-}
-
-.category-toolbar select {
-  padding-inline: 18px;
-  cursor: pointer;
-}
-
-/* Gabungkan state fokus agar tidak duplikat */
-.category-toolbar input:focus,
-.category-toolbar select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-
-/* =============================================================================
-   GRID KATEGORI — LAYOUT UTAMA
-============================================================================= */
-
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 30px;
-  margin-top: 30px;
-}
-
-
-/* =============================================================================
-   CATEGORY CARD
-============================================================================= */
-
-.category-card {
-  background: #fff;
-  border-radius: 24px;
-  padding: 30px;
-  text-align: center;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  /* Animasi masuk — lihat @keyframes fadeUp */
-  animation: fadeUp 0.5s ease;
-  transition: transform 0.35s, box-shadow 0.35s;
-}
-
-.category-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-}
-
-/* Ikon bulat di dalam kartu */
-.category-icon {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.4rem;
-  background: #dcfce7;
-  margin-bottom: 22px;
-  transition: transform 0.3s, background 0.3s;
-}
-
-.category-card:hover .category-icon {
-  transform: scale(1.08);
-  background: #bbf7d0;
-}
-
-.category-card h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: var(--color-heading);
-}
-
-.category-card p {
-  color: var(--color-text);
-  line-height: 1.7;
-  margin-bottom: 18px;
-}
-
-/* Badge jumlah produk di dalam kartu */
-.category-count {
-  display: inline-flex;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: #f0fdf4;
-  color: var(--color-primary);
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-
-
-/* =============================================================================
-   SKELETON LOADING — placeholder saat data belum dimuat
-============================================================================= */
-
-/* Nonaktifkan interaksi pada kartu skeleton */
-.skeleton-card {
-  pointer-events: none;
-}
-
-/* Animasi shimmer */
-.skeleton {
-  border-radius: 12px;
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
+.hero-page{
+  position:relative;
+  overflow:hidden;
+  padding:150px 0 90px;
+  text-align:center;
+  background:linear-gradient(
+    135deg,
+    var(--color-primary-light),
+    var(--color-surface)
   );
-  background-size: 200% 100%;
-  animation: skeletonLoading 1.5s infinite;
 }
 
-.skeleton-title {
-  width: 75%;
-  height: 24px;
-  margin-bottom: 15px;
+.hero-page-content{
+  max-width:850px;
+  margin-inline:auto;
 }
 
-.skeleton-text {
-  width: 55%;
-  height: 14px;
+.hero-page h1{
+  margin:24px 0 20px;
+  color:var(--color-text);
 }
 
-@keyframes skeletonLoading {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.hero-page p{
+  max-width:700px;
+  margin-inline:auto;
+  line-height:1.8;
 }
 
-
-/* =============================================================================
-   KATEGORI POPULER
-============================================================================= */
-
-.popular-category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 30px;
-  margin-top: 35px;
-}
-
-.popular-category-card {
-  background: #fff;
-  padding: 35px 25px;
-  border-radius: 24px;
-  text-align: center;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-
-  animation: fadeUp 0.5s ease;
-  transition: transform 0.35s, box-shadow 0.35s;
-}
-
-.popular-category-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-}
-
-.popular-icon {
-  width: 90px;
-  height: 90px;
-  margin: 0 auto 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
-  background: #dcfce7;
-  transition: transform 0.3s, background 0.3s;
-}
-
-.popular-category-card:hover .popular-icon {
-  transform: rotate(8deg) scale(1.08);
-  background: #bbf7d0;
-}
-
-.popular-category-card h3 {
-  font-size: 1.35rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: var(--color-heading);
-}
-
-.popular-category-card p {
-  color: var(--color-text);
-  font-size: 0.95rem;
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 22px;
+  border-radius:var(--radius-full);
+  background:var(--color-primary-light);
+  color:var(--color-primary);
+  font-weight:700;
 }
 
 
-/* =============================================================================
-   CTA — Ajakan Daftar UMKM
-============================================================================= */
+/* ==========================================================================
+   HERO SEARCH
+   ========================================================================== */
 
-.cta {
-  padding: 70px 40px;
-  border-radius: 30px;
-  text-align: center;
-  background: linear-gradient(135deg, #16a34a, #22c55e);
-  color: #fff;
-
-  animation: fadeUp 0.5s ease;
+.hero-search{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  margin-top:36px;
+  flex-wrap:wrap;
 }
 
-.cta-icon {
-  font-size: 60px;
-  margin-bottom: 20px;
+.hero-search input{
+  width:100%;
+  max-width:520px;
 }
 
-.cta h2 {
-  font-size: 2.2rem;
-  margin-bottom: 20px;
-  color: #fff;
-}
-
-.cta p {
-  max-width: 650px;
-  margin: 0 auto 35px;
-  line-height: 1.8;
-  opacity: 0.95;
-}
-
-.cta-action {
-  display: flex;
-  justify-content: center;
-  gap: 18px;
-  flex-wrap: wrap;
+.hero-search button{
+  flex-shrink:0;
 }
 
 
-/* =============================================================================
-   ANIMASI — masuk dari bawah
-============================================================================= */
+/* ==========================================================================
+   HERO STAT
+   ========================================================================== */
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+.hero-stat{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:40px;
+  flex-wrap:wrap;
+  margin-top:42px;
+}
+
+.hero-stat-item{
+  text-align:center;
+}
+
+.hero-stat-item h2{
+  margin-bottom:4px;
+  color:var(--color-primary);
+}
+
+.hero-stat-item span{
+  color:var(--color-muted);
+}
+
+
+/* ==========================================================================
+   BREADCRUMB
+   ========================================================================== */
+
+.breadcrumb{
+  padding:22px 0;
+  background:var(--color-background);
+  border-bottom:1px solid var(--color-border);
+}
+
+.breadcrumb .container{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.breadcrumb a{
+  color:var(--color-primary);
+  font-weight:600;
+}
+
+@media(hover:hover){
+
+  .breadcrumb a:hover{
+    text-decoration:underline;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
 }
 
-/* Hormati preferensi pengguna yang mengurangi gerakan */
-@media (prefers-reduced-motion: reduce) {
+
+/* ==========================================================================
+   TOOLBAR
+   ========================================================================== */
+
+.category-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin:40px 0;
+  flex-wrap:wrap;
+}
+
+.category-toolbar input{
+  flex:1;
+  min-width:260px;
+}
+
+.category-toolbar select{
+  min-width:200px;
+  cursor:pointer;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media(max-width:992px){
+
+  .hero-page{
+    padding:130px 0 70px;
+  }
+
+}
+
+@media(max-width:768px){
+
+  .hero-search{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .hero-search button{
+    width:100%;
+  }
+
+  .category-toolbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+}
+/* ==========================================================================
+   CATEGORY GRID
+   ========================================================================== */
+
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:30px;
+}
+
+
+/* ==========================================================================
+   CATEGORY CARD
+   ========================================================================== */
+
+.category-card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  height:100%;
+  padding:32px 28px;
+  text-align:center;
+  cursor:pointer;
+
+  background:var(--color-surface);
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-sm);
+
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+@media(hover:hover){
+
+  .category-card:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--shadow-lg);
+    border-color:var(--color-primary-light);
+  }
+
+}
+
+
+/* ==========================================================================
+   CATEGORY ICON
+   ========================================================================== */
+
+.category-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:90px;
+  height:90px;
+
+  margin-bottom:24px;
+
+  border-radius:var(--radius-full);
+
+  background:var(--color-primary-light);
+
+  color:var(--color-primary);
+
+  font-size:2.3rem;
+
+  transition:
+    transform var(--transition),
+    background var(--transition);
+}
+
+@media(hover:hover){
+
+  .category-card:hover .category-icon{
+    transform:scale(1.08);
+  }
+
+}
+
+
+/* ==========================================================================
+   CATEGORY TITLE
+   ========================================================================== */
+
+.category-card h3{
+  margin-bottom:12px;
+  color:var(--color-text);
+}
+
+
+/* ==========================================================================
+   CATEGORY DESCRIPTION
+   ========================================================================== */
+
+.category-card p{
+  flex:1;
+  margin-bottom:22px;
+  line-height:1.8;
+}
+
+
+/* ==========================================================================
+   CATEGORY COUNT
+   ========================================================================== */
+
+.category-count{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:8px 18px;
+
+  border-radius:var(--radius-full);
+
+  background:var(--color-primary-light);
+
+  color:var(--color-primary);
+
+  font-size:.9rem;
+  font-weight:700;
+}
+
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+
+.category-empty{
+
+  grid-column:1/-1;
+
+  padding:60px 30px;
+
+  text-align:center;
+
+  border:2px dashed var(--color-border);
+
+  border-radius:var(--radius-xl);
+
+  background:var(--color-surface);
+
+}
+
+.category-empty h3{
+
+  margin-bottom:10px;
+
+}
+
+.category-empty p{
+
+  max-width:500px;
+
+  margin-inline:auto;
+
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media(max-width:768px){
+
+  .category-grid{
+
+    grid-template-columns:1fr;
+
+  }
+
+}
+
+@media(max-width:576px){
+
+  .category-card{
+
+    padding:26px 20px;
+
+  }
+
+  .category-icon{
+
+    width:75px;
+    height:75px;
+
+    font-size:2rem;
+
+  }
+
+}
+/* ==========================================================================
+   SKELETON LOADING
+   ========================================================================== */
+
+.skeleton-card{
+  pointer-events:none;
+}
+
+.skeleton{
+  overflow:hidden;
+  border-radius:var(--radius-md);
+  background:linear-gradient(
+    90deg,
+    var(--color-background) 25%,
+    var(--color-border) 50%,
+    var(--color-background) 75%
+  );
+  background-size:200% 100%;
+  animation:skeleton-loading 1.4s linear infinite;
+}
+
+.skeleton-icon{
+  width:90px;
+  height:90px;
+  margin:0 auto 24px;
+  border-radius:var(--radius-full);
+}
+
+.skeleton-title{
+  width:70%;
+  height:24px;
+  margin:0 auto 16px;
+}
+
+.skeleton-text{
+  width:55%;
+  height:14px;
+  margin:0 auto;
+}
+
+@keyframes skeleton-loading{
+
+  from{
+    background-position:200% 0;
+  }
+
+  to{
+    background-position:-200% 0;
+  }
+
+}
+
+
+/* ==========================================================================
+   POPULAR CATEGORY
+   ========================================================================== */
+
+.popular-category-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px;
+  margin-top:40px;
+}
+
+
+/* ==========================================================================
+   POPULAR CARD
+   ========================================================================== */
+
+.popular-category-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+
+  padding:36px 28px;
+
+  background:var(--color-surface);
+
+  border:1px solid var(--color-border);
+
+  border-radius:var(--radius-xl);
+
+  box-shadow:var(--shadow-sm);
+
+  cursor:pointer;
+
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+@media(hover:hover){
+
+  .popular-category-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:var(--shadow-lg);
+
+    border-color:var(--color-primary-light);
+
+  }
+
+}
+
+
+/* ==========================================================================
+   POPULAR ICON
+   ========================================================================== */
+
+.popular-icon{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  width:90px;
+
+  height:90px;
+
+  margin-bottom:24px;
+
+  border-radius:var(--radius-full);
+
+  background:var(--color-primary-light);
+
+  color:var(--color-primary);
+
+  font-size:2.4rem;
+
+  transition:
+    transform var(--transition),
+    background var(--transition);
+
+}
+
+@media(hover:hover){
+
+  .popular-category-card:hover .popular-icon{
+
+    transform:rotate(8deg) scale(1.08);
+
+  }
+
+}
+
+
+/* ==========================================================================
+   POPULAR CONTENT
+   ========================================================================== */
+
+.popular-category-card h3{
+
+  margin-bottom:12px;
+
+  color:var(--color-text);
+
+}
+
+.popular-category-card p{
+
+  line-height:1.8;
+
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media(max-width:768px){
+
+  .popular-category-grid{
+
+    grid-template-columns:1fr;
+
+  }
+
+}
+
+@media(max-width:576px){
+
+  .popular-category-card{
+
+    padding:26px 20px;
+
+  }
+
+  .popular-icon{
+
+    width:75px;
+    height:75px;
+
+    font-size:2rem;
+
+  }
+
+}
+/* ==========================================================================
+   CATEGORY CTA
+   Tidak bentrok dengan cta.css global
+   ========================================================================== */
+
+.category-cta{
+  margin-top:80px;
+  padding:70px 40px;
+  text-align:center;
+
+  border-radius:var(--radius-xl);
+
+  background:linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
+
+  color:var(--color-white);
+
+  overflow:hidden;
+  position:relative;
+}
+
+.category-cta h2{
+  color:var(--color-white);
+  margin-bottom:20px;
+}
+
+.category-cta p{
+  max-width:680px;
+  margin:0 auto 36px;
+  color:rgba(255,255,255,.9);
+  line-height:1.8;
+}
+
+.category-cta .btn-secondary{
+  background:var(--color-white);
+  color:var(--color-primary);
+  border:none;
+}
+
+@media(hover:hover){
+
+  .category-cta .btn-secondary:hover{
+    background:var(--color-background);
+  }
+
+}
+
+
+/* ==========================================================================
+   NO RESULT
+   ========================================================================== */
+
+.no-result{
+
+  grid-column:1/-1;
+
+  padding:80px 20px;
+
+  text-align:center;
+
+}
+
+.no-result h3{
+
+  margin-bottom:12px;
+
+}
+
+.no-result p{
+
+  max-width:500px;
+
+  margin-inline:auto;
+
+}
+
+
+/* ==========================================================================
+   SECTION SPACING
+   ========================================================================== */
+
+.category-section{
+
+  padding:90px 0;
+
+}
+
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+.category-card:focus-visible,
+.popular-category-card:focus-visible{
+
+  outline:2px solid var(--color-primary);
+
+  outline-offset:4px;
+
+}
+
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
   .category-card,
   .popular-category-card,
-  .cta,
-  .skeleton {
-    animation: none;
-  }
-
-  .category-card,
-  .popular-category-card {
-    transition: none;
-  }
-}
-
-
-/* =============================================================================
-   RESPONSIVE
-============================================================================= */
-
-/* Tablet landscape */
-@media (max-width: 992px) {
-  .hero-page {
-    padding: 120px 0 70px;
-  }
-
-  .hero-page h1 {
-    font-size: 2.5rem;
-  }
-
-  .category-grid,
-  .popular-category-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Tablet portrait & ponsel besar */
-@media (max-width: 768px) {
-  .hero-page h1 {
-    font-size: 2.1rem;
-  }
-
-  .hero-search {
-    flex-direction: column;
-  }
-
-  .hero-search button {
-    width: 100%;
-  }
-
-  .category-toolbar {
-    flex-direction: column;
-  }
-
-  .category-grid,
-  .popular-category-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .cta {
-    padding: 50px 25px;
-  }
-}
-
-/* Ponsel kecil */
-@media (max-width: 576px) {
-  .category-card,
-  .popular-category-card {
-    padding: 25px 20px;
-  }
-
   .category-icon,
-  .popular-icon {
-    width: 75px;
-    height: 75px;
-    font-size: 2rem;
+  .popular-icon,
+  .skeleton{
+
+    animation:none;
+
+    transition:none;
+
+    transform:none;
+
   }
 
-  .cta h2 {
-    font-size: 1.8rem;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media(max-width:992px){
+
+  .category-cta{
+
+    padding:60px 30px;
+
   }
+
+}
+
+@media(max-width:768px){
+
+  .hero-stat{
+
+    gap:24px;
+
+  }
+
+  .category-section{
+
+    padding:70px 0;
+
+  }
+
+  .category-cta{
+
+    padding:50px 24px;
+
+  }
+
+}
+
+@media(max-width:576px){
+
+  .hero-stat{
+
+    flex-direction:column;
+
+    gap:18px;
+
+  }
+
+  .category-toolbar input,
+  .category-toolbar select{
+
+    min-width:100%;
+
+  }
+
+  .category-cta h2{
+
+    font-size:1.8rem;
+
+  }
+
 }
