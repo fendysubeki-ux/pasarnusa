@@ -1,538 +1,446 @@
-/* ==========================================
-HERO
-========================================== */
+/*
+ * detail-pesanan.css — Gaya Halaman Detail Pesanan | PasarNusa
+ * =============================================================
+ * Mengatur tampilan: hero, breadcrumb, layout dua kolom,
+ * info-item (dl/dt/dd), timeline, kartu produk, ringkasan
+ * pembayaran, bukti pembayaran, animasi, dan responsivitas.
+ *
+ * Catatan:
+ *   - Semua warna menggunakan CSS custom property dari style.css
+ *     apabila tersedia, dengan fallback ke nilai literal.
+ *   - Animasi dihormati via prefers-reduced-motion.
+ *   - "hidden" attribute ditangani secara global oleh browser;
+ *     tidak perlu selector tambahan di sini.
+ */
 
-.hero-page{
 
-padding:150px 0 80px;
+/* ============================================================
+   HERO
+   ============================================================ */
 
-background:linear-gradient(
-135deg,
-#f0fdf4,
-#ffffff
-);
-
-text-align:center;
-
+.hero-page {
+  padding: 150px 0 80px;
+  background: linear-gradient(135deg, #f0fdf4, #ffffff);
+  text-align: center;
 }
 
-.hero-page-content{
-
-max-width:800px;
-
-margin:auto;
-
+.hero-page-content {
+  max-width: 800px;
+  margin-inline: auto; /* lebih modern dari margin: auto */
 }
 
-.hero-page h1{
-
-font-size:3rem;
-
-font-weight:800;
-
-margin:20px 0;
-
-color:var(--color-heading);
-
+.hero-page h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 20px 0;
+  color: var(--color-heading, #111827);
 }
 
-.hero-page p{
-
-max-width:650px;
-
-margin:auto;
-
-line-height:1.8;
-
-color:#6b7280;
-
+.hero-page p {
+  max-width: 650px;
+  margin-inline: auto;
+  line-height: 1.8;
+  color: #6b7280;
 }
 
-.badge{
-
-display:inline-flex;
-
-align-items:center;
-
-padding:12px 24px;
-
-background:#dcfce7;
-
-border-radius:999px;
-
-font-weight:700;
-
-color:#166534;
-
-}
-/* ==========================================
-BREADCRUMB
-========================================== */
-
-.breadcrumb{
-
-padding:18px 0;
-
-background:#fff;
-
-border-bottom:1px solid #eee;
-
+/* Badge label kecil di atas judul */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  background: #dcfce7;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #166534;
 }
 
-.breadcrumb .container{
 
-display:flex;
+/* ============================================================
+   BREADCRUMB
+   ============================================================ */
 
-gap:12px;
-
-align-items:center;
-
-flex-wrap:wrap;
-
+.breadcrumb {
+  padding: 18px 0;
+  background: #fff;
+  border-bottom: 1px solid #eee;
 }
 
-.breadcrumb a{
-
-text-decoration:none;
-
-color:#16a34a;
-
-font-weight:600;
-
-}
-/* ==========================================
-LAYOUT
-========================================== */
-
-.detail-layout{
-
-display:grid;
-
-grid-template-columns:
-
-2fr 1fr;
-
-gap:30px;
-
-align-items:start;
-
+/* nav.breadcrumb > .container — flex row dengan pemisah "/" */
+.breadcrumb .container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.detail-content{
-
-display:flex;
-
-flex-direction:column;
-
-gap:24px;
-
-}
-/* ==========================================
-INFO
-========================================== */
-
-.info-item{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:14px 0;
-
-border-bottom:1px solid #f3f4f6;
-
-gap:15px;
-
+.breadcrumb a {
+  text-decoration: none;
+  color: #16a34a;
+  font-weight: 600;
 }
 
-.info-item:last-child{
-
-border-bottom:none;
-
+.breadcrumb a:hover {
+  text-decoration: underline; /* UX: umpan balik visual saat hover */
 }
 
-.info-item span{
 
-color:#6b7280;
+/* ============================================================
+   LAYOUT DUA KOLOM
+   Kiri (2fr): detail pesanan  |  Kanan (1fr): ringkasan + aksi
+   ============================================================ */
 
-font-weight:500;
-
+.detail-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: start;
 }
 
-.info-item b{
-
-color:#111827;
-
-text-align:right;
-
-}
-/* ==========================================
-TIMELINE
-========================================== */
-
-.timeline{
-
-display:flex;
-
-flex-direction:column;
-
-gap:18px;
-
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.timeline-item{
 
-display:flex;
+/* ============================================================
+   INFO ITEM  (dl > div.info-item > dt + dd)
+   Menggantikan span + b yang tidak semantik.
+   ============================================================ */
 
-align-items:center;
-
-gap:16px;
-
-opacity:.45;
-
+/* Reset margin bawaan <dl> */
+.info-list {
+  margin: 0;
+  padding: 0;
 }
 
-.timeline-item.active{
-
-opacity:1;
-
-font-weight:700;
-
-color:#16a34a;
-
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f3f4f6;
+  gap: 15px;
 }
 
-.timeline-item span{
-
-width:42px;
-
-height:42px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-border-radius:50%;
-
-background:#dcfce7;
-
-font-size:1.2rem;
-
-}
-/* ==========================================
-PRODUK
-========================================== */
-
-.produk-list{
-
-display:flex;
-
-flex-direction:column;
-
-gap:18px;
-
+.info-item:last-child {
+  border-bottom: none;
 }
 
-.produk-card{
-
-display:grid;
-
-grid-template-columns:
-90px 1fr auto;
-
-gap:18px;
-
-padding:18px;
-
-border:1px solid #e5e7eb;
-
-border-radius:18px;
-
-background:#fff;
-
-align-items:center;
-
-transition:.3s;
-
+/* Label (dt) */
+.info-item dt {
+  color: #6b7280;
+  font-weight: 500;
 }
 
-.produk-card:hover{
-
-transform:translateY(-3px);
-
-box-shadow:
-
-0 10px 25px rgba(0,0,0,.08);
-
+/* Nilai (dd) */
+.info-item dd {
+  margin: 0;          /* reset margin bawaan dd */
+  color: #111827;
+  font-weight: 700;
+  text-align: right;
 }
 
-.produk-card img{
 
-width:90px;
+/* ============================================================
+   TIMELINE STATUS PESANAN  (ol > li.timeline-item)
+   ============================================================ */
 
-height:90px;
-
-object-fit:cover;
-
-border-radius:14px;
-
-border:1px solid #eee;
-
+/* Reset list style karena kita pakai ol secara semantik */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.produk-info{
-
-display:flex;
-
-flex-direction:column;
-
-gap:8px;
-
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0.45;
 }
 
-.produk-info h3{
-
-margin:0;
-
-font-size:1.05rem;
-
-font-weight:700;
-
+/* Langkah yang sudah selesai / aktif */
+.timeline-item.active {
+  opacity: 1;
+  font-weight: 700;
+  color: #16a34a;
 }
 
-.produk-info p{
-
-margin:0;
-
-color:#6b7280;
-
+/* Ikon bulat di setiap langkah */
+.timeline-item span {
+  flex-shrink: 0;        /* jangan menyusut di layar sempit */
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #dcfce7;
+  font-size: 1.2rem;
 }
 
-.produk-harga{
 
-text-align:right;
+/* ============================================================
+   KARTU PRODUK
+   ============================================================ */
 
-font-weight:700;
-
-color:#16a34a;
-
-}
-/* ==========================================
-SUMMARY
-========================================== */
-
-.summary-card{
-
-position:sticky;
-
-top:110px;
-
-background:#fff;
-
-padding:28px;
-
-border-radius:24px;
-
-box-shadow:
-
-0 10px 30px rgba(0,0,0,.06);
-
+.produk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.summary-item{
-
-display:flex;
-
-justify-content:space-between;
-
-margin:14px 0;
-
-gap:15px;
-
+.produk-card {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  background: #fff;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.summary-total{
-
-margin-top:20px;
-
-text-align:center;
-
+.produk-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-.summary-total h2{
-
-font-size:2rem;
-
-color:#16a34a;
-
-margin-top:10px;
-
-}
-/* ==========================================
-ACTION
-========================================== */
-
-.action-box{
-
-display:flex;
-
-flex-direction:column;
-
-gap:14px;
-
-margin-top:25px;
-
+.produk-card img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid #eee;
 }
 
-.action-box .btn{
-
-width:100%;
-
-}
-/* ==========================================
-BUKTI
-========================================== */
-
-#buktiContainer img{
-
-width:100%;
-
-border-radius:18px;
-
-border:1px solid #eee;
-
-margin-top:15px;
-
+.produk-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.empty-state-mini{
-
-padding:35px;
-
-text-align:center;
-
-border:2px dashed #d1d5db;
-
-border-radius:18px;
-
-color:#6b7280;
-
-background:#fafafa;
-
-}
-/* ==========================================
-RESPONSIVE
-========================================== */
-
-@media(max-width:992px){
-
-.detail-layout{
-
-grid-template-columns:1fr;
-
+.produk-info h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 
-.summary-card{
-
-position:static;
-
+.produk-info p {
+  margin: 0;
+  color: #6b7280;
 }
 
+.produk-harga {
+  text-align: right;
+  font-weight: 700;
+  color: #16a34a;
 }
 
-@media(max-width:768px){
 
-.hero-page{
+/* ============================================================
+   RINGKASAN PEMBAYARAN (summary-card)
+   Sticky di desktop agar selalu terlihat saat scroll.
+   ============================================================ */
 
-padding:120px 0 70px;
-
+.summary-card {
+  position: sticky;
+  top: 110px;
+  background: #fff;
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
-.hero-page h1{
-
-font-size:2rem;
-
+/* Reset list style (dl dalam summary) */
+.summary-list {
+  margin: 0;
+  padding: 0;
 }
 
-.produk-card{
-
-grid-template-columns:1fr;
-
-text-align:center;
-
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 14px 0;
+  gap: 15px;
 }
 
-.produk-card img{
-
-margin:auto;
-
+/* Label summary (dt) */
+.summary-item dt {
+  color: #6b7280;
 }
 
-.produk-harga{
-
-text-align:center;
-
+/* Nilai summary (dd) */
+.summary-item dd {
+  margin: 0;
+  font-weight: 600;
+  color: #111827;
 }
 
-.info-item{
-
-flex-direction:column;
-
-align-items:flex-start;
-
+.summary-total {
+  margin-top: 20px;
+  text-align: center;
 }
 
+.summary-total h2 {
+  font-size: 2rem;
+  color: #16a34a;
+  margin-top: 10px;
 }
-/* ==========================================
-ANIMATION
-========================================== */
 
+
+/* ============================================================
+   TOMBOL AKSI
+   ============================================================ */
+
+.action-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 25px;
+}
+
+/* Tombol memenuhi lebar kartu */
+.action-box .btn {
+  width: 100%;
+}
+
+
+/* ============================================================
+   BUKTI PEMBAYARAN
+   ============================================================ */
+
+#buktiContainer img {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid #eee;
+  margin-top: 15px;
+}
+
+/* State kosong — sebelum bukti diupload */
+.empty-state-mini {
+  padding: 35px;
+  text-align: center;
+  border: 2px dashed #d1d5db;
+  border-radius: 18px;
+  color: #6b7280;
+  background: #fafafa;
+}
+
+/* Loading skeleton — dipakai sementara data belum tiba */
+.loading-card {
+  padding: 24px;
+  text-align: center;
+  color: #9ca3af;
+  border-radius: 14px;
+  background: #f9fafb;
+}
+
+
+/* ============================================================
+   ANIMASI
+   Dihormati via prefers-reduced-motion untuk aksesibilitas.
+   ============================================================ */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+
+/* Animasi masuk untuk kartu-kartu utama */
 .form-card,
-
 .summary-card,
-
-.produk-card{
-
-animation:fadeUp .4s ease;
-
+.produk-card {
+  animation: fadeUp 0.4s ease both;
 }
 
-@keyframes fadeUp{
-
-from{
-
-opacity:0;
-
-transform:translateY(20px);
-
+/* Skeleton loading */
+.skeleton {
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
-to{
+/* Matikan semua animasi untuk pengguna yang memintanya */
+@media (prefers-reduced-motion: reduce) {
+  .form-card,
+  .summary-card,
+  .produk-card,
+  .skeleton {
+    animation: none;
+  }
 
-opacity:1;
-
-transform:translateY(0);
-
+  .produk-card:hover {
+    transform: none;
+  }
 }
 
+
+/* ============================================================
+   RESPONSIF — Tablet (≤ 992px)
+   Kolom tunggal, summary tidak sticky.
+   ============================================================ */
+
+@media (max-width: 992px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    position: static;
+  }
 }
 
-.skeleton{
 
-animation:pulse 1.5s infinite;
+/* ============================================================
+   RESPONSIF — Mobile (≤ 768px)
+   ============================================================ */
 
-}
+@media (max-width: 768px) {
+  .hero-page {
+    padding: 120px 0 70px;
+  }
 
-@keyframes pulse{
+  .hero-page h1 {
+    font-size: 2rem;
+  }
 
-0%{opacity:.5;}
+  /* Kartu produk jadi satu kolom, konten terpusat */
+  .produk-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
 
-50%{opacity:1;}
+  .produk-card img {
+    margin-inline: auto;
+  }
 
-100%{opacity:.5;}
+  .produk-harga {
+    text-align: center;
+  }
 
+  /* Info item bertumpuk vertikal di layar sempit */
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-item dd {
+    text-align: left; /* sejajar dengan dt saat ditumpuk */
+  }
 }
