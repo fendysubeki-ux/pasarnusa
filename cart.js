@@ -1,923 +1,429 @@
 // ======================================
-// PASARNUSA CART
-// cart.js
+// cart.js — PasarNusa Keranjang Belanja
 // ======================================
 
-// Firebase
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+// --- Firebase Imports ---
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth }        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  writeBatch,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-getFirestore,
-
-collection,
-
-query,
-
-where,
-
-getDocs,
-
-doc,
-
-updateDoc,
-
-deleteDoc,
-
-writeBatch
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-
-getAuth
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 // ======================================
-// FIREBASE
+// KONFIGURASI FIREBASE
 // ======================================
 
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
-};
-
-const app=
-
-initializeApp(firebaseConfig);
-
-const db=
-
-getFirestore(app);
-
-const auth=
-
-getAuth(app);
-// ======================================
-// ELEMENT
-// ======================================
-
-const cartContainer=
-
-document.getElementById("cartContainer");
-
-const totalProduk=
-
-document.getElementById("totalProduk");
-
-const totalItem=
-
-document.getElementById("totalItem");
-
-const subtotal=
-
-document.getElementById("subtotal");
-
-const totalBayar=
-
-document.getElementById("totalBayar");
-
-const pilihSemua=
-
-document.getElementById("pilihSemua");
-
-const hapusDipilih=
-
-document.getElementById("hapusDipilih");
-
-const checkoutBtn=
-
-document.getElementById("checkoutBtn");
-
-const kosongkanCart=
-
-document.getElementById("kosongkanCart");
-
-const emptyCart=
-
-document.getElementById("emptyCart");
-// ======================================
-// VARIABLE
-// ======================================
-
-let uid="";
-
-let dataCart=[];
-// ======================================
-// START
-// ======================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-initPage
-
-);
-
-async function initPage(){
-
-await checkLogin();
-
-showLoading();
-
-await loadCart();
-
-initEvent();
-
-}
-// ======================================
-// LOGIN
-// ======================================
-
-async function checkLogin(){
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href=
-
-"login.html";
-
-return;
-
-}
-
-uid=
-
-auth.currentUser.uid;
-
-}
-// ======================================
-// LOADING
-// ======================================
-
-function showLoading(){
-
-const template=
-
-document.getElementById(
-
-"loadingCart"
-
-);
-
-cartContainer.innerHTML="";
-
-for(let i=0;i<3;i++){
-
-cartContainer.appendChild(
-
-template.content.cloneNode(true)
-
-);
-
-}
-
-}
-// ======================================
-// LOAD CART
-// ======================================
-
-async function loadCart(){
-
-try{
-
-const snapshot=
-
-await getDocs(
-
-query(
-
-collection(db,"keranjang"),
-
-where(
-
-"uidUser",
-
-"==",
-
-uid
-
-)
-
-)
-
-);
-
-dataCart=[];
-
-snapshot.forEach(doc=>{
-
-dataCart.push({
-
-id:doc.id,
-
-...doc.data()
-
+const app  = initializeApp({
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952",
 });
 
-});
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-renderCart();
+// ======================================
+// ELEMEN DOM
+// ======================================
 
-updateSummary();
+const cartContainer = document.getElementById("cartContainer");
+const totalProdukEl = document.getElementById("totalProduk");
+const totalItemEl   = document.getElementById("totalItem");
+const subtotalEl    = document.getElementById("subtotal");
+const totalBayarEl  = document.getElementById("totalBayar");
+const pilihSemuaEl  = document.getElementById("pilihSemua");
+const hapusDipilih  = document.getElementById("hapusDipilih");
+const checkoutBtn   = document.getElementById("checkoutBtn");
+const kosongkanBtn  = document.getElementById("kosongkanCart");
+const emptyCart     = document.getElementById("emptyCart");
 
-}catch(error){
+// ======================================
+// STATE
+// ======================================
 
-console.error(error);
+let uid      = "";   // UID pengguna yang sedang login
+let dataCart = [];   // Cache data keranjang dari Firestore
 
-showToast(
+// ======================================
+// INISIALISASI
+// ======================================
 
-"Gagal memuat keranjang."
+document.addEventListener("DOMContentLoaded", initPage);
 
-);
-
+async function initPage() {
+  await checkLogin();
+  showLoading();
+  await loadCart();
+  initEvent();
 }
 
-}
 // ======================================
-// RENDER
+// AUTH — Redirect jika belum login
 // ======================================
 
-function renderCart(){
+async function checkLogin() {
+  await auth.authStateReady();
 
-cartContainer.innerHTML="";
+  if (!auth.currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
 
-if(dataCart.length===0){
-
-emptyCart.style.display="block";
-
-cartContainer.style.display="none";
-
-return;
-
+  uid = auth.currentUser.uid;
 }
 
-emptyCart.style.display="none";
-
-cartContainer.style.display="block";
-
-dataCart.forEach(item=>{
-
-const subtotal=
-
-Number(item.harga||0)
-
-*
-
-Number(item.jumlah||1);
-
-cartContainer.innerHTML+=`
-
-<div class="cart-item">
-
-<input
-
-type="checkbox"
-
-class="pilihProduk"
-
-data-id="${item.id}"
-
-${item.selected!==false?"checked":""}>
-
-<img
-
-src="${item.gambar||
-
-"assets/no-image.png"}"
-
-loading="lazy">
-
-<div class="cart-info">
-
-<h3>
-
-${item.namaProduk}
-
-</h3>
-
-<p>
-
-${formatRupiah(item.harga)}
-
-</p>
-
-<p>
-
-Subtotal
-
-<b>
-
-${formatRupiah(subtotal)}
-
-</b>
-
-</p>
-
-<div class="qty-box">
-
-<button
-
-onclick="kurangQty('${item.id}')">
-
-−
-
-</button>
-
-<input
-
-value="${item.jumlah}"
-
-readonly>
-
-<button
-
-onclick="tambahQty('${item.id}')">
-
-+
-
-</button>
-
-</div>
-
-<div class="cart-action">
-
-<button
-
-onclick="hapusItem('${item.id}')"
-
-class="btn btn-secondary">
-
-🗑 Hapus
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-pasangCheckbox();
-
-}
 // ======================================
-// SUMMARY
+// LOADING SKELETON
+// Tampilkan 3 placeholder sebelum data dimuat
 // ======================================
 
-function updateSummary(){
+function showLoading() {
+  const template = document.getElementById("loadingCart");
+  cartContainer.innerHTML = "";
 
-let produk=0;
-
-let item=0;
-
-let total=0;
-
-dataCart.forEach(data=>{
-
-if(data.selected===false)return;
-
-produk++;
-
-item+=
-
-Number(data.jumlah||0);
-
-total+=
-
-Number(data.harga||0)
-
-*
-
-Number(data.jumlah||0);
-
-});
-
-totalProduk.innerText=
-
-produk;
-
-totalItem.innerText=
-
-item;
-
-subtotal.innerText=
-
-formatRupiah(total);
-
-totalBayar.innerText=
-
-formatRupiah(total);
-
-}
-// ======================================
-// CHECKBOX
-// ======================================
-
-function pasangCheckbox(){
-
-document
-
-.querySelectorAll(
-
-".pilihProduk"
-
-)
-
-.forEach(check=>{
-
-check.addEventListener(
-
-"change",
-
-async()=>{
-
-const id=
-
-check.dataset.id;
-
-const item=
-
-dataCart.find(
-
-i=>i.id===id
-
-);
-
-item.selected=
-
-check.checked;
-
-await updateDoc(
-
-doc(
-
-db,
-
-"keranjang",
-
-id
-
-),
-
-{
-
-selected:
-
-check.checked
-
+  for (let i = 0; i < 3; i++) {
+    cartContainer.appendChild(template.content.cloneNode(true));
+  }
 }
 
-);
-
-updateSummary();
-
-});
-
-});
-
-}
 // ======================================
-// PILIH SEMUA
+// LOAD DATA KERANJANG dari Firestore
 // ======================================
 
-async function pilihSemuaProduk(){
+async function loadCart() {
+  try {
+    const snapshot = await getDocs(
+      query(collection(db, "keranjang"), where("uidUser", "==", uid))
+    );
 
-const batch=
+    dataCart = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
 
-writeBatch(db);
-
-dataCart.forEach(item=>{
-
-item.selected=
-
-pilihSemua.checked;
-
-batch.update(
-
-doc(
-
-db,
-
-"keranjang",
-
-item.id
-
-),
-
-{
-
-selected:
-
-pilihSemua.checked
-
+    renderCart();
+    updateSummary();
+  } catch (err) {
+    console.error("loadCart:", err);
+    showToast("Gagal memuat keranjang.");
+  }
 }
 
-);
-
-});
-
-await batch.commit();
-
-renderCart();
-
-updateSummary();
-
-}
 // ======================================
-// TAMBAH QTY
+// RENDER — Tampilkan item keranjang ke DOM
 // ======================================
 
-window.tambahQty = async(id)=>{
+function renderCart() {
+  cartContainer.innerHTML = "";
 
-const item=
+  // Tampilkan empty state jika keranjang kosong
+  if (dataCart.length === 0) {
+    emptyCart.hidden  = false;
+    cartContainer.hidden = true;
+    return;
+  }
 
-dataCart.find(
+  emptyCart.hidden  = true;
+  cartContainer.hidden = false;
 
-i=>i.id===id
+  const fragment = document.createDocumentFragment();
 
-);
+  dataCart.forEach(item => {
+    const harga    = Number(item.harga  || 0);
+    const jumlah   = Number(item.jumlah || 1);
+    const subtotal = harga * jumlah;
+    const checked  = item.selected !== false ? "checked" : "";
+    const gambar   = item.gambar || "assets/no-image.png";
 
-if(!item)return;
+    // Buat elemen via innerHTML untuk kemudahan templating
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      <input type="checkbox" class="pilihProduk" data-id="${item.id}" ${checked}>
 
-if(
+      <img src="${gambar}" alt="${item.namaProduk}" loading="lazy">
 
-item.jumlah>=
+      <div class="cart-info">
+        <h3>${item.namaProduk}</h3>
+        <p>${formatRupiah(harga)}</p>
+        <p>Subtotal <b>${formatRupiah(subtotal)}</b></p>
 
-(item.stok||9999)
+        <div class="qty-box">
+          <button data-action="kurang" data-id="${item.id}" aria-label="Kurangi jumlah">−</button>
+          <input type="number" value="${jumlah}" min="1" readonly aria-label="Jumlah">
+          <button data-action="tambah" data-id="${item.id}" aria-label="Tambah jumlah">+</button>
+        </div>
 
-){
+        <div class="cart-action">
+          <button data-action="hapus" data-id="${item.id}" class="btn btn-secondary">🗑 Hapus</button>
+        </div>
+      </div>
+    `;
 
-showToast(
+    fragment.appendChild(div);
+  });
 
-"Stok tidak mencukupi."
-
-);
-
-return;
-
-}
-
-await updateDoc(
-
-doc(
-
-db,
-
-"keranjang",
-
-id
-
-),
-
-{
-
-jumlah:
-
-Number(item.jumlah)+1
-
+  cartContainer.appendChild(fragment);
+  pasangCheckbox();
 }
 
-);
-
-await loadCart();
-
-};
 // ======================================
-// KURANG QTY
+// SUMMARY — Hitung total berdasar item terpilih
 // ======================================
 
-window.kurangQty = async(id)=>{
+function updateSummary() {
+  let produk = 0;
+  let item   = 0;
+  let total  = 0;
 
-const item=
+  dataCart.forEach(data => {
+    if (data.selected === false) return;
 
-dataCart.find(
+    produk++;
+    item  += Number(data.jumlah || 0);
+    total += Number(data.harga  || 0) * Number(data.jumlah || 0);
+  });
 
-i=>i.id===id
-
-);
-
-if(!item)return;
-
-if(item.jumlah<=1){
-
-await hapusItem(id);
-
-return;
-
+  totalProdukEl.textContent = produk;
+  totalItemEl.textContent   = item;
+  subtotalEl.textContent    = formatRupiah(total);
+  totalBayarEl.textContent  = formatRupiah(total);
 }
 
-await updateDoc(
+// ======================================
+// CHECKBOX — Sinkron status terpilih per item ke Firestore
+// ======================================
 
-doc(
+function pasangCheckbox() {
+  cartContainer.querySelectorAll(".pilihProduk").forEach(check => {
+    check.addEventListener("change", async () => {
+      const id   = check.dataset.id;
+      const item = dataCart.find(i => i.id === id);
+      if (!item) return;
 
-db,
+      item.selected = check.checked;
 
-"keranjang",
+      try {
+        await updateDoc(doc(db, "keranjang", id), { selected: check.checked });
+      } catch (err) {
+        console.error("pasangCheckbox:", err);
+        showToast("Gagal memperbarui pilihan.");
+      }
 
-id
-
-),
-
-{
-
-jumlah:
-
-Number(item.jumlah)-1
-
+      updateSummary();
+    });
+  });
 }
 
-);
-
-await loadCart();
-
-};
 // ======================================
-// HAPUS
+// PILIH SEMUA — Batch update ke Firestore
 // ======================================
 
-window.hapusItem = async(id)=>{
+async function pilihSemuaProduk() {
+  const isChecked = pilihSemuaEl.checked;
+  const batch     = writeBatch(db);
 
-const yakin=
+  dataCart.forEach(item => {
+    item.selected = isChecked;
+    batch.update(doc(db, "keranjang", item.id), { selected: isChecked });
+  });
 
-confirm(
+  try {
+    await batch.commit();
+  } catch (err) {
+    console.error("pilihSemuaProduk:", err);
+    showToast("Gagal memperbarui pilihan.");
+  }
 
-"Hapus produk dari keranjang?"
-
-);
-
-if(!yakin)return;
-
-try{
-
-await deleteDoc(
-
-doc(
-
-db,
-
-"keranjang",
-
-id
-
-)
-
-);
-
-showToast(
-
-"Produk dihapus."
-
-);
-
-await loadCart();
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menghapus."
-
-);
-
+  renderCart();
+  updateSummary();
 }
 
-};
 // ======================================
-// KOSONGKAN
-// ======================================
-
-async function kosongkanSemua(){
-
-const yakin=
-
-confirm(
-
-"Kosongkan seluruh keranjang?"
-
-);
-
-if(!yakin)return;
-
-const batch=
-
-writeBatch(db);
-
-dataCart.forEach(item=>{
-
-batch.delete(
-
-doc(
-
-db,
-
-"keranjang",
-
-item.id
-
-)
-
-);
-
-});
-
-await batch.commit();
-
-showToast(
-
-"Keranjang dikosongkan."
-
-);
-
-await loadCart();
-
-}
-// ======================================
-// CHECKOUT
+// TAMBAH / KURANG QTY
+// Diekspos ke window karena dipanggil lewat event delegation
 // ======================================
 
-function checkout(){
+async function tambahQty(id) {
+  const item = dataCart.find(i => i.id === id);
+  if (!item) return;
 
-const dipilih=
+  if (item.jumlah >= (item.stok || 9999)) {
+    showToast("Stok tidak mencukupi.");
+    return;
+  }
 
-dataCart.filter(
-
-item=>item.selected!==false
-
-);
-
-if(dipilih.length===0){
-
-showToast(
-
-"Pilih minimal satu produk."
-
-);
-
-return;
-
+  try {
+    await updateDoc(doc(db, "keranjang", id), { jumlah: Number(item.jumlah) + 1 });
+    await loadCart();
+  } catch (err) {
+    console.error("tambahQty:", err);
+    showToast("Gagal menambah jumlah.");
+  }
 }
 
-window.location.href=
+async function kurangQty(id) {
+  const item = dataCart.find(i => i.id === id);
+  if (!item) return;
 
-"checkout.html";
+  // Jika sudah 1, hapus item sekalian
+  if (item.jumlah <= 1) {
+    await hapusItem(id);
+    return;
+  }
 
-}
-// ======================================
-// EVENT
-// ======================================
-
-function initEvent(){
-
-pilihSemua.addEventListener(
-
-"change",
-
-pilihSemuaProduk
-
-);
-
-hapusDipilih.addEventListener(
-
-"click",
-
-async()=>{
-
-const batch=
-
-writeBatch(db);
-
-dataCart
-
-.filter(
-
-item=>item.selected!==false
-
-)
-
-.forEach(item=>{
-
-batch.delete(
-
-doc(
-
-db,
-
-"keranjang",
-
-item.id
-
-)
-
-);
-
-});
-
-await batch.commit();
-
-showToast(
-
-"Produk dipilih berhasil dihapus."
-
-);
-
-await loadCart();
-
-});
-
-checkoutBtn.addEventListener(
-
-"click",
-
-checkout
-
-);
-
-kosongkanCart.addEventListener(
-
-"click",
-
-kosongkanSemua
-
-);
-
-}
-// ======================================
-// HELPER
-// ======================================
-
-function formatRupiah(angka){
-
-return "Rp "+
-
-Number(
-
-angka||0
-
-)
-
-.toLocaleString(
-
-"id-ID"
-
-);
-
+  try {
+    await updateDoc(doc(db, "keranjang", id), { jumlah: Number(item.jumlah) - 1 });
+    await loadCart();
+  } catch (err) {
+    console.error("kurangQty:", err);
+    showToast("Gagal mengurangi jumlah.");
+  }
 }
 
-function showToast(message){
+// ======================================
+// HAPUS SATU ITEM
+// ======================================
 
-const toast=
+async function hapusItem(id) {
+  if (!confirm("Hapus produk dari keranjang?")) return;
 
-document.createElement("div");
+  try {
+    await deleteDoc(doc(db, "keranjang", id));
+    showToast("Produk dihapus.");
+    await loadCart();
+  } catch (err) {
+    console.error("hapusItem:", err);
+    showToast("Gagal menghapus produk.");
+  }
+}
 
-toast.className="toast";
+// ======================================
+// KOSONGKAN SEMUA ITEM
+// ======================================
 
-toast.innerText=message;
+async function kosongkanSemua() {
+  if (!confirm("Kosongkan seluruh keranjang?")) return;
 
-document.body.appendChild(toast);
+  const batch = writeBatch(db);
+  dataCart.forEach(item => batch.delete(doc(db, "keranjang", item.id)));
 
-setTimeout(()=>{
+  try {
+    await batch.commit();
+    showToast("Keranjang dikosongkan.");
+    await loadCart();
+  } catch (err) {
+    console.error("kosongkanSemua:", err);
+    showToast("Gagal mengosongkan keranjang.");
+  }
+}
 
-toast.classList.add("show");
+// ======================================
+// HAPUS ITEM TERPILIH
+// ======================================
 
-},100);
+async function hapusDipilihFn() {
+  const dipilih = dataCart.filter(item => item.selected !== false);
 
-setTimeout(()=>{
+  if (dipilih.length === 0) {
+    showToast("Belum ada produk yang dipilih.");
+    return;
+  }
 
-toast.classList.remove("show");
+  if (!confirm(`Hapus ${dipilih.length} produk yang dipilih?`)) return;
 
-setTimeout(()=>{
+  const batch = writeBatch(db);
+  dipilih.forEach(item => batch.delete(doc(db, "keranjang", item.id)));
 
-toast.remove();
+  try {
+    await batch.commit();
+    showToast("Produk dipilih berhasil dihapus.");
+    await loadCart();
+  } catch (err) {
+    console.error("hapusDipilih:", err);
+    showToast("Gagal menghapus produk dipilih.");
+  }
+}
 
-},300);
+// ======================================
+// CHECKOUT — Validasi sebelum pindah halaman
+// ======================================
 
-},3000);
+function checkout() {
+  const dipilih = dataCart.filter(item => item.selected !== false);
 
+  if (dipilih.length === 0) {
+    showToast("Pilih minimal satu produk untuk checkout.");
+    return;
+  }
+
+  window.location.href = "checkout.html";
+}
+
+// ======================================
+// EVENT LISTENERS
+// Menggunakan event delegation untuk tombol qty & hapus di dalam item
+// ======================================
+
+function initEvent() {
+  // Pilih semua checkbox
+  pilihSemuaEl.addEventListener("change", pilihSemuaProduk);
+
+  // Hapus item yang dipilih
+  hapusDipilih.addEventListener("click", hapusDipilihFn);
+
+  // Checkout
+  checkoutBtn.addEventListener("click", checkout);
+
+  // Kosongkan keranjang
+  kosongkanBtn.addEventListener("click", kosongkanSemua);
+
+  // Delegasi untuk tombol qty & hapus di dalam cartContainer
+  cartContainer.addEventListener("click", async e => {
+    const btn    = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const { action, id } = btn.dataset;
+
+    if (action === "tambah") await tambahQty(id);
+    if (action === "kurang") await kurangQty(id);
+    if (action === "hapus")  await hapusItem(id);
+  });
+}
+
+// ======================================
+// HELPER — Format angka ke Rupiah
+// ======================================
+
+function formatRupiah(angka) {
+  return "Rp " + Number(angka || 0).toLocaleString("id-ID");
+}
+
+// ======================================
+// HELPER — Toast Notifikasi
+// ======================================
+
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className   = "toast";
+  toast.textContent = message;   // textContent lebih aman dari innerHTML untuk input dinamis
+  document.body.appendChild(toast);
+
+  // Tampilkan setelah satu frame agar transisi CSS aktif
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add("show"));
+  });
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3000);
 }
