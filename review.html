@@ -1,611 +1,291 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & PWA -->
+  <title>Review Produk | PasarNusa</title>
+  <meta name="description" content="Berikan rating dan review untuk produk UMKM yang Anda beli di PasarNusa.">
+  <meta name="theme-color" content="#16a34a">
+  <link rel="icon" href="assets/logo.png">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts — preconnect sebelum stylesheet untuk performa -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-<title>Review Produk | PasarNusa</title>
-
-<meta
-name="description"
-content="Berikan rating dan review produk">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="review.css">
-
+  <!-- Stylesheet global lalu halaman-spesifik -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="review.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="pesanan-saya.html">
-
-Pesanan Saya
-
-</a>
-
-<a
-href="review.html"
-class="active">
-
-Review
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-⭐ Review Produk
-
-</div>
-
-<h1>
-
-Bagikan Pengalaman Anda
-
-</h1>
-
-<p>
-
-Review Anda membantu pelanggan lain menemukan produk UMKM terbaik.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/</span>
-
-<a href="pesanan-saya.html">
-
-Pesanan Saya
-
-</a>
-
-<span>
-
-/</span>
-
-<span>
-
-Review Produk
-
-</span>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="review-layout">
-
-<div class="review-content">
-<div class="form-card">
-
-<h2>
-
-🛍 Produk
-
-</h2>
-
-<div
-id="produkContainer">
-
-<div class="loading-card">
-
-Memuat produk...
-
-</div>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-⭐ Rating
-
-</h2>
-
-<div
-id="ratingBox"
-class="rating-box">
-
-<span class="star" data-rating="1">★</span>
-
-<span class="star" data-rating="2">★</span>
-
-<span class="star" data-rating="3">★</span>
-
-<span class="star" data-rating="4">★</span>
-
-<span class="star" data-rating="5">★</span>
-
-</div>
-
-<p id="ratingText">
-
-Pilih rating Anda
-
-</p>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-📝 Tulis Review
-
-</h2>
-
-<div class="form-group">
-
-<label>
-
-Bagaimana pengalaman Anda?
-
-</label>
-
-<textarea
-
-id="reviewText"
-
-rows="6"
-
-placeholder="Ceritakan kualitas produk, pelayanan penjual, pengiriman, atau pengalaman Anda menggunakan produk ini...">
-
-</textarea>
-
-<small>
-
-Minimal 10 karakter.
-
-</small>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-📷 Foto Review
-
-</h2>
-
-<div class="upload-box">
-
-<input
-
-type="file"
-
-id="fotoReview"
-
-accept="image/png,image/jpeg,image/webp"
-
-multiple>
-
-<label
-
-for="fotoReview"
-
-class="upload-area">
-
-<div class="upload-icon">
-
-📸
-
-</div>
-
-<h3>
-
-Tambah Foto
-
-</h3>
-
-<p>
-
-Opsional • Maksimal 5 foto
-
-</p>
-
-</label>
-
-</div>
-
-<div
-
-id="previewFoto"
-
-class="preview-grid">
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-✅ Selesai
-
-</h2>
-
-<button
-
-id="kirimReview"
-
-class="btn btn-primary">
-
-⭐ Kirim Review
-
-</button>
-
-<a
-
-href="pesanan-saya.html"
-
-class="btn btn-secondary">
-
-⬅ Kembali
-
-</a>
-
-</div>
-
-</div>
-<div class="review-summary">
-
-<div class="summary-card">
-
-<h2>
-
-📊 Ringkasan
-
-</h2>
-
-<div class="summary-item">
-
-<span>
-
-Produk
-
-</span>
-
-<b id="summaryProduk">
-
--
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Toko
-
-</span>
-
-<b id="summaryToko">
-
--
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Rating
-
-</span>
-
-<b id="summaryRating">
-
-0 / 5
-
-</b>
-
-</div>
-
-<p class="summary-note">
-
-Review yang jujur akan membantu pembeli lain memilih produk yang tepat.
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<div
-
-id="emptyReview"
-
-class="empty-state"
-
-style="display:none;">
-
-<div class="empty-icon">
-
-⭐
-
-</div>
-
-<h2>
-
-Produk Tidak Ditemukan
-
-</h2>
-
-<p>
-
-Produk atau pesanan yang akan direview tidak tersedia.
-
-</p>
-
-<a
-
-href="pesanan-saya.html"
-
-class="btn btn-primary">
-
-Kembali ke Pesanan
-
-</a>
-
-</div>
-<template id="loadingReview">
-
-<div class="form-card skeleton">
-
-<div class="image-skeleton">
-
-</div>
-
-<div class="content-skeleton">
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-</div>
-
-</div>
-
-</template>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-
-🌿 PasarNusa
-
-</h3>
-
-<p>
-
-Marketplace UMKM Indonesia yang membantu produk lokal berkembang hingga ke seluruh Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-Menu
-
-</h4>
-
-<ul>
-
-<li><a href="index.html">Beranda</a></li>
-
-<li><a href="produk.html">Produk</a></li>
-
-<li><a href="pesanan-saya.html">Pesanan Saya</a></li>
-
-<li><a href="review.html">Review</a></li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>
-
-Bantuan
-
-</h4>
-
-<ul>
-
-<li><a href="faq.html">FAQ</a></li>
-
-<li><a href="kontak.html">Kontak</a></li>
-
-<li><a href="kebijakan.html">Privasi</a></li>
-
-<li><a href="syarat.html">Syarat</a></li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-
-<script src="script.js"></script>
-
-<script
-
-type="module"
-
-src="review.js">
-
-</script>
+  <!-- ===================== NAVIGASI ===================== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Menu desktop -->
+        <nav class="navbar-menu" aria-label="Menu utama">
+          <a href="index.html">Beranda</a>
+          <a href="pesanan-saya.html">Pesanan Saya</a>
+          <a href="review.html" class="active" aria-current="page">Review</a>
+        </nav>
+
+        <!-- Aksi kanan -->
+        <div class="navbar-action">
+          <!-- Tombol ganti tema — label diperbarui via JS -->
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">
+            🌙
+          </button>
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+        <!-- Tombol hamburger (mobile) -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">
+          ☰
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero-page">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">⭐ Review Produk</div>
+        <h1>Bagikan Pengalaman Anda</h1>
+        <p>Review Anda membantu pelanggan lain menemukan produk UMKM terbaik.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BREADCRUMB ===================== -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true"> / </span>
+      <a href="pesanan-saya.html">Pesanan Saya</a>
+      <span aria-hidden="true"> / </span>
+      <span aria-current="page">Review Produk</span>
+    </div>
+  </nav>
+
+  <!-- ===================== KONTEN UTAMA ===================== -->
+  <main class="section">
+    <div class="container">
+      <div class="review-layout">
+
+        <!-- Kolom kiri: form review -->
+        <div class="review-content">
+
+          <!-- Kartu 1: Info produk (diisi oleh review.js) -->
+          <div class="form-card">
+            <h2>🛍 Produk</h2>
+            <div id="produkContainer">
+              <!-- Skeleton loading ditampilkan sementara data dimuat -->
+              <div class="loading-card" aria-live="polite">Memuat produk…</div>
+            </div>
+          </div>
+
+          <!-- Kartu 2: Rating bintang -->
+          <div class="form-card">
+            <h2>⭐ Rating</h2>
+
+            <!--
+              role="radiogroup" + role="radio" memungkinkan navigasi keyboard
+              dan pembaca layar membaca rating dengan benar.
+            -->
+            <div
+              id="ratingBox"
+              class="rating-box"
+              role="radiogroup"
+              aria-label="Pilih rating"
+            >
+              <span class="star" data-rating="1" role="radio" aria-checked="false" tabindex="0" aria-label="1 bintang">★</span>
+              <span class="star" data-rating="2" role="radio" aria-checked="false" tabindex="0" aria-label="2 bintang">★</span>
+              <span class="star" data-rating="3" role="radio" aria-checked="false" tabindex="0" aria-label="3 bintang">★</span>
+              <span class="star" data-rating="4" role="radio" aria-checked="false" tabindex="0" aria-label="4 bintang">★</span>
+              <span class="star" data-rating="5" role="radio" aria-checked="false" tabindex="0" aria-label="5 bintang">★</span>
+            </div>
+
+            <!-- Teks deskripsi rating diperbarui via JS -->
+            <p id="ratingText" aria-live="polite">Pilih rating Anda</p>
+          </div>
+
+          <!-- Kartu 3: Teks review -->
+          <div class="form-card">
+            <h2>📝 Tulis Review</h2>
+            <div class="form-group">
+              <label for="reviewText">Bagaimana pengalaman Anda?</label>
+              <textarea
+                id="reviewText"
+                rows="6"
+                placeholder="Ceritakan kualitas produk, pelayanan penjual, pengiriman, atau pengalaman Anda menggunakan produk ini…"
+                minlength="10"
+                aria-describedby="reviewHint"
+              ></textarea>
+              <!-- id dikaitkan ke aria-describedby agar pembaca layar membacanya -->
+              <small id="reviewHint">Minimal 10 karakter.</small>
+            </div>
+          </div>
+
+          <!-- Kartu 4: Upload foto (opsional) -->
+          <div class="form-card">
+            <h2>📷 Foto Review</h2>
+            <div class="upload-box">
+              <!--
+                accept dibatasi ke format gambar umum.
+                multiple diizinkan, dibatasi maksimal 5 foto via JS.
+              -->
+              <input
+                type="file"
+                id="fotoReview"
+                accept="image/png, image/jpeg, image/webp"
+                multiple
+                aria-label="Unggah foto review (opsional, maksimal 5)"
+              >
+              <label for="fotoReview" class="upload-area">
+                <div class="upload-icon" aria-hidden="true">📸</div>
+                <h3>Tambah Foto</h3>
+                <p>Opsional · Maksimal 5 foto</p>
+              </label>
+            </div>
+
+            <!-- Grid pratinjau foto diisi oleh review.js -->
+            <div id="previewFoto" class="preview-grid" aria-live="polite"></div>
+          </div>
+
+          <!-- Kartu 5: Tombol aksi -->
+          <div class="form-card">
+            <h2>✅ Selesai</h2>
+            <button id="kirimReview" class="btn btn-primary" type="button">
+              ⭐ Kirim Review
+            </button>
+            <a href="pesanan-saya.html" class="btn btn-secondary">
+              ⬅ Kembali
+            </a>
+          </div>
+
+        </div><!-- /review-content -->
+
+        <!-- Kolom kanan: ringkasan (diperbarui secara reaktif via JS) -->
+        <aside class="review-summary" aria-label="Ringkasan review">
+          <div class="summary-card">
+            <h2>📊 Ringkasan</h2>
+
+            <div class="summary-item">
+              <span>Produk</span>
+              <b id="summaryProduk">-</b>
+            </div>
+            <div class="summary-item">
+              <span>Toko</span>
+              <b id="summaryToko">-</b>
+            </div>
+            <div class="summary-item">
+              <span>Rating</span>
+              <b id="summaryRating">0 / 5</b>
+            </div>
+
+            <p class="summary-note">
+              Review yang jujur membantu pembeli lain memilih produk yang tepat.
+            </p>
+          </div>
+        </aside>
+
+      </div><!-- /review-layout -->
+    </div>
+  </main>
+
+  <!-- ===================== STATE KOSONG ===================== -->
+  <!--
+    Ditampilkan via JS (style="display:none" dihapus agar lebih bersih;
+    gunakan class .hidden yang dikontrol CSS/JS untuk toggle).
+  -->
+  <div id="emptyReview" class="empty-state hidden" role="alert" aria-live="assertive">
+    <div class="empty-icon" aria-hidden="true">⭐</div>
+    <h2>Produk Tidak Ditemukan</h2>
+    <p>Produk atau pesanan yang akan direview tidak tersedia.</p>
+    <a href="pesanan-saya.html" class="btn btn-primary">Kembali ke Pesanan</a>
+  </div>
+
+  <!-- ===================== TEMPLATE SKELETON LOADING ===================== -->
+  <!--
+    Template ini di-clone via JS untuk menampilkan placeholder
+    saat data produk masih dimuat dari server.
+  -->
+  <template id="loadingReview">
+    <div class="form-card skeleton" aria-hidden="true">
+      <div class="image-skeleton"></div>
+      <div class="content-skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+
+        <div>
+          <h3>🌿 PasarNusa</h3>
+          <p>Marketplace UMKM Indonesia yang membantu produk lokal berkembang hingga ke seluruh Indonesia.</p>
+        </div>
+
+        <nav aria-label="Menu footer">
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+            <li><a href="pesanan-saya.html">Pesanan Saya</a></li>
+            <li><a href="review.html">Review</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Bantuan">
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+            <li><a href="kebijakan.html">Privasi</a></li>
+            <li><a href="syarat.html">Syarat</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== TOMBOL KEMBALI KE ATAS ===================== -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- ===================== SCRIPT ===================== -->
+  <!--
+    script.js dimuat lebih dulu (utilitas global: tema, back-to-top, menu mobile).
+    review.js sebagai ES Module untuk isolasi scope dan import/export yang bersih.
+  -->
+  <script src="script.js"></script>
+  <script type="module" src="review.js"></script>
 
 </body>
-
 </html>
