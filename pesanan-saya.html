@@ -1,607 +1,238 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & Metadata -->
+  <title>Pesanan Saya | PasarNusa</title>
+  <meta name="description" content="Lihat seluruh pesanan Anda di PasarNusa">
+  <meta name="theme-color" content="#16a34a">
 
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/logo.png">
 
-<title>Pesanan Saya | PasarNusa</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-<meta
-name="description"
-content="Lihat seluruh pesanan Anda di PasarNusa">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="pesanan-saya.css">
-
+  <!-- Stylesheet global dan halaman ini -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="pesanan-saya.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<a
-href="pesanan-saya.html"
-class="active">
-
-Pesanan Saya
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-📦 Pesanan
-
-</div>
-
-<h1>
-
-Pesanan Saya
-
-</h1>
-
-<p>
-
-Pantau status seluruh pesanan Anda mulai dari pembayaran hingga pesanan diterima.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Pesanan Saya
-
-</span>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-
-<h3 id="totalPesanan">
-
-0
-
-</h3>
-
-<p>
-
-📦 Total Pesanan
-
-</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="belumBayar">
-
-0
-
-</h3>
-
-<p>
-
-💳 Belum Bayar
-
-</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="menungguVerifikasi">
-
-0
-
-</h3>
-
-<p>
-
-🟡 Verifikasi
-
-</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="diproses">
-
-0
-
-</h3>
-
-<p>
-
-📦 Diproses
-
-</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="dikirim">
-
-0
-
-</h3>
-
-<p>
-
-🚚 Dikirim
-
-</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="selesai">
-
-0
-
-</h3>
-
-<p>
-
-⭐ Selesai
-
-</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="totalBelanja">
-
-Rp 0
-
-</h3>
-
-<p>
-
-💰 Total Belanja
-
-</p>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<div class="search-filter">
-
-<input
-
-type="text"
-
-id="searchPesanan"
-
-placeholder="🔍 Cari nomor pesanan atau nama toko...">
-
-<select
-
-id="filterStatus">
-
-<option value="all">
-
-Semua Status
-
-</option>
-
-<option value="Belum Bayar">
-
-Belum Bayar
-
-</option>
-
-<option value="Menunggu Verifikasi">
-
-Menunggu Verifikasi
-
-</option>
-
-<option value="Diproses">
-
-Diproses
-
-</option>
-
-<option value="Dikirim">
-
-Dikirim
-
-</option>
-
-<option value="Selesai">
-
-Selesai
-
-</option>
-
-<option value="Ditolak">
-
-Ditolak
-
-</option>
-
-</select>
-
-</div>
-
-</div>
-<div
-
-id="pesananContainer"
-
-class="order-list">
-
-<div class="loading-card">
-
-Memuat pesanan...
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<div
-
-id="emptyPesanan"
-
-class="empty-state"
-
-style="display:none;">
-
-<div class="empty-icon">
-
-📦
-
-</div>
-
-<h2>
-
-Belum Ada Pesanan
-
-</h2>
-
-<p>
-
-Anda belum memiliki pesanan.
-
-Silakan mulai berbelanja di PasarNusa.
-
-</p>
-
-<a
-
-href="produk.html"
-
-class="btn btn-primary">
-
-🛍 Mulai Belanja
-
-</a>
-
-</div>
-<template id="loadingPesanan">
-
-<div class="order-card skeleton">
-
-<div class="image-skeleton">
-
-</div>
-
-<div class="content-skeleton">
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-</div>
-
-</div>
-
-</template>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-
-🌿 PasarNusa
-
-</h3>
-
-<p>
-
-Marketplace UMKM Indonesia yang membantu produk lokal menjangkau seluruh Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-Menu
-
-</h4>
-
-<ul>
-
-<li>
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-</li>
-
-<li>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-</li>
-
-<li>
-
-<a href="pesanan-saya.html">
-
-Pesanan Saya
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kontak.html">
-
-Kontak
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>
-
-Bantuan
-
-</h4>
-
-<ul>
-
-<li>
-
-<a href="faq.html">
-
-FAQ
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kebijakan.html">
-
-Kebijakan Privasi
-
-</a>
-
-</li>
-
-<li>
-
-<a href="syarat.html">
-
-Syarat & Ketentuan
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-<script src="script.js"></script>
-
-<script
-
-type="module"
-
-src="pesanan-saya.js">
-
-</script>
+  <!-- ==========================================
+       NAVIGASI UTAMA
+  =========================================== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Menu navigasi desktop -->
+        <nav class="navbar-menu" aria-label="Menu utama">
+          <a href="index.html">Beranda</a>
+          <a href="produk.html">Produk</a>
+          <a href="pesanan-saya.html" class="active" aria-current="page">Pesanan Saya</a>
+        </nav>
+
+        <!-- Aksi navbar: toggle tema & profil -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+        <!-- Tombol menu untuk mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       HERO HALAMAN
+  =========================================== -->
+  <section class="hero-page" aria-labelledby="heroHeading">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">📦 Pesanan</div>
+        <h1 id="heroHeading">Pesanan Saya</h1>
+        <p>Pantau status seluruh pesanan Anda mulai dari pembayaran hingga pesanan diterima.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       BREADCRUMB NAVIGASI
+  =========================================== -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Pesanan Saya</span>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       KONTEN UTAMA: DASHBOARD & DAFTAR PESANAN
+  =========================================== -->
+  <main class="section" id="mainContent">
+    <div class="container">
+
+      <!-- Ringkasan statistik pesanan -->
+      <div class="dashboard-grid" aria-label="Ringkasan pesanan">
+        <div class="dashboard-card">
+          <h3 id="totalPesanan" aria-live="polite">0</h3>
+          <p>📦 Total Pesanan</p>
+        </div>
+        <div class="dashboard-card">
+          <h3 id="belumBayar" aria-live="polite">0</h3>
+          <p>💳 Belum Bayar</p>
+        </div>
+        <div class="dashboard-card">
+          <h3 id="menungguVerifikasi" aria-live="polite">0</h3>
+          <p>🟡 Verifikasi</p>
+        </div>
+        <div class="dashboard-card">
+          <h3 id="diproses" aria-live="polite">0</h3>
+          <p>📦 Diproses</p>
+        </div>
+        <div class="dashboard-card">
+          <h3 id="dikirim" aria-live="polite">0</h3>
+          <p>🚚 Dikirim</p>
+        </div>
+        <div class="dashboard-card">
+          <h3 id="selesai" aria-live="polite">0</h3>
+          <p>⭐ Selesai</p>
+        </div>
+        <div class="dashboard-card">
+          <h3 id="totalBelanja" aria-live="polite">Rp 0</h3>
+          <p>💰 Total Belanja</p>
+        </div>
+      </div>
+
+      <!-- Filter & pencarian pesanan -->
+      <div class="form-card">
+        <div class="search-filter">
+          <label for="searchPesanan" class="sr-only">Cari pesanan</label>
+          <input
+            type="search"
+            id="searchPesanan"
+            placeholder="🔍 Cari nomor pesanan atau nama toko..."
+            autocomplete="off"
+          >
+
+          <label for="filterStatus" class="sr-only">Filter status pesanan</label>
+          <select id="filterStatus">
+            <option value="all">Semua Status</option>
+            <option value="Belum Bayar">Belum Bayar</option>
+            <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
+            <option value="Diproses">Diproses</option>
+            <option value="Dikirim">Dikirim</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Ditolak">Ditolak</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Daftar pesanan: diisi oleh JS, menampilkan skeleton saat memuat -->
+      <div id="pesananContainer" class="order-list" aria-live="polite" aria-busy="true">
+        <div class="loading-card">Memuat pesanan...</div>
+      </div>
+
+      <!-- State kosong: ditampilkan JS jika tidak ada pesanan -->
+      <div id="emptyPesanan" class="empty-state" hidden>
+        <div class="empty-icon" aria-hidden="true">📦</div>
+        <h2>Belum Ada Pesanan</h2>
+        <p>Anda belum memiliki pesanan. Silakan mulai berbelanja di PasarNusa.</p>
+        <a href="produk.html" class="btn btn-primary">🛍 Mulai Belanja</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==========================================
+       TEMPLATE SKELETON LOADING (digunakan oleh JS)
+  =========================================== -->
+  <template id="loadingPesanan">
+    <div class="order-card skeleton" aria-hidden="true">
+      <div class="image-skeleton"></div>
+      <div class="content-skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ==========================================
+       FOOTER
+  =========================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+
+        <!-- Tentang PasarNusa -->
+        <div>
+          <h3>🌿 PasarNusa</h3>
+          <p>Marketplace UMKM Indonesia yang membantu produk lokal menjangkau seluruh Indonesia.</p>
+        </div>
+
+        <!-- Menu navigasi footer -->
+        <nav aria-label="Menu footer">
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+            <li><a href="pesanan-saya.html">Pesanan Saya</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+          </ul>
+        </nav>
+
+        <!-- Tautan bantuan -->
+        <nav aria-label="Bantuan">
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kebijakan.html">Kebijakan Privasi</a></li>
+            <li><a href="syarat.html">Syarat &amp; Ketentuan</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <!-- Baris bawah footer -->
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun dengan ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       TOMBOL KEMBALI KE ATAS
+  =========================================== -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- ==========================================
+       SKRIP
+       - script.js  : utilitas global (tema, menu, back-to-top)
+       - pesanan-saya.js : logika khusus halaman ini (ES Module)
+  =========================================== -->
+  <script src="script.js"></script>
+  <script type="module" src="pesanan-saya.js"></script>
 
 </body>
-
 </html>
