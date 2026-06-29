@@ -1,403 +1,261 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toko Favorit - PasarNusa</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<title>Toko Favorit - PasarNusa</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <section class="dashboard">
 
-<div class="dashboard-header">
+  <!-- ===== Header ===== -->
+  <div class="dashboard-header">
+    <div>
+      <h1>⭐ Toko Favorit</h1>
+      <p>Toko yang Anda ikuti</p>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="dashboard-user.html" class="btn-secondary">⬅ Dashboard</a>
+      <a href="index.html" class="btn-primary">🏠 Beranda</a>
+      <button id="refreshBtn" class="btn-secondary">🔄 Refresh</button>
+    </div>
+  </div>
 
-<div>
-<h1>⭐ Toko Favorit</h1>
-<p>Toko yang Anda ikuti</p>
-</div>
+  <!-- ===== Statistik ===== -->
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <h3 id="totalToko">0</h3>
+      <p>Total Toko Favorit</p>
+    </div>
+    <div class="dashboard-card">
+      <h3 id="totalAktif">0</h3>
+      <p>Toko Aktif</p>
+    </div>
+  </div>
 
-<div style="display:flex;gap:10px;flex-wrap:wrap;">
+  <!-- ===== Search ===== -->
+  <div class="form-card">
+    <input type="text" id="searchInput" placeholder="Cari toko favorit...">
+  </div>
 
-<a href="dashboard-user.html" class="btn-secondary">
-⬅ Dashboard
-</a>
-
-<a href="index.html" class="btn-primary">
-🏠 Beranda
-</a>
-
-<button id="refreshBtn" class="btn-secondary">
-🔄 Refresh
-</button>
-
-</div>
-
-</div>
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-<h3 id="totalToko">0</h3>
-<p>Total Toko Favorit</p>
-</div>
-
-<div class="dashboard-card">
-<h3 id="totalAktif">0</h3>
-<p>Toko Aktif</p>
-</div>
-
-</div>
-
-<div class="form-card">
-
-<input
-type="text"
-id="searchInput"
-placeholder="Cari toko favorit...">
-
-</div>
-
-<div
-id="tokoContainer"
-class="dashboard-grid">
-
-<div class="dashboard-card">
-Memuat toko favorit...
-</div>
-
-</div>
+  <!-- ===== Kontainer Toko ===== -->
+  <div id="tokoContainer" class="dashboard-grid">
+    <div class="dashboard-card">Memuat toko favorit...</div>
+  </div>
 
 </section>
 
 <script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-query,
-where,
-deleteDoc,
-doc
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import {
-getAuth
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href =
-"login.html";
-
-}
-
-const uid =
-auth.currentUser.uid;
-
-const container =
-document.getElementById(
-"tokoContainer"
-);
-
-let semuaToko = [];
-
-async function loadToko(){
-
-try{
-
-container.innerHTML =
-`
-<div class="dashboard-card">
-Memuat...
-</div>
-`;
-
-const favSnapshot =
-await getDocs(
-query(
-collection(db,"favorite_toko"),
-where("uidUser","==",uid)
-)
-);
-
-if(favSnapshot.empty){
-
-container.innerHTML = `
-
-<div class="dashboard-card">
-
-<h3>
-⭐ Belum Ada Toko Favorit
-</h3>
-
-<p>
-Mulai ikuti toko favorit Anda
-</p>
-
-<br>
-
-<a
-href="index.html"
-class="btn-primary">
-
-Jelajahi Marketplace
-
-</a>
-
-</div>
-
-`;
-
-return;
-
-}
-
-semuaToko = [];
-
-for(const item of favSnapshot.docs){
-
-const fav =
-item.data();
-
-const tokoSnap =
-await getDocs(
-query(
-collection(db,"umkm"),
-where("uid","==",fav.uidToko)
-)
-);
-
-if(!tokoSnap.empty){
-
-semuaToko.push({
-
-favId:item.id,
-
-...tokoSnap.docs[0].data()
-
-});
-
-}
-
-}
-
-document.getElementById(
-"totalToko"
-).innerText =
-semuaToko.length;
-
-document.getElementById(
-"totalAktif"
-).innerText =
-semuaToko.filter(
-t=>t.status==="Aktif"
-).length;
-
-renderToko();
-
-}
-catch(error){
-
-container.innerHTML = `
-
-<div class="dashboard-card">
-
-<h3>Error</h3>
-
-<p>${error.message}</p>
-
-</div>
-
-`;
-
-}
-
-}
-
-function renderToko(){
-
-const keyword =
-document
-.getElementById("searchInput")
-.value
-.toLowerCase();
-
-container.innerHTML = "";
-
-const hasil =
-semuaToko.filter((toko)=>{
-
-return (
-toko.namaUmkm || ""
-)
-.toLowerCase()
-.includes(keyword);
-
-});
-
-if(hasil.length===0){
-
-container.innerHTML = `
-
-<div class="dashboard-card">
-
-<h3>
-Toko Tidak Ditemukan
-</h3>
-
-</div>
-
-`;
-
-return;
-
-}
-
-hasil.forEach((toko)=>{
-
-container.innerHTML += `
-
-<div class="dashboard-card">
-
-<img
-src="${
-toko.logo ||
-'https://picsum.photos/300'
-}"
-style="
-width:100px;
-height:100px;
-border-radius:50%;
-object-fit:cover;
-margin:auto;
-display:block;
-">
-
-<h3>
-${toko.namaUmkm}
-</h3>
-
-<p>
-${toko.kategori || "-"}
-</p>
-
-<p>
-⭐ ${toko.ratingToko || 0}
-</p>
-
-<p>
-${toko.deskripsi || ""}
-</p>
-
-<div
-style="
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:15px;
-">
-
-<a
-href="toko.html?uid=${toko.uid}"
-class="btn-primary">
-
-Kunjungi
-
-</a>
-
-<button
-onclick="hapusFavorit('${toko.favId}')"
-class="btn-secondary">
-
-Hapus
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-
-window.hapusFavorit =
-async(id)=>{
-
-if(
-!confirm(
-"Hapus toko dari favorit?"
-)
-)return;
-
-await deleteDoc(
-doc(
-db,
-"favorite_toko",
-id
-)
-);
-
-loadToko();
-
-};
-
-document
-.getElementById("searchInput")
-.addEventListener(
-"input",
-renderToko
-);
-
-document
-.getElementById("refreshBtn")
-.addEventListener(
-"click",
-loadToko
-);
-
-loadToko();
-
+  import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getAuth }          from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    where,
+    deleteDoc,
+    doc,
+  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+  // ─── Konfigurasi Firebase ────────────────────────────────────────────────────
+  const firebaseConfig = {
+    apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+    authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+    projectId:         "pasarnusa-18aa0",
+    storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+    messagingSenderId: "866998011671",
+    appId:             "1:866998011671:web:5555115feb82741ab55952",
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const db   = getFirestore(app);
+  const auth = getAuth(app);
+
+  // ─── Elemen DOM ──────────────────────────────────────────────────────────────
+  const container    = document.getElementById("tokoContainer");
+  const searchInput  = document.getElementById("searchInput");
+  const elTotalToko  = document.getElementById("totalToko");
+  const elTotalAktif = document.getElementById("totalAktif");
+
+  // Cache data toko yang sudah dimuat
+  let semuaToko = [];
+
+  // ─── Guard: pastikan user sudah login ────────────────────────────────────────
+  await auth.authStateReady();
+  if (!auth.currentUser) {
+    window.location.href = "login.html";
+  }
+  const uid = auth.currentUser.uid;
+
+  // ─── Render Helpers ──────────────────────────────────────────────────────────
+
+  /** Tampilkan satu pesan sederhana di dalam container */
+  function renderPesan(html) {
+    container.innerHTML = `<div class="dashboard-card">${html}</div>`;
+  }
+
+  /**
+   * Buat card toko sebagai elemen DOM (bukan string innerHTML)
+   * → menghindari XSS dan performa lebih baik
+   */
+  function buatCardToko(toko) {
+    const card = document.createElement("div");
+    card.className = "dashboard-card";
+
+    // Logo
+    const img = document.createElement("img");
+    img.src    = toko.logo || "https://picsum.photos/300";
+    img.alt    = toko.namaUmkm || "Logo Toko";
+    img.style.cssText = "width:100px;height:100px;border-radius:50%;object-fit:cover;margin:auto;display:block;";
+
+    // Nama
+    const nama = document.createElement("h3");
+    nama.textContent = toko.namaUmkm || "Tanpa Nama";
+
+    // Kategori
+    const kategori = document.createElement("p");
+    kategori.textContent = toko.kategori || "-";
+
+    // Rating
+    const rating = document.createElement("p");
+    rating.textContent = `⭐ ${toko.ratingToko || 0}`;
+
+    // Deskripsi
+    const deskripsi = document.createElement("p");
+    deskripsi.textContent = toko.deskripsi || "";
+
+    // Tombol aksi
+    const aksi = document.createElement("div");
+    aksi.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;";
+
+    const btnKunjungi = document.createElement("a");
+    btnKunjungi.href      = `toko.html?uid=${encodeURIComponent(toko.uid)}`;
+    btnKunjungi.className = "btn-primary";
+    btnKunjungi.textContent = "Kunjungi";
+
+    const btnHapus = document.createElement("button");
+    btnHapus.className   = "btn-secondary";
+    btnHapus.textContent = "Hapus";
+    // Simpan favId di dataset agar mudah diakses oleh event delegation
+    btnHapus.dataset.favId = toko.favId;
+
+    aksi.append(btnKunjungi, btnHapus);
+    card.append(img, nama, kategori, rating, deskripsi, aksi);
+    return card;
+  }
+
+  // ─── Render Toko (filter + tampilkan) ───────────────────────────────────────
+  function renderToko() {
+    const keyword = searchInput.value.toLowerCase().trim();
+
+    const hasil = keyword
+      ? semuaToko.filter(t => (t.namaUmkm || "").toLowerCase().includes(keyword))
+      : semuaToko;
+
+    if (hasil.length === 0) {
+      renderPesan("<h3>Toko Tidak Ditemukan</h3>");
+      return;
+    }
+
+    // Bangun fragment sekaligus → satu kali repaint
+    const fragment = document.createDocumentFragment();
+    hasil.forEach(toko => fragment.appendChild(buatCardToko(toko)));
+    container.innerHTML = "";
+    container.appendChild(fragment);
+  }
+
+  // ─── Load Data dari Firestore ────────────────────────────────────────────────
+  async function loadToko() {
+    renderPesan("Memuat...");
+
+    try {
+      // 1. Ambil semua favorit milik user ini
+      const favSnapshot = await getDocs(
+        query(collection(db, "favorite_toko"), where("uidUser", "==", uid))
+      );
+
+      if (favSnapshot.empty) {
+        renderPesan(`
+          <h3>⭐ Belum Ada Toko Favorit</h3>
+          <p>Mulai ikuti toko favorit Anda</p>
+          <br>
+          <a href="index.html" class="btn-primary">Jelajahi Marketplace</a>
+        `);
+        return;
+      }
+
+      // 2. Kumpulkan semua uidToko unik agar bisa di-query sekaligus
+      //    → mengganti pola N+1 query (satu query per toko)
+      const favData = favSnapshot.docs.map(d => ({ favId: d.id, ...d.data() }));
+      const uidTokoList = [...new Set(favData.map(f => f.uidToko))];
+
+      // Firestore "in" query mendukung max 30 item per batch
+      const BATCH_SIZE = 30;
+      const tokoMap    = new Map(); // uid toko → data toko
+
+      for (let i = 0; i < uidTokoList.length; i += BATCH_SIZE) {
+        const batch    = uidTokoList.slice(i, i + BATCH_SIZE);
+        const tokoSnap = await getDocs(
+          query(collection(db, "umkm"), where("uid", "in", batch))
+        );
+        tokoSnap.forEach(d => tokoMap.set(d.data().uid, d.data()));
+      }
+
+      // 3. Gabungkan data favorit dengan data toko
+      semuaToko = favData
+        .filter(f => tokoMap.has(f.uidToko))
+        .map(f => ({ favId: f.favId, ...tokoMap.get(f.uidToko) }));
+
+      // 4. Update statistik
+      elTotalToko.textContent  = semuaToko.length;
+      elTotalAktif.textContent = semuaToko.filter(t => t.status === "Aktif").length;
+
+      renderToko();
+
+    } catch (error) {
+      console.error("loadToko error:", error);
+      renderPesan(`<h3>Terjadi Kesalahan</h3><p>${error.message}</p>`);
+    }
+  }
+
+  // ─── Hapus Favorit ───────────────────────────────────────────────────────────
+  async function hapusFavorit(favId) {
+    if (!confirm("Hapus toko dari favorit?")) return;
+
+    try {
+      await deleteDoc(doc(db, "favorite_toko", favId));
+      // Hapus dari cache lokal tanpa reload penuh ke server
+      semuaToko = semuaToko.filter(t => t.favId !== favId);
+      elTotalToko.textContent  = semuaToko.length;
+      elTotalAktif.textContent = semuaToko.filter(t => t.status === "Aktif").length;
+      renderToko();
+    } catch (error) {
+      console.error("hapusFavorit error:", error);
+      alert("Gagal menghapus favorit. Coba lagi.");
+    }
+  }
+
+  // ─── Event Delegation untuk tombol Hapus ────────────────────────────────────
+  // Lebih efisien daripada onclick inline di setiap card
+  container.addEventListener("click", e => {
+    const btn = e.target.closest("[data-fav-id]");
+    if (btn) hapusFavorit(btn.dataset.favId);
+  });
+
+  // ─── Event Listeners Lain ────────────────────────────────────────────────────
+  searchInput.addEventListener("input", renderToko);
+  document.getElementById("refreshBtn").addEventListener("click", loadToko);
+
+  // ─── Init ────────────────────────────────────────────────────────────────────
+  loadToko();
 </script>
 
 </body>
