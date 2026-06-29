@@ -1,490 +1,361 @@
-/* ==========================================
-HERO
-========================================== */
+/* =============================================================
+   payment.css — Halaman Pembayaran PasarNusa
+   Urutan: Hero → Breadcrumb → Layout → Kartu → Metode →
+           Catatan → Tombol → Countdown → Animasi →
+           Skeleton → Scrollbar → Responsive
+============================================================= */
 
-.hero-page{
-
-padding:150px 0 80px;
-
-background:linear-gradient(
-135deg,
-#f0fdf4,
-#ffffff
-);
-
-text-align:center;
-
+/* ── Variabel lokal (melengkapi variabel global di style.css) ── */
+:root {
+  --pay-green:        #16a34a;
+  --pay-green-light:  #f0fdf4;
+  --pay-green-bg:     #dcfce7;
+  --pay-green-text:   #166534;
+  --pay-red:          #dc2626;
+  --pay-border:       #e5e7eb;
+  --pay-border-soft:  #f3f4f6;
+  --pay-text-muted:   #6b7280;
+  --pay-text-body:    #4b5563;
+  --pay-shadow:       0 12px 30px rgba(0, 0, 0, 0.06);
+  --pay-radius-pill:  999px;
+  --pay-radius-card:  24px;
+  --pay-radius-input: 18px;
+  --pay-transition:   0.25s ease;
 }
 
-.hero-page-content{
-
-max-width:800px;
-
-margin:auto;
-
+/* ─────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────── */
+.hero-page {
+  padding: 150px 0 80px;
+  background: linear-gradient(135deg, var(--pay-green-light), #ffffff);
+  text-align: center;
 }
 
-.hero-page h1{
-
-font-size:3rem;
-
-font-weight:800;
-
-margin:20px 0;
-
-color:var(--color-heading);
-
+.hero-page-content {
+  max-width: 800px;
+  margin: auto;
 }
 
-.hero-page p{
-
-max-width:650px;
-
-margin:auto;
-
-line-height:1.8;
-
-color:#6b7280;
-
+.hero-page h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 20px 0;
+  color: var(--color-heading); /* dari style.css global */
 }
 
-.badge{
-
-display:inline-flex;
-
-align-items:center;
-
-padding:12px 24px;
-
-border-radius:999px;
-
-background:#dcfce7;
-
-color:#166534;
-
-font-weight:700;
-
-}
-/* ==========================================
-BREADCRUMB
-========================================== */
-
-.breadcrumb{
-
-padding:18px 0;
-
-background:#fff;
-
-border-bottom:1px solid #eee;
-
+.hero-page p {
+  max-width: 650px;
+  margin: auto;
+  line-height: 1.8;
+  color: var(--pay-text-muted);
 }
 
-.breadcrumb .container{
-
-display:flex;
-
-gap:12px;
-
-align-items:center;
-
-flex-wrap:wrap;
-
+/* Badge label kecil (dipakai di hero & label opsi) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: var(--pay-radius-pill);
+  background: var(--pay-green-bg);
+  color: var(--pay-green-text);
+  font-weight: 700;
 }
 
-.breadcrumb a{
-
-text-decoration:none;
-
-font-weight:600;
-
-color:#16a34a;
-
-}
-/* ==========================================
-LAYOUT
-========================================== */
-
-.payment-layout{
-
-display:grid;
-
-grid-template-columns:2fr 1fr;
-
-gap:30px;
-
-align-items:start;
-
+/* Badge "Segera Hadir" di opsi pembayaran — lebih kecil */
+.badge-soon {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pay-text-muted);
 }
 
-.payment-content{
-
-display:flex;
-
-flex-direction:column;
-
-gap:24px;
-
+/* ─────────────────────────────────────────────
+   BREADCRUMB
+───────────────────────────────────────────── */
+.breadcrumb {
+  padding: 18px 0;
+  background: #fff;
+  border-bottom: 1px solid #eee;
 }
 
-.payment-summary{
-
-position:sticky;
-
-top:110px;
-
-}
-/* ==========================================
-SUMMARY
-========================================== */
-
-.summary-card{
-
-background:#fff;
-
-padding:28px;
-
-border-radius:24px;
-
-box-shadow:
-
-0 12px 30px rgba(0,0,0,.06);
-
+.breadcrumb .container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.summary-card h1{
-
-font-size:2.2rem;
-
-margin:20px 0;
-
-color:#16a34a;
-
+.breadcrumb a {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--pay-green);
 }
 
-.summary-item{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:14px 0;
-
-border-bottom:1px solid #f3f4f6;
-
+/* ─────────────────────────────────────────────
+   LAYOUT DUA KOLOM
+───────────────────────────────────────────── */
+.payment-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: start;
 }
 
-.summary-item:last-child{
-
-border-bottom:none;
-
-}
-/* ==========================================
-PAYMENT INFO
-========================================== */
-
-.info-item{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:14px 0;
-
-border-bottom:1px solid #f3f4f6;
-
-gap:15px;
-
+/* Kolom kiri */
+.payment-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.info-item:last-child{
-
-border-bottom:none;
-
+/* Kolom kanan menempel saat scroll */
+.payment-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: 110px;
 }
 
-.info-item span{
-
-color:#6b7280;
-
+/* ─────────────────────────────────────────────
+   KARTU TOTAL (summary-card)
+───────────────────────────────────────────── */
+.summary-card {
+  background: #fff;
+  padding: 28px;
+  border-radius: var(--pay-radius-card);
+  box-shadow: var(--pay-shadow);
 }
 
-.info-item b{
-
-font-weight:700;
-
-word-break:break-word;
-
-}
-/* ==========================================
-PAYMENT METHOD
-========================================== */
-
-.payment-method{
-
-display:flex;
-
-flex-direction:column;
-
-gap:16px;
-
-margin-top:20px;
-
+/* Angka total — pakai <p> bukan <h1> agar hierarki heading tetap benar */
+.total-amount {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 20px 0;
+  color: var(--pay-green);
 }
 
-.payment-method label{
+/* ─────────────────────────────────────────────
+   BARIS INFO (dl > div > dt + dd)
+───────────────────────────────────────────── */
 
-display:flex;
-
-align-items:center;
-
-gap:14px;
-
-padding:16px;
-
-border:1px solid #e5e7eb;
-
-border-radius:18px;
-
-cursor:pointer;
-
-transition:.25s;
-
-background:#fff;
-
+/* Dipakai di .info-list dan .summary-item */
+.info-item,
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--pay-border-soft);
+  gap: 15px;
 }
 
-.payment-method label:hover{
-
-border-color:#16a34a;
-
-background:#f0fdf4;
-
+.info-item:last-child,
+.summary-item:last-child {
+  border-bottom: none;
 }
 
-.payment-method input[type="radio"]{
-
-accent-color:#16a34a;
-
-transform:scale(1.2);
-
-}
-/* ==========================================
-PAYMENT NOTE
-========================================== */
-
-.payment-note{
-
-margin-top:18px;
-
-padding-left:22px;
-
-display:flex;
-
-flex-direction:column;
-
-gap:12px;
-
+/* dt = label abu */
+.info-item dt,
+.summary-item dt,
+.info-item span,   /* fallback jika masih pakai span */
+.summary-item span {
+  color: var(--pay-text-muted);
 }
 
-.payment-note li{
-
-line-height:1.7;
-
-color:#4b5563;
-
-}
-/* ==========================================
-BUTTON
-========================================== */
-
-.payment-summary .btn{
-
-width:100%;
-
-margin-top:20px;
-
+/* dd = nilai tebal */
+.info-item dd,
+.summary-item dd,
+.info-item b,
+.summary-item b {
+  font-weight: 700;
+  word-break: break-word;
+  margin: 0; /* reset margin default <dd> */
 }
 
-#copyRekening{
-
-margin-top:18px;
-
-width:100%;
-
-}
-/* ==========================================
-COUNTDOWN
-========================================== */
-
-#expiredTime{
-
-color:#dc2626;
-
-font-weight:700;
-
-font-size:18px;
-
-}
-/* ==========================================
-RESPONSIVE
-========================================== */
-
-@media(max-width:992px){
-
-.payment-layout{
-
-grid-template-columns:1fr;
-
+/* ─────────────────────────────────────────────
+   METODE PEMBAYARAN (fieldset > label)
+───────────────────────────────────────────── */
+.form-card fieldset {
+  border: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.payment-summary{
-
-position:static;
-
+.form-card fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--pay-border);
+  border-radius: var(--pay-radius-input);
+  cursor: pointer;
+  transition: border-color var(--pay-transition),
+              background  var(--pay-transition);
+  background: #fff;
 }
 
+.form-card fieldset label:hover {
+  border-color: var(--pay-green);
+  background: var(--pay-green-light);
 }
 
-@media(max-width:768px){
-
-.hero-page{
-
-padding:120px 0 70px;
-
+/* Label opsi nonaktif tidak interaktif */
+.form-card fieldset label.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.hero-page h1{
-
-font-size:2rem;
-
+.form-card fieldset input[type="radio"] {
+  accent-color: var(--pay-green);
+  transform: scale(1.2);
+  flex-shrink: 0;
 }
 
-.info-item{
-
-flex-direction:column;
-
-align-items:flex-start;
-
+/* ─────────────────────────────────────────────
+   CATATAN / PETUNJUK
+───────────────────────────────────────────── */
+.payment-note {
+  margin-top: 18px;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.summary-card h1{
-
-font-size:1.8rem;
-
+.payment-note li {
+  line-height: 1.7;
+  color: var(--pay-text-body);
 }
 
-}
-/* ==========================================
-ANIMATION
-========================================== */
+/* ─────────────────────────────────────────────
+   TOMBOL
+───────────────────────────────────────────── */
 
+/* Tombol Bayar Sekarang — penuh lebar di dalam summary-card */
+.summary-card .btn {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Tombol Salin Rekening — penuh lebar di bawah daftar rekening */
+#copyRekening {
+  margin-top: 18px;
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────
+   COUNTDOWN / BATAS WAKTU
+───────────────────────────────────────────── */
+#expiredTime {
+  color: var(--pay-red);
+  font-weight: 700;
+  font-size: 1.125rem; /* 18px dalam rem agar ikut skala font */
+}
+
+/* ─────────────────────────────────────────────
+   ANIMASI MASUK
+───────────────────────────────────────────── */
 .form-card,
-
-.summary-card{
-
-animation:fadeUp .35s ease;
-
+.summary-card {
+  animation: fadeUp 0.35s ease both;
 }
 
-@keyframes fadeUp{
-
-from{
-
-opacity:0;
-
-transform:translateY(20px);
-
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
+/* Hormati preferensi pengguna yang tidak suka animasi */
+@media (prefers-reduced-motion: reduce) {
+  .form-card,
+  .summary-card {
+    animation: none;
+  }
 }
 
-}
-/* ==========================================
-SKELETON
-========================================== */
-
-.skeleton{
-
-animation:pulse 1.4s infinite;
-
+/* ─────────────────────────────────────────────
+   SKELETON LOADING
+───────────────────────────────────────────── */
+.skeleton {
+  animation: pulse 1.4s ease infinite;
 }
 
-.image-skeleton{
-
-width:100%;
-
-height:180px;
-
-background:#e5e7eb;
-
-border-radius:20px;
-
-margin-bottom:20px;
-
+.image-skeleton {
+  width: 100%;
+  height: 180px;
+  background: var(--pay-border);
+  border-radius: 20px;
+  margin-bottom: 20px;
 }
 
-.content-skeleton{
-
-display:flex;
-
-flex-direction:column;
-
-gap:14px;
-
+.content-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.content-skeleton div{
-
-height:18px;
-
-background:#e5e7eb;
-
-border-radius:999px;
-
+.content-skeleton div {
+  height: 18px;
+  background: var(--pay-border);
+  border-radius: var(--pay-radius-pill);
 }
 
-@keyframes pulse{
-
-0%{opacity:.5;}
-
-50%{opacity:1;}
-
-100%{opacity:.5;}
-
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
 }
 
-/* ==========================================
-SCROLLBAR
-========================================== */
+/* ─────────────────────────────────────────────
+   SCROLLBAR KUSTOM (Webkit)
+───────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--pay-green); border-radius: var(--pay-radius-pill); }
+::-webkit-scrollbar-track { background: var(--pay-border-soft); }
 
-::-webkit-scrollbar{
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
 
-width:8px;
+/* Tablet: satu kolom */
+@media (max-width: 992px) {
+  .payment-layout {
+    grid-template-columns: 1fr;
+  }
 
-height:8px;
-
+  /* Sidebar tidak perlu sticky di layout satu kolom */
+  .payment-sidebar {
+    position: static;
+  }
 }
 
-::-webkit-scrollbar-thumb{
+/* Mobile */
+@media (max-width: 768px) {
+  .hero-page {
+    padding: 120px 0 70px;
+  }
 
-background:#16a34a;
+  .hero-page h1 {
+    font-size: 2rem;
+  }
 
-border-radius:999px;
+  .total-amount {
+    font-size: 1.8rem;
+  }
 
-}
-
-::-webkit-scrollbar-track{
-
-background:#f3f4f6;
-
+  /* Baris info susun vertikal di layar kecil */
+  .info-item,
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
