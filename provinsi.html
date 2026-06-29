@@ -2,451 +2,263 @@
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Provinsi – PasarNusa</title>
 
-<meta charset="UTF-8">
+  <!-- Tema warna browser (Android Chrome) -->
+  <meta name="theme-color" content="#16a34a">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-<title>Provinsi - PasarNusa</title>
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link rel="stylesheet"
-href="style.css">
-
-<meta name="theme-color"
-content="#16a34a">
-
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<section class="hero">
-
-<img
-id="bannerProvinsi"
-src="https://placehold.co/1200x400"
-style="
-width:100%;
-height:260px;
-object-fit:cover;
-border-radius:20px;
-">
-
-</section>
-
-<section class="dashboard">
-
-<h1 id="namaProvinsi">
-
-Memuat...
-
-</h1>
-
-<p>
-
-Indonesia
-
-</p>
-
-</section>
-
-<section class="dashboard">
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-
-<h3 id="jumlahKabupaten">
-
-0
-
-</h3>
-
-<p>Kabupaten/Kota</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="jumlahKecamatan">
-
-0
-
-</h3>
-
-<p>Kecamatan</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="jumlahDesa">
-
-0
-
-</h3>
-
-<p>Desa</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="jumlahProduk">
-
-0
-
-</h3>
-
-<p>Produk</p>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="dashboard">
-
-<h2>
-
-📖 Tentang Provinsi
-
-</h2>
-
-<div class="dashboard-card">
-
-<p id="deskripsiProvinsi">
-
-Memuat informasi...
-
-</p>
-
-</div>
-
-</section>
-
-<section class="dashboard">
-
-<h2>
-
-🏛 Kabupaten / Kota
-
-</h2>
-
-<div
-id="kabupatenContainer"
-class="dashboard-grid">
-
-<div class="dashboard-card">
-
-Memuat data...
-
-</div>
-
-</div>
-
-</section>
-
-<script type="module">
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
-import {
-
-getFirestore,
-collection,
-getDocs
-
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
-};
-
-const app=
-initializeApp(firebaseConfig);
-
-const db=
-getFirestore(app);
-
-const params=
-new URLSearchParams(
-window.location.search
-);
-
-const namaProvinsi=
-params.get("provinsi");
-
-const kabupatenContainer=
-document.getElementById(
-"kabupatenContainer"
-);
-
-let semuaKabupaten=[];
-
-async function loadProvinsi(){
-
-const provinsiSnap=
-await getDocs(
-collection(db,"provinsi")
-);
-
-provinsiSnap.forEach((doc)=>{
-
-const data=
-doc.data();
-
-if(
-data.nama!==namaProvinsi
-){
-
-return;
-
-}
-
-document.getElementById(
-"namaProvinsi"
-).innerText=
-data.nama;
-
-document.getElementById(
-"deskripsiProvinsi"
-).innerText=
-data.deskripsi||"-";
-
-document.getElementById(
-"bannerProvinsi"
-).src=
-data.banner||
-"https://placehold.co/1200x400";
-
-});
-
-await loadStatistik();
-
-}
-async function loadStatistik(){
-
-const [
-
-kabupatenSnap,
-kecamatanSnap,
-desaSnap,
-produkSnap
-
-]=await Promise.all([
-
-getDocs(collection(db,"kabupaten")),
-
-getDocs(collection(db,"kecamatan")),
-
-getDocs(collection(db,"desa")),
-
-getDocs(collection(db,"produk"))
-
-]);
-
-semuaKabupaten=[];
-
-let jumlahKabupaten=0;
-
-let jumlahKecamatan=0;
-
-let jumlahDesa=0;
-
-let jumlahProduk=0;
-
-kabupatenSnap.forEach((docSnap)=>{
-
-const data=
-docSnap.data();
-
-if(
-data.provinsi!==namaProvinsi
-){
-
-return;
-
-}
-
-jumlahKabupaten++;
-
-semuaKabupaten.push({
-
-id:docSnap.id,
-
-...data
-
-});
-
-});
-
-kecamatanSnap.forEach((docSnap)=>{
-
-const data=
-docSnap.data();
-
-if(
-data.provinsi===namaProvinsi
-){
-
-jumlahKecamatan++;
-
-}
-
-});
-
-desaSnap.forEach((docSnap)=>{
-
-const data=
-docSnap.data();
-
-if(
-data.provinsi===namaProvinsi
-){
-
-jumlahDesa++;
-
-}
-
-});
-
-produkSnap.forEach((docSnap)=>{
-
-const data=
-docSnap.data();
-
-if(
-data.provinsi===namaProvinsi
-){
-
-jumlahProduk++;
-
-}
-
-});
-
-document.getElementById(
-"jumlahKabupaten"
-).innerText=
-jumlahKabupaten;
-
-document.getElementById(
-"jumlahKecamatan"
-).innerText=
-jumlahKecamatan;
-
-document.getElementById(
-"jumlahDesa"
-).innerText=
-jumlahDesa;
-
-document.getElementById(
-"jumlahProduk"
-).innerText=
-jumlahProduk;
-
-renderKabupaten();
-
-}
-function renderKabupaten(){
-
-kabupatenContainer.innerHTML="";
-
-if(
-semuaKabupaten.length===0
-){
-
-kabupatenContainer.innerHTML=`
-
-<div class="dashboard-card">
-
-<h3>
-
-Belum Ada Kabupaten
-
-</h3>
-
-<p>
-
-Belum ada data kabupaten.
-
-</p>
-
-</div>
-
-`;
-
-return;
-
-}
-
-semuaKabupaten.forEach((item)=>{
-
-kabupatenContainer.innerHTML+=`
-
-<div class="dashboard-card">
-
-<img
-src="${item.banner||'https://placehold.co/600x300'}"
-style="
-width:100%;
-height:180px;
-object-fit:cover;
-border-radius:15px;
-">
-
-<h3>
-
-🏛 ${item.nama}
-
-</h3>
-
-<p>
-
-${item.deskripsi||"-"}
-
-</p>
-
-<a
-href="kabupaten.html?kabupaten=${encodeURIComponent(item.nama)}"
-class="btn-primary">
-
-Lihat Kabupaten
-
-</a>
-
-</div>
-
-`;
-
-});
-
-}
-
-loadProvinsi();
-
-</script>
+  <!-- ====================================================
+       HERO BANNER
+       Banner diambil dari field "banner" dokumen provinsi.
+       Fallback ke placeholder jika field kosong.
+  ===================================================== -->
+  <section class="hero">
+    <img
+      id="bannerProvinsi"
+      src="https://placehold.co/1200x400"
+      alt="Banner Provinsi"
+      style="width:100%; height:260px; object-fit:cover; border-radius:20px;"
+    >
+  </section>
+
+  <!-- ====================================================
+       JUDUL PROVINSI
+  ===================================================== -->
+  <section class="dashboard">
+    <h1 id="namaProvinsi">Memuat...</h1>
+    <p>Indonesia</p>
+  </section>
+
+  <!-- ====================================================
+       STATISTIK RINGKAS
+       Diisi secara dinamis setelah data Firestore dimuat.
+  ===================================================== -->
+  <section class="dashboard">
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <h3 id="jumlahKabupaten">–</h3>
+        <p>Kabupaten/Kota</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="jumlahKecamatan">–</h3>
+        <p>Kecamatan</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="jumlahDesa">–</h3>
+        <p>Desa</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="jumlahProduk">–</h3>
+        <p>Produk</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       DESKRIPSI PROVINSI
+  ===================================================== -->
+  <section class="dashboard">
+    <h2>📖 Tentang Provinsi</h2>
+    <div class="dashboard-card">
+      <p id="deskripsiProvinsi">Memuat informasi...</p>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       DAFTAR KABUPATEN / KOTA
+       Kartu dirender secara dinamis oleh renderKabupaten().
+  ===================================================== -->
+  <section class="dashboard">
+    <h2>🏛 Kabupaten / Kota</h2>
+    <div id="kabupatenContainer" class="dashboard-grid">
+      <div class="dashboard-card">Memuat data...</div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       FIREBASE + LOGIKA HALAMAN
+  ===================================================== -->
+  <script type="module">
+    // ── Import Firebase ──────────────────────────────────
+    import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs }
+                               from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    // ── Konfigurasi Firebase ─────────────────────────────
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+      authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+      projectId:         "pasarnusa-18aa0",
+      storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+      messagingSenderId: "866998011671",
+      appId:             "1:866998011671:web:5555115feb82741ab55952",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // ── Baca parameter URL (?provinsi=NamaProvinsi) ──────
+    const namaProvinsi = new URLSearchParams(window.location.search).get("provinsi");
+
+    // ── Referensi elemen DOM ─────────────────────────────
+    const elNama           = document.getElementById("namaProvinsi");
+    const elDeskripsi      = document.getElementById("deskripsiProvinsi");
+    const elBanner         = document.getElementById("bannerProvinsi");
+    const elJmlKabupaten   = document.getElementById("jumlahKabupaten");
+    const elJmlKecamatan   = document.getElementById("jumlahKecamatan");
+    const elJmlDesa        = document.getElementById("jumlahDesa");
+    const elJmlProduk      = document.getElementById("jumlahProduk");
+    const kabupatenContainer = document.getElementById("kabupatenContainer");
+
+    // ── Konstanta ────────────────────────────────────────
+    const PLACEHOLDER_BANNER  = "https://placehold.co/1200x400";
+    const PLACEHOLDER_KABUPATEN = "https://placehold.co/600x300";
+
+    // ────────────────────────────────────────────────────
+    // MAIN: muat semua data secara paralel
+    // ────────────────────────────────────────────────────
+    async function init() {
+      // Tampilkan error jika parameter provinsi tidak ada
+      if (!namaProvinsi) {
+        elNama.textContent      = "Provinsi tidak ditemukan";
+        elDeskripsi.textContent = "Parameter 'provinsi' tidak ditemukan di URL.";
+        kabupatenContainer.innerHTML = buatKartuKosong("Parameter URL tidak valid.");
+        return;
+      }
+
+      try {
+        // Ambil semua koleksi sekaligus (satu round-trip)
+        const [
+          provinsiSnap,
+          kabupatenSnap,
+          kecamatanSnap,
+          desaSnap,
+          produkSnap,
+        ] = await Promise.all([
+          getDocs(collection(db, "provinsi")),
+          getDocs(collection(db, "kabupaten")),
+          getDocs(collection(db, "kecamatan")),
+          getDocs(collection(db, "desa")),
+          getDocs(collection(db, "produk")),
+        ]);
+
+        // ── Isi info provinsi ──────────────────────────
+        let provinsiDitemukan = false;
+        provinsiSnap.forEach((doc) => {
+          const data = doc.data();
+          if (data.nama !== namaProvinsi) return;
+
+          provinsiDitemukan = true;
+          elNama.textContent      = data.nama;
+          elDeskripsi.textContent = data.deskripsi || "Deskripsi belum tersedia.";
+          elBanner.src            = data.banner || PLACEHOLDER_BANNER;
+          elBanner.alt            = `Banner ${data.nama}`;
+          document.getElementById("pageTitle").textContent = `${data.nama} – PasarNusa`;
+        });
+
+        if (!provinsiDitemukan) {
+          elNama.textContent      = "Provinsi tidak ditemukan";
+          elDeskripsi.textContent = `Tidak ada data untuk provinsi "${namaProvinsi}".`;
+        }
+
+        // ── Hitung statistik ───────────────────────────
+        const kabupatenList = [];
+        let jmlKabupaten = 0, jmlKecamatan = 0, jmlDesa = 0, jmlProduk = 0;
+
+        kabupatenSnap.forEach((doc) => {
+          const data = doc.data();
+          if (data.provinsi !== namaProvinsi) return;
+          jmlKabupaten++;
+          kabupatenList.push({ id: doc.id, ...data });
+        });
+
+        kecamatanSnap.forEach((doc) => {
+          if (doc.data().provinsi === namaProvinsi) jmlKecamatan++;
+        });
+
+        desaSnap.forEach((doc) => {
+          if (doc.data().provinsi === namaProvinsi) jmlDesa++;
+        });
+
+        produkSnap.forEach((doc) => {
+          if (doc.data().provinsi === namaProvinsi) jmlProduk++;
+        });
+
+        // ── Tampilkan angka statistik ──────────────────
+        elJmlKabupaten.textContent = jmlKabupaten;
+        elJmlKecamatan.textContent = jmlKecamatan;
+        elJmlDesa.textContent      = jmlDesa;
+        elJmlProduk.textContent    = jmlProduk;
+
+        // ── Render kartu kabupaten ─────────────────────
+        renderKabupaten(kabupatenList);
+
+      } catch (err) {
+        console.error("[PasarNusa] Gagal memuat data:", err);
+        elNama.textContent           = "Terjadi Kesalahan";
+        elDeskripsi.textContent      = "Gagal memuat data. Periksa koneksi dan coba lagi.";
+        kabupatenContainer.innerHTML = buatKartuKosong("Gagal memuat daftar kabupaten.");
+      }
+    }
+
+    // ────────────────────────────────────────────────────
+    // Render kartu kabupaten ke dalam grid
+    // ────────────────────────────────────────────────────
+    function renderKabupaten(list) {
+      if (list.length === 0) {
+        kabupatenContainer.innerHTML = buatKartuKosong("Belum ada data kabupaten untuk provinsi ini.");
+        return;
+      }
+
+      // Bangun HTML sekaligus (lebih efisien dari += di dalam loop)
+      kabupatenContainer.innerHTML = list.map((item) => `
+        <div class="dashboard-card">
+          <img
+            src="${item.banner || PLACEHOLDER_KABUPATEN}"
+            alt="Banner ${item.nama || 'Kabupaten'}"
+            style="width:100%; height:180px; object-fit:cover; border-radius:15px;"
+            loading="lazy"
+          >
+          <h3>🏛 ${item.nama || "Tanpa Nama"}</h3>
+          <p>${item.deskripsi || "Deskripsi belum tersedia."}</p>
+          <a
+            href="kabupaten.html?kabupaten=${encodeURIComponent(item.nama)}"
+            class="btn-primary"
+          >Lihat Kabupaten</a>
+        </div>
+      `).join("");
+    }
+
+    // ────────────────────────────────────────────────────
+    // Helper: kartu pesan kosong / error
+    // ────────────────────────────────────────────────────
+    function buatKartuKosong(pesan) {
+      return `
+        <div class="dashboard-card">
+          <h3>Tidak Ada Data</h3>
+          <p>${pesan}</p>
+        </div>
+      `;
+    }
+
+    // ── Jalankan ─────────────────────────────────────────
+    init();
+  </script>
 
 </body>
-
 </html>
