@@ -1,624 +1,345 @@
-// ======================================
-// PASARNUSA NOTIFIKASI
-// notifikasi.js
-// ======================================
+// ============================================================
+// notifikasi.js — Logika Halaman Notifikasi PasarNusa
+// Menangani: autentikasi, load/render notifikasi, aksi massal,
+//            statistik, auto-refresh, dan toast feedback.
+// ============================================================
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth }          from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  orderBy,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  writeBatch,
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-getFirestore,
 
-collection,
+// ============================================================
+// KONFIGURASI FIREBASE
+// ============================================================
 
-query,
-
-where,
-
-orderBy,
-
-getDocs,
-
-doc,
-
-updateDoc,
-
-deleteDoc
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import {
-
-getAuth
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-// ======================================
-// FIREBASE
-// ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+const firebaseConfig = {
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952",
 };
 
-const app=initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-const db=getFirestore(app);
 
-const auth=getAuth(app);
-// ======================================
-// ELEMENT
-// ======================================
+// ============================================================
+// REFERENSI ELEMEN DOM
+// ============================================================
 
-const notifContainer=
+const notifContainer = document.getElementById("notifContainer");
+const elTotal        = document.getElementById("totalNotif");
+const elBelum        = document.getElementById("belumDibaca");
+const elSudah        = document.getElementById("sudahDibaca");
+const readAllBtn     = document.getElementById("readAllBtn");
+const deleteAllBtn   = document.getElementById("deleteAllBtn");
+const emptyState     = document.getElementById("emptyNotif");
 
-document.getElementById("notifContainer");
 
-const totalNotif=
+// ============================================================
+// STATE MODUL
+// ============================================================
 
-document.getElementById("totalNotif");
+let uid         = "";        // UID pengguna yang sedang login
+let semuaNotif  = [];        // Cache daftar notifikasi terkini
+let refreshTimer = null;     // Referensi timer auto-refresh
 
-const belumDibaca=
 
-document.getElementById("belumDibaca");
+// ============================================================
+// INISIALISASI
+// ============================================================
 
-const sudahDibaca=
+document.addEventListener("DOMContentLoaded", initPage);
 
-document.getElementById("sudahDibaca");
-
-const readAllBtn=
-
-document.getElementById("readAllBtn");
-
-const deleteAllBtn=
-
-document.getElementById("deleteAllBtn");
-// ======================================
-// VARIABLE
-// ======================================
-
-let uid="";
-
-let semuaNotif=[];
-// ======================================
-// START
-// ======================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-initPage
-
-);
-
-async function initPage(){
-
-await checkLogin();
-
-await loadNotif();
-
-initButton();
-
-}
-// ======================================
-// LOGIN
-// ======================================
-
-async function checkLogin(){
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href=
-
-"login.html";
-
-return;
-
+async function initPage() {
+  await checkLogin();
+  await loadNotif();
+  initButtons();
+  startAutoRefresh();
 }
 
-uid=
 
-auth.currentUser.uid;
+// ============================================================
+// CEK LOGIN — Redirect ke login.html jika belum masuk
+// ============================================================
 
-}
-// ======================================
-// LOAD
-// ======================================
+async function checkLogin() {
+  await auth.authStateReady();
 
-async function loadNotif(){
+  if (!auth.currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
 
-try{
-
-const snap=
-
-await getDocs(
-
-query(
-
-collection(db,"notifikasi"),
-
-where("uid","==",uid),
-
-orderBy("createdAt","desc")
-
-)
-
-);
-
-semuaNotif=[];
-
-snap.forEach(docSnap=>{
-
-semuaNotif.push({
-
-id:docSnap.id,
-
-...docSnap.data()
-
-});
-
-});
-
-renderNotif();
-
-updateStatistik();
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal memuat notifikasi."
-
-);
-
+  uid = auth.currentUser.uid;
 }
 
-}
-// ======================================
-// STATISTIK
-// ======================================
 
-function updateStatistik(){
+// ============================================================
+// LOAD NOTIFIKASI — Ambil dari Firestore, urutkan terbaru dulu
+// ============================================================
 
-totalNotif.innerText=
+async function loadNotif() {
+  try {
+    const snap = await getDocs(
+      query(
+        collection(db, "notifikasi"),
+        where("uid", "==", uid),
+        orderBy("createdAt", "desc")
+      )
+    );
 
-semuaNotif.length;
+    semuaNotif = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-belumDibaca.innerText=
-
-semuaNotif.filter(
-
-item=>!item.dibaca
-
-).length;
-
-sudahDibaca.innerText=
-
-semuaNotif.filter(
-
-item=>item.dibaca
-
-).length;
-
-}
-// ======================================
-// RENDER
-// ======================================
-
-function renderNotif(){
-
-notifContainer.innerHTML="";
-
-if(semuaNotif.length===0){
-
-document.getElementById(
-
-"emptyNotif"
-
-).style.display="block";
-
-return;
-
+    renderNotif();
+    updateStatistik();
+  } catch (err) {
+    console.error("[loadNotif]", err);
+    showToast("Gagal memuat notifikasi.");
+  }
 }
 
-document.getElementById(
 
-"emptyNotif"
+// ============================================================
+// RENDER — Tampilkan daftar notifikasi atau empty state
+// ============================================================
 
-).style.display="none";
+function renderNotif() {
+  const isEmpty = semuaNotif.length === 0;
 
-semuaNotif.forEach(item=>{
+  // Tampilkan / sembunyikan empty state
+  emptyState.hidden       = !isEmpty;
+  emptyState.ariaHidden   = String(isEmpty ? "false" : "true");
+  notifContainer.hidden   = isEmpty;
 
-notifContainer.innerHTML+=`
+  if (isEmpty) return;
 
-<div class="notif-item ${
+  // Bangun fragmen DOM sekali, hindari innerHTML += dalam loop
+  const fragment = document.createDocumentFragment();
 
-item.dibaca
+  semuaNotif.forEach(item => {
+    const el = document.createElement("div");
+    el.className  = `notif-item${item.dibaca ? "" : " unread"}`;
+    el.dataset.id = item.id;
+    el.setAttribute("role", "listitem");
 
-?"":"unread"
+    // Gunakan textContent untuk field user agar aman dari XSS
+    const judulEl  = document.createElement("h3");
+    judulEl.textContent = item.judul;
 
-}">
+    const pesanEl  = document.createElement("p");
+    pesanEl.textContent = item.pesan;
 
-<div class="notif-icon">
+    const timeEl   = document.createElement("div");
+    timeEl.className    = "notif-time";
+    timeEl.textContent  = formatTanggal(item.createdAt);
 
-${getIcon(item.judul)}
+    el.innerHTML = `
+      <div class="notif-icon" aria-hidden="true">${getIcon(item.judul)}</div>
+      <div class="notif-content"></div>
+      <div class="notif-actions">
+        <button class="btn btn-secondary js-baca"
+                aria-label="${item.dibaca ? "Sudah dibaca" : "Tandai dibaca"}">
+          ${item.dibaca ? "✓ Dibaca" : "Baca"}
+        </button>
+        <button class="btn btn-danger js-hapus" aria-label="Hapus notifikasi">🗑</button>
+      </div>
+    `;
 
-</div>
+    // Sisipkan elemen teks yang sudah di-escape
+    el.querySelector(".notif-content").append(judulEl, pesanEl, timeEl);
 
-<div class="notif-content">
+    // Event listener (lebih aman & efisien daripada onclick inline)
+    el.querySelector(".js-baca").addEventListener("click",  () => bacaNotif(item.id));
+    el.querySelector(".js-hapus").addEventListener("click", () => hapusNotif(item.id));
 
-<h3>
+    fragment.appendChild(el);
+  });
 
-${item.judul}
-
-</h3>
-
-<p>
-
-${item.pesan}
-
-</p>
-
-<div class="notif-time">
-
-${formatTanggal(item.createdAt)}
-
-</div>
-
-</div>
-
-<div>
-
-<button
-
-onclick="bacaNotif('${item.id}')"
-
-class="btn btn-secondary">
-
-${item.dibaca?"✓":"Baca"}
-
-</button>
-
-<br><br>
-
-<button
-
-onclick="hapusNotif('${item.id}')"
-
-class="btn btn-danger">
-
-🗑
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-// ======================================
-// ICON
-// ======================================
-
-function getIcon(judul){
-
-const text=
-
-(judul||"").toLowerCase();
-
-if(text.includes("pesanan")) return "📦";
-
-if(text.includes("bayar")) return "💳";
-
-if(text.includes("kirim")) return "🚚";
-
-if(text.includes("review")) return "⭐";
-
-if(text.includes("affiliate")) return "💰";
-
-return "🔔";
-
-}
-// ======================================
-// BACA
-// ======================================
-
-window.bacaNotif=
-
-async(id)=>{
-
-try{
-
-await updateDoc(
-
-doc(db,"notifikasi",id),
-
-{
-
-dibaca:true
-
+  notifContainer.replaceChildren(fragment);
 }
 
-);
 
-await loadNotif();
+// ============================================================
+// STATISTIK — Perbarui angka ringkasan di atas
+// ============================================================
 
-}catch(error){
+function updateStatistik() {
+  const jumlahBelum = semuaNotif.filter(n => !n.dibaca).length;
 
-console.error(error);
-
-showToast(
-
-"Gagal memperbarui notifikasi."
-
-);
-
+  elTotal.textContent = semuaNotif.length;
+  elBelum.textContent = jumlahBelum;
+  elSudah.textContent = semuaNotif.length - jumlahBelum;
 }
 
-};
-// ======================================
-// HAPUS
-// ======================================
 
-window.hapusNotif=
+// ============================================================
+// ICON — Pilih emoji berdasarkan kata kunci di judul
+// ============================================================
 
-async(id)=>{
-
-try{
-
-await deleteDoc(
-
-doc(db,"notifikasi",id)
-
-);
-
-await loadNotif();
-
-showToast(
-
-"Notifikasi dihapus."
-
-);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menghapus notifikasi."
-
-);
-
+function getIcon(judul = "") {
+  const teks = judul.toLowerCase();
+  if (teks.includes("pesanan"))   return "📦";
+  if (teks.includes("bayar"))     return "💳";
+  if (teks.includes("kirim"))     return "🚚";
+  if (teks.includes("review"))    return "⭐";
+  if (teks.includes("affiliate")) return "💰";
+  return "🔔";
 }
 
-};
-// ======================================
-// BUTTON
-// ======================================
 
-function initButton(){
+// ============================================================
+// TANDAI DIBACA — Perbarui satu notifikasi
+// ============================================================
 
-readAllBtn.onclick=
-
-bacaSemua;
-
-deleteAllBtn.onclick=
-
-hapusSemua;
-
-}
-// ======================================
-// BACA SEMUA
-// ======================================
-
-async function bacaSemua(){
-
-try{
-
-for(const item of semuaNotif){
-
-if(!item.dibaca){
-
-await updateDoc(
-
-doc(db,"notifikasi",item.id),
-
-{
-
-dibaca:true
-
+async function bacaNotif(id) {
+  try {
+    await updateDoc(doc(db, "notifikasi", id), { dibaca: true });
+    await loadNotif();
+  } catch (err) {
+    console.error("[bacaNotif]", err);
+    showToast("Gagal memperbarui notifikasi.");
+  }
 }
 
-);
 
+// ============================================================
+// HAPUS — Hapus satu notifikasi
+// ============================================================
+
+async function hapusNotif(id) {
+  try {
+    await deleteDoc(doc(db, "notifikasi", id));
+    await loadNotif();
+    showToast("Notifikasi dihapus.");
+  } catch (err) {
+    console.error("[hapusNotif]", err);
+    showToast("Gagal menghapus notifikasi.");
+  }
 }
 
+
+// ============================================================
+// TANDAI SEMUA DIBACA — Gunakan writeBatch agar efisien
+// ============================================================
+
+async function bacaSemua() {
+  const belumDibacaList = semuaNotif.filter(n => !n.dibaca);
+  if (belumDibacaList.length === 0) {
+    showToast("Semua notifikasi sudah dibaca.");
+    return;
+  }
+
+  try {
+    const batch = writeBatch(db);
+    belumDibacaList.forEach(n => {
+      batch.update(doc(db, "notifikasi", n.id), { dibaca: true });
+    });
+    await batch.commit();
+    await loadNotif();
+    showToast("Semua notifikasi telah dibaca.");
+  } catch (err) {
+    console.error("[bacaSemua]", err);
+    showToast("Gagal memperbarui notifikasi.");
+  }
 }
 
-await loadNotif();
 
-showToast(
+// ============================================================
+// HAPUS SEMUA — Konfirmasi dulu, lalu batch delete
+// ============================================================
 
-"Semua notifikasi telah dibaca."
+async function hapusSemua() {
+  if (!confirm("Hapus semua notifikasi? Tindakan ini tidak dapat dibatalkan.")) return;
 
-);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal memperbarui notifikasi."
-
-);
-
+  try {
+    const batch = writeBatch(db);
+    semuaNotif.forEach(n => {
+      batch.delete(doc(db, "notifikasi", n.id));
+    });
+    await batch.commit();
+    await loadNotif();
+    showToast("Semua notifikasi dihapus.");
+  } catch (err) {
+    console.error("[hapusSemua]", err);
+    showToast("Gagal menghapus notifikasi.");
+  }
 }
 
-}
-// ======================================
-// HAPUS SEMUA
-// ======================================
 
-async function hapusSemua(){
+// ============================================================
+// INISIALISASI TOMBOL AKSI
+// ============================================================
 
-if(
-
-!confirm(
-
-"Hapus semua notifikasi?"
-
-)
-
-){
-
-return;
-
+function initButtons() {
+  readAllBtn.addEventListener("click",   bacaSemua);
+  deleteAllBtn.addEventListener("click", hapusSemua);
 }
 
-try{
 
-for(const item of semuaNotif){
+// ============================================================
+// AUTO-REFRESH — Muat ulang notifikasi setiap 30 detik
+// ============================================================
 
-await deleteDoc(
-
-doc(db,"notifikasi",item.id)
-
-);
-
+function startAutoRefresh() {
+  // Bersihkan timer lama jika ada (mencegah duplikasi)
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(loadNotif, 30_000);
 }
 
-await loadNotif();
 
-showToast(
+// ============================================================
+// FORMAT TANGGAL — Ubah Firestore Timestamp atau string ke lokal
+// ============================================================
 
-"Semua notifikasi dihapus."
+function formatTanggal(waktu) {
+  if (!waktu) return "-";
 
-);
+  const tanggal = waktu?.toDate ? waktu.toDate() : new Date(waktu);
+  if (isNaN(tanggal.getTime())) return "-";
 
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menghapus notifikasi."
-
-);
-
+  return tanggal.toLocaleString("id-ID", {
+    day:    "2-digit",
+    month:  "long",
+    year:   "numeric",
+    hour:   "2-digit",
+    minute: "2-digit",
+  });
 }
 
+
+// ============================================================
+// TOAST — Notifikasi singkat di layar (muncul 3 detik)
+// ============================================================
+
+function showToast(pesan) {
+  const toast = document.createElement("div");
+  toast.className   = "toast";
+  toast.textContent = pesan;           // textContent, bukan innerText — lebih aman
+  toast.setAttribute("role", "alert"); // Dibaca screen reader secara otomatis
+
+  document.body.appendChild(toast);
+
+  // Trigger transisi CSS (butuh delay 1 frame agar class "show" terbaca)
+  requestAnimationFrame(() => toast.classList.add("show"));
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3000);
 }
-// ======================================
-// FORMAT TANGGAL
-// ======================================
-
-function formatTanggal(waktu){
-
-if(!waktu)return"-";
-
-const tanggal=
-
-waktu.toDate
-
-? waktu.toDate()
-
-:new Date(waktu);
-
-return tanggal.toLocaleString(
-
-"id-ID",
-
-{
-
-day:"2-digit",
-
-month:"long",
-
-year:"numeric",
-
-hour:"2-digit",
-
-minute:"2-digit"
-
-}
-
-);
-
-}
-// ======================================
-// TOAST
-// ======================================
-
-function showToast(message){
-
-const toast=
-
-document.createElement("div");
-
-toast.className="toast";
-
-toast.innerText=message;
-
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.classList.add("show");
-
-},100);
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-setTimeout(()=>{
-
-toast.remove();
-
-},300);
-
-},3000);
-
-}
-// ======================================
-// AUTO REFRESH
-// ======================================
-
-setInterval(
-
-async()=>{
-
-await loadNotif();
-
-},
-
-30000
-
-);
