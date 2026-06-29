@@ -1,676 +1,436 @@
-/* ==========================================
-HERO
-========================================== */
+/* ==========================================================================
+   review.css — PasarNusa
+   Stylesheet khusus halaman Review Produk.
+   Bergantung pada variabel dan utilitas dari style.css (global).
+   ========================================================================== */
 
-.hero-page{
 
-padding:150px 0 80px;
+/* ==========================================================================
+   HERO
+   ========================================================================== */
 
-background:linear-gradient(
-135deg,
-#f0fdf4,
-#ffffff
-);
-
-text-align:center;
-
+.hero-page {
+  padding: 150px 0 80px;
+  background: linear-gradient(135deg, #f0fdf4, #ffffff);
+  text-align: center;
 }
 
-.hero-page-content{
-
-max-width:800px;
-
-margin:auto;
-
+.hero-page-content {
+  max-width: 800px;
+  margin: auto;
 }
 
-.hero-page h1{
-
-font-size:3rem;
-
-font-weight:800;
-
-margin:20px 0;
-
-color:var(--color-heading);
-
+.hero-page h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 20px 0;
+  color: var(--color-heading);
 }
 
-.hero-page p{
-
-max-width:650px;
-
-margin:auto;
-
-line-height:1.8;
-
-color:#6b7280;
-
+.hero-page p {
+  max-width: 650px;
+  margin: auto;
+  line-height: 1.8;
+  color: #6b7280;
 }
 
-.badge{
-
-display:inline-flex;
-
-align-items:center;
-
-padding:12px 24px;
-
-border-radius:999px;
-
-background:#dcfce7;
-
-color:#166534;
-
-font-weight:700;
-
-}
-/* ==========================================
-BREADCRUMB
-========================================== */
-
-.breadcrumb{
-
-padding:18px 0;
-
-background:#fff;
-
-border-bottom:1px solid #eee;
-
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
 }
 
-.breadcrumb .container{
 
-display:flex;
+/* ==========================================================================
+   BREADCRUMB
+   ========================================================================== */
 
-gap:12px;
-
-align-items:center;
-
-flex-wrap:wrap;
-
+.breadcrumb {
+  padding: 18px 0;
+  background: #fff;
+  border-bottom: 1px solid #eee;
 }
 
-.breadcrumb a{
-
-text-decoration:none;
-
-font-weight:600;
-
-color:#16a34a;
-
-}
-/* ==========================================
-LAYOUT
-========================================== */
-
-.review-layout{
-
-display:grid;
-
-grid-template-columns:2fr 1fr;
-
-gap:30px;
-
-align-items:start;
-
+.breadcrumb .container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.review-content{
-
-display:flex;
-
-flex-direction:column;
-
-gap:24px;
-
+.breadcrumb a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #16a34a;
 }
 
-.review-summary{
 
-position:sticky;
+/* ==========================================================================
+   LAYOUT UTAMA
+   ========================================================================== */
 
-top:110px;
-
-}
-/* ==========================================
-PRODUK
-========================================== */
-
-.produk-card{
-
-display:flex;
-
-gap:20px;
-
-align-items:center;
-
+/* Grid dua kolom: konten (kiri) + ringkasan sticky (kanan) */
+.review-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: start;
 }
 
-.produk-card img{
-
-width:120px;
-
-height:120px;
-
-object-fit:cover;
-
-border-radius:18px;
-
-background:#f3f4f6;
-
+.review-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.produk-info{
-
-flex:1;
-
+/* Ringkasan mengikuti scroll hingga batas atas yang nyaman */
+.review-summary {
+  position: sticky;
+  top: 110px;
 }
 
-.produk-info h3{
 
-margin-bottom:8px;
+/* ==========================================================================
+   KARTU PRODUK
+   ========================================================================== */
 
-font-size:1.2rem;
-
+.produk-card {
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
 
-.produk-info p{
-
-color:#6b7280;
-
-margin:4px 0;
-
-}
-/* ==========================================
-RATING
-========================================== */
-
-.rating-box{
-
-display:flex;
-
-justify-content:center;
-
-gap:12px;
-
-margin-top:20px;
-
+.produk-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #f3f4f6; /* fallback saat gambar belum dimuat */
 }
 
-.star{
-
-font-size:48px;
-
-cursor:pointer;
-
-color:#d1d5db;
-
-transition:.25s;
-
-user-select:none;
-
+.produk-info {
+  flex: 1;
 }
 
-.star:hover{
-
-transform:scale(1.15);
-
+.produk-info h3 {
+  margin-bottom: 8px;
+  font-size: 1.2rem;
 }
 
-.star.active{
-
-color:#facc15;
-
+.produk-info p {
+  margin: 4px 0;
+  color: #6b7280;
 }
 
-#ratingText{
 
-margin-top:15px;
+/* ==========================================================================
+   RATING BINTANG
+   ========================================================================== */
 
-text-align:center;
-
-font-weight:700;
-
-font-size:1rem;
-
-color:#374151;
-
-}
-/* ==========================================
-RATING
-========================================== */
-
-.rating-box{
-
-display:flex;
-
-justify-content:center;
-
-gap:12px;
-
-margin-top:20px;
-
+.rating-box {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
 }
 
-.star{
-
-font-size:48px;
-
-cursor:pointer;
-
-color:#d1d5db;
-
-transition:.25s;
-
-user-select:none;
-
+.star {
+  font-size: 48px;
+  cursor: pointer;
+  color: #d1d5db;           /* abu — belum dipilih */
+  transition: color 0.25s, transform 0.25s;
+  user-select: none;
 }
 
-.star:hover{
-
-transform:scale(1.15);
-
+.star:hover {
+  transform: scale(1.15);
 }
 
-.star.active{
-
-color:#facc15;
-
+/* Fokus keyboard: penting untuk aksesibilitas (role="radio") */
+.star:focus-visible {
+  outline: 3px solid #16a34a;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
-#ratingText{
-
-margin-top:15px;
-
-text-align:center;
-
-font-weight:700;
-
-font-size:1rem;
-
-color:#374151;
-
-}
-/* ==========================================
-REVIEW
-========================================== */
-
-.form-group{
-
-display:flex;
-
-flex-direction:column;
-
-gap:10px;
-
+.star.active {
+  color: #facc15;           /* kuning — sudah dipilih */
 }
 
-.form-group label{
-
-font-weight:700;
-
-color:#111827;
-
+#ratingText {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #374151;
 }
 
-.form-group textarea{
 
-width:100%;
+/* ==========================================================================
+   FORM TEXTAREA
+   ========================================================================== */
 
-min-height:170px;
-
-padding:16px;
-
-border:1px solid #d1d5db;
-
-border-radius:16px;
-
-font-family:inherit;
-
-font-size:15px;
-
-resize:vertical;
-
-outline:none;
-
-transition:.25s;
-
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.form-group textarea:focus{
-
-border-color:#16a34a;
-
-box-shadow:0 0 0 4px rgba(22,163,74,.15);
-
+.form-group label {
+  font-weight: 700;
+  color: #111827;
 }
 
-.form-group small{
-
-color:#6b7280;
-
-}
-/* ==========================================
-UPLOAD
-========================================== */
-
-.upload-box{
-
-margin-top:20px;
-
-}
-
-.upload-area{
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-justify-content:center;
-
-padding:40px 20px;
-
-border:2px dashed #d1d5db;
-
-border-radius:20px;
-
-cursor:pointer;
-
-transition:.25s;
-
-text-align:center;
-
+.form-group textarea {
+  width: 100%;
+  min-height: 170px;
+  padding: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  /* box-sizing: border-box diperlukan agar padding tidak overflow */
+  box-sizing: border-box;
 }
 
-.upload-area:hover{
-
-border-color:#16a34a;
-
-background:#f0fdf4;
-
+.form-group textarea:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
 }
 
-.upload-area h3{
-
-margin:15px 0 8px;
-
+.form-group small {
+  color: #6b7280;
 }
 
-.upload-area p{
 
-color:#6b7280;
+/* ==========================================================================
+   UPLOAD FOTO
+   ========================================================================== */
 
+.upload-box {
+  margin-top: 20px;
 }
 
-.upload-icon{
-
-font-size:52px;
-
+/* Input file disembunyikan; label bertindak sebagai tombol visual */
+.upload-box input[type="file"] {
+  display: none;
 }
 
-.upload-box input{
-
-display:none;
-
-}
-/* ==========================================
-PREVIEW
-========================================== */
-
-.preview-grid{
-
-display:grid;
-
-grid-template-columns:
-
-repeat(auto-fill,minmax(120px,1fr));
-
-gap:15px;
-
-margin-top:20px;
-
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  border: 2px dashed #d1d5db;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.25s, background 0.25s;
 }
 
-.preview-grid img{
-
-width:100%;
-
-aspect-ratio:1;
-
-object-fit:cover;
-
-border-radius:18px;
-
-border:1px solid #e5e7eb;
-
-}
-/* ==========================================
-SUMMARY
-========================================== */
-
-.summary-card{
-
-background:#fff;
-
-padding:28px;
-
-border-radius:24px;
-
-box-shadow:
-
-0 10px 25px rgba(0,0,0,.06);
-
+.upload-area:hover,
+.upload-area:focus-within {
+  border-color: #16a34a;
+  background: #f0fdf4;
 }
 
-.summary-item{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin:18px 0;
-
-gap:12px;
-
+.upload-icon {
+  font-size: 52px;
 }
 
-.summary-item span{
-
-color:#6b7280;
-
+.upload-area h3 {
+  margin: 15px 0 8px;
 }
 
-.summary-item b{
-
-font-weight:700;
-
+.upload-area p {
+  color: #6b7280;
 }
 
-.summary-note{
 
-margin-top:20px;
+/* ==========================================================================
+   PRATINJAU FOTO
+   ========================================================================== */
 
-padding:14px;
-
-border-radius:16px;
-
-background:#f0fdf4;
-
-color:#166534;
-
-line-height:1.7;
-
-font-size:14px;
-
-}
-/* ==========================================
-RESPONSIVE
-========================================== */
-
-@media(max-width:992px){
-
-.review-layout{
-
-grid-template-columns:1fr;
-
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.review-summary{
-
-position:static;
-
+.preview-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
 }
 
+
+/* ==========================================================================
+   KARTU RINGKASAN
+   ========================================================================== */
+
+.summary-card {
+  background: #fff;
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
 }
 
-@media(max-width:768px){
-
-.hero-page{
-
-padding:120px 0 70px;
-
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
 }
 
-.hero-page h1{
-
-font-size:2rem;
-
+.summary-item span {
+  color: #6b7280;
 }
 
-.produk-card{
-
-flex-direction:column;
-
-text-align:center;
-
+.summary-item b {
+  font-weight: 700;
 }
 
-.produk-card img{
-
-width:170px;
-
-height:170px;
-
+.summary-note {
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #f0fdf4;
+  color: #166534;
+  line-height: 1.7;
+  font-size: 14px;
 }
 
-.star{
 
-font-size:38px;
+/* ==========================================================================
+   STATE KOSONG
+   ========================================================================== */
 
+/* .hidden dikontrol JS; lebih bersih dari inline style="display:none" */
+.hidden {
+  display: none !important;
 }
 
-}
-/* ==========================================
-ANIMATION
-========================================== */
+
+/* ==========================================================================
+   ANIMASI
+   ========================================================================== */
 
 .form-card,
-
-.summary-card{
-
-animation:fadeUp .35s ease;
-
+.summary-card {
+  animation: fadeUp 0.35s ease both;
 }
 
-@keyframes fadeUp{
-
-from{
-
-opacity:0;
-
-transform:translateY(20px);
-
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
+/* Matikan animasi untuk pengguna yang memilih reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .form-card,
+  .summary-card {
+    animation: none;
+  }
 }
 
-}
-/* ==========================================
-SKELETON
-========================================== */
 
-.skeleton{
+/* ==========================================================================
+   SKELETON LOADING
+   ========================================================================== */
 
-animation:pulse 1.4s infinite;
-
+.skeleton {
+  animation: pulse 1.4s ease-in-out infinite;
 }
 
-.image-skeleton{
-
-width:100%;
-
-height:180px;
-
-border-radius:20px;
-
-background:#e5e7eb;
-
-margin-bottom:20px;
-
+.image-skeleton {
+  width: 100%;
+  height: 180px;
+  border-radius: 20px;
+  background: #e5e7eb;
+  margin-bottom: 20px;
 }
 
-.content-skeleton{
-
-display:flex;
-
-flex-direction:column;
-
-gap:14px;
-
+.content-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.content-skeleton div{
-
-height:18px;
-
-border-radius:999px;
-
-background:#e5e7eb;
-
+.content-skeleton div {
+  height: 18px;
+  border-radius: 999px;
+  background: #e5e7eb;
 }
 
-@keyframes pulse{
-
-0%{opacity:.5;}
-
-50%{opacity:1;}
-
-100%{opacity:.5;}
-
-}
-/* ==========================================
-SCROLLBAR
-========================================== */
-
-::-webkit-scrollbar{
-
-width:8px;
-
-height:8px;
-
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
 }
 
-::-webkit-scrollbar-thumb{
 
-background:#16a34a;
+/* ==========================================================================
+   SCROLLBAR KUSTOM (Webkit)
+   ========================================================================== */
 
-border-radius:999px;
+::-webkit-scrollbar       { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 999px; }
+::-webkit-scrollbar-track { background: #f3f4f6; }
 
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+/* Tablet — layout jadi satu kolom, ringkasan tidak sticky */
+@media (max-width: 992px) {
+  .review-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .review-summary {
+    position: static;
+  }
 }
 
-::-webkit-scrollbar-track{
+/* Mobile */
+@media (max-width: 768px) {
+  .hero-page {
+    padding: 120px 0 70px;
+  }
 
-background:#f3f4f6;
+  .hero-page h1 {
+    font-size: 2rem;
+  }
 
+  .produk-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .produk-card img {
+    width: 170px;
+    height: 170px;
+  }
+
+  .star {
+    font-size: 38px;
+  }
 }
