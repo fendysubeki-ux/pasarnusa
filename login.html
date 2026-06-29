@@ -1,426 +1,202 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & Meta -->
+  <title>Login | PasarNusa</title>
+  <meta name="description" content="Masuk ke akun PasarNusa untuk berbelanja, mengelola UMKM, atau menjalankan affiliate.">
+  <meta name="theme-color" content="#16a34a">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/logo.png">
 
-<title>Login | PasarNusa</title>
+  <!-- Google Fonts — preconnect dulu agar lebih cepat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<meta
-name="description"
-content="Masuk ke akun PasarNusa untuk berbelanja, mengelola UMKM, atau menjalankan affiliate.">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="login.css">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
+  <!-- Stylesheet global & halaman -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>PasarNusa</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<a href="kategori.html">
-
-Kategori
-
-</a>
-
-<a href="wilayah.html">
-
-Wilayah
-
-</a>
-
-<a href="tentang.html">
-
-Tentang
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="login.html"
-class="btn btn-primary">
-
-Masuk
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-🔐 Login PasarNusa
-
-</div>
-
-<h1>
-
-Selamat Datang Kembali
-
-</h1>
-
-<p>
-
-Masuk ke akun Anda untuk berbelanja, mengelola UMKM, atau menjalankan program affiliate PasarNusa.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Login
-
-</span>
-
-</div>
-
-</section>
-<!-- ==========================================
-LOGIN
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="login-wrapper">
-
-<div class="login-card">
-
-<div class="login-header">
-
-<div class="login-icon">
-
-🌿
-
-</div>
-
-<h2>
-
-Masuk ke Akun
-
-</h2>
-
-<p>
-
-Silakan masuk menggunakan email dan password yang telah didaftarkan.
-
-</p>
-
-</div>
-<form id="loginForm">
-
-<div class="form-group">
-
-<label for="email">
-
-Email
-
-</label>
-
-<input
-
-type="email"
-
-id="email"
-
-placeholder="Masukkan email"
-
-required>
-
-</div>
-
-<div class="form-group">
-
-<label for="password">
-
-Password
-
-</label>
-
-<div class="password-box">
-
-<input
-
-type="password"
-
-id="password"
-
-placeholder="Masukkan password"
-
-required>
-
-<button
-
-type="button"
-
-id="togglePassword"
-
-class="password-toggle">
-
-👁️
-
-</button>
-
-</div>
-
-</div>
-<div class="login-option">
-
-<label class="remember">
-
-<input
-
-type="checkbox"
-
-id="rememberMe">
-
-<span>
-
-Ingat Saya
-
-</span>
-
-</label>
-
-<a
-
-href="reset-password.html">
-
-Lupa Password?
-
-</a>
-
-</div>
-<button
-
-type="submit"
-
-id="btnLogin"
-
-class="btn btn-primary login-btn">
-
-Masuk
-
-</button>
-
-</form>
-<button
-
-type="submit"
-
-id="btnLogin"
-
-class="btn btn-primary login-btn">
-
-Masuk
-
-</button>
-
-</form>
-<div class="register-box">
-
-<p>
-
-Belum punya akun?
-
-</p>
-
-<div class="register-action">
-
-<a
-href="register-user.html"
-class="btn btn-secondary">
-
-👤 Daftar Pembeli
-
-</a>
-
-<a
-href="register.html"
-class="btn btn-secondary">
-
-🏪 Daftar UMKM
-
-</a>
-
-<a
-href="register-affiliate.html"
-class="btn btn-secondary">
-
-🤝 Daftar Affiliate
-
-</a>
-
-</div>
-
-</div>
-<div class="login-footer">
-
-<a
-href="index.html">
-
-← Kembali ke Beranda
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-<script src="script.js"></script>
-
-<script
-type="module"
-src="login.js">
-
-</script>
+  <!-- ==========================================
+       NAVBAR
+  ========================================== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Menu navigasi utama -->
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="produk.html">Produk</a>
+          <a href="kategori.html">Kategori</a>
+          <a href="wilayah.html">Wilayah</a>
+          <a href="tentang.html">Tentang</a>
+        </nav>
+
+        <!-- Aksi navbar: toggle tema & tombol masuk -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="login.html" class="btn btn-primary" aria-current="page">Masuk</a>
+        </div>
+
+        <!-- Tombol hamburger untuk mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       HERO PAGE
+  ========================================== -->
+  <section class="hero-page" aria-labelledby="heroHeading">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">🔐 Login PasarNusa</div>
+        <h1 id="heroHeading">Selamat Datang Kembali</h1>
+        <p>Masuk ke akun Anda untuk berbelanja, mengelola UMKM, atau menjalankan program affiliate PasarNusa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       BREADCRUMB
+  ========================================== -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Login</span>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       FORM LOGIN
+  ========================================== -->
+  <section class="section" aria-labelledby="loginHeading">
+    <div class="container">
+      <div class="login-wrapper">
+        <div class="login-card">
+
+          <!-- Header kartu login -->
+          <div class="login-header">
+            <div class="login-icon" aria-hidden="true">🌿</div>
+            <h2 id="loginHeading">Masuk ke Akun</h2>
+            <p>Silakan masuk menggunakan email dan password yang telah didaftarkan.</p>
+          </div>
+
+          <!-- Form login — satu form, satu tombol submit -->
+          <form id="loginForm" novalidate>
+
+            <!-- Field email -->
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Masukkan email"
+                autocomplete="email"
+                required>
+            </div>
+
+            <!-- Field password dengan tombol show/hide -->
+            <div class="form-group">
+              <label for="password">Password</label>
+              <div class="password-box">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Masukkan password"
+                  autocomplete="current-password"
+                  required>
+                <button
+                  type="button"
+                  id="togglePassword"
+                  class="password-toggle"
+                  aria-label="Tampilkan password">
+                  👁️
+                </button>
+              </div>
+            </div>
+
+            <!-- Opsi: Ingat Saya & Lupa Password -->
+            <div class="login-option">
+              <label class="remember">
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <span>Ingat Saya</span>
+              </label>
+              <a href="reset-password.html">Lupa Password?</a>
+            </div>
+
+            <!-- Tombol submit -->
+            <button type="submit" id="btnLogin" class="btn btn-primary login-btn">
+              Masuk
+            </button>
+
+          </form>
+          <!-- /form#loginForm -->
+
+          <!-- Opsi registrasi untuk pengguna baru -->
+          <div class="register-box">
+            <p>Belum punya akun?</p>
+            <div class="register-action">
+              <a href="register-user.html" class="btn btn-secondary">👤 Daftar Pembeli</a>
+              <a href="register.html" class="btn btn-secondary">🏪 Daftar UMKM</a>
+              <a href="register-affiliate.html" class="btn btn-secondary">🤝 Daftar Affiliate</a>
+            </div>
+          </div>
+
+          <!-- Link kembali ke beranda -->
+          <div class="login-footer">
+            <a href="index.html">← Kembali ke Beranda</a>
+          </div>
+
+        </div>
+        <!-- /login-card -->
+      </div>
+      <!-- /login-wrapper -->
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+  ========================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       TOMBOL KEMBALI KE ATAS
+  ========================================== -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- ==========================================
+       SCRIPT
+       — script.js dimuat terakhir (non-module) agar DOM sudah siap
+       — login.js sebagai ES module untuk logika autentikasi
+  ========================================== -->
+  <script src="script.js"></script>
+  <script type="module" src="login.js"></script>
 
 </body>
-
 </html>
