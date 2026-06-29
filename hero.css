@@ -1,195 +1,168 @@
-/* ==========================================================================
-   PasarNusa — Hero
-   hero.css
-   Seksi hero utama halaman beranda: layout grid dua kolom, dekorasi blur,
-   pencarian, dan gambar ilustrasi.
-   ========================================================================== */
+/* hero.css */
 
-/* --------------------------------------------------------------------------
-   Hero — Wrapper
--------------------------------------------------------------------------- */
-.hero {
-  padding: 160px 0 100px;
-  position: relative;
-  overflow: hidden;
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:160px 0 100px;
 }
 
-/* Dekorasi blur ambient — tidak mempengaruhi layout (pointer-events: none) */
 .hero::before,
-.hero::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  pointer-events: none;   /* cegah area blur memblokir klik elemen di bawahnya */
-  will-change: filter;    /* isolasi layer GPU agar blur tidak mempengaruhi repaint */
+.hero::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  filter:blur(120px);
+  pointer-events:none;
 }
 
-.hero::before {
-  top: -200px;
-  right: -150px;
-  width: 450px;
-  height: 450px;
-  background: rgba(22, 163, 74, 0.12);
+.hero::before{
+  top:-200px;
+  right:-150px;
+  width:450px;
+  height:450px;
+  background:rgba(22,163,74,.12);
 }
 
-.hero::after {
-  bottom: -180px;
-  left: -150px;
-  width: 400px;
-  height: 400px;
-  background: rgba(59, 130, 246, 0.08);
+.hero::after{
+  left:-150px;
+  bottom:-180px;
+  width:400px;
+  height:400px;
+  background:rgba(59,130,246,.08);
 }
 
-/* --------------------------------------------------------------------------
-   Hero — Grid Dua Kolom
--------------------------------------------------------------------------- */
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  align-items: center;
-  gap: 64px;
-  position: relative;
-  z-index: 2;   /* tampil di atas dekorasi blur */
+.hero-grid{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  align-items:center;
+  gap:64px;
 }
 
-/* --------------------------------------------------------------------------
-   Hero — Konten Teks
--------------------------------------------------------------------------- */
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-weight: 600;
-  margin-bottom: 24px;
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 18px;
+  margin-bottom:24px;
+  border-radius:var(--radius-full);
+  background:var(--color-primary-light);
+  color:var(--color-primary);
+  font-weight:600;
 }
 
-.hero h1 {
-  max-width: 650px;
-  margin-bottom: 20px;
+.hero h1{
+  max-width:650px;
+  margin-bottom:20px;
 }
 
-.hero p {
-  max-width: 580px;
-  margin-bottom: 32px;
+.hero p{
+  max-width:580px;
+  margin-bottom:32px;
 }
 
-.hero-action {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-top: 28px;
+.hero-action{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  margin-top:28px;
 }
 
-/* --------------------------------------------------------------------------
-   Hero — Pencarian
--------------------------------------------------------------------------- */
-.hero-search {
-  display: flex;
-  align-items: center;
-  margin-top: 32px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  max-width: 620px;
+.hero-search{
+  display:flex;
+  align-items:center;
+  margin-top:32px;
+  max-width:620px;
+  overflow:hidden;
+  background:var(--color-surface);
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);
 }
 
-.hero-search input {
-  flex: 1;               /* input mengisi sisa ruang, bukan tombol */
-  border: none;
-  padding: 18px 22px;
-  box-shadow: none;
-  min-width: 0;          /* cegah input overflow container di flex */
+.hero-search input{
+  flex:1;
+  min-width:0;
+  padding:18px 22px;
 }
 
-.hero-search button {
-  padding: 18px 28px;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-weight: 600;
-  white-space: nowrap;   /* cegah teks tombol terpotong di layar sempit */
-  transition: background var(--transition);
+.hero-search input:focus{
+  outline:none;
 }
 
-.hero-search button:hover {
-  background: var(--color-primary-dark);
+.hero-search button{
+  padding:18px 28px;
+  color:#fff;
+  background:var(--color-primary);
+  font-weight:600;
+  white-space:nowrap;
+  transition:background var(--transition);
 }
 
-/* --------------------------------------------------------------------------
-   Hero — Gambar
--------------------------------------------------------------------------- */
-.hero-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.hero-search button:hover{
+  background:var(--color-primary-dark);
 }
 
-.hero-image img {
-  width: 100%;
-  max-width: 520px;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  transition: transform var(--transition);   /* hanya animasikan transform */
+.hero-image{
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.hero-image img:hover {
-  transform: translateY(-8px);
+.hero-image img{
+  width:100%;
+  max-width:520px;
+  object-fit:cover;
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-lg);
+  transition:transform var(--transition);
 }
 
-/* --------------------------------------------------------------------------
-   Responsif — Tablet (≤ 992px)
--------------------------------------------------------------------------- */
-@media (max-width: 992px) {
-  .hero {
-    padding: 140px 0 80px;
+.hero-image img:hover{
+  transform:translateY(-8px);
+}
+
+@media(max-width:992px){
+
+  .hero{
+    padding:140px 0 80px;
   }
 
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
+  .hero-grid{
+    grid-template-columns:1fr;
+    text-align:center;
   }
 
-  /* Pusatkan elemen teks yang memiliki max-width */
   .hero h1,
   .hero p,
-  .hero-search {
-    margin-inline: auto;
+  .hero-search{
+    margin-inline:auto;
   }
 
-  .hero-action {
-    justify-content: center;
+  .hero-action{
+    justify-content:center;
   }
 
-  .hero-image {
-    margin-top: 40px;
+  .hero-image{
+    margin-top:40px;
   }
+
 }
 
-/* --------------------------------------------------------------------------
-   Responsif — Mobile (≤ 576px)
--------------------------------------------------------------------------- */
-@media (max-width: 576px) {
-  .hero {
-    padding: 130px 0 70px;
+@media(max-width:576px){
+
+  .hero{
+    padding:130px 0 70px;
   }
 
-  .hero h1 {
-    font-size: 2.5rem;
+  .hero-search{
+    flex-direction:column;
+    align-items:stretch;
   }
 
-  /* Pencarian bertumpuk vertikal di layar sangat sempit */
-  .hero-search {
-    flex-direction: column;
-    align-items: stretch;
+  .hero-search button{
+    width:100%;
   }
 
-  .hero-search button {
-    width: 100%;
-  }
 }
