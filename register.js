@@ -1,489 +1,224 @@
-// ======================================
-// PASARNUSA REGISTER UMKM
-// register.js
-// ======================================
+// =============================================================
+// register.js — Pendaftaran UMKM | PasarNusa
+// Alur: validasi → Firebase Auth → simpan Firestore → redirect
+// =============================================================
 
-// Firebase
+// --- Import Firebase (versi modular) -------------------------
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import {
+// =============================================================
+// KONFIGURASI FIREBASE
+// =============================================================
 
-getFirestore,
-
-doc,
-
-setDoc,
-
-serverTimestamp
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-
-getAuth,
-
-createUserWithEmailAndPassword,
-
-signOut
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-// ======================================
-// FIREBASE
-// ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+const firebaseConfig = {
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952"
 };
 
-const app=
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
-initializeApp(firebaseConfig);
 
-const auth=
+// =============================================================
+// REFERENSI ELEMEN DOM
+// =============================================================
 
-getAuth(app);
+const form           = document.getElementById("registerForm");
+const btnDaftar      = document.getElementById("btnDaftar");
+const togglePassword = document.getElementById("togglePassword");
 
-const db=
+// Kolom input — dikelompokkan agar mudah diiterasi saat validasi
+const fields = {
+  nama:      document.getElementById("nama"),
+  namaToko:  document.getElementById("namaToko"),
+  email:     document.getElementById("email"),
+  whatsapp:  document.getElementById("whatsapp"),
+  alamat:    document.getElementById("alamat"),
+  provinsi:  document.getElementById("provinsi"),
+  kabupaten: document.getElementById("kabupaten"),
+  kecamatan: document.getElementById("kecamatan"),
+  desa:      document.getElementById("desa"),
+  password:  document.getElementById("password"),
+  agree:     document.getElementById("agree"),
+};
 
-getFirestore(app);
-// ======================================
-// ELEMENT
-// ======================================
 
-const form=
+// =============================================================
+// TOMBOL SHOW / HIDE PASSWORD
+// =============================================================
 
-document.getElementById("registerForm");
-
-const nama=
-
-document.getElementById("nama");
-
-const namaToko=
-
-document.getElementById("namaToko");
-
-const email=
-
-document.getElementById("email");
-
-const whatsapp=
-
-document.getElementById("whatsapp");
-
-const alamat=
-
-document.getElementById("alamat");
-
-const provinsi=
-
-document.getElementById("provinsi");
-
-const kabupaten=
-
-document.getElementById("kabupaten");
-
-const kecamatan=
-
-document.getElementById("kecamatan");
-
-const desa=
-
-document.getElementById("desa");
-
-const password=
-
-document.getElementById("password");
-
-const agree=
-
-document.getElementById("agree");
-
-const btnDaftar=
-
-document.getElementById("btnDaftar");
-
-const togglePassword=
-
-document.getElementById("togglePassword");
-// ======================================
-// SHOW PASSWORD
-// ======================================
-
-togglePassword.addEventListener(
-
-"click",
-
-()=>{
-
-if(password.type==="password"){
-
-password.type="text";
-
-togglePassword.innerText="🙈";
-
-}else{
-
-password.type="password";
-
-togglePassword.innerText="👁️";
-
-}
-
+togglePassword.addEventListener("click", () => {
+  const isHidden = fields.password.type === "password";
+  fields.password.type           = isHidden ? "text" : "password";
+  togglePassword.textContent     = isHidden ? "🙈" : "👁️";
+  togglePassword.setAttribute("aria-label", isHidden ? "Sembunyikan password" : "Tampilkan password");
 });
-// ======================================
-// START
-// ======================================
 
-form.addEventListener(
 
-"submit",
+// =============================================================
+// SUBMIT FORM
+// =============================================================
 
-registerUmkm
+form.addEventListener("submit", registerUmkm);
 
-);
-// ======================================
-// REGISTER
-// ======================================
+async function registerUmkm(e) {
+  e.preventDefault();
 
-async function registerUmkm(e){
+  // --- Validasi sisi klien ---
+  const validationError = getValidationError();
+  if (validationError) {
+    showToast(validationError);
+    return;
+  }
 
-e.preventDefault();
+  setLoading(true);
 
-if(
+  try {
+    // Buat akun di Firebase Auth
+    const credential = await createUserWithEmailAndPassword(
+      auth,
+      fields.email.value.trim(),
+      fields.password.value
+    );
 
-!nama.value.trim()||
+    // Simpan profil UMKM ke Firestore
+    await saveUmkm(credential.user.uid);
 
-!namaToko.value.trim()||
-
-!email.value.trim()||
-
-!whatsapp.value.trim()||
-
-!alamat.value.trim()||
-
-!provinsi.value.trim()||
-
-!kabupaten.value.trim()||
-
-!kecamatan.value.trim()||
-
-!desa.value.trim()||
-
-!password.value
-
-){
-
-showToast(
-
-"Lengkapi semua data."
-
-);
-
-return;
-
+  } catch (error) {
+    console.error("[registerUmkm]", error);
+    showError(error.code);
+    setLoading(false);
+  }
 }
 
-if(password.value.length<6){
 
-showToast(
+// =============================================================
+// VALIDASI — mengembalikan pesan error pertama, atau null jika valid
+// =============================================================
 
-"Password minimal 6 karakter."
+function getValidationError() {
+  const f = fields;
 
-);
+  // Cek semua field teks wajib tidak kosong
+  const textFields = ["nama", "namaToko", "email", "whatsapp", "alamat",
+                      "provinsi", "kabupaten", "kecamatan", "desa", "password"];
+  for (const key of textFields) {
+    if (!f[key].value.trim()) return "Lengkapi semua data.";
+  }
 
-return;
+  if (f.password.value.length < 6)               return "Password minimal 6 karakter.";
+  if (!f.whatsapp.value.trim().startsWith("08")) return "Nomor WhatsApp harus diawali 08.";
+  if (!f.agree.checked)                          return "Setujui syarat dan ketentuan.";
 
+  return null;
 }
 
-if(
 
-!whatsapp.value.startsWith("08")
+// =============================================================
+// SIMPAN DATA UMKM KE FIRESTORE
+// =============================================================
 
-){
+async function saveUmkm(uid) {
+  const f = fields;
 
-showToast(
+  await setDoc(doc(db, "users", uid), {
+    uid,
 
-"Nomor WhatsApp harus diawali 08."
+    // Identitas
+    nama:      f.nama.value.trim(),
+    namaToko:  f.namaToko.value.trim(),
+    email:     f.email.value.trim(),
+    whatsapp:  f.whatsapp.value.trim(),
 
-);
+    // Alamat
+    alamat:    f.alamat.value.trim(),
+    provinsi:  f.provinsi.value.trim(),
+    kabupaten: f.kabupaten.value.trim(),
+    kecamatan: f.kecamatan.value.trim(),
+    desa:      f.desa.value.trim(),
 
-return;
+    // Meta akun
+    role:   "umkm",
+    status: "aktif",
 
+    // Profil toko — diisi saat onboarding berikutnya
+    fotoToko:   "",
+    logoToko:   "",
+    deskripsi:  "",
+
+    // Statistik awal
+    rating:         0,
+    totalProduk:    0,
+    totalPesanan:   0,
+    totalPenjualan: 0,
+    pendapatan:     0,
+
+    createdAt: serverTimestamp(),
+  });
+
+  // Keluarkan dari sesi; pengguna login secara eksplisit
+  await signOut(auth);
+
+  showToast("Pendaftaran UMKM berhasil! Silakan login.");
+  setTimeout(() => { window.location.href = "login.html"; }, 1500);
 }
 
-if(!agree.checked){
 
-showToast(
+// =============================================================
+// PENANGANAN ERROR FIREBASE AUTH
+// =============================================================
 
-"Setujui syarat dan ketentuan."
+// Peta kode error → pesan ramah pengguna
+const AUTH_ERRORS = {
+  "auth/email-already-in-use":  "Email sudah digunakan oleh akun lain.",
+  "auth/invalid-email":         "Format email tidak valid.",
+  "auth/weak-password":         "Password terlalu lemah, coba yang lebih panjang.",
+  "auth/network-request-failed":"Periksa koneksi internet Anda.",
+};
 
-);
-
-return;
-
+function showError(code) {
+  const message = AUTH_ERRORS[code] ?? "Terjadi kesalahan, silakan coba lagi.";
+  showToast(message);
 }
 
-btnDaftar.disabled=true;
 
-btnDaftar.innerText=
+// =============================================================
+// UTILITAS — state loading tombol
+// =============================================================
 
-"Mendaftarkan...";
-
-try{
-
-const credential=
-
-await createUserWithEmailAndPassword(
-
-auth,
-
-email.value.trim(),
-
-password.value
-
-);
-
-await saveUmkm(
-
-credential.user.uid
-
-);
-
-}catch(error){
-
-console.error(error);
-
-showError(error.code);
-
+function setLoading(isLoading) {
+  btnDaftar.disabled   = isLoading;
+  btnDaftar.textContent = isLoading ? "Mendaftarkan..." : "🏪 Daftarkan UMKM";
 }
 
-}
-// ======================================
-// SAVE UMKM
-// ======================================
 
-async function saveUmkm(uid){
-
-try{
-
-await setDoc(
-
-doc(db,"users",uid),
-
-{
-
-uid,
-
-nama:
-
-nama.value.trim(),
-
-namaToko:
-
-namaToko.value.trim(),
-
-email:
-
-email.value.trim(),
-
-whatsapp:
-
-whatsapp.value.trim(),
-
-alamat:
-
-alamat.value.trim(),
-
-provinsi:
-
-provinsi.value.trim(),
-
-kabupaten:
-
-kabupaten.value.trim(),
-
-kecamatan:
-
-kecamatan.value.trim(),
-
-desa:
-
-desa.value.trim(),
-
-role:"umkm",
-
-status:"aktif",
-
-fotoToko:"",
-
-logoToko:"",
-
-deskripsi:"",
-
-rating:0,
-
-totalProduk:0,
-
-totalPesanan:0,
-
-totalPenjualan:0,
-
-pendapatan:0,
-
-createdAt:
-
-serverTimestamp()
-
-}
-
-);
-
-await signOut(auth);
-
-showToast(
-
-"Pendaftaran UMKM berhasil."
-
-);
-
-setTimeout(()=>{
-
-window.location.href=
-
-"login.html";
-
-},1500);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menyimpan data UMKM."
-
-);
-
-btnDaftar.disabled=false;
-
-btnDaftar.innerText=
-
-"🏪 Daftarkan UMKM";
-
-}
-
-}
-// ======================================
-// ERROR
-// ======================================
-
-function showError(code){
-
-let message=
-
-"Pendaftaran gagal.";
-
-switch(code){
-
-case "auth/email-already-in-use":
-
-message=
-
-"Email sudah digunakan.";
-
-break;
-
-case "auth/invalid-email":
-
-message=
-
-"Format email tidak valid.";
-
-break;
-
-case "auth/weak-password":
-
-message=
-
-"Password terlalu lemah.";
-
-break;
-
-case "auth/network-request-failed":
-
-message=
-
-"Periksa koneksi internet.";
-
-break;
-
-default:
-
-message=
-
-"Terjadi kesalahan.";
-
-}
-
-showToast(message);
-
-btnDaftar.disabled=false;
-
-btnDaftar.innerText=
-
-"🏪 Daftarkan UMKM";
-
-}
-// ======================================
-// TOAST
-// ======================================
-
-function showToast(message){
-
-const toast=
-
-document.createElement("div");
-
-toast.className="toast";
-
-toast.innerText=message;
-
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.classList.add("show");
-
-},100);
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-setTimeout(()=>{
-
-toast.remove();
-
-},300);
-
-},3000);
-
+// =============================================================
+// UTILITAS — notifikasi toast
+// =============================================================
+
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className   = "toast";
+  toast.textContent = message;           // textContent lebih aman dari innerText/innerHTML
+  toast.setAttribute("role", "alert");   // agar screen reader mengumumkan pesan
+  document.body.appendChild(toast);
+
+  // Tampilkan dengan jeda singkat agar transisi CSS berjalan
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add("show"));
+  });
+
+  // Sembunyikan lalu hapus dari DOM
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3000);
 }
