@@ -1,139 +1,136 @@
-/* =============================================================
-   footer.css — PasarNusa
-   Komponen footer global: layout, navigasi, sosial, dan bottom bar.
-   Menggunakan CSS custom properties dari design system PasarNusa.
-   ============================================================= */
+/* footer.css */
 
-
-/* ─── Wrapper utama footer ─────────────────────────────────── */
-.footer {
-  margin-top: 80px;
-  padding: 70px 0 30px;
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
+.footer{
+  margin-top:80px;
+  padding:70px 0 30px;
+  background:var(--color-surface);
+  border-top:1px solid var(--color-border);
 }
 
-
-/* ─── Grid atas: logo+deskripsi + 3 kolom tautan ───────────── */
-.footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 40px;
-  margin-bottom: 50px;
+.footer-top{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:40px;
+  margin-bottom:50px;
 }
 
-
-/* ─── Logo footer ───────────────────────────────────────────── */
-.footer-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: var(--color-primary);
+.footer-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+  flex-shrink:0;
+  font-size:1.8rem;
+  font-weight:800;
+  color:var(--color-primary);
 }
 
-
-/* ─── Teks deskripsi singkat di bawah logo ──────────────────── */
-.footer-desc {
-  max-width: 360px;
-  line-height: 1.8;
-  color: var(--color-muted);
+.footer-desc{
+  max-width:360px;
+  line-height:1.8;
+  color:var(--color-muted);
 }
 
-
-/* ─── Judul tiap kolom tautan ───────────────────────────────── */
-.footer-title {
-  margin-bottom: 18px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--color-text);
+.footer-title{
+  margin-bottom:18px;
+  font-size:1.1rem;
+  font-weight:700;
+  color:var(--color-text);
 }
 
-
-/* ─── Daftar tautan navigasi footer ────────────────────────── */
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.footer-links{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 
-.footer-links a {
-  color: var(--color-muted);
-  transition: var(--transition);
+.footer-links a{
+  color:var(--color-muted);
+  transition:color var(--transition),
+             padding-left var(--transition);
 }
 
-/* Efek hover: warna berubah + geser ke kanan */
-.footer-links a:hover {
-  color: var(--color-primary);
-  padding-left: 6px;
-}
+@media (hover:hover){
 
-
-/* ─── Ikon media sosial ─────────────────────────────────────── */
-.social {
-  display: flex;
-  gap: 14px;
-  margin-top: 18px;
-}
-
-.social a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--color-background);
-  color: var(--color-text);
-  transition: var(--transition);
-}
-
-/* Hover: latar berubah ke warna primer, ikon naik sedikit */
-.social a:hover {
-  background: var(--color-primary);
-  color: var(--color-white);
-  transform: translateY(-4px);
-}
-
-
-/* ─── Garis pemisah antara top dan bottom ───────────────────── */
-.footer-divider {
-  height: 1px;
-  background: var(--color-border);
-  margin: 30px 0;
-}
-
-
-/* ─── Baris bawah: copyright + tautan kebijakan ─────────────── */
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  font-size: 0.9rem;
-  color: var(--color-muted);
-}
-
-
-/* ─── Responsif: tablet (≤ 900px) ──────────────────────────── */
-@media (max-width: 900px) {
-  .footer-top {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-
-/* ─── Responsif: mobile (≤ 600px) ──────────────────────────── */
-@media (max-width: 600px) {
-  .footer-top {
-    grid-template-columns: 1fr;
+  .footer-links a:hover{
+    color:var(--color-primary);
+    padding-left:6px;
   }
 
-  .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
+}
+
+.footer-links a:focus-visible{
+  color:var(--color-primary);
+}
+
+.social{
+  display:flex;
+  gap:14px;
+  margin-top:18px;
+}
+
+.social a{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:42px;
+  height:42px;
+  border-radius:var(--radius-full);
+  background:var(--color-background);
+  color:var(--color-text);
+  transition:background var(--transition),
+             color var(--transition),
+             transform var(--transition);
+}
+
+@media (hover:hover){
+
+  .social a:hover{
+    background:var(--color-primary);
+    color:var(--color-white);
+    transform:translateY(-4px);
   }
+
+}
+
+.social a:focus-visible{
+  background:var(--color-primary);
+  color:var(--color-white);
+}
+
+.footer-divider{
+  height:1px;
+  margin:30px 0;
+  background:var(--color-border);
+}
+
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:20px;
+  font-size:.9rem;
+  color:var(--color-muted);
+}
+
+@media(max-width:900px){
+
+  .footer-top{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:600px){
+
+  .footer-top{
+    grid-template-columns:1fr;
+  }
+
+  .footer-bottom{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
 }
