@@ -1,843 +1,489 @@
-// ======================================
-// PASARNUSA REVIEW
-// review.js
-// ======================================
+// =============================================================================
+// review.js — PasarNusa
+// Logika halaman Review Produk: autentikasi, load data, rating,
+// upload foto ke Cloudinary, dan simpan ulasan ke Firestore.
+// =============================================================================
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth }          from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import {
+  getFirestore,
+  doc, collection,
+  getDoc, getDocs, addDoc, updateDoc,
+  query, where,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-getFirestore,
 
-doc,
+// =============================================================================
+// KONFIGURASI FIREBASE
+// =============================================================================
 
-getDoc,
-
-addDoc,
-
-collection,
-
-query,
-
-where,
-
-getDocs,
-
-updateDoc,
-
-serverTimestamp
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import {
-
-getAuth
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-// ======================================
-// FIREBASE
-// ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+const firebaseConfig = {
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952",
 };
 
-const app=initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-const db=getFirestore(app);
 
-const auth=getAuth(app);
-// ======================================
-// CLOUDINARY
-// ======================================
+// =============================================================================
+// KONFIGURASI CLOUDINARY
+// =============================================================================
 
-const CLOUD_NAME="dq8gha9lv";
+const CLOUD_NAME    = "dq8gha9lv";
+const UPLOAD_PRESET = "pasarnusa";
+const CLOUDINARY_URL =
+  `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
-const UPLOAD_PRESET="pasarnusa";
-// ======================================
-// ELEMENT
-// ======================================
+const MAX_FOTO      = 5;
+const MAX_FOTO_SIZE = 2 * 1024 * 1024; // 2 MB
 
-const produkContainer=
 
-document.getElementById("produkContainer");
+// =============================================================================
+// REFERENSI ELEMEN DOM
+// =============================================================================
 
-const ratingBox=
+const elProdukContainer = document.getElementById("produkContainer");
+const elRatingBox       = document.getElementById("ratingBox");
+const elRatingText      = document.getElementById("ratingText");
+const elReviewText      = document.getElementById("reviewText");
+const elFotoReview      = document.getElementById("fotoReview");
+const elPreviewFoto     = document.getElementById("previewFoto");
+const elKirimReview     = document.getElementById("kirimReview");
+const elEmptyReview     = document.getElementById("emptyReview");
+const elSummaryProduk   = document.getElementById("summaryProduk");
+const elSummaryToko     = document.getElementById("summaryToko");
+const elSummaryRating   = document.getElementById("summaryRating");
 
-document.getElementById("ratingBox");
 
-const ratingText=
+// =============================================================================
+// STATE HALAMAN
+// =============================================================================
 
-document.getElementById("ratingText");
+let uid        = "";
+let orderId    = "";
+let dataPesanan = {};
+let dataProduk  = {};
+let rating      = 0;
+let fotoList    = [];
 
-const reviewText=
 
-document.getElementById("reviewText");
+// =============================================================================
+// INISIALISASI
+// =============================================================================
 
-const fotoReview=
+document.addEventListener("DOMContentLoaded", initPage);
 
-document.getElementById("fotoReview");
-
-const previewFoto=
-
-document.getElementById("previewFoto");
-
-const kirimReview=
-
-document.getElementById("kirimReview");
-
-const summaryProduk=
-
-document.getElementById("summaryProduk");
-
-const summaryToko=
-
-document.getElementById("summaryToko");
-
-const summaryRating=
-
-document.getElementById("summaryRating");
-// ======================================
-// VARIABLE
-// ======================================
-
-let uid="";
-
-let orderId="";
-
-let dataPesanan={};
-
-let dataProduk={};
-
-let rating=0;
-
-let fotoList=[];
-// ======================================
-// START
-// ======================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-initPage
-
-);
-
-async function initPage(){
-
-await checkLogin();
-
-ambilOrder();
-
-await loadPesanan();
-
-initRating();
-
-initUpload();
-
-initButton();
-
-}
-// ======================================
-// LOGIN
-// ======================================
-
-async function checkLogin(){
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href="login.html";
-
-return;
-
+async function initPage() {
+  await checkLogin();    // pastikan user sudah login
+  ambilOrderId();        // baca ?order= dari URL
+  await loadPesanan();   // validasi & muat data pesanan
+  initRating();          // pasang event bintang
+  initUpload();          // pasang event input foto
+  initButton();          // pasang event tombol kirim
 }
 
-uid=auth.currentUser.uid;
 
-}
-// ======================================
-// ORDER
-// ======================================
+// =============================================================================
+// AUTENTIKASI — redirect ke login jika belum masuk
+// =============================================================================
 
-function ambilOrder(){
+async function checkLogin() {
+  await auth.authStateReady();
 
-orderId=
+  if (!auth.currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
 
-new URLSearchParams(
-
-window.location.search
-
-).get("order");
-
-if(!orderId){
-
-window.location.href=
-
-"pesanan-saya.html";
-
+  uid = auth.currentUser.uid;
 }
 
-}
-// ======================================
-// LOAD PESANAN
-// ======================================
 
-async function loadPesanan(){
+// =============================================================================
+// BACA ORDER ID DARI URL
+// =============================================================================
 
-try{
+function ambilOrderId() {
+  orderId = new URLSearchParams(window.location.search).get("order");
 
-const pesananSnap=
-
-await getDoc(
-
-doc(db,"pesanan",orderId)
-
-);
-
-if(!pesananSnap.exists()){
-
-document.getElementById(
-
-"emptyReview"
-
-).style.display="block";
-
-return;
-
+  if (!orderId) {
+    window.location.href = "pesanan-saya.html";
+  }
 }
 
-dataPesanan=
 
-pesananSnap.data();
+// =============================================================================
+// LOAD & VALIDASI PESANAN
+// =============================================================================
 
-if(
+async function loadPesanan() {
+  try {
+    const snap = await getDoc(doc(db, "pesanan", orderId));
 
-dataPesanan.uidPembeli!==uid
+    // Pesanan tidak ditemukan
+    if (!snap.exists()) {
+      tampilkanStateKosong();
+      return;
+    }
 
-){
+    dataPesanan = snap.data();
 
-window.location.href=
+    // Pastikan pesanan milik user yang sedang login
+    if (dataPesanan.uidPembeli !== uid) {
+      window.location.href = "pesanan-saya.html";
+      return;
+    }
 
-"pesanan-saya.html";
+    // Hanya pesanan berstatus "Selesai" yang bisa direview
+    if (dataPesanan.status !== "Selesai") {
+      showToast("Pesanan belum selesai.");
+      window.location.href = `detail-pesanan.html?id=${orderId}`;
+      return;
+    }
 
-return;
+    // Satu pesanan hanya boleh punya satu review
+    if (dataPesanan.sudahReview === true) {
+      showToast("Review sudah pernah dikirim.");
+      window.location.href = `detail-pesanan.html?id=${orderId}`;
+      return;
+    }
 
+    await loadProduk();
+
+  } catch (error) {
+    console.error("loadPesanan:", error);
+    showError("Gagal memuat data pesanan.");
+    showToast("Terjadi kesalahan. Silakan coba lagi.");
+  }
 }
 
-if(
 
-dataPesanan.status!=="Selesai"
+// =============================================================================
+// LOAD DATA PRODUK
+// =============================================================================
 
-){
+async function loadProduk() {
+  const produkId = dataPesanan.items?.[0]?.id;
 
-showToast(
+  if (!produkId) {
+    showError("ID produk tidak ditemukan dalam pesanan.");
+    return;
+  }
 
-"Pesanan belum selesai."
+  const snap = await getDoc(doc(db, "produk", produkId));
 
-);
+  if (!snap.exists()) {
+    showToast("Produk tidak ditemukan.");
+    showError("Produk tidak ditemukan.");
+    return;
+  }
 
-window.location.href=
-
-"detail-pesanan.html?id="+orderId;
-
-return;
-
+  dataProduk = snap.data();
+  renderProduk();
 }
 
-if(
 
-dataPesanan.sudahReview===true
+// =============================================================================
+// RENDER KARTU PRODUK
+// =============================================================================
 
-){
+function renderProduk() {
+  // Ambil gambar pertama jika array, fallback ke placeholder
+  const gambar = Array.isArray(dataProduk.gambar)
+    ? dataProduk.gambar[0]
+    : dataProduk.gambar || "assets/no-image.png";
 
-showToast(
+  // Escape konten teks agar aman dari XSS
+  const nama = escapeHtml(dataProduk.namaProduk ?? "");
+  const toko = escapeHtml(dataProduk.namaToko   ?? "");
 
-"Review sudah pernah dikirim."
+  elProdukContainer.innerHTML = `
+    <div class="produk-card">
+      <img
+        src="${gambar}"
+        alt="${nama}"
+        loading="lazy"
+        onerror="this.src='assets/no-image.png'"
+      >
+      <div class="produk-info">
+        <h3>${nama}</h3>
+        <p>${toko}</p>
+      </div>
+    </div>
+  `;
 
-);
-
-window.location.href=
-
-"detail-pesanan.html?id="+orderId;
-
-return;
-
+  // Perbarui ringkasan di sidebar
+  elSummaryProduk.textContent = nama;
+  elSummaryToko.textContent   = toko;
 }
 
-await loadProduk();
 
-}
-catch(error){
+// =============================================================================
+// RATING BINTANG
+// =============================================================================
 
-console.error(error);
+function initRating() {
+  const stars = elRatingBox.querySelectorAll(".star");
 
-showError(
+  stars.forEach(star => {
+    // Klik mouse
+    star.addEventListener("click", () => pilihRating(Number(star.dataset.rating), stars));
 
-"Gagal memuat data pesanan."
-
-);
-
-showToast(
-
-"Terjadi kesalahan."
-
-);
-
-}
-
-}
-// ======================================
-// LOAD PRODUK
-// ======================================
-
-async function loadProduk(){
-
-const produkId=
-
-dataPesanan.items?.[0]?.id;
-
-const snap=
-
-await getDoc(
-
-doc(db,"produk",produkId)
-
-);
-
-if(!snap.exists()){
-
-showToast(
-
-"Produk tidak ditemukan."
-
-);
-
-return;
-
+    // Navigasi keyboard (Enter / Spasi) — sesuai role="radio" di HTML
+    star.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        pilihRating(Number(star.dataset.rating), stars);
+      }
+    });
+  });
 }
 
-dataProduk=
+function pilihRating(nilai, stars) {
+  rating = nilai;
 
-snap.data();
+  stars.forEach(star => {
+    const aktif = Number(star.dataset.rating) <= rating;
+    star.classList.toggle("active", aktif);
+    star.setAttribute("aria-checked", String(aktif));
+  });
 
-renderProduk();
-
-}
-// ======================================
-// RENDER PRODUK
-// ======================================
-
-function renderProduk(){
-
-const gambar=
-
-Array.isArray(dataProduk.gambar)
-
-?dataProduk.gambar[0]
-
-:dataProduk.gambar||
-
-"assets/no-image.png";
-
-produkContainer.innerHTML=`
-
-<div class="produk-card">
-
-<img
-
-src="${gambar}"
-
-loading="lazy"
-
-onerror="this.src='assets/no-image.png'">
-
-<div class="produk-info">
-
-<h3>
-
-${dataProduk.namaProduk}
-
-</h3>
-
-<p>
-
-${dataProduk.namaToko}
-
-</p>
-
-</div>
-
-</div>
-
-`;
-
-summaryProduk.innerText=
-
-dataProduk.namaProduk;
-
-summaryToko.innerText=
-
-dataProduk.namaToko;
-
-}
-// ======================================
-// RATING
-// ======================================
-
-function initRating(){
-
-const stars=
-
-document.querySelectorAll(".star");
-
-stars.forEach(star=>{
-
-star.onclick=()=>{
-
-rating=
-
-Number(
-
-star.dataset.rating
-
-);
-
-stars.forEach(item=>{
-
-item.classList.toggle(
-
-"active",
-
-Number(item.dataset.rating)<=rating
-
-);
-
-});
-
-ratingText.innerText=
-
-rating+" / 5 Bintang";
-
-summaryRating.innerText=
-
-rating+" / 5";
-ratingText.innerText=
-
-`Anda memberi ${rating} bintang`;
-};
-
-});
-
-}
-// ======================================
-// FOTO REVIEW
-// ======================================
-
-function initUpload(){
-
-fotoReview.onchange=()=>{
-if(fotoReview.files.length>5){
-
-showToast(
-
-"Maksimal 5 foto."
-
-);
-
-fotoReview.value="";
-
-return;
-
+  elRatingText.textContent   = `Anda memberi ${rating} bintang`;
+  elSummaryRating.textContent = `${rating} / 5`;
 }
 
-for(const file of fotoReview.files){
 
-if(file.size>2*1024*1024){
+// =============================================================================
+// UPLOAD FOTO — PREVIEW LOKAL
+// =============================================================================
 
-showToast(
+function initUpload() {
+  elFotoReview.addEventListener("change", () => {
+    const files = [...elFotoReview.files];
 
-"Ukuran foto maksimal 2 MB."
+    // Validasi jumlah
+    if (files.length > MAX_FOTO) {
+      showToast(`Maksimal ${MAX_FOTO} foto.`);
+      elFotoReview.value = "";
+      return;
+    }
 
-);
+    // Validasi ukuran per file
+    const terlalubesar = files.find(f => f.size > MAX_FOTO_SIZE);
+    if (terlalubesar) {
+      showToast("Ukuran foto maksimal 2 MB per file.");
+      elFotoReview.value = "";
+      return;
+    }
 
-fotoReview.value="";
-
-return;
-
+    // Tampilkan pratinjau dan simpan ke fotoList
+    fotoList = files.slice(0, MAX_FOTO);
+    tampilkanPreview(fotoList);
+  });
 }
 
-}
-previewFoto.innerHTML="";
+function tampilkanPreview(files) {
+  elPreviewFoto.innerHTML = "";
 
-fotoList=[
+  files.forEach(file => {
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.alt = `Pratinjau ${file.name}`;
 
-...fotoReview.files
+    // Bebaskan memori setelah gambar dimuat
+    img.addEventListener("load", () => URL.revokeObjectURL(img.src));
 
-].slice(0,5);
-
-fotoList.forEach(file=>{
-
-const img=
-
-document.createElement("img");
-
-img.src=
-
-URL.createObjectURL(file);
-
-previewFoto.appendChild(img);
-
-});
-
-};
-
-}
-// ======================================
-// UPLOAD CLOUDINARY
-// ======================================
-
-async function uploadFoto(){
-
-const hasil=[];
-
-for(const file of fotoList){
-
-const formData=
-
-new FormData();
-
-formData.append(
-
-"file",
-
-file
-
-);
-
-formData.append(
-
-"upload_preset",
-
-UPLOAD_PRESET
-
-);
-
-const response=
-
-await fetch(
-
-`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-
-{
-
-method:"POST",
-
-body:formData
-
+    elPreviewFoto.appendChild(img);
+  });
 }
 
-);
 
-const result=
+// =============================================================================
+// UPLOAD FOTO KE CLOUDINARY
+// =============================================================================
 
-await response.json();
+async function uploadFoto() {
+  const urls = [];
 
-if(result.secure_url){
+  for (const file of fotoList) {
+    const formData = new FormData();
+    formData.append("file",           file);
+    formData.append("upload_preset",  UPLOAD_PRESET);
 
-hasil.push(
+    const response = await fetch(CLOUDINARY_URL, {
+      method: "POST",
+      body:   formData,
+    });
 
-result.secure_url
+    if (!response.ok) {
+      throw new Error(`Upload gagal: ${response.status}`);
+    }
 
-);
+    const result = await response.json();
 
+    if (result.secure_url) {
+      urls.push(result.secure_url);
+    }
+  }
+
+  return urls;
 }
 
+
+// =============================================================================
+// TOMBOL KIRIM
+// =============================================================================
+
+function initButton() {
+  elKirimReview.addEventListener("click", kirimData);
 }
 
-return hasil;
+async function kirimData() {
+  // Validasi input sebelum mulai proses
+  if (rating === 0) {
+    showToast("Pilih rating terlebih dahulu.");
+    return;
+  }
 
-}
-// ======================================
-// BUTTON
-// ======================================
+  if (elReviewText.value.trim().length < 10) {
+    showToast("Review minimal 10 karakter.");
+    return;
+  }
 
-function initButton(){
+  // Nonaktifkan tombol selama proses berlangsung
+  setLoadingButton(true);
 
-kirimReview.onclick=
+  try {
+    const fotoUrls = await uploadFoto();
+    await simpanReview(fotoUrls);
 
-kirimData;
+  } catch (error) {
+    console.error("kirimData:", error);
+    showToast("Gagal mengirim review. Silakan coba lagi.");
 
-}
-// ======================================
-// SIMPAN REVIEW
-// ======================================
-
-async function kirimData(){
-
-try{
-
-if(rating===0){
-
-showToast(
-
-"Pilih rating terlebih dahulu."
-
-);
-
-return;
-
+  } finally {
+    setLoadingButton(false);
+  }
 }
 
-if(
-
-reviewText.value.trim().length<10
-
-){
-
-showToast(
-
-"Review minimal 10 karakter."
-
-);
-
-return;
-
+function setLoadingButton(loading) {
+  elKirimReview.disabled     = loading;
+  elKirimReview.textContent  = loading ? "Mengirim…" : "⭐ Kirim Review";
 }
 
-kirimReview.disabled=true;
 
-kirimReview.innerText=
+// =============================================================================
+// SIMPAN REVIEW KE FIRESTORE
+// =============================================================================
 
-"Mengirim...";
+async function simpanReview(foto) {
+  const produkId = dataPesanan.items[0].id;
 
-const foto=
+  // 1. Tulis dokumen ulasan baru
+  await addDoc(collection(db, "ulasan"), {
+    uid,
+    produkId,
+    pesananId: orderId,
+    uidUmkm:   dataPesanan.uidUmkm,
+    nama:      auth.currentUser.displayName || "Pembeli",
+    rating,
+    ulasan:    elReviewText.value.trim(),
+    foto,
+    createdAt: serverTimestamp(),
+  });
 
-await uploadFoto();
+  // 2. Perbarui rata-rata rating di dokumen produk
+  await updateRating(produkId);
 
-await simpanReview(
+  // 3. Tandai pesanan sudah direview agar tidak bisa dikirim ulang
+  await updateDoc(doc(db, "pesanan", orderId), { sudahReview: true });
 
-foto);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal mengirim review."
-
-);
-
-}finally{
-
-kirimReview.disabled=false;
-
-kirimReview.innerText=
-
-"⭐ Kirim Review";
-
+  showToast("Review berhasil dikirim. Terima kasih!");
+  setTimeout(() => { window.location.href = "pesanan-saya.html"; }, 1500);
 }
 
-}
-// ======================================
-// FIRESTORE
-// ======================================
 
-async function simpanReview(foto){
+// =============================================================================
+// PERBARUI RATA-RATA RATING PRODUK
+// =============================================================================
 
-await addDoc(
+async function updateRating(produkId) {
+  const totalLama  = Number(dataProduk.totalReview || 0);
+  const ratingLama = Number(dataProduk.rating      || 0);
 
-collection(db,"ulasan"),
+  const totalBaru  = totalLama + 1;
+  const ratingBaru = ((ratingLama * totalLama) + rating) / totalBaru;
 
-{
-
-uid,
-
-produkId:
-
-dataPesanan.items[0].id,
-
-pesananId:
-
-orderId,
-
-uidUmkm:
-
-dataPesanan.uidUmkm,
-
-nama:
-
-auth.currentUser.displayName||
-
-"Pembeli",
-
-rating,
-
-ulasan:
-
-reviewText.value.trim(),
-
-foto,
-
-createdAt:
-
-serverTimestamp()
-
+  await updateDoc(doc(db, "produk", produkId), {
+    rating:      Number(ratingBaru.toFixed(1)),
+    totalReview: totalBaru,
+  });
 }
 
-);
 
-await updateRating();
+// =============================================================================
+// UI HELPER — STATE KOSONG
+// =============================================================================
 
-await updateDoc(
+function tampilkanStateKosong() {
+  elEmptyReview.classList.remove("hidden");
 
-doc(db,"pesanan",orderId),
-
-{
-
-sudahReview:true
-
+  // Sembunyikan seluruh form agar tidak mengganggu
+  document.querySelector(".review-layout")?.classList.add("hidden");
 }
 
-);
 
-showToast(
+// =============================================================================
+// UI HELPER — PESAN ERROR DI CONTAINER PRODUK
+// =============================================================================
 
-"Review berhasil dikirim."
-
-);
-
-setTimeout(()=>{
-
-window.location.href=
-
-"pesanan-saya.html";
-
-},1500);
-
-}
-// ======================================
-// UPDATE RATING
-// ======================================
-
-async function updateRating(){
-
-const totalReview=
-
-Number(
-
-dataProduk.totalReview||0
-
-)+1;
-
-const totalRating=(
-
-Number(dataProduk.rating||0)
-
-*
-
-Number(dataProduk.totalReview||0)
-
-)+rating;
-
-await updateDoc(
-
-doc(
-
-db,
-
-"produk",
-
-dataPesanan.items[0].id
-
-),
-
-{
-
-rating:Number(
-
-(totalRating/totalReview)
-
-.toFixed(1)
-
-),
-
-totalReview
-
+function showError(message) {
+  elProdukContainer.innerHTML = `
+    <div class="empty-state-mini">⚠️ ${escapeHtml(message)}</div>
+  `;
 }
 
-);
 
+// =============================================================================
+// UI HELPER — TOAST NOTIFIKASI
+// =============================================================================
+
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className   = "toast";
+  toast.textContent = message;              // textContent aman dari XSS
+  toast.setAttribute("role", "status");     // dibaca screen reader
+
+  document.body.appendChild(toast);
+
+  // Animasi masuk
+  requestAnimationFrame(() => toast.classList.add("show"));
+
+  // Animasi keluar lalu hapus elemen
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
 }
-// ======================================
-// TOAST
-// ======================================
 
-function showToast(message){
 
-const toast=
+// =============================================================================
+// UTILITAS — ESCAPE HTML UNTUK MENCEGAH XSS
+// =============================================================================
 
-document.createElement("div");
-
-toast.className="toast";
-
-toast.innerText=message;
-
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.classList.add("show");
-
-},100);
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-setTimeout(()=>{
-
-toast.remove();
-
-},300);
-
-},3000);
-
-}
-// ======================================
-// ERROR
-// ======================================
-
-function showError(message){
-
-produkContainer.innerHTML=`
-
-<div class="empty-state-mini">
-
-⚠️ ${message}
-
-</div>
-
-`;
-
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,  "&amp;")
+    .replace(/</g,  "&lt;")
+    .replace(/>/g,  "&gt;")
+    .replace(/"/g,  "&quot;")
+    .replace(/'/g,  "&#039;");
 }
