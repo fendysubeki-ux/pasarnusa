@@ -1,325 +1,181 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil Saya - PasarNusa</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
 
-<title>Profil Saya - PasarNusa</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
+  <!-- Stylesheet utama PasarNusa -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-<section class="dashboard">
-
-<div class="dashboard-header">
-
-<div>
-
-<h1>👤 Profil Saya</h1>
-
-<p>
-Kelola akun PasarNusa Anda
-</p>
-
-</div>
-
-<a
-href="index.html"
-class="btn-secondary">
-
-🏠 Beranda
-
-</a>
-
-</div>
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-
-<h3 id="nama">
-Loading...
-</h3>
-
-<p>Nama Pengguna</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="email">
-Loading...
-</h3>
-
-<p>Email</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="role">
-Loading...
-</h3>
-
-<p>Role Akun</p>
-
-</div>
-
-<div class="dashboard-card">
-
-<h3 id="statusAkun">
-Loading...
-</h3>
-
-<p>Status Akun</p>
-
-</div>
-
-</div>
-
-<div class="form-card">
-
-<h2>📋 Informasi Akun</h2>
-
-<p><b>UID :</b></p>
-<p id="uidUser">-</p>
-
-<br>
-
-<p><b>Bergabung Dengan :</b></p>
-<p>PasarNusa Marketplace UMKM Indonesia</p>
-
-</div>
-
-<h2 style="margin-top:30px;">
-⚡ Menu Cepat
-</h2>
-
-<div class="dashboard-grid">
-
-<a
-href="pesanan-saya.html"
-class="dashboard-card">
-
-<h3>📦 Pesanan Saya</h3>
-
-<p>
-Lihat seluruh pesanan
-</p>
-
-</a>
-
-<a
-href="favorit.html"
-class="dashboard-card">
-
-<h3>❤️ Favorit</h3>
-
-<p>
-Produk favorit tersimpan
-</p>
-
-</a>
-
-<a
-href="cart.html"
-class="dashboard-card">
-
-<h3>🛒 Keranjang</h3>
-
-<p>
-Lihat keranjang belanja
-</p>
-
-</a>
-
-<a
-href="index.html"
-class="dashboard-card">
-
-<h3>🛍 Belanja</h3>
-
-<p>
-Cari produk UMKM
-</p>
-
-</a>
-
-</div>
-
-<div
-style="
-text-align:center;
-margin-top:30px;
-">
-
-<button
-id="btnLogout"
-class="btn-primary">
-
-🚪 Logout
-
-</button>
-
-</div>
-
-</section>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
-import {
-getFirestore,
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import {
-getAuth,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);
-
-const uid =
-localStorage.getItem("uid");
-
-if(!uid){
-
-alert(
-"Silakan login terlebih dahulu"
-);
-
-window.location.href =
-"login.html";
-
-throw new Error(
-"Belum login"
-);
-
-}
-
-try{
-
-const userDoc =
-await getDoc(
-doc(db,"users",uid)
-);
-
-if(userDoc.exists()){
-
-const user =
-userDoc.data();
-
-document.getElementById(
-"nama"
-).innerText =
-user.nama || "-";
-
-document.getElementById(
-"email"
-).innerText =
-user.email || "-";
-
-document.getElementById(
-"role"
-).innerText =
-(user.role || "user")
-.toUpperCase();
-
-document.getElementById(
-"statusAkun"
-).innerText =
-user.status || "Aktif";
-
-document.getElementById(
-"uidUser"
-).innerText =
-uid;
-
-}
-else{
-
-await signOut(auth);
-
-localStorage.clear();
-
-alert(
-"Data user tidak ditemukan"
-);
-
-window.location.href =
-"login.html";
-
-}
-
-}
-catch(error){
-
-console.error(error);
-
-alert(
-"Gagal memuat profil"
-);
-
-}
-
-document
-.getElementById("btnLogout")
-.addEventListener(
-"click",
-async()=>{
-
-if(
-confirm(
-"Yakin ingin logout?"
-)
-){
-
-await signOut(auth);
-
-localStorage.clear();
-
-window.location.href =
-"login.html";
-
-}
-
-}
-);
-
-</script>
+  <!-- =========================================================
+       HALAMAN PROFIL PENGGUNA
+       Menampilkan data akun dari Firestore berdasarkan UID
+       yang tersimpan di localStorage saat login.
+  ========================================================= -->
+  <section class="dashboard">
+
+    <!-- Header: judul halaman + tombol kembali ke beranda -->
+    <div class="dashboard-header">
+      <div>
+        <h1>👤 Profil Saya</h1>
+        <p>Kelola akun PasarNusa Anda</p>
+      </div>
+      <a href="index.html" class="btn-secondary">🏠 Beranda</a>
+    </div>
+
+    <!-- Kartu ringkasan: nama, email, role, status -->
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <h3 id="nama">Memuat...</h3>
+        <p>Nama Pengguna</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="email">Memuat...</h3>
+        <p>Email</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="role">Memuat...</h3>
+        <p>Role Akun</p>
+      </div>
+      <div class="dashboard-card">
+        <h3 id="statusAkun">Memuat...</h3>
+        <p>Status Akun</p>
+      </div>
+    </div>
+
+    <!-- Detail akun: UID dan platform -->
+    <div class="form-card">
+      <h2>📋 Informasi Akun</h2>
+      <p><strong>UID:</strong></p>
+      <p id="uidUser">-</p>
+      <br />
+      <p><strong>Bergabung dengan:</strong></p>
+      <p>PasarNusa Marketplace UMKM Indonesia</p>
+    </div>
+
+    <!-- Menu cepat navigasi -->
+    <h2 style="margin-top: 30px;">⚡ Menu Cepat</h2>
+
+    <div class="dashboard-grid">
+      <a href="pesanan-saya.html" class="dashboard-card">
+        <h3>📦 Pesanan Saya</h3>
+        <p>Lihat seluruh pesanan</p>
+      </a>
+      <a href="favorit.html" class="dashboard-card">
+        <h3>❤️ Favorit</h3>
+        <p>Produk favorit tersimpan</p>
+      </a>
+      <a href="cart.html" class="dashboard-card">
+        <h3>🛒 Keranjang</h3>
+        <p>Lihat keranjang belanja</p>
+      </a>
+      <a href="index.html" class="dashboard-card">
+        <h3>🛍 Belanja</h3>
+        <p>Cari produk UMKM</p>
+      </a>
+    </div>
+
+    <!-- Tombol logout -->
+    <div style="text-align: center; margin-top: 30px;">
+      <button id="btnLogout" class="btn-primary">🚪 Logout</button>
+    </div>
+
+  </section>
+
+  <!-- =========================================================
+       SCRIPT: Firebase Auth + Firestore
+       Versi Firebase: 12.0.0 (sesuaikan jika ada update)
+  ========================================================= -->
+  <script type="module">
+    import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    // --- Konfigurasi Firebase PasarNusa ---
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+      authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+      projectId:         "pasarnusa-18aa0",
+      storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+      messagingSenderId: "866998011671",
+      appId:             "1:866998011671:web:5555115feb82741ab55952",
+    };
+
+    // Inisialisasi layanan Firebase
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // --- Validasi sesi login ---
+    // UID disimpan di localStorage saat pengguna berhasil login
+    const uid = localStorage.getItem("uid");
+
+    if (!uid) {
+      alert("Silakan login terlebih dahulu.");
+      window.location.href = "login.html";
+      // Hentikan eksekusi script selanjutnya
+      throw new Error("Sesi tidak ditemukan, pengguna belum login.");
+    }
+
+    // Helper: isi elemen teks dengan aman
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    // --- Muat data profil dari Firestore ---
+    try {
+      const userSnap = await getDoc(doc(db, "users", uid));
+
+      if (userSnap.exists()) {
+        const user = userSnap.data();
+
+        setText("nama",       user.nama   || "-");
+        setText("email",      user.email  || "-");
+        setText("role",       (user.role  || "user").toUpperCase());
+        setText("statusAkun", user.status || "Aktif");
+        setText("uidUser",    uid);
+
+      } else {
+        // Dokumen tidak ditemukan → sesi tidak valid, paksa logout
+        await signOut(auth);
+        localStorage.clear();
+        alert("Data akun tidak ditemukan. Silakan login kembali.");
+        window.location.href = "login.html";
+      }
+
+    } catch (error) {
+      // Tangani error jaringan atau Firestore
+      console.error("[PasarNusa] Gagal memuat profil:", error);
+      alert("Gagal memuat profil. Periksa koneksi internet Anda.");
+    }
+
+    // --- Logout: hapus sesi dan arahkan ke login ---
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      if (!confirm("Yakin ingin logout?")) return;
+
+      try {
+        await signOut(auth);
+        localStorage.clear();
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("[PasarNusa] Gagal logout:", error);
+        alert("Gagal logout. Coba lagi.");
+      }
+    });
+  </script>
 
 </body>
 </html>
