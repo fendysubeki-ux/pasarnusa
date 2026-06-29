@@ -1,52 +1,72 @@
-body.dark{
+/* ============================================================
+   darkmode.css — PasarNusa
+   Dark mode diaktifkan dengan menambahkan kelas .dark pada
+   elemen <body>. Semua token warna di-override di sini agar
+   komponen lain yang menggunakan var(--color-*) otomatis
+   menyesuaikan tanpa perlu aturan tambahan.
 
---color-background:#0f172a;
+   Struktur:
+     1. Token warna (CSS custom properties)
+     2. Komponen — surface & border
+     3. Komponen — tipografi
+     4. Komponen — form input
+     5. Komponen — tombol sekunder
+     6. Komponen — ikon sosial footer
+   ============================================================ */
 
---color-surface:#1e293b;
 
---color-text:#f8fafc;
+/* ============================================================
+   1. TOKEN WARNA
+   Mendefinisikan ulang seluruh palet di scope body.dark agar
+   semua komponen mewarisi warna gelap secara otomatis.
+   ============================================================ */
 
---color-muted:#94a3b8;
+body.dark {
+  --color-background:   #0f172a;   /* Latar halaman utama          */
+  --color-surface:      #1e293b;   /* Kartu, navbar, footer        */
+  --color-text:         #f8fafc;   /* Teks utama                   */
+  --color-muted:        #94a3b8;   /* Teks sekunder / keterangan   */
+  --color-border:       #334155;   /* Garis batas elemen           */
+  --color-primary:      #22c55e;   /* Aksen hijau utama            */
+  --color-primary-dark: #16a34a;   /* Hover / aktif aksen hijau    */
 
---color-border:#334155;
-
---color-primary:#22c55e;
-
---color-primary-dark:#16a34a;
-
-background:var(--color-background);
-
-color:var(--color-text);
-
+  background: var(--color-background);
+  color:      var(--color-text);
 }
 
-/* Background */
+
+/* ============================================================
+   2. SURFACE & BORDER
+   Komponen berlatar putih di light mode diganti ke --color-surface,
+   dan border menggunakan --color-border.
+   ============================================================ */
 
 body.dark .navbar,
+body.dark .footer,
 body.dark .card,
 body.dark .category-card,
 body.dark .wilayah-card,
 body.dark .feature-card,
 body.dark .roadmap-card,
 body.dark .product-card,
-body.dark .stat-card,
-body.dark .footer{
-
-background:var(--color-surface);
-
-border-color:var(--color-border);
-
+body.dark .stat-card {
+  background:   var(--color-surface);
+  border-color: var(--color-border);
 }
 
-/* Typography */
+
+/* ============================================================
+   3. TIPOGRAFI
+   Teks sekunder (paragraf, label, tautan footer) → --color-muted.
+   Heading & logo tetap menggunakan --color-text agar kontras
+   terhadap surface gelap.
+   ============================================================ */
 
 body.dark p,
 body.dark small,
-body.dark .footer-links a,
-body.dark .stat-label{
-
-color:var(--color-muted);
-
+body.dark .stat-label,
+body.dark .footer-links a {
+  color: var(--color-muted);
 }
 
 body.dark h1,
@@ -55,52 +75,53 @@ body.dark h3,
 body.dark h4,
 body.dark h5,
 body.dark h6,
-body.dark .logo span{
-
-color:var(--color-text);
-
+body.dark .logo span {
+  color: var(--color-text);
 }
 
-/* Search */
+
+/* ============================================================
+   4. FORM INPUT
+   Input, textarea, dan select mendapat latar surface agar
+   menyatu dengan kartu dan tidak tampak "melayang" terang.
+   ============================================================ */
 
 body.dark input,
 body.dark textarea,
-body.dark select{
-
-background:var(--color-surface);
-
-color:var(--color-text);
-
-border-color:var(--color-border);
-
+body.dark select {
+  background:   var(--color-surface);
+  color:        var(--color-text);
+  border-color: var(--color-border);
 }
 
-/* Secondary Button */
 
-body.dark .btn-secondary{
+/* ============================================================
+   5. TOMBOL SEKUNDER
+   Tombol .btn-secondary menggunakan surface sebagai latar
+   sehingga tetap terbedakan dari tombol primer tanpa outline
+   yang terlalu mencolok.
+   ============================================================ */
 
-background:var(--color-surface);
-
-color:var(--color-text);
-
-border-color:var(--color-border);
-
+body.dark .btn-secondary {
+  background:   var(--color-surface);
+  color:        var(--color-text);
+  border-color: var(--color-border);
 }
 
-/* Footer Social */
 
-body.dark .social a{
+/* ============================================================
+   6. IKON SOSIAL FOOTER
+   Latar ikon menggunakan nilai --color-border (sama dengan
+   #334155) agar konsisten dengan token yang sudah didefinisikan,
+   dan hover menggunakan aksen hijau utama.
+   ============================================================ */
 
-background:#334155;
-
-color:var(--color-text);
-
+body.dark .social a {
+  background: var(--color-border);  /* Semula hardcode #334155 → diganti token */
+  color:      var(--color-text);
 }
 
-body.dark .social a:hover{
-
-background:var(--color-primary);
-
-color:#fff;
-
+body.dark .social a:hover {
+  background: var(--color-primary);
+  color:      #fff;
 }
