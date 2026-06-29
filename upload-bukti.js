@@ -1,816 +1,394 @@
-// ======================================
-// PASARNUSA UPLOAD BUKTI
-// upload-bukti.js
-// ======================================
+// ============================================================
+// upload-bukti.js  —  PasarNusa
+// Halaman upload bukti transfer pembayaran.
+//
+// Alur utama:
+//  1. Cek sesi login (redirect ke login jika belum masuk)
+//  2. Baca ?id= dari URL, lalu muat data pesanan & UMKM
+//  3. Tampilkan preview file yang dipilih + validasi ukuran
+//  4. Upload gambar ke Cloudinary, simpan URL ke Firestore
+//  5. Kirim notifikasi ke pembeli & UMKM
+// ============================================================
 
-// Firebase
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+// ── Import Firebase ──────────────────────────────────────────
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth }          from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
+  getFirestore, doc, getDoc, updateDoc,
+  collection, addDoc, serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-getFirestore,
-
-doc,
-
-getDoc,
-
-updateDoc,
-
-collection,
-
-addDoc,
-
-serverTimestamp
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-
-getAuth
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-// ======================================
-// FIREBASE
-// ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+// ── Konfigurasi Firebase ─────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952",
 };
 
-const app=
-
-initializeApp(firebaseConfig);
-
-const db=
-
-getFirestore(app);
-
-const auth=
-
-getAuth(app);
-// ======================================
-// CLOUDINARY
-// ======================================
-
-const CLOUD_NAME=
-
-"dq8gha9lv";
-
-const UPLOAD_PRESET=
-
-"pasarnusa";
-// ======================================
-// ELEMENT
-// ======================================
-
-const namaBank=
-
-document.getElementById("namaBank");
-
-const nomorRekening=
-
-document.getElementById("nomorRekening");
-
-const atasNama=
-
-document.getElementById("atasNama");
-
-const nomorPesanan=
-
-document.getElementById("nomorPesanan");
-
-const totalBayar=
-
-document.getElementById("totalBayar");
-
-const summaryTotal=
-
-document.getElementById("summaryTotal");
-
-const statusPesanan=
-
-document.getElementById("statusPesanan");
-
-const summaryStatus=
-
-document.getElementById("summaryStatus");
-
-const buktiTransfer=
-
-document.getElementById("buktiTransfer");
-
-const previewBukti=
-
-document.getElementById("previewBukti");
-
-const previewWrapper=
-
-document.getElementById("previewWrapper");
-
-const infoFile=
-
-document.getElementById("infoFile");
-
-const uploadBtn=
-
-document.getElementById("uploadBtn");
-
-const copyRekening=
-
-document.getElementById("copyRekening");
-
-const progressFill=
-
-document.getElementById("uploadProgress");
-
-const progressText=
-
-document.getElementById("progressText");
-// ======================================
-// VARIABLE
-// ======================================
-
-let uid="";
-
-let pesananId="";
-
-let dataPesanan={};
-
-let dataUmkm={};
-// ======================================
-// START
-// ======================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-initPage
-
-);
-
-async function initPage(){
-
-await checkLogin();
-
-ambilIdPesanan();
-
-await loadPesanan();
-
-initPreview();
-
-initCopy();
-
-initUpload();
-
-}
-// ======================================
-// LOGIN
-// ======================================
-
-async function checkLogin(){
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href=
-
-"login.html";
-
-return;
-
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+// ── Konfigurasi Cloudinary ───────────────────────────────────
+const CLOUD_NAME    = "dq8gha9lv";
+const UPLOAD_PRESET = "pasarnusa";
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 MB
+
+// ── Referensi elemen DOM ─────────────────────────────────────
+const el = {
+  // Informasi rekening
+  namaBank:       document.getElementById("namaBank"),
+  nomorRekening:  document.getElementById("nomorRekening"),
+  atasNama:       document.getElementById("atasNama"),
+
+  // Informasi pesanan
+  nomorPesanan:   document.getElementById("nomorPesanan"),
+  totalBayar:     document.getElementById("totalBayar"),
+  statusPesanan:  document.getElementById("statusPesanan"),
+
+  // Ringkasan sidebar
+  summaryTotal:   document.getElementById("summaryTotal"),
+  summaryStatus:  document.getElementById("summaryStatus"),
+
+  // Upload & preview
+  buktiTransfer:  document.getElementById("buktiTransfer"),
+  previewBukti:   document.getElementById("previewBukti"),
+  previewWrapper: document.getElementById("previewWrapper"),
+  infoFile:       document.getElementById("infoFile"),
+
+  // Progress bar
+  progressFill:   document.getElementById("uploadProgress"),
+  progressText:   document.getElementById("progressText"),
+
+  // Tombol
+  uploadBtn:      document.getElementById("uploadBtn"),
+  copyRekening:   document.getElementById("copyRekening"),
+};
+
+// ── State modul ──────────────────────────────────────────────
+let uid         = "";
+let pesananId   = "";
+let dataPesanan = {};
+let dataUmkm    = {};
+
+// ── Entry point ──────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", initPage);
+
+async function initPage() {
+  await checkLogin();
+  ambilIdPesanan();
+  await loadPesanan();
+  initPreview();
+  initCopy();
+  initUpload();
 }
 
-uid=
+// ── 1. Autentikasi ───────────────────────────────────────────
 
-auth.currentUser.uid;
+/**
+ * Pastikan pengguna sudah login.
+ * Jika belum, redirect ke halaman login.
+ */
+async function checkLogin() {
+  await auth.authStateReady();
 
-}
-// ======================================
-// ID PESANAN
-// ======================================
+  if (!auth.currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
 
-function ambilIdPesanan(){
-
-pesananId=
-
-new URLSearchParams(
-
-window.location.search
-
-).get("id");
-
-if(!pesananId){
-
-window.location.href=
-
-"pesanan-saya.html";
-
+  uid = auth.currentUser.uid;
 }
 
-}
-// ======================================
-// LOAD PESANAN
-// ======================================
+// ── 2. Muat data pesanan & UMKM ──────────────────────────────
 
-async function loadPesanan(){
+/**
+ * Baca parameter ?id= dari URL.
+ * Redirect ke daftar pesanan jika ID tidak ada.
+ */
+function ambilIdPesanan() {
+  pesananId = new URLSearchParams(window.location.search).get("id");
 
-try{
-
-const snapshot=
-
-await getDoc(
-
-doc(
-
-db,
-
-"pesanan",
-
-pesananId
-
-)
-
-);
-
-if(!snapshot.exists()){
-
-showToast(
-
-"Pesanan tidak ditemukan."
-
-);
-
-setTimeout(()=>{
-
-window.location.href=
-
-"pesanan-saya.html";
-
-},1500);
-
-return;
-
+  if (!pesananId) {
+    window.location.href = "pesanan-saya.html";
+  }
 }
 
-dataPesanan=
+/**
+ * Ambil dokumen pesanan dari Firestore.
+ * Validasi kepemilikan sebelum menampilkan data.
+ */
+async function loadPesanan() {
+  try {
+    const snapshot = await getDoc(doc(db, "pesanan", pesananId));
 
-snapshot.data();
+    if (!snapshot.exists()) {
+      showToast("Pesanan tidak ditemukan.");
+      redirectDelayed("pesanan-saya.html");
+      return;
+    }
 
-if(
+    dataPesanan = snapshot.data();
 
-dataPesanan.uidPembeli!==uid
+    // Cegah akses lintas pengguna
+    if (dataPesanan.uidPembeli !== uid) {
+      showToast("Akses ditolak.");
+      redirectDelayed("pesanan-saya.html");
+      return;
+    }
 
-){
-
-showToast(
-
-"Akses ditolak."
-
-);
-
-setTimeout(()=>{
-
-window.location.href=
-
-"pesanan-saya.html";
-
-},1500);
-
-return;
-
+    await loadDataUmkm();
+    isiData();
+  } catch (error) {
+    console.error("loadPesanan:", error);
+    showToast("Gagal memuat pesanan.");
+  }
 }
 
-await loadDataUmkm();
-
-isiData();
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal memuat pesanan."
-
-);
-
+/**
+ * Ambil data UMKM (rekening bank) berdasarkan UID dari pesanan.
+ */
+async function loadDataUmkm() {
+  const snapshot = await getDoc(doc(db, "users", dataPesanan.uidUmkm));
+  if (snapshot.exists()) dataUmkm = snapshot.data();
 }
 
-}
-// ======================================
-// LOAD UMKM
-// ======================================
+/**
+ * Isi semua elemen DOM dengan data pesanan & rekening UMKM.
+ */
+function isiData() {
+  const total = formatRupiah(dataPesanan.totalBayar);
+  const status = dataPesanan.status || "Belum Bayar";
 
-async function loadDataUmkm(){
+  el.namaBank.textContent      = dataUmkm.namaBank      || "-";
+  el.nomorRekening.textContent = dataUmkm.nomorRekening || "-";
+  el.atasNama.textContent      = dataUmkm.atasNama      || "-";
 
-const snapshot=
+  // Tampilkan 8 karakter pertama ID pesanan sebagai nomor singkat
+  el.nomorPesanan.textContent = pesananId.substring(0, 8).toUpperCase();
 
-await getDoc(
+  el.totalBayar.textContent  = total;
+  el.summaryTotal.textContent = total;
 
-doc(
-
-db,
-
-"users",
-
-dataPesanan.uidUmkm
-
-)
-
-);
-
-if(snapshot.exists()){
-
-dataUmkm=
-
-snapshot.data();
-
+  el.statusPesanan.textContent  = status;
+  el.summaryStatus.textContent  = status;
 }
 
-}
-// ======================================
-// TAMPILKAN DATA
-// ======================================
+// ── 3. Preview file ──────────────────────────────────────────
 
-function isiData(){
+/**
+ * Tampilkan preview gambar saat file dipilih.
+ * Tolak file yang melebihi batas ukuran 2 MB.
+ */
+function initPreview() {
+  el.buktiTransfer.addEventListener("change", () => {
+    const file = el.buktiTransfer.files[0];
+    if (!file) return;
 
-namaBank.innerText=
+    if (file.size > MAX_FILE_SIZE) {
+      showToast("Ukuran file maksimal 2 MB.");
+      el.buktiTransfer.value = "";
+      return;
+    }
 
-dataUmkm.namaBank||
+    // Bebaskan object URL lama jika ada untuk menghindari memory leak
+    if (el.previewBukti.src.startsWith("blob:")) {
+      URL.revokeObjectURL(el.previewBukti.src);
+    }
 
-"-";
-
-nomorRekening.innerText=
-
-dataUmkm.nomorRekening||
-
-"-";
-
-atasNama.innerText=
-
-dataUmkm.atasNama||
-
-"-";
-
-nomorPesanan.innerText=
-
-pesananId.substring(
-
-0,
-
-8
-
-);
-
-const total=
-
-formatRupiah(
-
-dataPesanan.totalBayar||0
-
-);
-
-totalBayar.innerText=
-
-total;
-
-summaryTotal.innerText=
-
-total;
-
-statusPesanan.innerText=
-
-dataPesanan.status||
-
-"Belum Bayar";
-
-summaryStatus.innerText=
-
-dataPesanan.status||
-
-"Belum Bayar";
-
-}
-// ======================================
-// PREVIEW
-// ======================================
-
-function initPreview(){
-
-buktiTransfer.addEventListener(
-
-"change",
-
-()=>{
-
-const file=
-
-buktiTransfer.files[0];
-
-if(!file)return;
-
-if(
-
-file.size>
-
-2*1024*1024
-
-){
-
-showToast(
-
-"Maksimal ukuran file 2 MB."
-
-);
-
-buktiTransfer.value="";
-
-return;
-
+    el.previewBukti.src         = URL.createObjectURL(file);
+    el.previewWrapper.hidden    = false;
+    el.infoFile.textContent     = file.name;
+  });
 }
 
-previewBukti.src=
+// ── 4. Salin nomor rekening ──────────────────────────────────
 
-URL.createObjectURL(file);
+/**
+ * Salin nomor rekening ke clipboard dan tampilkan konfirmasi.
+ */
+function initCopy() {
+  el.copyRekening.addEventListener("click", async () => {
+    const nomor = dataUmkm.nomorRekening || "";
+    if (!nomor) return;
 
-previewWrapper.style.display=
-
-"block";
-
-infoFile.innerText=
-
-file.name;
-
-});
-
-}
-// ======================================
-// COPY REKENING
-// ======================================
-
-function initCopy(){
-
-copyRekening.addEventListener(
-
-"click",
-
-async()=>{
-
-await navigator.clipboard.writeText(
-
-dataUmkm.nomorRekening||
-
-""
-
-);
-
-showToast(
-
-"Nomor rekening berhasil disalin."
-
-);
-
-});
-
-}
-// ======================================
-// UPLOAD CLOUDINARY
-// ======================================
-
-async function uploadCloudinary(){
-
-const file=
-
-buktiTransfer.files[0];
-
-if(!file){
-
-showToast(
-
-"Pilih bukti transfer."
-
-);
-
-return null;
-
+    try {
+      await navigator.clipboard.writeText(nomor);
+      showToast("Nomor rekening berhasil disalin.");
+    } catch {
+      showToast("Gagal menyalin. Salin secara manual.");
+    }
+  });
 }
 
-const formData=
+// ── 5. Upload ke Cloudinary & simpan ke Firestore ────────────
 
-new FormData();
-
-formData.append(
-
-"file",
-
-file
-
-);
-
-formData.append(
-
-"upload_preset",
-
-UPLOAD_PRESET
-
-);
-
-progressFill.style.width="15%";
-
-progressText.innerText=
-
-"Mengupload...";
-
-const response=
-
-await fetch(
-
-`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-
-{
-
-method:"POST",
-
-body:formData
-
+/** Pasang listener tombol upload. */
+function initUpload() {
+  el.uploadBtn.addEventListener("click", uploadBukti);
 }
 
-);
+/**
+ * Orkestrasi proses upload:
+ *  a. Upload gambar ke Cloudinary
+ *  b. Simpan URL ke Firestore
+ *  c. Kirim notifikasi ke pembeli & UMKM
+ */
+async function uploadBukti() {
+  setUploadState(true);
 
-progressFill.style.width="80%";
+  try {
+    const url = await uploadKeCloudinary();
+    if (!url) return; // showToast sudah ditangani di dalam fungsi
 
-const hasil=
-
-await response.json();
-
-if(!hasil.secure_url){
-
-throw new Error(
-
-"Gagal upload gambar."
-
-);
-
+    await simpanBukti(url);
+  } catch (error) {
+    console.error("uploadBukti:", error);
+    showToast(error.message || "Terjadi kesalahan, coba lagi.");
+  } finally {
+    setUploadState(false);
+  }
 }
 
-progressFill.style.width="100%";
+/**
+ * Upload file ke Cloudinary menggunakan unsigned upload preset.
+ * Update progress bar secara manual (Cloudinary REST tidak kirim progress).
+ * @returns {Promise<string|null>} URL gambar yang berhasil diupload, atau null.
+ */
+async function uploadKeCloudinary() {
+  const file = el.buktiTransfer.files[0];
 
-progressText.innerText=
+  if (!file) {
+    showToast("Pilih bukti transfer terlebih dahulu.");
+    return null;
+  }
 
-"Upload berhasil.";
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", UPLOAD_PRESET);
 
-return hasil.secure_url;
+  setProgress(15, "Mengupload gambar...");
 
-}
-// ======================================
-// UPLOAD
-// ======================================
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    { method: "POST", body: formData }
+  );
 
-function initUpload(){
+  setProgress(80, "Memproses...");
 
-uploadBtn.addEventListener(
+  const hasil = await response.json();
 
-"click",
+  if (!hasil.secure_url) {
+    throw new Error("Gagal mengunggah gambar ke server.");
+  }
 
-uploadBukti
-
-);
-
-}
-
-async function uploadBukti(){
-
-try{
-
-uploadBtn.disabled=true;
-
-uploadBtn.innerText=
-
-"Mengupload...";
-
-const url=
-
-await uploadCloudinary();
-
-if(!url){
-
-uploadBtn.disabled=false;
-
-uploadBtn.innerText=
-
-"📤 Upload Bukti";
-
-return;
-
+  setProgress(100, "Upload selesai.");
+  return hasil.secure_url;
 }
 
-await simpanBukti(url);
+/**
+ * Simpan URL bukti transfer ke dokumen pesanan di Firestore,
+ * lalu kirim notifikasi dan redirect ke daftar pesanan.
+ * @param {string} url - URL gambar dari Cloudinary.
+ */
+async function simpanBukti(url) {
+  await updateDoc(doc(db, "pesanan", pesananId), {
+    buktiTransfer:    url,
+    status:           "Menunggu Verifikasi",
+    statusPembayaran: "Menunggu Verifikasi",
+    uploadAt:         serverTimestamp(),
+  });
 
-}catch(error){
+  await kirimNotifikasi();
 
-console.error(error);
-
-showToast(
-
-error.message
-
-);
-
-uploadBtn.disabled=false;
-
-uploadBtn.innerText=
-
-"📤 Upload Bukti";
-
+  showToast("Bukti pembayaran berhasil dikirim.");
+  redirectDelayed("pesanan-saya.html", 1200);
 }
 
-}
-// ======================================
-// SIMPAN
-// ======================================
+/**
+ * Kirim notifikasi ke pembeli (konfirmasi) dan UMKM (tindakan verifikasi).
+ */
+async function kirimNotifikasi() {
+  const notifCol = collection(db, "notifikasi");
 
-async function simpanBukti(url){
-
-await updateDoc(
-
-doc(
-
-db,
-
-"pesanan",
-
-pesananId
-
-),
-
-{
-
-buktiTransfer:url,
-
-status:
-
-"Menunggu Verifikasi",
-
-statusPembayaran:
-
-"Menunggu Verifikasi",
-
-uploadAt:
-
-serverTimestamp()
-
+  await Promise.all([
+    addDoc(notifCol, {
+      uid:       dataPesanan.uidPembeli,
+      judul:     "Pembayaran Dikirim",
+      pesan:     "Bukti pembayaran berhasil dikirim dan sedang diverifikasi.",
+      dibaca:    false,
+      createdAt: serverTimestamp(),
+    }),
+    addDoc(notifCol, {
+      uid:       dataPesanan.uidUmkm,
+      judul:     "Pembayaran Baru",
+      pesan:     "Ada bukti pembayaran baru yang perlu diverifikasi.",
+      dibaca:    false,
+      createdAt: serverTimestamp(),
+    }),
+  ]);
 }
 
-);
+// ── Helper ───────────────────────────────────────────────────
 
-await kirimNotifikasi();
-
-showToast(
-
-"Bukti pembayaran berhasil dikirim."
-
-);
-
-setTimeout(()=>{
-
-window.location.href=
-
-"pesanan-saya.html";
-
-},1200);
-
-}
-// ======================================
-// NOTIFIKASI
-// ======================================
-
-async function kirimNotifikasi(){
-
-await addDoc(
-
-collection(db,"notifikasi"),
-
-{
-
-uid:
-
-dataPesanan.uidPembeli,
-
-judul:
-
-"Pembayaran Dikirim",
-
-pesan:
-
-"Bukti pembayaran berhasil dikirim dan sedang diverifikasi.",
-
-dibaca:false,
-
-createdAt:
-
-serverTimestamp()
-
+/**
+ * Aktifkan atau nonaktifkan tombol upload beserta teksnya.
+ * @param {boolean} loading - true saat proses sedang berjalan.
+ */
+function setUploadState(loading) {
+  el.uploadBtn.disabled    = loading;
+  el.uploadBtn.textContent = loading ? "Mengupload..." : "📤 Upload Bukti";
 }
 
-);
-
-await addDoc(
-
-collection(db,"notifikasi"),
-
-{
-
-uid:
-
-dataPesanan.uidUmkm,
-
-judul:
-
-"Pembayaran Baru",
-
-pesan:
-
-"Ada bukti pembayaran baru yang perlu diverifikasi.",
-
-dibaca:false,
-
-createdAt:
-
-serverTimestamp()
-
+/**
+ * Perbarui lebar progress bar dan teks keterangannya.
+ * @param {number} persen  - 0–100
+ * @param {string} teks    - Pesan status yang ditampilkan.
+ */
+function setProgress(persen, teks) {
+  el.progressFill.style.width  = `${persen}%`;
+  el.progressFill.setAttribute("aria-valuenow", persen);
+  el.progressText.textContent  = teks;
 }
 
-);
-
-}
-// ======================================
-// HELPER
-// ======================================
-
-function formatRupiah(angka){
-
-return "Rp "+
-
-Number(
-
-angka||0
-
-).toLocaleString(
-
-"id-ID"
-
-);
-
+/**
+ * Format angka ke format Rupiah Indonesia.
+ * @param {number} angka
+ * @returns {string} Contoh: "Rp 150.000"
+ */
+function formatRupiah(angka) {
+  return "Rp " + Number(angka || 0).toLocaleString("id-ID");
 }
 
-function showToast(message){
+/**
+ * Tampilkan pesan toast sementara di layar.
+ * Toast muncul dari bawah, bertahan 3 detik, lalu menghilang.
+ * @param {string} pesan
+ */
+function showToast(pesan) {
+  const toast = document.createElement("div");
+  toast.className   = "toast";
+  toast.textContent = pesan;
+  toast.setAttribute("role", "alert"); // agar dibaca oleh screen reader
+  document.body.appendChild(toast);
 
-const toast=
+  // Frame berikutnya agar transisi CSS bisa berjalan
+  requestAnimationFrame(() => toast.classList.add("show"));
 
-document.createElement("div");
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3000);
+}
 
-toast.className="toast";
-
-toast.innerText=message;
-
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.classList.add("show");
-
-},100);
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-setTimeout(()=>{
-
-toast.remove();
-
-},300);
-
-},3000);
-
+/**
+ * Redirect ke URL tertentu setelah jeda waktu.
+ * @param {string} url
+ * @param {number} delay - Milidetik (default 1500ms).
+ */
+function redirectDelayed(url, delay = 1500) {
+  setTimeout(() => { window.location.href = url; }, delay);
 }
