@@ -1,784 +1,437 @@
-// ======================================
-// PASARNUSA DETAIL PESANAN
+// ============================================================
+// PASARNUSA — DETAIL PESANAN
 // detail-pesanan.js
-// ======================================
+//
+// Tanggung jawab halaman ini:
+//   - Memverifikasi sesi login pengguna
+//   - Membaca ID pesanan dari URL query string
+//   - Mengambil data pesanan dari Firestore
+//   - Memastikan pesanan hanya bisa dilihat oleh pembelinya sendiri
+//   - Merender informasi pesanan, produk, bukti bayar, timeline,
+//     dan tombol aksi secara dinamis
+// ============================================================
 
-// Firebase
+// ── Firebase SDK ────────────────────────────────────────────
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth }          from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-
-getFirestore,
-
-doc,
-
-getDoc
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-
-getAuth
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-// ======================================
-// FIREBASE
-// ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+// ── Konfigurasi Firebase ─────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952",
 };
 
-const app=
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-initializeApp(firebaseConfig);
+// ── Referensi elemen DOM ─────────────────────────────────────
+// Dikelompokkan agar mudah dilacak; hanya diambil sekali saat modul dimuat.
+const el = {
+  nomorPesanan:    document.getElementById("nomorPesanan"),
+  statusPesanan:   document.getElementById("statusPesanan"),
+  tanggalPesanan:  document.getElementById("tanggalPesanan"),
+  namaPembeli:     document.getElementById("namaPembeli"),
+  whatsappPembeli: document.getElementById("whatsappPembeli"),
+  alamatPembeli:   document.getElementById("alamatPembeli"),
+  produkContainer: document.getElementById("produkContainer"),
+  buktiContainer:  document.getElementById("buktiContainer"),
+  namaKurir:       document.getElementById("namaKurir"),
+  nomorResi:       document.getElementById("nomorResi"),
+  statusPengiriman:document.getElementById("statusPengiriman"),
+  subtotal:        document.getElementById("subtotal"),
+  ongkir:          document.getElementById("ongkir"),
+  diskon:          document.getElementById("diskon"),
+  totalBayar:      document.getElementById("totalBayar"),
+  uploadBuktiBtn:  document.getElementById("uploadBuktiBtn"),
+  hubungiTokoBtn:  document.getElementById("hubungiTokoBtn"),
+  beriUlasanBtn:   document.getElementById("beriUlasanBtn"),
+};
 
-const db=
+// ── State modul ──────────────────────────────────────────────
+let uid        = "";   // UID pengguna yang sedang login
+let pesananId  = "";   // ID dokumen pesanan dari URL
+let dataPesanan = {};  // Data mentah dari Firestore
 
-getFirestore(app);
+// ── Urutan status untuk timeline ────────────────────────────
+// Indeks array ini harus sesuai dengan urutan elemen .timeline-item di HTML.
+const URUTAN_STATUS = [
+  "Pesanan Dibuat",     // index 0 — selalu aktif
+  "Belum Bayar",        // index 1
+  "Menunggu Verifikasi",// index 1 (sama dengan Belum Bayar, menggantikan)
+  "Diproses",           // index 2
+  "Dikirim",            // index 3
+  "Selesai",            // index 4
+];
 
-const auth=
+// ── Label status pengiriman ──────────────────────────────────
+const LABEL_PENGIRIMAN = {
+  Dikirim: "Sedang Dikirim",
+  Selesai: "Selesai",
+};
 
-getAuth(app);
-// ======================================
-// ELEMENT
-// ======================================
+// ============================================================
+// INIT
+// ============================================================
 
-const nomorPesanan=
+document.addEventListener("DOMContentLoaded", initPage);
 
-document.getElementById("nomorPesanan");
-
-const statusPesanan=
-
-document.getElementById("statusPesanan");
-
-const tanggalPesanan=
-
-document.getElementById("tanggalPesanan");
-
-const namaPembeli=
-
-document.getElementById("namaPembeli");
-
-const whatsappPembeli=
-
-document.getElementById("whatsappPembeli");
-
-const alamatPembeli=
-
-document.getElementById("alamatPembeli");
-
-const produkContainer=
-
-document.getElementById("produkContainer");
-
-const buktiContainer=
-
-document.getElementById("buktiContainer");
-
-const namaKurir=
-
-document.getElementById("namaKurir");
-
-const nomorResi=
-
-document.getElementById("nomorResi");
-
-const statusPengiriman=
-
-document.getElementById("statusPengiriman");
-
-const subtotal=
-
-document.getElementById("subtotal");
-
-const ongkir=
-
-document.getElementById("ongkir");
-
-const diskon=
-
-document.getElementById("diskon");
-
-const totalBayar=
-
-document.getElementById("totalBayar");
-
-const uploadBuktiBtn=
-
-document.getElementById("uploadBuktiBtn");
-
-const hubungiTokoBtn=
-
-document.getElementById("hubungiTokoBtn");
-
-const beriUlasanBtn=
-
-document.getElementById("beriUlasanBtn");
-// ======================================
-// VARIABLE
-// ======================================
-
-let uid="";
-
-let pesananId="";
-
-let dataPesanan={};
-// ======================================
-// START
-// ======================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-initPage
-
-);
-
-async function initPage(){
-
-await checkLogin();
-
-ambilIdPesanan();
-
-await loadPesanan();
-
-}
-// ======================================
-// LOGIN
-// ======================================
-
-async function checkLogin(){
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href=
-
-"login.html";
-
-return;
-
+/**
+ * Titik masuk utama halaman.
+ * Urutan: cek login → ambil ID pesanan dari URL → muat data dari Firestore.
+ */
+async function initPage() {
+  try {
+    await checkLogin();
+    ambilIdPesanan();
+    await loadPesanan();
+  } catch (err) {
+    // Error tak terduga yang tidak tertangkap di fungsi turunan
+    console.error("[PasarNusa] initPage error:", err);
+    showToast("Terjadi kesalahan. Silakan coba lagi.");
+  }
 }
 
-uid=
+// ============================================================
+// AUTH
+// ============================================================
 
-auth.currentUser.uid;
+/**
+ * Memastikan pengguna sudah login.
+ * Jika belum, langsung redirect ke halaman login.
+ */
+async function checkLogin() {
+  await auth.authStateReady();
 
+  if (!auth.currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  uid = auth.currentUser.uid;
 }
-// ======================================
+
+// ============================================================
 // ID PESANAN
-// ======================================
+// ============================================================
 
-function ambilIdPesanan(){
+/**
+ * Membaca parameter `id` dari URL query string.
+ * Redirect ke pesanan-saya.html jika parameter tidak ada.
+ */
+function ambilIdPesanan() {
+  pesananId = new URLSearchParams(window.location.search).get("id");
 
-pesananId=
-
-new URLSearchParams(
-
-window.location.search
-
-).get("id");
-
-if(!pesananId){
-
-window.location.href=
-
-"pesanan-saya.html";
-
+  if (!pesananId) {
+    window.location.href = "pesanan-saya.html";
+  }
 }
 
-}
-// ======================================
-// LOAD PESANAN
-// ======================================
+// ============================================================
+// LOAD DATA PESANAN
+// ============================================================
 
-async function loadPesanan(){
+/**
+ * Mengambil dokumen pesanan dari Firestore lalu memicu semua
+ * fungsi render. Melakukan validasi kepemilikan sebelum render.
+ */
+async function loadPesanan() {
+  try {
+    const snapshot = await getDoc(doc(db, "pesanan", pesananId));
 
-try{
+    // Pesanan tidak ditemukan
+    if (!snapshot.exists()) {
+      showToast("Pesanan tidak ditemukan.");
+      redirectKePesananSaya(1500);
+      return;
+    }
 
-const snapshot=
+    dataPesanan = snapshot.data();
 
-await getDoc(
+    // Pastikan pesanan ini milik pengguna yang login
+    if (dataPesanan.uidPembeli !== uid) {
+      showToast("Akses ditolak.");
+      redirectKePesananSaya(1500);
+      return;
+    }
 
-doc(
+    // Render semua bagian halaman
+    isiData();
+    renderProduk();
+    renderBukti();
+    renderTimeline();
+    renderAksi();
 
-db,
-
-"pesanan",
-
-pesananId
-
-)
-
-);
-
-if(!snapshot.exists()){
-
-showToast(
-
-"Pesanan tidak ditemukan."
-
-);
-
-setTimeout(()=>{
-
-window.location.href=
-
-"pesanan-saya.html";
-
-},1500);
-
-return;
-
+  } catch (err) {
+    console.error("[PasarNusa] loadPesanan error:", err);
+    showToast("Gagal memuat pesanan.");
+  }
 }
 
-dataPesanan=
+// ============================================================
+// RENDER: INFORMASI UMUM
+// ============================================================
 
-snapshot.data();
+/**
+ * Mengisi semua field informasi pesanan ke DOM.
+ * Menggunakan nilai default "-" untuk field yang kosong.
+ */
+function isiData() {
+  const d = dataPesanan;
 
-if(dataPesanan.uidPembeli!==uid){
-
-showToast(
-
-"Akses ditolak."
-
-);
-
-setTimeout(()=>{
-
-window.location.href=
-
-"pesanan-saya.html";
-
-},1500);
-
-return;
-
+  el.nomorPesanan.textContent    = pesananId.substring(0, 8).toUpperCase();
+  el.statusPesanan.textContent   = d.status       || "Belum Bayar";
+  el.tanggalPesanan.textContent  = formatTanggal(d.createdAt);
+  el.namaPembeli.textContent     = d.namaPembeli   || "-";
+  el.whatsappPembeli.textContent = d.whatsapp      || "-";
+  el.alamatPembeli.textContent   = d.alamat        || "-";
+  el.namaKurir.textContent       = d.kurir         || "-";
+  el.nomorResi.textContent       = d.resi          || "-";
+  el.statusPengiriman.textContent = LABEL_PENGIRIMAN[d.status] || "Belum Dikirim";
+  el.subtotal.textContent        = formatRupiah(d.subtotal);
+  el.ongkir.textContent          = formatRupiah(d.ongkir);
+  el.diskon.textContent          = formatRupiah(d.diskon);
+  el.totalBayar.textContent      = formatRupiah(d.totalBayar);
 }
 
-isiData();
+// ============================================================
+// RENDER: DAFTAR PRODUK
+// ============================================================
 
-renderProduk();
+/**
+ * Merender kartu produk dari array `items` pada data pesanan.
+ * Gambar fallback ke assets/no-image.png jika URL gambar rusak.
+ */
+function renderProduk() {
+  const items = dataPesanan.items || [];
 
-renderBukti();
+  if (!items.length) {
+    el.produkContainer.innerHTML =
+      `<div class="empty-state-mini">Tidak ada produk dalam pesanan ini.</div>`;
+    return;
+  }
 
-renderStatus();
+  // Bangun semua kartu sekaligus, baru sisipkan ke DOM (lebih efisien)
+  const html = items.map(item => {
+    const gambar = Array.isArray(item.gambar)
+      ? item.gambar[0]
+      : (item.gambar || "assets/no-image.png");
 
-renderAksi();
+    const qty   = Number(item.qty)   || 1;
+    const harga = Number(item.harga) || 0;
+    const total = qty * harga;
 
-}catch(error){
+    return `
+      <div class="produk-card">
+        <img
+          src="${escapeHTML(gambar)}"
+          loading="lazy"
+          alt="${escapeHTML(item.namaProduk)}"
+          onerror="this.src='assets/no-image.png'">
+        <div class="produk-info">
+          <h3>${escapeHTML(item.namaProduk)}</h3>
+          <p>Jumlah : ${qty}</p>
+          <p>Harga  : ${formatRupiah(harga)}</p>
+        </div>
+        <div class="produk-harga">${formatRupiah(total)}</div>
+      </div>
+    `;
+  }).join("");
 
-console.error(error);
-
-showToast(
-
-"Gagal memuat pesanan."
-
-);
-
+  el.produkContainer.innerHTML = html;
 }
 
-}
-// ======================================
-// ISI DATA
-// ======================================
-
-function isiData(){
-
-nomorPesanan.innerText=
-
-pesananId.substring(0,8);
-
-statusPesanan.innerText=
-
-dataPesanan.status||
-
-"Belum Bayar";
-
-tanggalPesanan.innerText=
-
-formatTanggal(
-
-dataPesanan.createdAt
-
-);
-
-namaPembeli.innerText=
-
-dataPesanan.namaPembeli||
-
-"-";
-
-whatsappPembeli.innerText=
-
-dataPesanan.whatsapp||
-
-"-";
-
-alamatPembeli.innerText=
-
-dataPesanan.alamat||
-
-"-";
-
-namaKurir.innerText=
-
-dataPesanan.kurir||
-
-"-";
-
-nomorResi.innerText=
-
-dataPesanan.resi||
-
-"-";
-
-statusPengiriman.innerText=
-
-dataPesanan.status==="Dikirim"
-
-?
-
-"Sedang Dikirim"
-
-:
-
-dataPesanan.status==="Selesai"
-
-?
-
-"Selesai"
-
-:
-
-"Belum Dikirim";
-
-subtotal.innerText=
-
-formatRupiah(
-
-dataPesanan.subtotal
-
-);
-
-ongkir.innerText=
-
-formatRupiah(
-
-dataPesanan.ongkir
-
-);
-
-diskon.innerText=
-
-formatRupiah(
-
-dataPesanan.diskon
-
-);
-
-totalBayar.innerText=
-
-formatRupiah(
-
-dataPesanan.totalBayar
-
-);
-
-}
-// ======================================
-// PRODUK
-// ======================================
-
-function renderProduk(){
-
-produkContainer.innerHTML="";
-
-const items=
-
-dataPesanan.items||[];
-
-items.forEach(item=>{
-
-const gambar=
-
-Array.isArray(item.gambar)
-
-?item.gambar[0]
-
-:item.gambar||
-
-"assets/no-image.png";
-
-const qty=
-
-Number(item.qty||1);
-
-const harga=
-
-Number(item.harga||0);
-
-produkContainer.innerHTML+=`
-
-<div class="produk-card">
-
-<img
-
-src="${gambar}"
-
-loading="lazy"
-
-onerror="this.src='assets/no-image.png'">
-
-<div class="produk-info">
-
-<h3>
-
-${item.namaProduk}
-
-</h3>
-
-<p>
-
-Jumlah :
-
-${qty}
-
-</p>
-
-<p>
-
-Harga :
-
-${formatRupiah(harga)}
-
-</p>
-
-</div>
-
-<div class="produk-harga">
-
-${formatRupiah(
-
-qty*harga
-
-)}
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-// ======================================
-// BUKTI
-// ======================================
-
-function renderBukti(){
-
-if(!dataPesanan.buktiTransfer){
-
-buktiContainer.innerHTML=`
-
-<div class="empty-state-mini">
-
-Belum ada bukti pembayaran.
-
-</div>
-
-`;
-
-return;
-
+// ============================================================
+// RENDER: BUKTI PEMBAYARAN
+// ============================================================
+
+/**
+ * Menampilkan gambar bukti transfer jika sudah diunggah.
+ * Jika belum ada, tampilkan pesan kosong.
+ */
+function renderBukti() {
+  const url = dataPesanan.buktiTransfer;
+
+  if (!url) {
+    el.buktiContainer.innerHTML =
+      `<div class="empty-state-mini">Belum ada bukti pembayaran.</div>`;
+    return;
+  }
+
+  el.buktiContainer.innerHTML = `
+    <img src="${escapeHTML(url)}" loading="lazy" alt="Bukti Transfer">
+    <br><br>
+    <a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer"
+       class="btn btn-secondary">
+      🔍 Lihat Gambar
+    </a>
+  `;
 }
 
-buktiContainer.innerHTML=`
+// ============================================================
+// RENDER: TIMELINE STATUS
+// ============================================================
 
-<img
+/**
+ * Mengaktifkan langkah-langkah timeline sesuai status pesanan saat ini.
+ * Asumsi: elemen .timeline-item di HTML berjumlah 5, indeks 0–4.
+ *
+ *   0 → Pesanan Dibuat   (selalu aktif)
+ *   1 → Menunggu Pembayaran / Menunggu Verifikasi
+ *   2 → Diproses
+ *   3 → Dikirim
+ *   4 → Selesai
+ */
+function renderTimeline() {
+  const items = [...document.querySelectorAll(".timeline-item")];
 
-src="${dataPesanan.buktiTransfer}"
+  // Reset semua langkah
+  items.forEach(item => item.classList.remove("active"));
 
-loading="lazy">
+  // Indeks langkah aktif berdasarkan status
+  const indeksMaksimal = {
+    "Belum Bayar":          1,
+    "Menunggu Verifikasi":  1,
+    "Diproses":             2,
+    "Dikirim":              3,
+    "Selesai":              4,
+  };
 
-<br><br>
+  const maks = indeksMaksimal[dataPesanan.status] ?? 0;
 
-<a
-
-href="${dataPesanan.buktiTransfer}"
-
-target="_blank"
-
-class="btn btn-secondary">
-
-🔍 Lihat Gambar
-
-</a>
-
-`;
-
-}
-// ======================================
-// STATUS
-// ======================================
-
-function renderStatus(){
-
-const items=
-
-document.querySelectorAll(
-
-".timeline-item"
-
-);
-
-items.forEach(item=>
-
-item.classList.remove(
-
-"active"
-
-)
-
-);
-
-items[0].classList.add(
-
-"active"
-
-);
-
-switch(dataPesanan.status){
-
-case"Belum Bayar":
-
-items[1].classList.add("active");
-
-break;
-
-case"Menunggu Verifikasi":
-
-items[1].classList.add("active");
-
-break;
-
-case"Diproses":
-
-items[1].classList.add("active");
-
-items[2].classList.add("active");
-
-break;
-
-case"Dikirim":
-
-items[1].classList.add("active");
-
-items[2].classList.add("active");
-
-items[3].classList.add("active");
-
-break;
-
-case"Selesai":
-
-items.forEach(item=>
-
-item.classList.add(
-
-"active"
-
-));
-
-break;
-
+  // Aktifkan semua langkah dari 0 hingga maks (inklusif)
+  for (let i = 0; i <= maks && i < items.length; i++) {
+    items[i].classList.add("active");
+  }
 }
 
-}
-// ======================================
-// AKSI
-// ======================================
+// ============================================================
+// RENDER: TOMBOL AKSI
+// ============================================================
 
-function renderAksi(){
+/**
+ * Menampilkan tombol yang relevan sesuai status pesanan:
+ *   - "Hubungi Toko"    → selalu aktif
+ *   - "Upload Bukti"    → hanya saat status "Belum Bayar"
+ *   - "Beri Ulasan"     → hanya saat status "Selesai"
+ */
+function renderAksi() {
+  // Sembunyikan tombol kondisional terlebih dahulu
+  el.uploadBuktiBtn.style.display = "none";
+  el.beriUlasanBtn.style.display  = "none";
 
-uploadBuktiBtn.style.display="none";
+  // Hubungi Toko — selalu tersedia
+  el.hubungiTokoBtn.onclick = () => {
+    if (dataPesanan.whatsappUmkm) {
+      window.open(`https://wa.me/${dataPesanan.whatsappUmkm}`, "_blank", "noopener,noreferrer");
+    } else {
+      showToast("Nomor WhatsApp penjual belum tersedia.");
+    }
+  };
 
-beriUlasanBtn.style.display="none";
+  // Upload bukti hanya saat belum bayar
+  if (dataPesanan.status === "Belum Bayar") {
+    el.uploadBuktiBtn.style.display = "block";
+    el.uploadBuktiBtn.onclick = () => {
+      window.location.href = `upload-bukti.html?id=${pesananId}`;
+    };
+  }
 
-hubungiTokoBtn.onclick=()=>{
-
-if(dataPesanan.whatsappUmkm){
-
-window.open(
-
-"https://wa.me/"+
-
-dataPesanan.whatsappUmkm,
-
-"_blank"
-
-);
-
-}else{
-
-showToast(
-
-"Nomor WhatsApp penjual belum tersedia."
-
-);
-
-}
-
-};
-
-if(
-
-dataPesanan.status==="Belum Bayar"
-
-){
-
-uploadBuktiBtn.style.display="block";
-
-uploadBuktiBtn.onclick=()=>{
-
-window.location.href=
-
-`upload-bukti.html?id=${pesananId}`;
-
-};
-
+  // Beri ulasan hanya saat pesanan selesai
+  if (dataPesanan.status === "Selesai") {
+    el.beriUlasanBtn.style.display = "block";
+    el.beriUlasanBtn.onclick = () => {
+      window.location.href = `beri-ulasan.html?id=${pesananId}`;
+    };
+  }
 }
 
-if(
+// ============================================================
+// UTILITAS
+// ============================================================
 
-dataPesanan.status==="Selesai"
+/**
+ * Memformat Firestore Timestamp atau nilai tanggal lain ke
+ * format lokal Bahasa Indonesia: "dd MMMM yyyy, HH:mm".
+ *
+ * @param {import("firebase/firestore").Timestamp|string|number|null} waktu
+ * @returns {string}
+ */
+function formatTanggal(waktu) {
+  if (!waktu) return "-";
 
-){
+  const tanggal = waktu.toDate ? waktu.toDate() : new Date(waktu);
 
-beriUlasanBtn.style.display="block";
-
-beriUlasanBtn.onclick=()=>{
-
-window.location.href=
-
-`beri-ulasan.html?id=${pesananId}`;
-
-};
-
+  return tanggal.toLocaleString("id-ID", {
+    day:    "2-digit",
+    month:  "long",
+    year:   "numeric",
+    hour:   "2-digit",
+    minute: "2-digit",
+  });
 }
 
-}
-// ======================================
-// FORMAT TANGGAL
-// ======================================
-
-function formatTanggal(waktu){
-
-if(!waktu)return"-";
-
-const tanggal=
-
-waktu.toDate
-
-? waktu.toDate()
-
-:new Date(waktu);
-
-return tanggal.toLocaleString(
-
-"id-ID",
-
-{
-
-day:"2-digit",
-
-month:"long",
-
-year:"numeric",
-
-hour:"2-digit",
-
-minute:"2-digit"
-
+/**
+ * Memformat angka ke format mata uang Rupiah, misal: "Rp 150.000".
+ *
+ * @param {number|string|null|undefined} angka
+ * @returns {string}
+ */
+function formatRupiah(angka) {
+  return "Rp " + Number(angka || 0).toLocaleString("id-ID");
 }
 
-);
-
+/**
+ * Meng-escape karakter HTML khusus untuk mencegah XSS
+ * saat menyisipkan string tidak terpercaya ke innerHTML.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+function escapeHTML(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
-// ======================================
-// FORMAT RUPIAH
-// ======================================
 
-function formatRupiah(angka){
+/**
+ * Menampilkan notifikasi toast sementara di sudut layar.
+ *
+ * @param {string} pesan - Teks yang ditampilkan di toast.
+ */
+function showToast(pesan) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = pesan;
+  document.body.appendChild(toast);
 
-return "Rp "+
+  // Animasi masuk
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add("show"));
+  });
 
-Number(
-
-angka||0
-
-).toLocaleString(
-
-"id-ID"
-
-);
-
+  // Animasi keluar lalu hapus elemen
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3000);
 }
-// ======================================
-// TOAST
-// ======================================
 
-function showToast(message){
-
-const toast=
-
-document.createElement("div");
-
-toast.className="toast";
-
-toast.innerText=message;
-
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.classList.add("show");
-
-},100);
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-setTimeout(()=>{
-
-toast.remove();
-
-},300);
-
-},3000);
-
+/**
+ * Redirect ke halaman daftar pesanan setelah jeda waktu tertentu.
+ *
+ * @param {number} delay - Jeda dalam milidetik sebelum redirect.
+ */
+function redirectKePesananSaya(delay = 0) {
+  setTimeout(() => {
+    window.location.href = "pesanan-saya.html";
+  }, delay);
 }
