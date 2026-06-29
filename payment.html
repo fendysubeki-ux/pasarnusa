@@ -1,549 +1,242 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & meta -->
+  <title>Pembayaran | PasarNusa</title>
+  <meta name="description" content="Selesaikan pembayaran pesanan Anda di PasarNusa.">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Pembayaran | PasarNusa</title>
-
-<meta
-name="description"
-content="Pembayaran Pesanan">
-
-<link rel="stylesheet"
-href="style.css">
-
-<link rel="stylesheet"
-href="payment.css">
-
+  <!-- Stylesheet utama lalu halaman-spesifik -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="payment.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿 PasarNusa
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a
-href="payment.html"
-class="active">
-
-Pembayaran
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-💳 Pembayaran
-
-</div>
-
-<h1>
-
-Selesaikan Pembayaran
-
-</h1>
-
-<p>
-
-Periksa kembali detail pembayaran sebelum melanjutkan.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="payment-layout">
-
-<div class="payment-content">
-
-<div class="form-card">
-
-<h2>
-
-📦 Ringkasan Pesanan
-
-</h2>
-
-<div id="orderContainer">
-
-Loading...
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-💳 Metode Pembayaran
-
-</h2>
-
-<label>
-
-<input
-type="radio"
-name="payment"
-value="transfer"
-checked>
-
-Transfer Bank
-
-</label>
-
-<label>
-
-<input
-type="radio"
-name="payment"
-value="qris">
-
-QRIS
-
-</label>
-
-<label>
-
-<input
-type="radio"
-name="payment"
-value="midtrans"
-disabled>
-
-Midtrans
-
-<span>
-
-(Segera Hadir)
-
-</span>
-
-</label>
-
-</div>
-<div class="payment-summary">
-
-<div class="summary-card">
-
-<h2>
-
-💰 Total
-
-</h2>
-
-<h1 id="totalBayar">
-
-Rp 0
-
-</h1>
-
-<button
-id="bayarBtn"
-class="btn btn-primary">
-
-💳 Bayar Sekarang
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<div class="form-card">
-
-<h2>
-
-🏦 Detail Pembayaran
-
-</h2>
-
-<div class="info-item">
-
-<span>
-
-Metode
-
-</span>
-
-<b id="paymentMethod">
-
-Transfer Bank
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Bank
-
-</span>
-
-<b id="bankName">
-
-BCA
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Nomor Rekening
-
-</span>
-
-<b id="rekening">
-
-1234567890
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Atas Nama
-
-</span>
-
-<b id="atasNama">
-
-PasarNusa
-
-</b>
-
-</div>
-
-<button
-
-id="copyRekening"
-
-class="btn btn-secondary">
-
-📋 Salin Rekening
-
-</button>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-📄 Status Pembayaran
-
-</h2>
-
-<div class="summary-item">
-
-<span>
-
-Status
-
-</span>
-
-<b id="statusPembayaran">
-
-Belum Dibayar
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Batas Pembayaran
-
-</span>
-
-<b id="expiredTime">
-
-24 Jam
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Nomor Pesanan
-
-</span>
-
-<b id="nomorPesanan">
-
--
-
-</b>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-ℹ️ Petunjuk
-
-</h2>
-
-<ul class="payment-note">
-
-<li>
-
-Transfer sesuai nominal yang tertera.
-
-</li>
-
-<li>
-
-Jangan mengubah nominal pembayaran.
-
-</li>
-
-<li>
-
-Setelah transfer silakan upload bukti pembayaran.
-
-</li>
-
-<li>
-
-Pesanan akan diproses setelah pembayaran diverifikasi.
-
-</li>
-
-</ul>
-
-</div>
-<div
-
-id="emptyPayment"
-
-class="empty-state"
-
-style="display:none;">
-
-<div class="empty-icon">
-
-💳
-
-</div>
-
-<h2>
-
-Pesanan Tidak Ditemukan
-
-</h2>
-
-<p>
-
-Pesanan yang akan dibayar tidak tersedia.
-
-</p>
-
-<a
-
-href="pesanan-saya.html"
-
-class="btn btn-primary">
-
-Kembali ke Pesanan
-
-</a>
-
-</div>
-<template id="loadingPayment">
-
-<div class="form-card skeleton">
-
-<div class="image-skeleton"></div>
-
-<div class="content-skeleton">
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-</div>
-
-</div>
-
-</template>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-
-🌿 PasarNusa
-
-</h3>
-
-<p>
-
-Marketplace UMKM Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-Menu
-
-</h4>
-
-<ul>
-
-<li><a href="index.html">Beranda</a></li>
-
-<li><a href="produk.html">Produk</a></li>
-
-<li><a href="pesanan-saya.html">Pesanan Saya</a></li>
-
-<li><a href="payment.html">Pembayaran</a></li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>
-
-Bantuan
-
-</h4>
-
-<ul>
-
-<li><a href="faq.html">FAQ</a></li>
-
-<li><a href="kontak.html">Kontak</a></li>
-
-<li><a href="kebijakan.html">Privasi</a></li>
-
-<li><a href="syarat.html">Syarat</a></li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-
-<script src="script.js"></script>
-
-<script
-type="module"
-src="payment.js">
-
-</script>
+  <!-- ===================== NAVBAR ===================== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <a href="index.html" class="logo">🌿 PasarNusa</a>
+
+        <nav class="navbar-menu" aria-label="Menu utama">
+          <a href="index.html">Beranda</a>
+          <a href="payment.html" class="active" aria-current="page">Pembayaran</a>
+        </nav>
+
+        <div class="navbar-action">
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero-page" aria-label="Judul halaman">
+    <div class="container">
+      <div class="hero-page-content">
+        <span class="badge">💳 Pembayaran</span>
+        <h1>Selesaikan Pembayaran</h1>
+        <p>Periksa kembali detail pembayaran sebelum melanjutkan.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KONTEN UTAMA ===================== -->
+  <main class="section">
+    <div class="container">
+      <div class="payment-layout">
+
+        <!-- Kolom kiri: ringkasan & metode -->
+        <div class="payment-content">
+
+          <!-- Ringkasan pesanan (diisi oleh payment.js) -->
+          <div class="form-card">
+            <h2>📦 Ringkasan Pesanan</h2>
+            <div id="orderContainer" aria-live="polite">Loading...</div>
+          </div>
+
+          <!-- Pilihan metode pembayaran -->
+          <div class="form-card">
+            <h2>💳 Metode Pembayaran</h2>
+
+            <fieldset>
+              <legend class="sr-only">Pilih metode pembayaran</legend>
+
+              <label>
+                <input type="radio" name="payment" value="transfer" checked>
+                Transfer Bank
+              </label>
+
+              <label>
+                <input type="radio" name="payment" value="qris">
+                QRIS
+              </label>
+
+              <!-- Midtrans belum tersedia -->
+              <label class="disabled">
+                <input type="radio" name="payment" value="midtrans" disabled>
+                Midtrans <span class="badge-soon">(Segera Hadir)</span>
+              </label>
+            </fieldset>
+          </div>
+
+          <!-- Total & tombol bayar -->
+          <div class="payment-summary">
+            <div class="summary-card">
+              <h2>💰 Total</h2>
+              <p id="totalBayar" class="total-amount">Rp 0</p>
+              <button id="bayarBtn" class="btn btn-primary" type="button">
+                💳 Bayar Sekarang
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /payment-content -->
+
+        <!-- Kolom kanan: detail, status, petunjuk -->
+        <aside class="payment-sidebar">
+
+          <!-- Detail rekening tujuan -->
+          <div class="form-card">
+            <h2>🏦 Detail Pembayaran</h2>
+
+            <dl class="info-list">
+              <div class="info-item">
+                <dt>Metode</dt>
+                <dd id="paymentMethod">Transfer Bank</dd>
+              </div>
+              <div class="info-item">
+                <dt>Bank</dt>
+                <dd id="bankName">BCA</dd>
+              </div>
+              <div class="info-item">
+                <dt>Nomor Rekening</dt>
+                <dd id="rekening">1234567890</dd>
+              </div>
+              <div class="info-item">
+                <dt>Atas Nama</dt>
+                <dd id="atasNama">PasarNusa</dd>
+              </div>
+            </dl>
+
+            <button id="copyRekening" class="btn btn-secondary" type="button">
+              📋 Salin Rekening
+            </button>
+          </div>
+
+          <!-- Status pembayaran -->
+          <div class="form-card">
+            <h2>📄 Status Pembayaran</h2>
+
+            <dl class="info-list">
+              <div class="summary-item">
+                <dt>Status</dt>
+                <dd id="statusPembayaran">Belum Dibayar</dd>
+              </div>
+              <div class="summary-item">
+                <dt>Batas Pembayaran</dt>
+                <dd id="expiredTime">24 Jam</dd>
+              </div>
+              <div class="summary-item">
+                <dt>Nomor Pesanan</dt>
+                <dd id="nomorPesanan">-</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Petunjuk transfer -->
+          <div class="form-card">
+            <h2>ℹ️ Petunjuk</h2>
+            <ul class="payment-note">
+              <li>Transfer sesuai nominal yang tertera.</li>
+              <li>Jangan mengubah nominal pembayaran.</li>
+              <li>Setelah transfer, unggah bukti pembayaran.</li>
+              <li>Pesanan diproses setelah pembayaran diverifikasi.</li>
+            </ul>
+          </div>
+
+        </aside><!-- /payment-sidebar -->
+
+      </div><!-- /payment-layout -->
+
+      <!-- State kosong: tampil jika pesanan tidak ditemukan -->
+      <div id="emptyPayment" class="empty-state" hidden>
+        <div class="empty-icon" aria-hidden="true">💳</div>
+        <h2>Pesanan Tidak Ditemukan</h2>
+        <p>Pesanan yang akan dibayar tidak tersedia.</p>
+        <a href="pesanan-saya.html" class="btn btn-primary">Kembali ke Pesanan</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+
+        <div>
+          <h3>🌿 PasarNusa</h3>
+          <p>Marketplace UMKM Indonesia.</p>
+        </div>
+
+        <nav aria-label="Menu footer">
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+            <li><a href="pesanan-saya.html">Pesanan Saya</a></li>
+            <li><a href="payment.html">Pembayaran</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Menu bantuan">
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+            <li><a href="kebijakan.html">Privasi</a></li>
+            <li><a href="syarat.html">Syarat</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== BACK TO TOP ===================== -->
+  <button id="backTop" class="back-top" type="button" aria-label="Kembali ke atas">↑</button>
+
+  <!-- ===================== TEMPLATE SKELETON LOADING ===================== -->
+  <!--
+    Template ini di-clone oleh payment.js saat data masih dimuat.
+    Tidak dirender langsung oleh browser karena berada di dalam <template>.
+  -->
+  <template id="loadingPayment">
+    <div class="form-card skeleton" aria-hidden="true">
+      <div class="image-skeleton"></div>
+      <div class="content-skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Script global lalu modul halaman ini -->
+  <script src="script.js"></script>
+  <script type="module" src="payment.js"></script>
 
 </body>
-
 </html>
