@@ -1,723 +1,298 @@
 <!DOCTYPE html>
+<!--
+  detail-pesanan.html — Halaman Detail Pesanan | PasarNusa
+  =========================================================
+  Menampilkan informasi lengkap pesanan: status, data pembeli,
+  produk, bukti pembayaran, pengiriman, dan ringkasan pembayaran.
 
+  Dependensi:
+    - style.css         → Gaya global PasarNusa
+    - detail-pesanan.css → Gaya khusus halaman ini
+    - script.js         → Utilitas umum (theme toggle, back-to-top, dsb.)
+    - detail-pesanan.js → Logika pengambilan & render data pesanan (ES module)
+-->
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & Browser -->
+  <title>Detail Pesanan | PasarNusa</title>
+  <meta name="description" content="Lihat status, pembayaran, pengiriman, dan rincian produk pesanan Anda di PasarNusa.">
+  <meta name="theme-color" content="#16a34a">
 
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/logo.png" type="image/png">
 
-<title>Detail Pesanan | PasarNusa</title>
+  <!-- Google Fonts — Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-<meta
-name="description"
-content="Detail pesanan PasarNusa">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="detail-pesanan.css">
-
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="detail-pesanan.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="pesanan-saya.html">
-
-Pesanan Saya
-
-</a>
-
-<a
-href="#"
-class="active">
-
-Detail Pesanan
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-📦 Detail Pesanan
-
-</div>
-
-<h1>
-
-Informasi Pesanan
-
-</h1>
-
-<p>
-
-Lihat status, pembayaran, pengiriman, dan rincian produk dalam satu halaman.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<a href="pesanan-saya.html">
-
-Pesanan Saya
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Detail Pesanan
-
-</span>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="detail-layout">
-
-<div class="detail-content">
-
-<div class="form-card">
-
-<h2>
-
-📦 Informasi Pesanan
-
-</h2>
-
-<div class="info-item">
-
-<span>
-
-Nomor Pesanan
-
-</span>
-
-<b id="nomorPesanan">
-
--
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Status
-
-</span>
-
-<b id="statusPesanan">
-
-Belum Bayar
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Tanggal
-
-</span>
-
-<b id="tanggalPesanan">
-
--
-
-</b>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-📍 Status Pesanan
-
-</h2>
-
-<div
-id="timelinePesanan"
-class="timeline">
-
-<div class="timeline-item active">
-
-<span>
-
-📝
-
-</span>
-
-<p>
-
-Pesanan Dibuat
-
-</p>
-
-</div>
-
-<div class="timeline-item">
-
-<span>
-
-💳
-
-</span>
-
-<p>
-
-Pembayaran
-
-</p>
-
-</div>
-
-<div class="timeline-item">
-
-<span>
-
-📦
-
-</span>
-
-<p>
-
-Diproses
-
-</p>
-
-</div>
-
-<div class="timeline-item">
-
-<span>
-
-🚚
-
-</span>
-
-<p>
-
-Dikirim
-
-</p>
-
-</div>
-
-<div class="timeline-item">
-
-<span>
-
-⭐
-
-</span>
-
-<p>
-
-Selesai
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-👤 Data Pembeli
-
-</h2>
-
-<div class="info-item">
-
-<span>
-
-Nama
-
-</span>
-
-<b id="namaPembeli">
-
--
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-WhatsApp
-
-</span>
-
-<b id="whatsappPembeli">
-
--
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Alamat
-
-</span>
-
-<b id="alamatPembeli">
-
--
-
-</b>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-🛍 Produk Dibeli
-
-</h2>
-
-<div
-
-id="produkContainer"
-
-class="produk-list">
-
-<div class="loading-card">
-
-Memuat produk...
-
-</div>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-💳 Bukti Pembayaran
-
-</h2>
-
-<div
-
-id="buktiContainer">
-
-<div class="empty-state-mini">
-
-Belum ada bukti pembayaran.
-
-</div>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-🚚 Pengiriman
-
-</h2>
-
-<div class="info-item">
-
-<span>
-
-Kurir
-
-</span>
-
-<b id="namaKurir">
-
--
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Nomor Resi
-
-</span>
-
-<b id="nomorResi">
-
--
-
-</b>
-
-</div>
-
-<div class="info-item">
-
-<span>
-
-Status Pengiriman
-
-</span>
-
-<b id="statusPengiriman">
-
-Belum Dikirim
-
-</b>
-
-</div>
-
-</div>
-
-</div>
-<div class="detail-summary">
-
-<div class="summary-card">
-
-<h2>
-
-💰 Ringkasan Pembayaran
-
-</h2>
-
-<div class="summary-item">
-
-<span>
-
-Subtotal
-
-</span>
-
-<b id="subtotal">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Ongkir
-
-</span>
-
-<b id="ongkir">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Diskon
-
-</span>
-
-<b id="diskon">
-
-Rp 0
-
-</b>
-
-</div>
-
-<hr>
-
-<div class="summary-total">
-
-<span>
-
-Total Bayar
-
-</span>
-
-<h2 id="totalBayar">
-
-Rp 0
-
-</h2>
-
-</div>
-<div
-
-id="aksiPesanan"
-
-class="action-box">
-
-<button
-
-id="uploadBuktiBtn"
-
-class="btn btn-primary"
-
-style="display:none;">
-
-💳 Upload Bukti
-
-</button>
-
-<button
-
-id="hubungiTokoBtn"
-
-class="btn btn-secondary">
-
-💬 Hubungi Penjual
-
-</button>
-
-<button
-
-id="beriUlasanBtn"
-
-class="btn btn-secondary"
-
-style="display:none;">
-
-⭐ Beri Ulasan
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<div
-
-id="emptyDetail"
-
-class="empty-state"
-
-style="display:none;">
-
-<div class="empty-icon">
-
-📦
-
-</div>
-
-<h2>
-
-Pesanan Tidak Ditemukan
-
-</h2>
-
-<p>
-
-Pesanan yang Anda cari tidak tersedia.
-
-</p>
-
-<a
-
-href="pesanan-saya.html"
-
-class="btn btn-primary">
-
-Kembali ke Pesanan
-
-</a>
-
-</div>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-
-<script src="script.js"></script>
-
-<script
-
-type="module"
-
-src="detail-pesanan.js">
-
-</script>
+  <!-- ═══════════════════════════════════════════
+       NAVIGASI UTAMA
+  ════════════════════════════════════════════ -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo" aria-label="PasarNusa — Halaman Beranda">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Menu navigasi desktop -->
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="pesanan-saya.html">Pesanan Saya</a>
+          <a href="#" class="active" aria-current="page">Detail Pesanan</a>
+        </nav>
+
+        <!-- Tombol aksi kanan -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+        <!-- Hamburger mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════════
+       HERO HALAMAN
+  ════════════════════════════════════════════ -->
+  <section class="hero-page" aria-label="Judul halaman">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">📦 Detail Pesanan</div>
+        <h1>Informasi Pesanan</h1>
+        <p>Lihat status, pembayaran, pengiriman, dan rincian produk dalam satu halaman.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       BREADCRUMB
+  ════════════════════════════════════════════ -->
+  <nav class="breadcrumb" aria-label="Navigasi lokasi halaman">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <a href="pesanan-saya.html">Pesanan Saya</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Detail Pesanan</span>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════
+       KONTEN UTAMA — DETAIL PESANAN
+       Tersembunyi saat pesanan tidak ditemukan.
+  ════════════════════════════════════════════ -->
+  <main id="mainDetail" class="section">
+    <div class="container">
+      <div class="detail-layout">
+
+        <!-- ── Kolom Kiri: Detail ── -->
+        <div class="detail-content">
+
+          <!-- 1. Informasi Pesanan -->
+          <div class="form-card">
+            <h2>📦 Informasi Pesanan</h2>
+            <dl class="info-list">
+              <div class="info-item">
+                <dt>Nomor Pesanan</dt>
+                <dd id="nomorPesanan">-</dd>
+              </div>
+              <div class="info-item">
+                <dt>Status</dt>
+                <dd id="statusPesanan">Belum Bayar</dd>
+              </div>
+              <div class="info-item">
+                <dt>Tanggal</dt>
+                <dd id="tanggalPesanan">-</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- 2. Timeline Status Pesanan -->
+          <div class="form-card">
+            <h2>📍 Status Pesanan</h2>
+            <!--
+              .timeline-item.active  → langkah yang sudah tercapai
+              Diperbarui secara dinamis oleh detail-pesanan.js
+            -->
+            <ol id="timelinePesanan" class="timeline" aria-label="Tahapan pesanan">
+              <li class="timeline-item active"><span aria-hidden="true">📝</span><p>Pesanan Dibuat</p></li>
+              <li class="timeline-item"><span aria-hidden="true">💳</span><p>Pembayaran</p></li>
+              <li class="timeline-item"><span aria-hidden="true">📦</span><p>Diproses</p></li>
+              <li class="timeline-item"><span aria-hidden="true">🚚</span><p>Dikirim</p></li>
+              <li class="timeline-item"><span aria-hidden="true">⭐</span><p>Selesai</p></li>
+            </ol>
+          </div>
+
+          <!-- 3. Data Pembeli -->
+          <div class="form-card">
+            <h2>👤 Data Pembeli</h2>
+            <dl class="info-list">
+              <div class="info-item">
+                <dt>Nama</dt>
+                <dd id="namaPembeli">-</dd>
+              </div>
+              <div class="info-item">
+                <dt>WhatsApp</dt>
+                <dd id="whatsappPembeli">-</dd>
+              </div>
+              <div class="info-item">
+                <dt>Alamat</dt>
+                <dd id="alamatPembeli">-</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- 4. Produk Dibeli — diisi oleh JS -->
+          <div class="form-card">
+            <h2>🛍 Produk Dibeli</h2>
+            <div id="produkContainer" class="produk-list" aria-live="polite" aria-busy="true">
+              <p class="loading-card">Memuat produk…</p>
+            </div>
+          </div>
+
+          <!-- 5. Bukti Pembayaran — diisi oleh JS -->
+          <div class="form-card">
+            <h2>💳 Bukti Pembayaran</h2>
+            <div id="buktiContainer" aria-live="polite">
+              <p class="empty-state-mini">Belum ada bukti pembayaran.</p>
+            </div>
+          </div>
+
+          <!-- 6. Informasi Pengiriman -->
+          <div class="form-card">
+            <h2>🚚 Pengiriman</h2>
+            <dl class="info-list">
+              <div class="info-item">
+                <dt>Kurir</dt>
+                <dd id="namaKurir">-</dd>
+              </div>
+              <div class="info-item">
+                <dt>Nomor Resi</dt>
+                <dd id="nomorResi">-</dd>
+              </div>
+              <div class="info-item">
+                <dt>Status Pengiriman</dt>
+                <dd id="statusPengiriman">Belum Dikirim</dd>
+              </div>
+            </dl>
+          </div>
+
+        </div><!-- /detail-content -->
+
+
+        <!-- ── Kolom Kanan: Ringkasan & Aksi ── -->
+        <aside class="detail-summary" aria-label="Ringkasan pembayaran">
+          <div class="summary-card">
+            <h2>💰 Ringkasan Pembayaran</h2>
+
+            <dl class="summary-list">
+              <div class="summary-item">
+                <dt>Subtotal</dt>
+                <dd id="subtotal">Rp 0</dd>
+              </div>
+              <div class="summary-item">
+                <dt>Ongkir</dt>
+                <dd id="ongkir">Rp 0</dd>
+              </div>
+              <div class="summary-item">
+                <dt>Diskon</dt>
+                <dd id="diskon">Rp 0</dd>
+              </div>
+            </dl>
+
+            <hr>
+
+            <div class="summary-total">
+              <span>Total Bayar</span>
+              <h2 id="totalBayar">Rp 0</h2>
+            </div>
+
+            <!-- Tombol aksi — visibilitas dikontrol oleh JS sesuai status pesanan -->
+            <div id="aksiPesanan" class="action-box">
+              <!--
+                hidden   → tombol tidak tampil (gunakan atribut HTML hidden,
+                           bukan style="display:none" agar lebih semantik;
+                           JS tetap bisa toggle dengan el.hidden = true/false)
+              -->
+              <button id="uploadBuktiBtn" class="btn btn-primary" hidden>
+                💳 Upload Bukti
+              </button>
+              <button id="hubungiTokoBtn" class="btn btn-secondary">
+                💬 Hubungi Penjual
+              </button>
+              <button id="beriUlasanBtn" class="btn btn-secondary" hidden>
+                ⭐ Beri Ulasan
+              </button>
+            </div>
+
+          </div>
+        </aside>
+
+      </div><!-- /detail-layout -->
+    </div><!-- /container -->
+  </main>
+
+
+  <!-- ═══════════════════════════════════════════
+       EMPTY STATE — tampil saat pesanan tidak ada
+       Dikontrol oleh detail-pesanan.js
+  ════════════════════════════════════════════ -->
+  <div id="emptyDetail" class="empty-state" hidden aria-live="polite">
+    <div class="empty-icon" aria-hidden="true">📦</div>
+    <h2>Pesanan Tidak Ditemukan</h2>
+    <p>Pesanan yang Anda cari tidak tersedia atau sudah dihapus.</p>
+    <a href="pesanan-saya.html" class="btn btn-primary">Kembali ke Pesanan</a>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun dengan ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ── Tombol kembali ke atas ── -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas halaman">↑</button>
+
+
+  <!-- ═══════════════════════════════════════════
+       SCRIPT
+       script.js      → utilitas global (non-module, dimuat duluan)
+       detail-pesanan.js → logika halaman ini (ES module)
+  ════════════════════════════════════════════ -->
+  <script src="script.js"></script>
+  <script type="module" src="detail-pesanan.js"></script>
 
 </body>
-
 </html>
