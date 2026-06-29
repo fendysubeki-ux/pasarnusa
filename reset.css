@@ -1,106 +1,81 @@
-/* ==========================================================================
-   PasarNusa — CSS Reset
-   reset.css
-   Menormalkan tampilan antar-browser dan menghapus style bawaan yang
-   tidak konsisten. Jangan tambahkan style dekoratif di sini — hanya reset.
-   ========================================================================== */
+/* reset.css */
 
-/* --------------------------------------------------------------------------
-   Box Model Universal
-   border-box memastikan padding & border tidak menambah lebar elemen.
--------------------------------------------------------------------------- */
 *,
 *::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*::after{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-/* --------------------------------------------------------------------------
-   Dokumen
--------------------------------------------------------------------------- */
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%; /* cegah perbesaran teks otomatis di iOS */
-  tab-size: 4;
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+  tab-size:4;
 }
 
-/* --------------------------------------------------------------------------
-   Halaman
--------------------------------------------------------------------------- */
-body {
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;   /* rendering teks lebih tajam (WebKit) */
-  -moz-osx-font-smoothing: grayscale;    /* rendering teks lebih tajam (Firefox/macOS) */
+body{
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
 }
 
-/* --------------------------------------------------------------------------
-   Elemen Media
-   display:block menghilangkan spasi bawah bawaan (inline gap).
--------------------------------------------------------------------------- */
 img,
 picture,
 video,
 canvas,
-svg {
-  display: block;
-  max-width: 100%;
+svg{
+  display:block;
+  max-width:100%;
+  height:auto;
 }
 
-/* --------------------------------------------------------------------------
-   Tautan
--------------------------------------------------------------------------- */
-a {
-  text-decoration: none;
-  color: inherit;
+a{
+  color:inherit;
+  text-decoration:none;
 }
 
-/* --------------------------------------------------------------------------
-   Daftar
--------------------------------------------------------------------------- */
 ul,
-ol {
-  list-style: none;
+ol{
+  list-style:none;
 }
 
-/* --------------------------------------------------------------------------
-   Elemen Form
-   font:inherit memastikan input mengikuti tipografi halaman, bukan default browser.
-   outline:none dihapus di sini; tambahkan kembali :focus-visible di base.css
-   agar aksesibilitas keyboard tetap terjaga.
--------------------------------------------------------------------------- */
 button,
 input,
 textarea,
-select {
-  font: inherit;
-  border: none;
-  background: none;
+select{
+  font:inherit;
+  color:inherit;
+  border:0;
+  background:transparent;
 }
 
-button {
-  cursor: pointer;
+button{
+  cursor:pointer;
 }
 
-textarea {
-  resize: vertical; /* hanya izinkan resize vertikal — lebih terkontrol */
+button:disabled{
+  cursor:not-allowed;
 }
 
-/* --------------------------------------------------------------------------
-   Tabel
--------------------------------------------------------------------------- */
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+input,
+textarea,
+select{
+  outline:none;
 }
 
-/* --------------------------------------------------------------------------
-   Teks Terseleksi
-   Gunakan token warna dari variables.css jika sudah diimpor sebelumnya,
-   atau hardcode di sini sebagai fallback aman.
--------------------------------------------------------------------------- */
-::selection {
-  background: var(--color-primary, #16a34a);
-  color: var(--color-white, #ffffff);
+textarea{
+  resize:vertical;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  border-spacing:0;
+}
+
+::selection{
+  background:var(--color-primary,#16a34a);
+  color:var(--color-white,#fff);
 }
