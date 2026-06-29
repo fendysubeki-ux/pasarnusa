@@ -1,1060 +1,361 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <!-- =============================================
+    META & SEO
+  ============================================= -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lihat informasi lengkap produk UMKM Indonesia di PasarNusa.">
+  <meta name="keywords" content="UMKM, Produk Lokal, Marketplace Indonesia, PasarNusa">
+  <meta name="author" content="PasarNusa">
+  <meta name="theme-color" content="#16a34a">
 
-<meta charset="UTF-8">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Detail Produk | PasarNusa">
+  <meta property="og:description" content="Belanja produk UMKM Indonesia dengan mudah di PasarNusa.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/logo.png">
+  <meta property="og:locale" content="id_ID">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <title>Detail Produk | PasarNusa</title>
 
-<title>Detail Produk | PasarNusa</title>
+  <!-- =============================================
+    FAVICON
+  ============================================= -->
+  <link rel="icon" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
 
-<meta
-name="description"
-content="Lihat informasi lengkap produk UMKM Indonesia di PasarNusa.">
+  <!-- =============================================
+    FONTS — Plus Jakarta Sans (display + body)
+  ============================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<meta
-name="keywords"
-content="UMKM, Produk Lokal, Marketplace Indonesia, PasarNusa">
-
-<meta
-name="author"
-content="PasarNusa">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<meta
-property="og:title"
-content="Detail Produk | PasarNusa">
-
-<meta
-property="og:description"
-content="Belanja produk UMKM Indonesia dengan mudah di PasarNusa.">
-
-<meta
-property="og:type"
-content="website">
-
-<meta
-property="og:image"
-content="assets/logo.png">
-
-<meta
-property="og:locale"
-content="id_ID">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="apple-touch-icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link rel="stylesheet" href="produk-detail.css">
-
+  <!-- =============================================
+    STYLESHEETS
+  ============================================= -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="produk-detail.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a
-href="produk.html"
-class="active">
-
-Produk
-
-</a>
-
-<a href="kategori.html">
-
-Kategori
-
-</a>
-
-<a href="wilayah.html">
-
-Wilayah
-
-</a>
-
-<a href="tentang.html">
-
-Tentang
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="keranjang.html"
-class="btn btn-secondary">
-
-🛒 Keranjang
-
-</a>
-
-<a
-href="login.html"
-class="btn btn-primary">
-
-Masuk
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-🛍️ Produk UMKM
-
-</div>
-
-<h1 id="heroTitle">
-
-Memuat Produk...
-
-</h1>
-
-<p>
-
-Temukan produk terbaik dari UMKM Indonesia dengan kualitas terpercaya.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span
-id="breadcrumbNama">
-
-Detail Produk
-
-</span>
-
-</div>
-
-</section>
-<!-- ==========================================
-DETAIL PRODUK
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="detail-grid">
-
-<!-- ==========================================
-GALERI
-========================================== -->
-
-<div class="detail-gallery">
-
-<div class="main-image">
-
-<img
-
-id="gambarUtama"
-
-src="assets/no-image.png"
-
-alt="Produk"
-
-loading="lazy">
-
-<div
-
-id="badgeProduk"
-
-class="product-badge">
-
-🔥 Terlaris
-
-</div>
-
-</div>
-
-<div
-
-id="thumbnailProduk"
-
-class="thumbnail-list">
-
-<!-- Thumbnail -->
-
-</div>
-
-</div>
-
-<!-- ==========================================
-INFORMASI
-========================================== -->
-
-<div class="detail-content">
-
-<div
-
-id="kategoriProduk"
-
-class="product-category">
-
-Kategori
-
-</div>
-
-<h1
-
-id="namaProduk"
-
-class="detail-title">
-
-Memuat Produk...
-
-</h1>
-
-<div class="detail-meta">
-
-<span id="ratingProduk">
-
-⭐ 0
-
-</span>
-
-<span id="reviewProduk">
-
-0 Review
-
-</span>
-
-<span id="terjualProduk">
-
-🔥 0 Terjual
-
-</span>
-
-</div>
-
-<div
-
-id="hargaProduk"
-
-class="detail-price">
-
-Rp 0
-
-</div>
-
-<div
-
-id="stokProduk"
-
-class="detail-stock">
-
-📦 Stok : 0
-
-</div>
-
-<div
-
-id="lokasiProduk"
-
-class="detail-location">
-
-📍 Indonesia
-
-</div>
-
-<div
-
-id="namaToko"
-
-class="detail-store">
-
-🏪 Nama UMKM
-
-</div>
-
-<div
-
-id="affiliateBadge"
-
-class="affiliate-box">
-
-</div>
-
-<p
-
-id="deskripsiProduk"
-
-class="detail-description">
-
-Memuat deskripsi produk...
-
-</p>
-
-</div>
-
-<!-- ==========================================
-BUY BOX
-========================================== -->
-
-<div class="buy-box">
-
-<h3>
-
-Ringkasan Pembelian
-
-</h3>
-
-<div
-
-id="buyHarga"
-
-class="buy-price">
-
-Rp 0
-
-</div>
-
-<div class="qty-box">
-
-<button
-
-id="minusQty"
-
-type="button">
-
-−
-
-</button>
-
-<input
-
-type="number"
-
-id="jumlahProduk"
-
-value="1"
-
-min="1">
-
-<button
-
-id="plusQty"
-
-type="button">
-
-+
-
-</button>
-
-</div>
-
-<button
-
-id="addToCart"
-
-class="btn btn-primary">
-
-🛒 Tambah ke Keranjang
-
-</button>
-
-<button
-
-id="buyNow"
-
-class="btn btn-secondary">
-
-⚡ Beli Sekarang
-
-</button>
-
-<button
-
-id="btnFavorit"
-
-class="btn btn-secondary">
-
-❤️ Simpan Favorit
-
-</button>
-
-<a
-
-id="chatWA"
-
-target="_blank"
-
-class="btn btn-secondary">
-
-💬 Hubungi Penjual
-
-</a>
-
-<button
-
-id="shareProduk"
-
-class="btn btn-secondary">
-
-📤 Bagikan
-
-</button>
-
-<p
-
-id="wishlistCount"
-
-class="wishlist-count">
-
-❤️ Disimpan 0 pengguna
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-INFORMASI PENGIRIMAN
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="info-card">
-
-<h2>
-
-📦 Informasi Pengiriman
-
-</h2>
-
-<div class="info-grid">
-
-<div class="info-item">
-
-<h4>
-
-Berat Produk
-
-</h4>
-
-<p id="beratProduk">
-
-0 Gram
-
-</p>
-
-</div>
-
-<div class="info-item">
-
-<h4>
-
-Asal Pengiriman
-
-</h4>
-
-<p id="asalProduk">
-
-Indonesia
-
-</p>
-
-</div>
-
-<div class="info-item">
-
-<h4>
-
-Estimasi
-
-</h4>
-
-<p>
-
-2 - 5 Hari Kerja
-
-</p>
-
-</div>
-
-<div class="info-item">
-
-<h4>
-
-Kurir
-
-</h4>
-
-<p>
-
-JNE • J&T • SiCepat • POS
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-PROFIL UMKM
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="store-card">
-
-<div class="store-header">
-
-<div class="store-logo">
-
-🏪
-
-</div>
-
-<div>
-
-<h2 id="storeName">
-
-Nama UMKM
-
-</h2>
-
-<p id="storeLocation">
-
-Indonesia
-
-</p>
-
-<p id="storeJoin">
-
-Bergabung sejak 2026
-
-</p>
-
-</div>
-
-</div>
-
-<div class="store-info">
-
-<div>
-
-<h4>
-
-⭐ Rating
-
-</h4>
-
-<p id="storeRating">
-
-0.0
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-🛍 Produk
-
-</h4>
-
-<p id="storeProduk">
-
-0 Produk
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-👥 Followers
-
-</h4>
-
-<p id="storeFollowers">
-
-0
-
-</p>
-
-</div>
-
-</div>
-
-<div class="store-action">
-
-<a
-
-id="linkToko"
-
-href="#"
-
-class="btn btn-primary">
-
-🏪 Kunjungi Toko
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-PRODUK LAIN
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="section-title">
-
-<h2>
-
-🏪 Produk Lain dari Toko Ini
-
-</h2>
-
-<p>
-
-Temukan produk lainnya dari UMKM yang sama.
-
-</p>
-
-</div>
-
-</div>
-
-<div
-
-id="produkToko"
-
-class="product-grid">
-
-<div class="loading-card">
-
-Memuat produk...
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-PRODUK TERKAIT
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="section-title">
-
-<h2>
-
-🛍 Produk Terkait
-
-</h2>
-
-<p>
-
-Produk lain dengan kategori yang sama.
-
-</p>
-
-</div>
-
-</div>
-
-<div
-
-id="produkTerkait"
-
-class="product-grid">
-
-<div class="loading-card">
-
-Memuat produk...
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-ULASAN PEMBELI
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="review-card">
-
-<div class="section-header">
-
-<div class="section-title">
-
-<h2>
-
-⭐ Ulasan Pembeli
-
-</h2>
-
-<p>
-
-Pengalaman pelanggan setelah membeli produk ini.
-
-</p>
-
-</div>
-
-</div>
-
-<div
-id="reviewContainer"
-class="review-list">
-
-<div class="empty-state">
-
-<div class="empty-icon">
-
-⭐
-
-</div>
-
-<h3>
-
-Belum Ada Ulasan
-
-</h3>
-
-<p>
-
-Jadilah pembeli pertama yang memberikan ulasan.
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!-- ==========================================
-FOOTER
-========================================== -->
-
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-
-🌿 PasarNusa
-
-</h3>
-
-<p>
-
-Marketplace UMKM Indonesia yang menghubungkan penjual lokal dengan pembeli di seluruh Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-Navigasi
-
-</h4>
-
-<ul>
-
-<li>
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-</li>
-
-<li>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kategori.html">
-
-Kategori
-
-</a>
-
-</li>
-
-<li>
-
-<a href="tentang.html">
-
-Tentang
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>
-
-Bantuan
-
-</h4>
-
-<ul>
-
-<li>
-
-<a href="faq.html">
-
-FAQ
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kontak.html">
-
-Kontak
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kebijakan.html">
-
-Kebijakan Privasi
-
-</a>
-
-</li>
-
-<li>
-
-<a href="syarat.html">
-
-Syarat & Ketentuan
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-
-<script src="script.js"></script>
-
-<script type="module" src="produk-detail.js"></script>
+  <!-- =============================================
+    NAVBAR
+  ============================================= -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Navigasi Utama -->
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="produk.html" class="active" aria-current="page">Produk</a>
+          <a href="kategori.html">Kategori</a>
+          <a href="wilayah.html">Wilayah</a>
+          <a href="tentang.html">Tentang</a>
+        </nav>
+
+        <!-- Aksi Navbar -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="keranjang.html" class="btn btn-secondary">🛒 Keranjang</a>
+          <a href="login.html" class="btn btn-primary">Masuk</a>
+        </div>
+
+        <!-- Tombol Menu Mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- =============================================
+    HERO — Judul halaman produk
+  ============================================= -->
+  <section class="hero-page" aria-label="Judul produk">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">🛍️ Produk UMKM</div>
+        <h1 id="heroTitle">Memuat Produk...</h1>
+        <p>Temukan produk terbaik dari UMKM Indonesia dengan kualitas terpercaya.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+    BREADCRUMB — Navigasi halaman
+  ============================================= -->
+  <nav class="breadcrumb" aria-label="Jejak halaman">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <a href="produk.html">Produk</a>
+      <span aria-hidden="true">/</span>
+      <span id="breadcrumbNama" aria-current="page">Detail Produk</span>
+    </div>
+  </nav>
+
+  <!-- =============================================
+    DETAIL PRODUK — Galeri, Info, dan Beli
+  ============================================= -->
+  <section class="section" aria-label="Detail produk">
+    <div class="container">
+      <div class="detail-grid">
+
+        <!-- Galeri Gambar Produk -->
+        <div class="detail-gallery">
+          <div class="main-image">
+            <img id="gambarUtama" src="assets/no-image.png" alt="Gambar produk" loading="lazy" width="600" height="600">
+            <div id="badgeProduk" class="product-badge">🔥 Terlaris</div>
+          </div>
+          <!-- Thumbnail diisi via JS -->
+          <div id="thumbnailProduk" class="thumbnail-list" role="list" aria-label="Gambar produk lainnya"></div>
+        </div>
+
+        <!-- Informasi Produk -->
+        <div class="detail-content">
+          <div id="kategoriProduk" class="product-category">Kategori</div>
+          <h1 id="namaProduk" class="detail-title">Memuat Produk...</h1>
+
+          <div class="detail-meta">
+            <span id="ratingProduk">⭐ 0</span>
+            <span id="reviewProduk">0 Ulasan</span>
+            <span id="terjualProduk">🔥 0 Terjual</span>
+          </div>
+
+          <div id="hargaProduk" class="detail-price">Rp 0</div>
+          <div id="stokProduk" class="detail-stock">📦 Stok: 0</div>
+          <div id="lokasiProduk" class="detail-location">📍 Indonesia</div>
+          <div id="namaToko" class="detail-store">🏪 Nama UMKM</div>
+
+          <!-- Badge afiliasi (jika ada) -->
+          <div id="affiliateBadge" class="affiliate-box" aria-live="polite"></div>
+
+          <p id="deskripsiProduk" class="detail-description">Memuat deskripsi produk...</p>
+        </div>
+
+        <!-- Kotak Pembelian -->
+        <div class="buy-box">
+          <h3>Ringkasan Pembelian</h3>
+          <div id="buyHarga" class="buy-price">Rp 0</div>
+
+          <!-- Pilih Jumlah -->
+          <div class="qty-box">
+            <button id="minusQty" type="button" aria-label="Kurangi jumlah">−</button>
+            <input
+              type="number"
+              id="jumlahProduk"
+              value="1"
+              min="1"
+              aria-label="Jumlah produk">
+            <button id="plusQty" type="button" aria-label="Tambah jumlah">+</button>
+          </div>
+
+          <!-- Aksi Pembelian -->
+          <button id="addToCart" class="btn btn-primary">🛒 Tambah ke Keranjang</button>
+          <button id="buyNow" class="btn btn-secondary">⚡ Beli Sekarang</button>
+          <button id="btnFavorit" class="btn btn-secondary">❤️ Simpan Favorit</button>
+          <a id="chatWA" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">💬 Hubungi Penjual</a>
+          <button id="shareProduk" class="btn btn-secondary">📤 Bagikan</button>
+
+          <p id="wishlistCount" class="wishlist-count">❤️ Disimpan 0 pengguna</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+    INFORMASI PENGIRIMAN
+  ============================================= -->
+  <section class="section" aria-label="Informasi pengiriman">
+    <div class="container">
+      <div class="info-card">
+        <h2>📦 Informasi Pengiriman</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <h4>Berat Produk</h4>
+            <p id="beratProduk">0 Gram</p>
+          </div>
+          <div class="info-item">
+            <h4>Asal Pengiriman</h4>
+            <p id="asalProduk">Indonesia</p>
+          </div>
+          <div class="info-item">
+            <h4>Estimasi</h4>
+            <p>2–5 Hari Kerja</p>
+          </div>
+          <div class="info-item">
+            <h4>Kurir</h4>
+            <p>JNE • J&T • SiCepat • POS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+    PROFIL UMKM / TOKO
+  ============================================= -->
+  <section class="section" aria-label="Profil toko">
+    <div class="container">
+      <div class="store-card">
+        <div class="store-header">
+          <div class="store-logo" aria-hidden="true">🏪</div>
+          <div>
+            <h2 id="storeName">Nama UMKM</h2>
+            <p id="storeLocation">Indonesia</p>
+            <p id="storeJoin">Bergabung sejak 2026</p>
+          </div>
+        </div>
+
+        <div class="store-info">
+          <div>
+            <h4>⭐ Rating</h4>
+            <p id="storeRating">0.0</p>
+          </div>
+          <div>
+            <h4>🛍 Produk</h4>
+            <p id="storeProduk">0 Produk</p>
+          </div>
+          <div>
+            <h4>👥 Followers</h4>
+            <p id="storeFollowers">0</p>
+          </div>
+        </div>
+
+        <div class="store-action">
+          <a id="linkToko" href="#" class="btn btn-primary">🏪 Kunjungi Toko</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+    PRODUK LAIN DARI TOKO INI
+  ============================================= -->
+  <section class="section" aria-label="Produk lain dari toko ini">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title">
+          <h2>🏪 Produk Lain dari Toko Ini</h2>
+          <p>Temukan produk lainnya dari UMKM yang sama.</p>
+        </div>
+      </div>
+      <!-- Diisi via JS -->
+      <div id="produkToko" class="product-grid" aria-live="polite">
+        <div class="loading-card">Memuat produk...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+    PRODUK TERKAIT (KATEGORI SAMA)
+  ============================================= -->
+  <section class="section" aria-label="Produk terkait">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title">
+          <h2>🛍 Produk Terkait</h2>
+          <p>Produk lain dengan kategori yang sama.</p>
+        </div>
+      </div>
+      <!-- Diisi via JS -->
+      <div id="produkTerkait" class="product-grid" aria-live="polite">
+        <div class="loading-card">Memuat produk...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+    ULASAN PEMBELI
+  ============================================= -->
+  <section class="section" aria-label="Ulasan pembeli">
+    <div class="container">
+      <div class="review-card">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>⭐ Ulasan Pembeli</h2>
+            <p>Pengalaman pelanggan setelah membeli produk ini.</p>
+          </div>
+        </div>
+        <!-- Diisi via JS; tampilkan empty state jika kosong -->
+        <div id="reviewContainer" class="review-list" aria-live="polite">
+          <div class="empty-state">
+            <div class="empty-icon" aria-hidden="true">⭐</div>
+            <h3>Belum Ada Ulasan</h3>
+            <p>Jadilah pembeli pertama yang memberikan ulasan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+    FOOTER
+  ============================================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+
+        <!-- Tentang PasarNusa -->
+        <div>
+          <h3>🌿 PasarNusa</h3>
+          <p>Marketplace UMKM Indonesia yang menghubungkan penjual lokal dengan pembeli di seluruh Indonesia.</p>
+        </div>
+
+        <!-- Navigasi Cepat -->
+        <div>
+          <h4>Navigasi</h4>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+            <li><a href="kategori.html">Kategori</a></li>
+            <li><a href="tentang.html">Tentang</a></li>
+          </ul>
+        </div>
+
+        <!-- Bantuan & Legal -->
+        <div>
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+            <li><a href="kebijakan.html">Kebijakan Privasi</a></li>
+            <li><a href="syarat.html">Syarat &amp; Ketentuan</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun dengan ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =============================================
+    TOMBOL KEMBALI KE ATAS
+  ============================================= -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- =============================================
+    SCRIPTS
+    - script.js     : utilitas global (tema, menu, dll.)
+    - produk-detail : logika halaman ini (ES Module)
+  ============================================= -->
+  <script src="script.js"></script>
+  <script type="module" src="produk-detail.js"></script>
 
 </body>
-
 </html>
