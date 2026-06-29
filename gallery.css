@@ -1,141 +1,161 @@
-.product-grid{
+/* =============================================================================
+   gallery.css — PasarNusa Product Gallery
+   Komponen grid produk dan kartu produk untuk halaman katalog.
+   ============================================================================= */
 
-display:grid;
 
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+/* -----------------------------------------------------------------------------
+   1. GRID PRODUK
+   Tata letak responsif otomatis; kolom minimum 280px, maksimum 1fr.
+----------------------------------------------------------------------------- */
 
-gap:24px;
-
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
-.product-card{
 
-overflow:hidden;
+/* -----------------------------------------------------------------------------
+   2. KARTU PRODUK
+   Kontainer utama dengan efek hover: naik & bayangan lebih dalam.
+----------------------------------------------------------------------------- */
 
-background:var(--color-surface);
-
-border:1px solid var(--color-border);
-
-border-radius:var(--radius-lg);
-
-box-shadow:var(--shadow-xs);
-
-transition:var(--transition);
-
+.product-card {
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  transition: var(--transition);
+  /* Pastikan konten di dalam kartu tidak meluap saat transformasi */
+  will-change: transform;
 }
 
-.product-card:hover{
-
-transform:translateY(-8px);
-
-box-shadow:var(--shadow-md);
-
-border-color:var(--color-primary);
-
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
 }
 
-.product-image{
 
-position:relative;
+/* -----------------------------------------------------------------------------
+   3. GAMBAR PRODUK
+   Rasio aspek 1:1 dengan efek zoom halus saat hover.
+----------------------------------------------------------------------------- */
 
-overflow:hidden;
-
-aspect-ratio:1/1;
-
-background:#f1f5f9;
-
+.product-image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: #f1f5f9; /* Warna placeholder saat gambar belum dimuat */
 }
 
-.product-image img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-transition:.4s;
-
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Durasi eksplisit agar konsisten di semua browser */
+  transition: transform 0.4s ease;
 }
 
-.product-card:hover .product-image img{
-
-transform:scale(1.08);
-
+.product-card:hover .product-image img {
+  transform: scale(1.08);
 }
 
-.product-badge{
 
-position:absolute;
+/* -----------------------------------------------------------------------------
+   4. LENCANA / BADGE PRODUK
+   Label mengambang (mis. "Baru", "Diskon") di pojok kiri atas gambar.
+----------------------------------------------------------------------------- */
 
-top:16px;
-
-left:16px;
-
-padding:6px 12px;
-
-background:var(--color-primary);
-
-color:var(--color-white);
-
-border-radius:999px;
-
-font-size:13px;
-
-font-weight:600;
-
+.product-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 6px 12px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 999px; /* Pill shape */
+  font-size: 0.8125rem; /* 13px — lebih eksplisit dibanding nilai piksel mentah */
+  font-weight: 600;
+  /* Pastikan badge selalu di atas gambar */
+  z-index: 1;
+  /* Cegah seleksi teks yang tidak disengaja */
+  user-select: none;
 }
 
-.product-content{
 
-padding:22px;
+/* -----------------------------------------------------------------------------
+   5. KONTEN KARTU
+   Area teks dan aksi di bawah gambar.
+----------------------------------------------------------------------------- */
 
+.product-content {
+  padding: 22px;
 }
 
-.product-title{
-
-font-size:1.15rem;
-
-font-weight:700;
-
-margin-bottom:8px;
-
-color:var(--color-text);
-
+/* Judul produk */
+.product-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--color-text);
+  /* Batasi ke 2 baris agar grid tetap rapi */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.product-location{
-
-font-size:.9rem;
-
-color:var(--color-muted);
-
-margin-bottom:16px;
-
+/* Lokasi asal produk */
+.product-location {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  margin-bottom: 16px;
 }
 
-.product-price{
-
-margin-bottom:20px;
-
+/* Blok harga */
+.product-price {
+  margin-bottom: 20px;
 }
 
-.new-price{
-
-font-size:1.6rem;
-
-font-weight:800;
-
-color:var(--color-primary);
-
+/* Harga setelah diskon / harga utama */
+.new-price {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-primary);
 }
 
-.product-action{
 
-display:grid;
+/* -----------------------------------------------------------------------------
+   6. TOMBOL AKSI
+   Dua tombol berdampingan (mis. "Tambah ke Keranjang" & "Lihat Detail").
+----------------------------------------------------------------------------- */
 
-grid-template-columns:1fr 1fr;
+.product-action {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
 
-gap:12px;
 
+/* -----------------------------------------------------------------------------
+   7. AKSESIBILITAS — REDUCED MOTION
+   Nonaktifkan semua animasi untuk pengguna yang memilih pengurangan gerak.
+----------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .product-image img {
+    transition: none;
+  }
+
+  .product-card:hover {
+    transform: none;
+  }
+
+  .product-card:hover .product-image img {
+    transform: none;
+  }
 }
