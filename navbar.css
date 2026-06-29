@@ -1,157 +1,129 @@
-/* ==========================================================================
-   PasarNusa — Navbar
-   navbar.css
-   Navigasi utama: fixed, blur, scroll-shrink, mobile drawer.
-   ========================================================================== */
+/* navbar.css */
 
-/* --------------------------------------------------------------------------
-   Navbar — Container
--------------------------------------------------------------------------- */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);   /* Safari — wajib untuk efek blur */
-  border-bottom: 1px solid var(--color-border);
-  z-index: 1000;
-  transition: height var(--transition), background var(--transition), box-shadow var(--transition);
+.navbar{
+  position:fixed;
+  inset:0 0 auto;
+  width:100%;
+  height:var(--navbar-height);
+  display:flex;
+  align-items:center;
+  background:rgba(255,255,255,.8);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--color-border);
+  z-index:var(--z-fixed);
+  transition:height var(--transition),box-shadow var(--transition),background var(--transition);
 }
 
-/* State saat halaman di-scroll — tinggi mengecil, latar lebih solid */
-.navbar.scrolled {
-  height: 72px;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+.navbar.scrolled{
+  height:72px;
+  background:var(--color-surface);
+  box-shadow:var(--shadow-sm);
 }
 
-/* --------------------------------------------------------------------------
-   Navbar — Layout Dalam
--------------------------------------------------------------------------- */
-.navbar-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
+.navbar-content{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:32px;
 }
 
-/* --------------------------------------------------------------------------
-   Logo
--------------------------------------------------------------------------- */
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.75rem;      /* 28px → rem agar ikut skala root */
-  font-weight: 800;
-  color: var(--color-primary);
-  flex-shrink: 0;          /* cegah logo terpotong saat ruang sempit */
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-shrink:0;
+  font-size:1.75rem;
+  font-weight:800;
+  color:var(--color-primary);
 }
 
-.logo span {
-  color: var(--color-text);
+.logo span{
+  color:var(--color-text);
 }
 
-/* --------------------------------------------------------------------------
-   Menu Navigasi
--------------------------------------------------------------------------- */
-.navbar-menu {
-  display: flex;
-  align-items: center;
-  gap: 28px;
+.navbar-menu{
+  display:flex;
+  align-items:center;
+  gap:28px;
 }
 
-.navbar-menu a {
-  position: relative;
-  font-weight: 600;
-  color: var(--color-text);
-  transition: color var(--transition);
+.navbar-menu a{
+  position:relative;
+  font-weight:600;
+  color:var(--color-text);
+  transition:color var(--transition);
 }
 
-.navbar-menu a:hover {
-  color: var(--color-primary);
+.navbar-menu a:hover,
+.navbar-menu a:focus-visible{
+  color:var(--color-primary);
 }
 
-/* Garis bawah aktif / hover */
-.navbar-menu a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -8px;
-  width: 0;
-  height: 2px;
-  background: var(--color-primary);
-  transition: width var(--transition);
+.navbar-menu a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-8px;
+  width:0;
+  height:2px;
+  background:var(--color-primary);
+  transition:width var(--transition-fast);
 }
 
 .navbar-menu a:hover::after,
-.navbar-menu a.active::after {
-  width: 100%;
+.navbar-menu a.active::after,
+.navbar-menu a:focus-visible::after{
+  width:100%;
 }
 
-/* --------------------------------------------------------------------------
-   Tombol Aksi (Login / Daftar)
--------------------------------------------------------------------------- */
-.navbar-action {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
+.navbar-action{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
 }
 
-/* --------------------------------------------------------------------------
-   Tombol Hamburger (tersembunyi di desktop)
--------------------------------------------------------------------------- */
-.menu-toggle {
-  display: none;
-  font-size: 1.875rem;     /* 30px → rem */
-  color: var(--color-text);
-  /* cursor:pointer sudah diset di reset.css untuk semua button */
+.menu-toggle{
+  display:none;
+  font-size:1.8rem;
+  color:var(--color-text);
 }
 
-/* --------------------------------------------------------------------------
-   Responsif — Mobile Drawer (≤ 992px)
--------------------------------------------------------------------------- */
-@media (max-width: 992px) {
+@media(max-width:992px){
 
-  .menu-toggle {
-    display: block;
+  .menu-toggle{
+    display:block;
   }
 
-  /* Sembunyikan tombol aksi — akses login/daftar dipindah ke dalam drawer */
-  .navbar-action {
-    display: none;
+  .navbar-action{
+    display:none;
   }
 
-  /* Drawer: mulai di luar layar kiri, geser masuk saat .active */
-  .navbar-menu {
-    position: fixed;
-    top: 80px;
-    left: -100%;
-    width: 280px;
-    height: calc(100dvh - 80px);   /* dvh lebih akurat dari vh di mobile (address bar) */
-    padding: 30px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-    background: var(--color-surface);
-    box-shadow: var(--shadow-md);
-    transition: left var(--transition-fast);   /* animasikan 'left' saja, bukan semua */
-    overflow-y: auto;                          /* scroll jika menu sangat panjang */
+  .navbar-menu{
+    position:fixed;
+    top:var(--navbar-height);
+    left:-100%;
+    width:280px;
+    height:calc(100dvh - var(--navbar-height));
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+    overflow-y:auto;
+    background:var(--color-surface);
+    box-shadow:var(--shadow-md);
+    transition:left var(--transition-fast);
+    z-index:var(--z-modal);
   }
 
-  .navbar-menu.active {
-    left: 0;
+  .navbar-menu.active{
+    left:0;
   }
 
-  /* Saat drawer terbuka, nonaktifkan scroll halaman */
-  body.menu-open {
-    overflow: hidden;
+  body.menu-open{
+    overflow:hidden;
   }
 
 }
