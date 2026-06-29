@@ -1,517 +1,239 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & PWA Meta -->
+  <title>Wishlist | PasarNusa</title>
+  <meta name="description" content="Daftar produk favorit Anda di PasarNusa — marketplace UMKM Indonesia.">
+  <meta name="theme-color" content="#16a34a">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/logo.png">
 
-<title>Wishlist | PasarNusa</title>
+  <!-- Google Fonts: preconnect dulu agar tidak blokir render -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-<meta
-name="description"
-content="Daftar produk favorit Anda">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="wishlist.css">
-
+  <!-- Stylesheet utama, lalu halaman spesifik -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="wishlist.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a
-href="wishlist.html"
-class="active">
-
-Wishlist
-
-</a>
-
-<a href="profil.html">
-
-Akun
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-❤️ Wishlist
-
-</div>
-
-<h1>
-
-Produk Favorit Anda
-
-</h1>
-
-<p>
-
-Simpan produk favorit agar mudah ditemukan kembali saat ingin membeli.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/</span>
-
-<span>
-
-Wishlist
-
-</span>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="wishlist-layout">
-
-<div class="wishlist-content">
-<div class="form-card">
-
-<h2>
-
-❤️ Ringkasan Wishlist
-
-</h2>
-
-<div class="summary-item">
-
-<span>
-
-Total Produk
-
-</span>
-
-<b id="totalWishlist">
-
-0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Tersedia
-
-</span>
-
-<b id="stokAda">
-
-0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Stok Habis
-
-</span>
-
-<b id="stokHabis">
-
-0
-
-</b>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-🛍 Produk Favorit
-
-</h2>
-
-<div
-id="wishlistContainer">
-
-<div class="loading-card">
-
-Memuat wishlist...
-
-</div>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-⚡ Aksi Cepat
-
-</h2>
-
-<div class="action-box">
-
-<button
-
-id="addAllCart"
-
-class="btn btn-primary">
-
-🛒 Tambahkan Semua ke Keranjang
-
-</button>
-
-<button
-
-id="hapusWishlist"
-
-class="btn btn-secondary">
-
-🗑 Hapus Semua Wishlist
-
-</button>
-
-</div>
-
-</div>
-<div class="wishlist-summary">
-
-<div class="summary-card">
-
-<h2>
-
-📌 Informasi
-
-</h2>
-
-<p>
-
-Wishlist membantu Anda menyimpan produk yang ingin dibeli di kemudian hari.
-
-</p>
-
-<ul class="summary-list">
-
-<li>
-
-❤️ Simpan produk favorit
-
-</li>
-
-<li>
-
-🛒 Tambahkan ke keranjang kapan saja
-
-</li>
-
-<li>
-
-📦 Pantau stok produk
-
-</li>
-
-<li>
-
-💰 Lihat perubahan harga
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<div
-
-id="emptyWishlist"
-
-class="empty-state"
-
-style="display:none;">
-
-<div class="empty-icon">
-
-❤️
-
-</div>
-
-<h2>
-
-Wishlist Masih Kosong
-
-</h2>
-
-<p>
-
-Tambahkan produk favorit Anda agar lebih mudah ditemukan nanti.
-
-</p>
-
-<a
-
-href="produk.html"
-
-class="btn btn-primary">
-
-🛍 Jelajahi Produk
-
-</a>
-
-</div>
-<template id="loadingWishlist">
-
-<div class="form-card skeleton">
-
-<div class="image-skeleton"></div>
-
-<div class="content-skeleton">
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-</div>
-
-</div>
-
-</template>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-
-🌿 PasarNusa
-
-</h3>
-
-<p>
-
-Marketplace UMKM Indonesia untuk membantu produk lokal berkembang hingga ke seluruh Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-Menu
-
-</h4>
-
-<ul>
-
-<li><a href="index.html">Beranda</a></li>
-
-<li><a href="produk.html">Produk</a></li>
-
-<li><a href="wishlist.html">Wishlist</a></li>
-
-<li><a href="keranjang.html">Keranjang</a></li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>
-
-Bantuan
-
-</h4>
-
-<ul>
-
-<li><a href="faq.html">FAQ</a></li>
-
-<li><a href="kontak.html">Kontak</a></li>
-
-<li><a href="kebijakan.html">Kebijakan Privasi</a></li>
-
-<li><a href="syarat.html">Syarat & Ketentuan</a></li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-
-<script src="script.js"></script>
-
-<script
-
-type="module"
-
-src="wishlist.js">
-
-</script>
+  <!-- =========================================================
+       NAVBAR
+       ========================================================= -->
+  <header class="navbar" role="banner">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo" aria-label="PasarNusa — Halaman Beranda">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Navigasi utama -->
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="wishlist.html" class="active" aria-current="page">Wishlist</a>
+          <a href="profil.html">Akun</a>
+        </nav>
+
+        <!-- Aksi navbar -->
+        <div class="navbar-action">
+          <!-- Tombol toggle tema gelap/terang -->
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+        <!-- Tombol hamburger untuk mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">
+          ☰
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       HERO — Judul halaman
+       ========================================================= -->
+  <section class="hero-page" aria-labelledby="heroHeading">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">❤️ Wishlist</div>
+        <h1 id="heroHeading">Produk Favorit Anda</h1>
+        <p>Simpan produk favorit agar mudah ditemukan kembali saat ingin membeli.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       BREADCRUMB — Navigasi sekunder
+       ========================================================= -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true"> / </span>
+      <span aria-current="page">Wishlist</span>
+    </div>
+  </nav>
+
+  <!-- =========================================================
+       KONTEN UTAMA
+       ========================================================= -->
+  <main class="section" id="main-content">
+    <div class="container">
+      <div class="wishlist-layout">
+        <div class="wishlist-content">
+
+          <!-- Kartu ringkasan wishlist -->
+          <section class="form-card" aria-labelledby="ringkasanHeading">
+            <h2 id="ringkasanHeading">❤️ Ringkasan Wishlist</h2>
+            <dl class="summary-list-dl">
+              <div class="summary-item">
+                <dt>Total Produk</dt>
+                <dd><b id="totalWishlist">0</b></dd>
+              </div>
+              <div class="summary-item">
+                <dt>Tersedia</dt>
+                <dd><b id="stokAda">0</b></dd>
+              </div>
+              <div class="summary-item">
+                <dt>Stok Habis</dt>
+                <dd><b id="stokHabis">0</b></dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- Daftar produk favorit — diisi oleh wishlist.js -->
+          <section class="form-card" aria-labelledby="produkFavoritHeading" aria-live="polite">
+            <h2 id="produkFavoritHeading">🛍 Produk Favorit</h2>
+            <div id="wishlistContainer">
+              <!-- Placeholder sementara JS memuat data -->
+              <p class="loading-card" role="status">Memuat wishlist…</p>
+            </div>
+          </section>
+
+          <!-- Aksi cepat -->
+          <section class="form-card" aria-labelledby="aksiCepatHeading">
+            <h2 id="aksiCepatHeading">⚡ Aksi Cepat</h2>
+            <div class="action-box">
+              <button id="addAllCart" class="btn btn-primary">
+                🛒 Tambahkan Semua ke Keranjang
+              </button>
+              <button id="hapusWishlist" class="btn btn-secondary">
+                🗑 Hapus Semua Wishlist
+              </button>
+            </div>
+          </section>
+
+          <!-- Info tambahan wishlist -->
+          <aside class="wishlist-summary" aria-label="Informasi wishlist">
+            <div class="summary-card">
+              <h2>📌 Informasi</h2>
+              <p>Wishlist membantu Anda menyimpan produk yang ingin dibeli di kemudian hari.</p>
+              <ul class="summary-list">
+                <li>❤️ Simpan produk favorit</li>
+                <li>🛒 Tambahkan ke keranjang kapan saja</li>
+                <li>📦 Pantau stok produk</li>
+                <li>💰 Lihat perubahan harga</li>
+              </ul>
+            </div>
+          </aside>
+
+        </div><!-- /.wishlist-content -->
+      </div><!-- /.wishlist-layout -->
+    </div><!-- /.container -->
+  </main>
+
+  <!-- =========================================================
+       EMPTY STATE — Ditampilkan oleh JS bila wishlist kosong
+       ========================================================= -->
+  <div id="emptyWishlist" class="empty-state" hidden aria-live="polite">
+    <div class="empty-icon" aria-hidden="true">❤️</div>
+    <h2>Wishlist Masih Kosong</h2>
+    <p>Tambahkan produk favorit Anda agar lebih mudah ditemukan nanti.</p>
+    <a href="produk.html" class="btn btn-primary">🛍 Jelajahi Produk</a>
+  </div>
+
+  <!-- =========================================================
+       TEMPLATE — Skeleton loading card (dipakai oleh wishlist.js)
+       ========================================================= -->
+  <template id="loadingWishlist">
+    <div class="form-card skeleton" aria-hidden="true">
+      <div class="image-skeleton"></div>
+      <div class="content-skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-content">
+
+        <!-- Deskripsi singkat -->
+        <div>
+          <h3>🌿 PasarNusa</h3>
+          <p>Marketplace UMKM Indonesia untuk membantu produk lokal berkembang hingga ke seluruh Indonesia.</p>
+        </div>
+
+        <!-- Navigasi halaman -->
+        <nav aria-label="Menu footer">
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+            <li><a href="wishlist.html">Wishlist</a></li>
+            <li><a href="keranjang.html">Keranjang</a></li>
+          </ul>
+        </nav>
+
+        <!-- Tautan bantuan -->
+        <nav aria-label="Bantuan footer">
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+            <li><a href="kebijakan.html">Kebijakan Privasi</a></li>
+            <li><a href="syarat.html">Syarat &amp; Ketentuan</a></li>
+          </ul>
+        </nav>
+
+      </div><!-- /.footer-content -->
+
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun dengan ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Tombol kembali ke atas -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- =========================================================
+       SCRIPTS
+       - script.js: utilitas global (tema, back-to-top, menu)
+       - wishlist.js: logika khusus halaman wishlist (type="module")
+       ========================================================= -->
+  <script src="script.js"></script>
+  <script type="module" src="wishlist.js"></script>
 
 </body>
-
 </html>
