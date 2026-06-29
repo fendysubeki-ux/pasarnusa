@@ -1,967 +1,588 @@
 /* =====================================================
-   PASARNUSA APP V1
-   CORE SYSTEM
-===================================================== */
+ * PASARNUSA APP v1
+ * Deskripsi : Core JavaScript untuk seluruh halaman
+ * Struktur  : Module pattern — setiap fitur dalam
+ *             objek/fungsi tersendiri agar mudah
+ *             di-maintain dan di-debug.
+ * ===================================================== */
 
-document.addEventListener("DOMContentLoaded",()=>{
+"use strict";
 
-initNavbar();
+/* ─────────────────────────────────────────────────────
+ * UTILITAS UMUM
+ * ───────────────────────────────────────────────────── */
 
-initReveal();
-
-initRipple();
-
-initLoader();
-
-initBackTop();
-
-initSearch();
-
-});
-/* =========================================
-   NAVBAR
-========================================= */
-
-function initNavbar(){
-
-const navbar=document.querySelector(".navbar");
-
-if(!navbar) return;
-
-window.addEventListener("scroll",()=>{
-
-navbar.classList.toggle(
-
-"scrolled",
-
-window.scrollY>30
-
-);
-
-});
-
-}
-/* =========================================
-   REVEAL
-========================================= */
-
-function initReveal(){
-
-const items=document.querySelectorAll(".reveal");
-
-if(!items.length) return;
-
-const observer=new IntersectionObserver(entries=>{
-
-entries.forEach(entry=>{
-
-if(entry.isIntersecting){
-
-entry.target.classList.add("active");
-
+/**
+ * Tunda eksekusi fungsi hingga jeda tertentu usai.
+ * @param {Function} fn    - Fungsi yang akan dipanggil
+ * @param {number}   delay - Jeda dalam milidetik
+ */
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
 }
 
-});
+/**
+ * Kembalikan Promise yang selesai setelah `ms` milidetik.
+ * @param {number} ms
+ */
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-},{
-
-threshold:.15
-
-});
-
-items.forEach(item=>observer.observe(item));
-
+/**
+ * Buat ID acak 8-karakter (alfanumerik).
+ * @returns {string}
+ */
+function uid() {
+  return Math.random().toString(36).substring(2, 10);
 }
-/* =========================================
-   RIPPLE
-========================================= */
 
-function initRipple(){
-
-document.querySelectorAll(".btn")
-
-.forEach(btn=>{
-
-btn.addEventListener("click",function(e){
-
-const circle=document.createElement("span");
-
-const size=Math.max(
-
-this.clientWidth,
-
-this.clientHeight
-
-);
-
-circle.style.width=size+"px";
-
-circle.style.height=size+"px";
-
-circle.style.left=
-
-e.offsetX-size/2+"px";
-
-circle.style.top=
-
-e.offsetY-size/2+"px";
-
-circle.className="ripple";
-
-this.appendChild(circle);
-
-setTimeout(()=>{
-
-circle.remove();
-
-},600);
-
-});
-
-});
-
+/**
+ * Format angka ke format mata uang Rupiah.
+ * @param   {number} nilai
+ * @returns {string} contoh: "Rp 10.000"
+ */
+function rupiah(nilai) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(nilai);
 }
-/* =========================================
-   LOADER
-========================================= */
 
-function initLoader(){
-
-const loader=
-
-document.querySelector(".loading-screen");
-
-if(!loader) return;
-
-window.addEventListener("load",()=>{
-
-loader.style.opacity="0";
-
-setTimeout(()=>{
-
-loader.remove();
-
-},500);
-
-});
-
+/**
+ * Format tanggal ke format lokal Indonesia.
+ * @param   {string|Date} date
+ * @returns {string} contoh: "1 Januari 2025"
+ */
+function tanggal(date) {
+  return new Date(date).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
-/* =========================================
-   BACK TO TOP
-========================================= */
 
-function initBackTop(){
+/* ─────────────────────────────────────────────────────
+ * STORAGE — Wrapper localStorage dengan JSON otomatis
+ * ───────────────────────────────────────────────────── */
 
-const btn=document.querySelector(".back-top");
+const Storage = {
+  /**
+   * Simpan nilai ke localStorage sebagai JSON.
+   * @param {string} key
+   * @param {*}      value
+   */
+  set(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  },
 
-if(!btn) return;
+  /**
+   * Ambil nilai dari localStorage; kembalikan `[]` jika kosong.
+   * @param   {string} key
+   * @returns {*}
+   */
+  get(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key)) ?? [];
+    } catch {
+      return [];
+    }
+  },
 
-window.addEventListener("scroll",()=>{
-
-btn.classList.toggle(
-
-"show",
-
-window.scrollY>500
-
-);
-
-});
-
-btn.onclick=()=>{
-
-window.scrollTo({
-
-top:0,
-
-behavior:"smooth"
-
-});
-
+  /** Hapus item dari localStorage. */
+  remove(key) {
+    localStorage.removeItem(key);
+  },
 };
 
-}
-/* =========================================
-   SEARCH
-========================================= */
+/* ─────────────────────────────────────────────────────
+ * CART — Manajemen keranjang belanja
+ * ───────────────────────────────────────────────────── */
 
-function initSearch(){
+const Cart = {
+  key: "cart",
 
-const input=
+  /** Ambil semua item di keranjang. */
+  all() {
+    return Storage.get(this.key);
+  },
 
-document.getElementById("searchHome");
+  /** Simpan array item ke storage. */
+  save(data) {
+    Storage.set(this.key, data);
+  },
 
-if(!input) return;
+  /**
+   * Tambah produk ke keranjang.
+   * @param {Object} product - Data produk
+   */
+  add(product) {
+    const cart = this.all();
+    cart.push(product);
+    this.save(cart);
+    showToast("Produk masuk keranjang");
+  },
 
-input.addEventListener("keypress",e=>{
-
-if(e.key==="Enter"){
-
-window.location=
-
-`produk.html?search=${encodeURIComponent(input.value)}`;
-
-}
-
-});
-
-}
-/* =====================================================
-   PASARNUSA APP V1
-   PART 2
-   UI INTERACTION
-===================================================== */
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-initMobileMenu();
-
-initDarkMode();
-
-initToast();
-
-initCounter();
-
-initModal();
-
-});
-/* =========================================
-   MOBILE MENU
-========================================= */
-
-function initMobileMenu(){
-
-const toggle=document.querySelector(".menu-toggle");
-
-const menu=document.querySelector(".navbar-menu");
-
-if(!toggle||!menu) return;
-
-toggle.onclick=()=>{
-
-menu.classList.toggle("active");
-
+  /** Jumlah item di keranjang. */
+  count() {
+    return this.all().length;
+  },
 };
 
-document.addEventListener("click",e=>{
+/* ─────────────────────────────────────────────────────
+ * WISHLIST — Toggle produk favorit
+ * ───────────────────────────────────────────────────── */
 
-if(
+const Wishlist = {
+  key: "wishlist",
 
-!menu.contains(e.target)
-
-&&
-
-!toggle.contains(e.target)
-
-){
-
-menu.classList.remove("active");
-
-}
-
-});
-
-}
-/* =========================================
-   DARK MODE
-========================================= */
-
-function initDarkMode(){
-
-const btn=document.querySelector(".dark-toggle");
-
-if(!btn) return;
-
-if(localStorage.getItem("theme")==="dark"){
-
-document.body.classList.add("dark");
-
-}
-
-btn.onclick=()=>{
-
-document.body.classList.toggle("dark");
-
-localStorage.setItem(
-
-"theme",
-
-document.body.classList.contains("dark")
-
-?"dark":"light"
-
-);
-
+  /**
+   * Tambah jika belum ada, hapus jika sudah ada.
+   * @param {string|number} id - ID produk
+   */
+  toggle(id) {
+    let list = Storage.get(this.key);
+    list = list.includes(id)
+      ? list.filter((x) => x !== id)
+      : [...list, id];
+    Storage.set(this.key, list);
+  },
 };
 
-}
-/* =========================================
-   TOAST
-========================================= */
+/* ─────────────────────────────────────────────────────
+ * API — Fetch helper dengan error handling
+ * ───────────────────────────────────────────────────── */
 
-function showToast(message,type="success"){
-
-const toast=document.createElement("div");
-
-toast.className=`toast toast-${type}`;
-
-toast.innerHTML=`
-
-<div>${message}</div>
-
-`;
-
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.classList.add("show");
-
-},100);
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-setTimeout(()=>toast.remove(),300);
-
-},3000);
-
-}
-/* =========================================
-   COUNTER
-========================================= */
-
-function initCounter(){
-
-const counters=document.querySelectorAll("[data-counter]");
-
-if(!counters.length) return;
-
-counters.forEach(counter=>{
-
-const target=Number(counter.dataset.counter);
-
-let current=0;
-
-const speed=Math.max(1,Math.ceil(target/80));
-
-const timer=setInterval(()=>{
-
-current+=speed;
-
-if(current>=target){
-
-current=target;
-
-clearInterval(timer);
-
+/**
+ * Ambil data dari URL; tampilkan toast jika gagal.
+ * @param   {string}  url
+ * @param   {Object}  [options] - fetch options (opsional)
+ * @returns {Promise<*|null>}
+ */
+async function api(url, options = {}) {
+  try {
+    const res = await fetch(url, options);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    console.error("[PasarNusa API]", e);
+    showToast("Gagal mengambil data", "error");
+    return null;
+  }
 }
 
-counter.textContent=current.toLocaleString("id-ID");
+/* ─────────────────────────────────────────────────────
+ * TOAST — Notifikasi pop-up sementara
+ * ───────────────────────────────────────────────────── */
 
-},20);
+/**
+ * Tampilkan notifikasi toast selama 3 detik.
+ * @param {string} message         - Pesan yang ditampilkan
+ * @param {"success"|"error"|"warning"} [type="success"]
+ */
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
 
+  // Delay kecil agar transisi CSS berjalan
+  requestAnimationFrame(() => toast.classList.add("show"));
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3000);
+}
+
+/* ─────────────────────────────────────────────────────
+ * NAVBAR — Tambah class "scrolled" saat halaman di-scroll
+ * ───────────────────────────────────────────────────── */
+
+function initNavbar() {
+  const navbar = document.querySelector(".navbar");
+  if (!navbar) return;
+
+  const onScroll = debounce(
+    () => navbar.classList.toggle("scrolled", window.scrollY > 30),
+    50
+  );
+  window.addEventListener("scroll", onScroll, { passive: true });
+}
+
+/* ─────────────────────────────────────────────────────
+ * REVEAL — Animasi elemen saat masuk viewport
+ * ───────────────────────────────────────────────────── */
+
+function initReveal() {
+  const items = document.querySelectorAll(".reveal");
+  if (!items.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+          observer.unobserve(entry.target); // cukup sekali
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  items.forEach((item) => observer.observe(item));
+}
+
+/* ─────────────────────────────────────────────────────
+ * RIPPLE — Efek gelombang pada tombol saat diklik
+ * ───────────────────────────────────────────────────── */
+
+function initRipple() {
+  // Gunakan event delegation agar tombol yang ditambah
+  // secara dinamis juga mendapat efek ripple.
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn");
+    if (!btn) return;
+
+    const size = Math.max(btn.clientWidth, btn.clientHeight);
+    const rect = btn.getBoundingClientRect();
+
+    const circle = document.createElement("span");
+    circle.className = "ripple";
+    circle.style.cssText = `
+      width:  ${size}px;
+      height: ${size}px;
+      left:   ${e.clientX - rect.left - size / 2}px;
+      top:    ${e.clientY - rect.top  - size / 2}px;
+    `;
+
+    btn.appendChild(circle);
+    circle.addEventListener("animationend", () => circle.remove(), { once: true });
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * LOADER — Sembunyikan loading screen setelah halaman siap
+ * ───────────────────────────────────────────────────── */
+
+function initLoader() {
+  const loader = document.querySelector(".loading-screen");
+  if (!loader) return;
+
+  const hide = () => {
+    loader.style.opacity = "0";
+    loader.addEventListener("transitionend", () => loader.remove(), { once: true });
+  };
+
+  // Jika halaman sudah selesai load, langsung sembunyikan
+  if (document.readyState === "complete") {
+    hide();
+  } else {
+    window.addEventListener("load", hide, { once: true });
+  }
+}
+
+/* ─────────────────────────────────────────────────────
+ * BACK TO TOP — Tombol gulir ke atas
+ * ───────────────────────────────────────────────────── */
+
+function initBackTop() {
+  const btn = document.querySelector(".back-top");
+  if (!btn) return;
+
+  window.addEventListener(
+    "scroll",
+    debounce(() => btn.classList.toggle("show", window.scrollY > 500), 100),
+    { passive: true }
+  );
+
+  btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+}
+
+/* ─────────────────────────────────────────────────────
+ * SEARCH — Arahkan ke halaman produk saat tekan Enter
+ * ───────────────────────────────────────────────────── */
+
+function initSearch() {
+  const input = document.getElementById("searchHome");
+  if (!input) return;
+
+  input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter" && input.value.trim()) {
+      window.location.href = `produk.html?search=${encodeURIComponent(input.value.trim())}`;
+    }
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * MOBILE MENU — Toggle navigasi di layar kecil
+ * ───────────────────────────────────────────────────── */
+
+function initMobileMenu() {
+  const toggle = document.querySelector(".menu-toggle");
+  const menu   = document.querySelector(".navbar-menu");
+  if (!toggle || !menu) return;
+
+  toggle.addEventListener("click", () => menu.classList.toggle("active"));
+
+  // Tutup menu saat klik di luar
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      menu.classList.remove("active");
+    }
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * DARK MODE — Toggle tema terang/gelap
+ * ───────────────────────────────────────────────────── */
+
+function initDarkMode() {
+  const btn = document.querySelector(".dark-toggle");
+  if (!btn) return;
+
+  // Terapkan tema tersimpan saat halaman dimuat
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+  }
+
+  btn.addEventListener("click", () => {
+    const isDark = document.body.classList.toggle("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * COUNTER — Animasi angka naik dari 0 ke target
+ * ───────────────────────────────────────────────────── */
+
+function initCounter() {
+  const counters = document.querySelectorAll("[data-counter]");
+  if (!counters.length) return;
+
+  counters.forEach((counter) => {
+    const target = Number(counter.dataset.counter);
+    if (!target) return;
+
+    let current = 0;
+    const step  = Math.max(1, Math.ceil(target / 80));
+
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      counter.textContent = current.toLocaleString("id-ID");
+      if (current >= target) clearInterval(timer);
+    }, 20);
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * MODAL — Buka/tutup dialog overlay
+ * ───────────────────────────────────────────────────── */
+
+function initModal() {
+  // Buka modal sesuai atribut data-modal
+  document.querySelectorAll("[data-modal]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const modal = document.getElementById(btn.dataset.modal);
+      if (modal) modal.style.display = "flex";
+    });
+  });
+
+  // Tutup modal saat klik overlay atau tombol close
+  document.querySelectorAll(".modal").forEach((modal) => {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal || e.target.classList.contains("close")) {
+        modal.style.display = "none";
+      }
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * WISHLIST BUTTON — Toggle ikon hati pada kartu produk
+ * ───────────────────────────────────────────────────── */
+
+function initWishlistButtons() {
+  // Gunakan event delegation untuk mendukung produk dinamis
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".favorite");
+    if (!btn) return;
+
+    btn.classList.toggle("active");
+
+    const icon = btn.querySelector("i");
+    if (icon) {
+      icon.classList.toggle("fa-regular");
+      icon.classList.toggle("fa-solid");
+    }
+
+    // Animasi detak jantung
+    btn.classList.add("heart");
+    btn.addEventListener("animationend", () => btn.classList.remove("heart"), { once: true });
+
+    showToast("Produk ditambahkan ke wishlist");
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * COPY AFFILIATE — Salin link afiliasi ke clipboard
+ * ───────────────────────────────────────────────────── */
+
+function initCopyAffiliate() {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".copy-link");
+    if (!btn) return;
+
+    const input = btn.parentElement.querySelector("input");
+    if (!input) return;
+
+    navigator.clipboard
+      .writeText(input.value)
+      .then(() => showToast("Link berhasil disalin"))
+      .catch(() => showToast("Gagal menyalin link", "error"));
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * SHARE — Bagikan halaman via Web Share API
+ * ───────────────────────────────────────────────────── */
+
+function initShare() {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".share-btn");
+    if (!btn) return;
+
+    if (navigator.share) {
+      navigator.share({
+        title: document.title,
+        text:  "Lihat produk ini",
+        url:   window.location.href,
+      }).catch(() => {}); // abaikan jika user membatalkan
+    } else {
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => showToast("Link disalin"))
+        .catch(() => showToast("Gagal menyalin link", "error"));
+    }
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * RATING — Sistem bintang interaktif
+ * ───────────────────────────────────────────────────── */
+
+function initRating() {
+  // Delegation: tangani klik pada bintang di mana pun
+  document.addEventListener("click", (e) => {
+    const star = e.target.closest(".rating i");
+    if (!star) return;
+
+    const parent = star.closest(".rating");
+    const stars  = [...parent.querySelectorAll("i")];
+    const index  = stars.indexOf(star);
+
+    parent.dataset.rating = index + 1;
+    stars.forEach((s, i) => s.classList.toggle("active", i <= index));
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+ * LAZY IMAGE — Muat gambar hanya saat masuk viewport
+ * ───────────────────────────────────────────────────── */
+
+function initLazyImage() {
+  const images = document.querySelectorAll("img[data-src]");
+  if (!images.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const img = entry.target;
+      img.src = img.dataset.src;
+      img.removeAttribute("data-src");
+      observer.unobserve(img);
+    });
+  });
+
+  images.forEach((img) => observer.observe(img));
+}
+
+/* ─────────────────────────────────────────────────────
+ * INFINITE SCROLL — Muat produk berikutnya otomatis
+ * ───────────────────────────────────────────────────── */
+
+function initInfiniteScroll() {
+  const trigger = document.querySelector("#loadMore");
+  if (!trigger) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) loadMoreProduct();
+    });
+  });
+
+  observer.observe(trigger);
+}
+
+/**
+ * Muat batch produk berikutnya dari server/data lokal.
+ * TODO: Implementasikan pemanggilan API nyata di sini.
+ */
+function loadMoreProduct() {
+  console.log("[PasarNusa] Memuat produk berikutnya…");
+}
+
+/* ─────────────────────────────────────────────────────
+ * CONNECTION STATUS — Notifikasi status koneksi internet
+ * ───────────────────────────────────────────────────── */
+
+function initConnectionStatus() {
+  window.addEventListener("offline", () =>
+    showToast("Koneksi internet terputus", "warning")
+  );
+  window.addEventListener("online", () =>
+    showToast("Koneksi kembali normal", "success")
+  );
+}
+
+/* ─────────────────────────────────────────────────────
+ * GLOBAL ERROR HANDLER
+ * ───────────────────────────────────────────────────── */
+
+window.addEventListener("error", ({ message, filename, lineno }) => {
+  console.error(`[PasarNusa Error] ${message} — ${filename}:${lineno}`);
 });
 
-}
-/* =========================================
-   MODAL
-========================================= */
+/* ─────────────────────────────────────────────────────
+ * INIT — Jalankan semua modul saat DOM siap
+ * ───────────────────────────────────────────────────── */
 
-function initModal(){
+document.addEventListener("DOMContentLoaded", () => {
+  // Core UI
+  initNavbar();
+  initReveal();
+  initRipple();
+  initLoader();
+  initBackTop();
+  initSearch();
 
-document.querySelectorAll("[data-modal]")
+  // Interaksi UI
+  initMobileMenu();
+  initDarkMode();
+  initCounter();
+  initModal();
 
-.forEach(btn=>{
+  // Fitur marketplace
+  initWishlistButtons();
+  initCopyAffiliate();
+  initShare();
+  initRating();
 
-btn.onclick=()=>{
-
-const modal=document.getElementById(
-
-btn.dataset.modal
-
-);
-
-if(modal){
-
-modal.style.display="flex";
-
-}
-
-};
-
+  // Performa & koneksi
+  initLazyImage();
+  initInfiniteScroll();
+  initConnectionStatus();
 });
-
-document.querySelectorAll(".modal")
-
-.forEach(modal=>{
-
-modal.onclick=e=>{
-
-if(
-
-e.target===modal ||
-
-e.target.classList.contains("close")
-
-){
-
-modal.style.display="none";
-
-}
-
-};
-
-});
-
-}
-/* =====================================================
-   PASARNUSA APP V1
-   PART 3
-   MARKETPLACE FEATURES
-===================================================== */
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-initWishlist();
-
-initCopyAffiliate();
-
-initShare();
-
-initRating();
-
-});
-/* =========================================
-   WISHLIST
-========================================= */
-
-function initWishlist(){
-
-document.querySelectorAll(".favorite")
-
-.forEach(btn=>{
-
-btn.addEventListener("click",()=>{
-
-btn.classList.toggle("active");
-
-const icon=btn.querySelector("i");
-
-if(icon){
-
-icon.classList.toggle("fa-regular");
-
-icon.classList.toggle("fa-solid");
-
-}
-
-showToast("Produk ditambahkan ke wishlist");
-
-});
-
-});
-
-}
-.favorite.active{
-
-background:#ef4444;
-
-color:white;
-
-transform:scale(1.1);
-
-}
-/* =========================================
-   COPY AFFILIATE
-========================================= */
-
-function initCopyAffiliate(){
-
-document.querySelectorAll(".copy-link")
-
-.forEach(btn=>{
-
-btn.onclick=()=>{
-
-const input=
-
-btn.parentElement.querySelector("input");
-
-navigator.clipboard.writeText(input.value);
-
-showToast("Link berhasil disalin");
-
-};
-
-});
-
-}
-/* =========================================
-   SHARE
-========================================= */
-
-function initShare(){
-
-document.querySelectorAll(".share-btn")
-
-.forEach(btn=>{
-
-btn.onclick=()=>{
-
-if(navigator.share){
-
-navigator.share({
-
-title:document.title,
-
-text:"Lihat produk ini",
-
-url:window.location.href
-
-});
-
-}else{
-
-navigator.clipboard.writeText(
-
-window.location.href
-
-);
-
-showToast("Link disalin");
-
-}
-
-};
-
-});
-
-}
-/* =========================================
-   RATING
-========================================= */
-
-function initRating(){
-
-document.querySelectorAll(".rating i")
-
-.forEach((star,index)=>{
-
-star.addEventListener("click",()=>{
-
-const parent=star.parentElement;
-
-parent.dataset.rating=index+1;
-
-parent.querySelectorAll("i")
-
-.forEach((item,i)=>{
-
-item.classList.toggle(
-
-"active",
-
-i<=index
-
-);
-
-});
-
-});
-
-});
-
-}
-/* =========================================
-   HEART
-========================================= */
-
-document
-
-.querySelectorAll(".favorite")
-
-.forEach(btn=>{
-
-btn.addEventListener("click",()=>{
-
-btn.classList.add("heart");
-
-setTimeout(()=>{
-
-btn.classList.remove("heart");
-
-},500);
-
-});
-
-});
-/* =========================================
-   FORMAT RUPIAH
-========================================= */
-
-function rupiah(nilai){
-
-return new Intl.NumberFormat(
-
-"id-ID",
-
-{
-
-style:"currency",
-
-currency:"IDR",
-
-maximumFractionDigits:0
-
-}
-
-).format(nilai);
-
-}
-/* =========================================
-   DEBOUNCE
-========================================= */
-
-function debounce(fn,delay){
-
-let timer;
-
-return(...args)=>{
-
-clearTimeout(timer);
-
-timer=setTimeout(()=>{
-
-fn(...args);
-
-},delay);
-
-};
-
-}
-/* =====================================================
-   PASARNUSA APP V1
-   PART 4
-   PRODUCTION READY
-===================================================== */
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-initLazyImage();
-
-initInfiniteScroll();
-
-initConnectionStatus();
-
-});
-/* =========================================
-   LAZY IMAGE
-========================================= */
-
-function initLazyImage(){
-
-const images=document.querySelectorAll("img[data-src]");
-
-if(!images.length) return;
-
-const observer=new IntersectionObserver(entries=>{
-
-entries.forEach(entry=>{
-
-if(!entry.isIntersecting) return;
-
-const img=entry.target;
-
-img.src=img.dataset.src;
-
-img.removeAttribute("data-src");
-
-observer.unobserve(img);
-
-});
-
-});
-
-images.forEach(img=>observer.observe(img));
-
-}
-/* =========================================
-   CONNECTION
-========================================= */
-
-function initConnectionStatus(){
-
-window.addEventListener("offline",()=>{
-
-showToast(
-
-"Koneksi internet terputus",
-
-"warning"
-
-);
-
-});
-
-window.addEventListener("online",()=>{
-
-showToast(
-
-"Koneksi kembali normal",
-
-"success"
-
-);
-
-});
-
-}
-/* =========================================
-   INFINITE SCROLL
-========================================= */
-
-function initInfiniteScroll(){
-
-const trigger=document.querySelector("#loadMore");
-
-if(!trigger) return;
-
-const observer=new IntersectionObserver(entries=>{
-
-entries.forEach(entry=>{
-
-if(entry.isIntersecting){
-
-loadMoreProduct();
-
-}
-
-});
-
-});
-
-observer.observe(trigger);
-
-}
-
-function loadMoreProduct(){
-
-console.log("Load produk berikutnya");
-
-}
-/* =========================================
-   STORAGE
-========================================= */
-
-const Storage={
-
-set(key,value){
-
-localStorage.setItem(
-
-key,
-
-JSON.stringify(value)
-
-);
-
-},
-
-get(key){
-
-return JSON.parse(
-
-localStorage.getItem(key)
-
-)||[];
-
-},
-
-remove(key){
-
-localStorage.removeItem(key);
-
-}
-
-};
-/* =========================================
-   CART
-========================================= */
-
-const Cart={
-
-key:"cart",
-
-all(){
-
-return Storage.get(this.key);
-
-},
-
-save(data){
-
-Storage.set(this.key,data);
-
-},
-
-add(product){
-
-const cart=this.all();
-
-cart.push(product);
-
-this.save(cart);
-
-showToast(
-
-"Produk masuk keranjang"
-
-);
-
-},
-
-count(){
-
-return this.all().length;
-
-}
-
-};
-/* =========================================
-   WISHLIST
-========================================= */
-
-const Wishlist={
-
-key:"wishlist",
-
-toggle(id){
-
-let list=Storage.get(this.key);
-
-if(list.includes(id)){
-
-list=list.filter(x=>x!==id);
-
-}else{
-
-list.push(id);
-
-}
-
-Storage.set(this.key,list);
-
-}
-
-};
-/* =========================================
-   API
-========================================= */
-
-async function api(url){
-
-try{
-
-const res=await fetch(url);
-
-if(!res.ok)
-
-throw Error("API Error");
-
-return await res.json();
-
-}
-
-catch(e){
-
-console.error(e);
-
-showToast(
-
-"Gagal mengambil data",
-
-"error"
-
-);
-
-}
-
-}
-/* =========================================
-   ERROR
-========================================= */
-
-window.onerror=(
-
-msg,
-
-url,
-
-line
-
-)=>{
-
-console.error(
-
-msg,
-
-url,
-
-line
-
-);
-
-return false;
-
-};
-/* =========================================
-   DELAY
-========================================= */
-
-const sleep=(ms)=>
-
-new Promise(resolve=>
-
-setTimeout(resolve,ms)
-
-);
-/* =========================================
-   RANDOM ID
-========================================= */
-
-function uid(){
-
-return Math.random()
-
-.toString(36)
-
-.substring(2,10);
-
-}
-/* =========================================
-   DATE
-========================================= */
-
-function tanggal(date){
-
-return new Date(date)
-
-.toLocaleDateString(
-
-"id-ID",
-
-{
-
-day:"numeric",
-
-month:"long",
-
-year:"numeric"
-
-}
-
-);
-
-}
