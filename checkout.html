@@ -1,805 +1,294 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & PWA -->
+  <title>Checkout | PasarNusa</title>
+  <meta name="description" content="Checkout pesanan PasarNusa">
+  <meta name="theme-color" content="#16a34a">
+  <link rel="icon" href="assets/logo.png">
 
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1.0">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<title>Checkout | PasarNusa</title>
-
-<meta
-name="description"
-content="Checkout pesanan PasarNusa">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="checkout.css">
-
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="checkout.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<a href="cart.html">
-
-Keranjang
-
-</a>
-
-<a
-href="checkout.html"
-class="active">
-
-Checkout
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-💳 Checkout
-
-</div>
-
-<h1>
-
-Selesaikan Pesanan Anda
-
-</h1>
-
-<p>
-
-Pastikan seluruh informasi pengiriman sudah benar sebelum membuat pesanan.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<a href="cart.html">
-
-Keranjang
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Checkout
-
-</span>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="checkout-layout">
-<div class="checkout-content">
-
-<div class="form-card">
-
-<h2>
-
-👤 Data Penerima
-
-</h2>
-
-<div class="form-group">
-
-<label>
-
-Nama Lengkap
-
-</label>
-
-<input
-
-type="text"
-
-id="namaPembeli"
-
-placeholder="Masukkan nama lengkap">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Nomor WhatsApp
-
-</label>
-
-<input
-
-type="tel"
-
-id="whatsappPembeli"
-
-placeholder="08xxxxxxxxxx">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Alamat Lengkap
-
-</label>
-
-<textarea
-
-id="alamatPembeli"
-
-rows="5"
-
-placeholder="Masukkan alamat lengkap">
-
-</textarea>
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Kota Tujuan
-
-</label>
-
-<select
-
-id="kotaTujuan">
-
-<option value="">
-
-Pilih Kota
-
-</option>
-
-</select>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-📦 Produk Checkout
-
-</h2>
-
-<div
-id="checkoutProduk"
-class="checkout-product-list">
-
-<div class="loading-card">
-
-Memuat produk...
-
-</div>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-🎟 Voucher
-
-</h2>
-
-<div class="voucher-box">
-
-<input
-
-type="text"
-
-id="kodeVoucher"
-
-placeholder="Masukkan kode voucher">
-
-<button
-
-id="cekVoucher"
-
-class="btn btn-secondary">
-
-Gunakan
-
-</button>
-
-</div>
-
-<p
-id="voucherInfo">
-
-Belum menggunakan voucher.
-
-</p>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-🚚 Pengiriman
-
-</h2>
-
-<div class="form-group">
-
-<label>
-
-Pilih Kurir
-
-</label>
-
-<select
-id="kurir">
-
-<option value="JNE">
-
-JNE
-
-</option>
-
-<option value="J&T">
-
-J&T Express
-
-</option>
-
-<option value="SiCepat">
-
-SiCepat
-
-</option>
-
-<option value="POS">
-
-POS Indonesia
-
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Catatan Untuk Penjual
-
-</label>
-
-<textarea
-
-id="catatan"
-
-rows="4"
-
-placeholder="Contoh: Tolong dikemas dengan aman.">
-
-</textarea>
-
-</div>
-
-</div>
-<div class="checkout-summary">
-
-<div class="summary-card">
-
-<h2>
-
-💰 Ringkasan Pembayaran
-
-</h2>
-
-<div class="summary-item">
-
-<span>
-
-Subtotal
-
-</span>
-
-<b id="subtotalInfo">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Ongkir
-
-</span>
-
-<b id="ongkirInfo">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Diskon
-
-</span>
-
-<b id="diskonInfo">
-
-Rp 0
-
-</b>
-
-</div>
-
-<hr>
-
-<div class="summary-total">
-
-<span>
-
-Total Bayar
-
-</span>
-
-<h2 id="totalBayar">
-
-Rp 0
-
-</h2>
-
-</div>
-<div class="income-box">
-
-<h3>
-
-📊 Pembagian Pendapatan
-
-</h3>
-
-<div class="summary-item">
-
-<span>
-
-UMKM
-
-</span>
-
-<b id="pendapatanUmkm">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Affiliate
-
-</span>
-
-<b id="komisiAffiliate">
-
-Rp 0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Platform
-
-</span>
-
-<b id="pendapatanPlatform">
-
-Rp 0
-
-</b>
-
-</div>
-
-</div>
-<button
-
-id="checkoutBtn"
-
-class="btn btn-primary">
-
-💳 Buat Pesanan
-
-</button>
-
-<a
-
-href="cart.html"
-
-class="btn btn-secondary">
-
-⬅ Kembali ke Keranjang
-
-</a>
-
-</div>
-
-</div>
-
-</section>
-<div
-id="emptyCheckout"
-class="empty-state"
-style="display:none;">
-
-<div class="empty-icon">
-
-🛒
-
-</div>
-
-<h2>
-
-Tidak Ada Produk
-
-</h2>
-
-<p>
-
-Silakan tambahkan produk ke keranjang terlebih dahulu.
-
-</p>
-
-<a
-
-href="produk.html"
-
-class="btn btn-primary">
-
-Mulai Belanja
-
-</a>
-
-</div>
-<template id="loadingCheckout">
-
-<div class="checkout-item skeleton">
-
-<div class="image-skeleton">
-
-</div>
-
-<div class="content-skeleton">
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-</div>
-
-</div>
-
-</template>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-
-🌿 PasarNusa
-
-</h3>
-
-<p>
-
-Marketplace UMKM Indonesia yang membantu produk lokal menjangkau seluruh Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-Menu
-
-</h4>
-
-<ul>
-
-<li>
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-</li>
-
-<li>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-</li>
-
-<li>
-
-<a href="cart.html">
-
-Keranjang
-
-</a>
-
-</li>
-
-<li>
-
-<a href="checkout.html">
-
-Checkout
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>
-
-Bantuan
-
-</h4>
-
-<ul>
-
-<li>
-
-<a href="faq.html">
-
-FAQ
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kontak.html">
-
-Kontak
-
-</a>
-
-</li>
-
-<li>
-
-<a href="kebijakan.html">
-
-Privasi
-
-</a>
-
-</li>
-
-<li>
-
-<a href="syarat.html">
-
-Syarat
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-<script src="script.js"></script>
-
-<script
-type="module"
-src="checkout.js">
-
-</script>
+  <!-- ===== NAVIGASI ===== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Menu Utama -->
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="produk.html">Produk</a>
+          <a href="cart.html">Keranjang</a>
+          <a href="checkout.html" class="active" aria-current="page">Checkout</a>
+        </nav>
+
+        <!-- Aksi Navbar -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+        <!-- Tombol Menu Mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero-page" aria-labelledby="heroTitle">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">💳 Checkout</div>
+        <h1 id="heroTitle">Selesaikan Pesanan Anda</h1>
+        <p>Pastikan seluruh informasi pengiriman sudah benar sebelum membuat pesanan.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BREADCRUMB ===== -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true">/</span>
+      <a href="cart.html">Keranjang</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Checkout</span>
+    </div>
+  </nav>
+
+  <!-- ===== KONTEN UTAMA ===== -->
+  <main class="section">
+    <div class="container">
+      <div class="checkout-layout">
+
+        <!-- ===== FORMULIR CHECKOUT ===== -->
+        <div class="checkout-content">
+
+          <!-- Data Penerima -->
+          <div class="form-card">
+            <h2>👤 Data Penerima</h2>
+
+            <div class="form-group">
+              <label for="namaPembeli">Nama Lengkap</label>
+              <input type="text" id="namaPembeli" name="namaPembeli"
+                placeholder="Masukkan nama lengkap"
+                autocomplete="name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="whatsappPembeli">Nomor WhatsApp</label>
+              <input type="tel" id="whatsappPembeli" name="whatsappPembeli"
+                placeholder="08xxxxxxxxxx"
+                autocomplete="tel" required>
+            </div>
+
+            <div class="form-group">
+              <label for="alamatPembeli">Alamat Lengkap</label>
+              <textarea id="alamatPembeli" name="alamatPembeli"
+                rows="5"
+                placeholder="Masukkan alamat lengkap"
+                autocomplete="street-address" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="kotaTujuan">Kota Tujuan</label>
+              <select id="kotaTujuan" name="kotaTujuan" required>
+                <option value="">Pilih Kota</option>
+                <!-- Opsi kota diisi via JavaScript (checkout.js) -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Daftar Produk -->
+          <div class="form-card">
+            <h2>📦 Produk Checkout</h2>
+            <!-- Diisi oleh checkout.js; tampilkan skeleton saat loading -->
+            <div id="checkoutProduk" class="checkout-product-list" aria-live="polite">
+              <div class="loading-card" aria-busy="true">Memuat produk...</div>
+            </div>
+          </div>
+
+          <!-- Voucher -->
+          <div class="form-card">
+            <h2>🎟 Voucher</h2>
+            <div class="voucher-box">
+              <label for="kodeVoucher" class="sr-only">Kode Voucher</label>
+              <input type="text" id="kodeVoucher" name="kodeVoucher"
+                placeholder="Masukkan kode voucher"
+                autocomplete="off">
+              <button id="cekVoucher" class="btn btn-secondary" type="button">Gunakan</button>
+            </div>
+            <!-- Status voucher diperbarui via JavaScript -->
+            <p id="voucherInfo" aria-live="polite">Belum menggunakan voucher.</p>
+          </div>
+
+          <!-- Pengiriman -->
+          <div class="form-card">
+            <h2>🚚 Pengiriman</h2>
+
+            <div class="form-group">
+              <label for="kurir">Pilih Kurir</label>
+              <select id="kurir" name="kurir">
+                <option value="JNE">JNE</option>
+                <option value="J&T">J&T Express</option>
+                <option value="SiCepat">SiCepat</option>
+                <option value="POS">POS Indonesia</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="catatan">Catatan untuk Penjual</label>
+              <textarea id="catatan" name="catatan"
+                rows="4"
+                placeholder="Contoh: Tolong dikemas dengan aman."></textarea>
+            </div>
+          </div>
+
+        </div>
+        <!-- /checkout-content -->
+
+        <!-- ===== RINGKASAN PEMBAYARAN ===== -->
+        <aside class="checkout-summary" aria-label="Ringkasan pembayaran">
+          <div class="summary-card">
+            <h2>💰 Ringkasan Pembayaran</h2>
+
+            <div class="summary-item">
+              <span>Subtotal</span>
+              <b id="subtotalInfo">Rp 0</b>
+            </div>
+            <div class="summary-item">
+              <span>Ongkir</span>
+              <b id="ongkirInfo">Rp 0</b>
+            </div>
+            <div class="summary-item">
+              <span>Diskon</span>
+              <b id="diskonInfo">Rp 0</b>
+            </div>
+
+            <hr>
+
+            <div class="summary-total">
+              <span>Total Bayar</span>
+              <h2 id="totalBayar">Rp 0</h2>
+            </div>
+
+            <!-- Pembagian pendapatan (untuk transparansi ekosistem) -->
+            <div class="income-box">
+              <h3>📊 Pembagian Pendapatan</h3>
+              <div class="summary-item">
+                <span>UMKM</span>
+                <b id="pendapatanUmkm">Rp 0</b>
+              </div>
+              <div class="summary-item">
+                <span>Affiliate</span>
+                <b id="komisiAffiliate">Rp 0</b>
+              </div>
+              <div class="summary-item">
+                <span>Platform</span>
+                <b id="pendapatanPlatform">Rp 0</b>
+              </div>
+            </div>
+
+            <!-- Aksi -->
+            <button id="checkoutBtn" class="btn btn-primary" type="button">
+              💳 Buat Pesanan
+            </button>
+            <a href="cart.html" class="btn btn-secondary">⬅ Kembali ke Keranjang</a>
+
+          </div>
+        </aside>
+
+      </div>
+      <!-- /checkout-layout -->
+
+      <!-- State kosong: tampil via JS bila keranjang kosong -->
+      <div id="emptyCheckout" class="empty-state" hidden aria-hidden="true">
+        <div class="empty-icon" aria-hidden="true">🛒</div>
+        <h2>Tidak Ada Produk</h2>
+        <p>Silakan tambahkan produk ke keranjang terlebih dahulu.</p>
+        <a href="produk.html" class="btn btn-primary">Mulai Belanja</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Template skeleton item (digunakan oleh checkout.js saat loading) -->
+  <template id="loadingCheckout">
+    <div class="checkout-item skeleton" aria-hidden="true">
+      <div class="image-skeleton"></div>
+      <div class="content-skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+
+        <div>
+          <h3>🌿 PasarNusa</h3>
+          <p>Marketplace UMKM Indonesia yang membantu produk lokal menjangkau seluruh Indonesia.</p>
+        </div>
+
+        <div>
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+            <li><a href="cart.html">Keranjang</a></li>
+            <li><a href="checkout.html">Checkout</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+            <li><a href="kebijakan.html">Privasi</a></li>
+            <li><a href="syarat.html">Syarat</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Tombol kembali ke atas -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- Scripts: script.js global, checkout.js sebagai modul ES -->
+  <script src="script.js"></script>
+  <script type="module" src="checkout.js"></script>
 
 </body>
-
 </html>
