@@ -1,691 +1,315 @@
-// ======================================
-// PASARNUSA PESANAN SAYA
-// pesanan-saya.js
-// ======================================
+// ============================================================
+// pesanan-saya.js — PasarNusa
+// Menampilkan, memfilter, dan menghitung statistik pesanan
+// milik pengguna yang sedang login.
+// ============================================================
 
-// Firebase
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, where, orderBy, getDocs }
+                            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth }          from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// ============================================================
+// KONFIGURASI FIREBASE
+// ============================================================
 
-import {
-
-getFirestore,
-
-collection,
-
-query,
-
-where,
-
-orderBy,
-
-getDocs
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-
-getAuth
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-// ======================================
-// FIREBASE
-// ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+const firebaseConfig = {
+  apiKey:            "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain:        "pasarnusa-18aa0.firebaseapp.com",
+  projectId:         "pasarnusa-18aa0",
+  storageBucket:     "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId:             "1:866998011671:web:5555115feb82741ab55952",
 };
 
-const app=
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-initializeApp(firebaseConfig);
+// ============================================================
+// REFERENSI ELEMEN DOM
+// ============================================================
 
-const db=
+const el = {
+  container:           document.getElementById("pesananContainer"),
+  emptyState:          document.getElementById("emptyPesanan"),
+  search:              document.getElementById("searchPesanan"),
+  filterStatus:        document.getElementById("filterStatus"),
+  totalPesanan:        document.getElementById("totalPesanan"),
+  belumBayar:          document.getElementById("belumBayar"),
+  menungguVerifikasi:  document.getElementById("menungguVerifikasi"),
+  diproses:            document.getElementById("diproses"),
+  dikirim:             document.getElementById("dikirim"),
+  selesai:             document.getElementById("selesai"),
+  totalBelanja:        document.getElementById("totalBelanja"),
+};
 
-getFirestore(app);
+// ============================================================
+// STATE
+// ============================================================
 
-const auth=
+/** @type {string} UID pengguna yang sedang login */
+let uid = "";
 
-getAuth(app);
-// ======================================
-// ELEMENT
-// ======================================
+/** @type {Array<Object>} Seluruh data pesanan dari Firestore */
+let semuaPesanan = [];
 
-const pesananContainer=
+// ============================================================
+// INISIALISASI
+// ============================================================
 
-document.getElementById("pesananContainer");
+document.addEventListener("DOMContentLoaded", initPage);
 
-const totalPesanan=
-
-document.getElementById("totalPesanan");
-
-const belumBayar=
-
-document.getElementById("belumBayar");
-
-const menungguVerifikasi=
-
-document.getElementById("menungguVerifikasi");
-
-const diproses=
-
-document.getElementById("diproses");
-
-const dikirim=
-
-document.getElementById("dikirim");
-
-const selesai=
-
-document.getElementById("selesai");
-
-const totalBelanja=
-
-document.getElementById("totalBelanja");
-
-const searchPesanan=
-
-document.getElementById("searchPesanan");
-
-const filterStatus=
-
-document.getElementById("filterStatus");
-// ======================================
-// VARIABLE
-// ======================================
-
-let uid="";
-
-let semuaPesanan=[];
-// ======================================
-// START
-// ======================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-initPage
-
-);
-
-async function initPage(){
-
-await checkLogin();
-
-showLoading();
-
-await loadPesanan();
-
-initSearch();
-
-initFilter();
-
-}
-// ======================================
-// LOGIN
-// ======================================
-
-async function checkLogin(){
-
-await auth.authStateReady();
-
-if(!auth.currentUser){
-
-window.location.href=
-
-"login.html";
-
-return;
-
+async function initPage() {
+  await checkLogin();
+  showLoading();
+  await loadPesanan();
+  el.search.addEventListener("input", filterPesanan);
+  el.filterStatus.addEventListener("change", filterPesanan);
 }
 
-uid=
+// ============================================================
+// AUTENTIKASI — redirect ke login jika belum masuk
+// ============================================================
 
-auth.currentUser.uid;
+async function checkLogin() {
+  await auth.authStateReady();
 
-}
-// ======================================
-// LOADING
-// ======================================
+  if (!auth.currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
 
-function showLoading(){
-
-const template=
-
-document.getElementById(
-
-"loadingPesanan"
-
-);
-
-pesananContainer.innerHTML="";
-
-for(let i=0;i<4;i++){
-
-pesananContainer.appendChild(
-
-template.content.cloneNode(true)
-
-);
-
+  uid = auth.currentUser.uid;
 }
 
-}
-// ======================================
-// LOAD PESANAN
-// ======================================
+// ============================================================
+// LOADING SKELETON — tampilkan 4 kartu placeholder
+// ============================================================
 
-async function loadPesanan(){
+function showLoading() {
+  const template = document.getElementById("loadingPesanan");
+  el.container.innerHTML = "";
+  el.container.setAttribute("aria-busy", "true");
 
-try{
-
-const snapshot=
-
-await getDocs(
-
-query(
-
-collection(db,"pesanan"),
-
-where(
-
-"uidPembeli",
-
-"==",
-
-uid
-
-),
-
-orderBy(
-
-"createdAt",
-
-"desc"
-
-)
-
-)
-
-);
-
-semuaPesanan=[];
-
-snapshot.forEach(doc=>{
-
-semuaPesanan.push({
-
-id:doc.id,
-
-...doc.data()
-
-});
-
-});
-
-updateStatistik();
-
-renderPesanan(
-
-semuaPesanan
-
-);
-
-}catch(error){
-
-console.error(error);
-
-showError();
-
+  for (let i = 0; i < 4; i++) {
+    el.container.appendChild(template.content.cloneNode(true));
+  }
 }
 
-}
-// ======================================
-// STATISTIK
-// ======================================
+// ============================================================
+// AMBIL DATA PESANAN dari Firestore
+// ============================================================
 
-function updateStatistik(){
+async function loadPesanan() {
+  try {
+    const q = query(
+      collection(db, "pesanan"),
+      where("uidPembeli", "==", uid),
+      orderBy("createdAt", "desc")
+    );
 
-totalPesanan.innerText=
+    const snapshot = await getDocs(q);
 
-semuaPesanan.length;
+    semuaPesanan = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-belumBayar.innerText=
-
-semuaPesanan.filter(item=>
-
-item.status==="Belum Bayar"
-
-).length;
-
-menungguVerifikasi.innerText=
-
-semuaPesanan.filter(item=>
-
-item.status==="Menunggu Verifikasi"
-
-).length;
-
-diproses.innerText=
-
-semuaPesanan.filter(item=>
-
-item.status==="Diproses"
-
-).length;
-
-dikirim.innerText=
-
-semuaPesanan.filter(item=>
-
-item.status==="Dikirim"
-
-).length;
-
-selesai.innerText=
-
-semuaPesanan.filter(item=>
-
-item.status==="Selesai"
-
-).length;
-
-const total=
-
-semuaPesanan.reduce(
-
-(sum,item)=>
-
-sum+
-
-Number(item.totalBayar||0),
-
-0
-
-);
-
-totalBelanja.innerText=
-
-formatRupiah(total);
-
-}
-// ======================================
-// RENDER
-// ======================================
-
-function renderPesanan(data){
-
-pesananContainer.innerHTML="";
-
-if(data.length===0){
-
-document.getElementById(
-
-"emptyPesanan"
-
-).style.display="block";
-
-return;
-
+    updateStatistik();
+    renderPesanan(semuaPesanan);
+  } catch (error) {
+    console.error("[PasarNusa] Gagal memuat pesanan:", error);
+    showError();
+  } finally {
+    el.container.setAttribute("aria-busy", "false");
+  }
 }
 
-document.getElementById(
-
-"emptyPesanan"
-
-).style.display="none";
-
-data.forEach(item=>{
-
-pesananContainer.innerHTML+=
-
-createCard(item);
-
-});
-
-}
-// ======================================
-// CARD
-// ======================================
-
-function createCard(item){
-
-const gambar=
-
-item.items?.[0]?.gambar?.[0]||
-
-item.items?.[0]?.gambar||
-
-"assets/no-image.png";
-
-const namaProduk=
-
-item.items?.[0]?.namaProduk||
-
-"Produk";
-
-const jumlah=
-
-item.items?.length||0;
-
-return`
-
-<div class="order-card">
-
-<img
-
-src="${gambar}"
-
-loading="lazy">
-
-<div class="order-info">
-
-<h3>
-
-${namaProduk}
-
-</h3>
-
-<p>
-
-🏪 ${item.namaUmkm||"-"}
-
-</p>
-
-<p>
-
-🆔 ${item.id.substring(0,8)}
-
-</p>
-
-<p>
-
-🛍 ${jumlah} Produk
-
-</p>
-
-<p class="harga">
-
-${formatRupiah(item.totalBayar)}
-
-</p>
-
-<span class="status-badge ${statusClass(item.status)}">
-
-${item.status}
-
-</span>
-
-</div>
-
-<div class="order-action">
-
-<a
-
-href="detail-pesanan.html?id=${item.id}"
-
-class="btn btn-primary">
-
-Detail
-
-</a>
-
-${item.status==="Belum Bayar"
-
-?`
-
-<a
-
-href="upload-bukti.html?id=${item.id}"
-
-class="btn btn-secondary">
-
-Upload Bukti
-
-</a>
-
-`
-
-:""}
-
-</div>
-
-</div>
-
-`;
-
-}
-// ======================================
-// STATUS
-// ======================================
-
-function statusClass(status){
-
-switch(status){
-
-case"Belum Bayar":
-
-return"status-belum";
-
-case"Menunggu Verifikasi":
-
-return"status-verifikasi";
-
-case"Diproses":
-
-return"status-proses";
-
-case"Dikirim":
-
-return"status-kirim";
-
-case"Selesai":
-
-return"status-selesai";
-
-default:
-
-return"status-ditolak";
-
+// ============================================================
+// STATISTIK DASHBOARD — hitung dan tampilkan ringkasan
+// ============================================================
+
+function updateStatistik() {
+  const count = status =>
+    semuaPesanan.filter(item => item.status === status).length;
+
+  el.totalPesanan.textContent       = semuaPesanan.length;
+  el.belumBayar.textContent         = count("Belum Bayar");
+  el.menungguVerifikasi.textContent = count("Menunggu Verifikasi");
+  el.diproses.textContent           = count("Diproses");
+  el.dikirim.textContent            = count("Dikirim");
+  el.selesai.textContent            = count("Selesai");
+
+  const total = semuaPesanan.reduce((sum, item) => sum + Number(item.totalBayar || 0), 0);
+  el.totalBelanja.textContent = formatRupiah(total);
 }
 
-}
-// ======================================
-// SEARCH
-// ======================================
+// ============================================================
+// RENDER DAFTAR PESANAN
+// ============================================================
 
-function initSearch(){
+function renderPesanan(data) {
+  el.container.innerHTML = "";
 
-searchPesanan.addEventListener(
+  const isEmpty = data.length === 0;
+  el.emptyState.hidden = !isEmpty;
 
-"input",
+  if (isEmpty) return;
 
-filterPesanan
-
-);
-
-}
-// ======================================
-// FILTER
-// ======================================
-
-function initFilter(){
-
-filterStatus.addEventListener(
-
-"change",
-
-filterPesanan
-
-);
-
+  // Gunakan DocumentFragment agar hanya satu reflow DOM
+  const fragment = document.createDocumentFragment();
+  data.forEach(item => fragment.appendChild(createCard(item)));
+  el.container.appendChild(fragment);
 }
 
-function filterPesanan(){
+// ============================================================
+// BUAT KARTU PESANAN — aman dari XSS via textContent
+// ============================================================
 
-const keyword=
+function createCard(item) {
+  // Ambil gambar produk pertama (support string maupun array)
+  const gambar = item.items?.[0]?.gambar?.[0]
+    ?? item.items?.[0]?.gambar
+    ?? "assets/no-image.png";
 
-searchPesanan.value
+  const namaProduk  = item.items?.[0]?.namaProduk ?? "Produk";
+  const jumlahItem  = item.items?.length ?? 0;
+  const nomorSingkat = item.id.substring(0, 8);
 
-.toLowerCase()
+  // Buat elemen secara programatik — tidak ada innerHTML dengan data user
+  const card = document.createElement("div");
+  card.className = "order-card";
 
-.trim();
+  const img = document.createElement("img");
+  img.src     = gambar;
+  img.alt     = namaProduk;
+  img.loading = "lazy";
 
-const status=
+  const info = document.createElement("div");
+  info.className = "order-info";
+  info.innerHTML = `
+    <h3></h3>
+    <p>🏪 <span class="toko"></span></p>
+    <p>🆔 <span class="nomor"></span></p>
+    <p>🛍 <span class="jumlah"></span></p>
+    <p class="harga"></p>
+    <span class="status-badge ${statusClass(item.status)}"></span>
+  `;
 
-filterStatus.value;
+  // Isi teks via textContent agar aman dari XSS
+  info.querySelector("h3").textContent           = namaProduk;
+  info.querySelector(".toko").textContent        = item.namaUmkm    || "-";
+  info.querySelector(".nomor").textContent       = nomorSingkat;
+  info.querySelector(".jumlah").textContent      = `${jumlahItem} Produk`;
+  info.querySelector(".harga").textContent       = formatRupiah(item.totalBayar);
+  info.querySelector(".status-badge").textContent = item.status;
 
-const hasil=
+  const actions = document.createElement("div");
+  actions.className = "order-action";
 
-semuaPesanan.filter(item=>{
+  const linkDetail = document.createElement("a");
+  linkDetail.href      = `detail-pesanan.html?id=${encodeURIComponent(item.id)}`;
+  linkDetail.className = "btn btn-primary";
+  linkDetail.textContent = "Detail";
+  actions.appendChild(linkDetail);
 
-const nomor=
+  // Tombol upload bukti hanya muncul untuk pesanan belum bayar
+  if (item.status === "Belum Bayar") {
+    const linkBukti = document.createElement("a");
+    linkBukti.href      = `upload-bukti.html?id=${encodeURIComponent(item.id)}`;
+    linkBukti.className = "btn btn-secondary";
+    linkBukti.textContent = "Upload Bukti";
+    actions.appendChild(linkBukti);
+  }
 
-item.id
-
-.toLowerCase();
-
-const toko=
-
-(item.namaUmkm||"")
-
-.toLowerCase();
-
-const cocokKeyword=
-
-nomor.includes(keyword)
-
-||
-
-toko.includes(keyword);
-
-const cocokStatus=
-
-status==="all"
-
-||
-
-item.status===status;
-
-return cocokKeyword
-
-&&
-
-cocokStatus;
-
-});
-
-renderPesanan(
-
-hasil
-
-);
-
+  card.append(img, info, actions);
+  return card;
 }
-// ======================================
-// FORMAT
-// ======================================
 
-function formatRupiah(angka){
+// ============================================================
+// STATUS BADGE — peta status ke class CSS
+// ============================================================
 
-return "Rp "+
+const STATUS_CLASS = {
+  "Belum Bayar":          "status-belum",
+  "Menunggu Verifikasi":  "status-verifikasi",
+  "Diproses":             "status-proses",
+  "Dikirim":              "status-kirim",
+  "Selesai":              "status-selesai",
+};
 
-Number(
-
-angka||0
-
-)
-
-.toLocaleString(
-
-"id-ID"
-
-);
-
+function statusClass(status) {
+  return STATUS_CLASS[status] ?? "status-ditolak";
 }
-// ======================================
-// ERROR
-// ======================================
 
-function showError(){
+// ============================================================
+// FILTER & PENCARIAN — gabungkan keyword + status
+// ============================================================
 
-pesananContainer.innerHTML=`
+function filterPesanan() {
+  const keyword = el.search.value.toLowerCase().trim();
+  const status  = el.filterStatus.value;
 
-<div class="empty-state">
+  const hasil = semuaPesanan.filter(item => {
+    const cocokKeyword =
+      item.id.toLowerCase().includes(keyword) ||
+      (item.namaUmkm ?? "").toLowerCase().includes(keyword);
 
-<div class="empty-icon">
+    const cocokStatus = status === "all" || item.status === status;
 
-⚠️
+    return cocokKeyword && cocokStatus;
+  });
 
-</div>
-
-<h2>
-
-Terjadi Kesalahan
-
-</h2>
-
-<p>
-
-Gagal memuat data pesanan.
-
-</p>
-
-</div>
-
-`;
-
+  renderPesanan(hasil);
 }
-// ======================================
-// TOAST
-// ======================================
 
-function showToast(message){
+// ============================================================
+// FORMAT RUPIAH
+// ============================================================
 
-const toast=
+function formatRupiah(angka) {
+  return "Rp " + Number(angka || 0).toLocaleString("id-ID");
+}
 
-document.createElement("div");
+// ============================================================
+// TAMPILAN ERROR — gagal memuat dari Firestore
+// ============================================================
 
-toast.className="toast";
+function showError() {
+  el.container.innerHTML = "";
 
-toast.innerText=message;
+  const wrap = document.createElement("div");
+  wrap.className = "empty-state";
 
-document.body.appendChild(toast);
+  const icon = document.createElement("div");
+  icon.className   = "empty-icon";
+  icon.setAttribute("aria-hidden", "true");
+  icon.textContent = "⚠️";
 
-setTimeout(()=>{
+  const judul = document.createElement("h2");
+  judul.textContent = "Terjadi Kesalahan";
 
-toast.classList.add("show");
+  const pesan = document.createElement("p");
+  pesan.textContent = "Gagal memuat data pesanan. Silakan muat ulang halaman.";
 
-},100);
+  wrap.append(icon, judul, pesan);
+  el.container.appendChild(wrap);
+}
 
-setTimeout(()=>{
+// ============================================================
+// TOAST NOTIFIKASI — dipakai oleh modul lain jika diperlukan
+// ============================================================
 
-toast.classList.remove("show");
+export function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className   = "toast";
+  toast.textContent = message;
+  document.body.appendChild(toast);
 
-setTimeout(()=>{
+  // Animasi masuk
+  requestAnimationFrame(() => toast.classList.add("show"));
 
-toast.remove();
-
-},300);
-
-},3000);
-
+  // Animasi keluar lalu hapus elemen
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3000);
 }
