@@ -1,618 +1,1009 @@
-/* ==========================================
-  produk.css — Halaman Produk PasarNusa
-  Berisi style khusus produk.html:
-  hero, filter, grid produk, skeleton, pagination, CTA.
-  Style global (warna, font, utilitas) ada di style.css.
-========================================== */
+/* ==========================================================================
+   produk.css
+   Part 1 — Hero, Hero Search, Hero Stat, Breadcrumb
+   ========================================================================== */
 
 
-/* ==========================================
-  HERO PRODUK
-  Bagian atas halaman dengan judul dan pencarian.
-========================================== */
+/* ==========================================================================
+   HERO
+   ========================================================================== */
 
-.hero-page {
-  padding: 150px 0 90px;
-  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-  text-align: center;
-  overflow: hidden;
+.hero-page{
+  position:relative;
+  overflow:hidden;
+  padding:150px 0 90px;
+  text-align:center;
+  background:linear-gradient(
+    135deg,
+    var(--color-primary-light),
+    var(--color-surface)
+  );
 }
 
-.hero-page-content {
-  max-width: 850px;
-  margin: 0 auto;
+.hero-page-content{
+  max-width:850px;
+  margin-inline:auto;
 }
 
-.hero-page h1 {
-  font-size: 3.2rem;
-  font-weight: 800;
-  color: var(--color-heading);
-  margin: 25px 0;
-  line-height: 1.2;
+.hero-page h1{
+  margin:24px 0 20px;
+  color:var(--color-text);
 }
 
-.hero-page p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: var(--color-text);
-  max-width: 700px;
-  margin: 0 auto 40px;
+.hero-page p{
+  max-width:720px;
+  margin-inline:auto;
+  line-height:1.8;
 }
 
 
-/* Badge label di atas judul hero */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
-  background: #dcfce7;
-  color: #166534;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.95rem;
+/* ==========================================================================
+   HERO BADGE
+   ========================================================================== */
+
+.badge{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:10px 22px;
+
+  border-radius:var(--radius-full);
+
+  background:var(--color-primary-light);
+
+  color:var(--color-primary);
+
+  font-weight:700;
+
 }
 
 
-/* Form pencarian di hero */
-.hero-search {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 35px;
-  flex-wrap: wrap;
+/* ==========================================================================
+   HERO SEARCH
+   ========================================================================== */
+
+.hero-search{
+
+  display:flex;
+
+  justify-content:center;
+
+  gap:16px;
+
+  margin-top:36px;
+
+  flex-wrap:wrap;
+
 }
 
-.hero-search input {
-  width: 100%;
-  max-width: 560px;
-  padding: 18px 22px;
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  background: #fff;
-  font-size: 1rem;
-  transition: border-color 0.3s, box-shadow 0.3s;
+.hero-search input{
+
+  width:100%;
+
+  max-width:560px;
+
 }
 
-.hero-search input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.15);
-}
+.hero-search button{
 
-.hero-search button {
-  min-width: 140px;
-}
+  min-width:150px;
 
+  flex-shrink:0;
 
-/* Statistik ringkas (total produk, UMKM, kategori) */
-.hero-stat {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 50px;
-  flex-wrap: wrap;
-}
-
-.hero-stat-item {
-  min-width: 120px;
-  text-align: center;
-}
-
-.hero-stat-item h2 {
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: var(--color-primary);
-  margin: 0 0 6px;
-}
-
-.hero-stat-item span {
-  font-size: 0.95rem;
-  color: var(--color-text);
-  font-weight: 500;
 }
 
 
-/* ==========================================
-  BREADCRUMB
-  Navigasi hierarki halaman.
-========================================== */
+/* ==========================================================================
+   HERO STAT
+   ========================================================================== */
 
-.breadcrumb {
-  padding: 25px 0;
-  background: #fafafa;
-  border-bottom: 1px solid var(--color-border);
+.hero-stat{
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  gap:40px;
+
+  margin-top:45px;
+
+  flex-wrap:wrap;
+
 }
 
-.breadcrumb .container {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font-size: 0.95rem;
+.hero-stat-item{
+
+  min-width:120px;
+
+  text-align:center;
+
 }
 
-.breadcrumb a {
-  color: var(--color-primary);
-  font-weight: 600;
-  text-decoration: none;
+.hero-stat-item h2{
+
+  margin-bottom:6px;
+
+  color:var(--color-primary);
+
 }
 
-.breadcrumb a:hover {
-  text-decoration: underline;
-}
+.hero-stat-item span{
 
+  color:var(--color-muted);
 
-/* ==========================================
-  FILTER KATEGORI
-  Baris tombol filter di atas grid produk.
-========================================== */
-
-.filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 35px;
-  margin-bottom: 50px;
-}
-
-.filter-btn {
-  border-radius: 999px;
-  padding: 12px 24px;
-  font-weight: 600;
-  transition: transform 0.2s, background 0.2s, color 0.2s;
-  cursor: pointer;
-}
-
-.filter-btn.active {
-  background: var(--color-primary);
-  color: #fff;
-}
-
-.filter-btn:hover {
-  transform: translateY(-2px);
 }
 
 
-/* ==========================================
-  SORT / URUTAN
-  Dropdown pengurutan hasil produk.
-========================================== */
+/* ==========================================================================
+   BREADCRUMB
+   ========================================================================== */
 
-.sort-box {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+.breadcrumb{
+
+  padding:22px 0;
+
+  background:var(--color-background);
+
+  border-bottom:1px solid var(--color-border);
+
 }
 
-.sort-box label {
-  font-weight: 600;
-  color: var(--color-text);
-  white-space: nowrap;
+.breadcrumb .container{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  flex-wrap:wrap;
+
 }
 
-.sort-select {
-  padding: 14px 18px;
-  border-radius: 12px;
-  border: 1px solid var(--color-border);
-  background: #fff;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
+.breadcrumb a{
+
+  color:var(--color-primary);
+
+  font-weight:600;
+
 }
 
-.sort-select:hover,
-.sort-select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
+@media(hover:hover){
 
+  .breadcrumb a:hover{
 
-/* ==========================================
-  PRODUCT GRID
-  Layout grid responsif untuk kartu produk.
-========================================== */
+    text-decoration:underline;
 
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 30px;
-  margin-top: 40px;
+  }
+
 }
 
 
-/* ==========================================
-  PRODUCT CARD
-  Kartu individual untuk setiap produk.
-========================================== */
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
 
-.product-card {
-  background: #fff;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  transition: transform 0.35s, box-shadow 0.35s;
+@media(max-width:992px){
+
+  .hero-page{
+
+    padding:130px 0 70px;
+
+  }
+
 }
 
-.product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+@media(max-width:768px){
+
+  .hero-search{
+
+    flex-direction:column;
+
+    align-items:stretch;
+
+  }
+
+  .hero-search button{
+
+    width:100%;
+
+  }
+
 }
 
-/* Gambar produk dengan rasio 1:1 */
-.product-image {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: #f3f4f6;
+@media(max-width:576px){
+
+  .hero-stat{
+
+    flex-direction:column;
+
+    gap:18px;
+
+  }
+
+}
+/* ==========================================================================
+   FILTER BAR
+   ========================================================================== */
+
+.filter-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin:40px 0;
+  flex-wrap:wrap;
 }
 
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s;
+
+/* ==========================================================================
+   FILTER BUTTON
+   ========================================================================== */
+
+.filter-group{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
-.product-card:hover .product-image img {
-  transform: scale(1.08);
+.filter-btn{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:12px 24px;
+
+  border:1px solid var(--color-border);
+
+  border-radius:var(--radius-full);
+
+  background:var(--color-surface);
+
+  color:var(--color-text);
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+
 }
 
-/* Label badge (misal: "Terlaris", "Baru") di atas gambar */
-.product-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: #16a34a;
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 700;
+.filter-btn.active{
+
+  background:var(--color-primary);
+
+  color:var(--color-white);
+
+  border-color:var(--color-primary);
+
 }
 
-/* Konten teks kartu produk */
-.product-content {
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+@media(hover:hover){
+
+  .filter-btn:hover{
+
+    transform:translateY(-2px);
+
+    border-color:var(--color-primary);
+
+  }
+
 }
 
-.product-category {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: 10px;
+
+/* ==========================================================================
+   SORT BOX
+   ========================================================================== */
+
+.sort-box{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:14px;
+
 }
 
-.product-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 15px;
-  color: var(--color-heading);
+.sort-box label{
+
+  font-weight:600;
+
+  color:var(--color-text);
+
+  white-space:nowrap;
+
 }
 
-.product-price {
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: var(--color-primary);
-  margin-bottom: 18px;
+.sort-select{
+
+  min-width:220px;
+
 }
 
-.product-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 15px;
+
+/* ==========================================================================
+   PRODUCT GRID
+   ========================================================================== */
+
+.product-grid{
+
+  display:grid;
+
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+  gap:30px;
+
+}
+
+
+/* ==========================================================================
+   RESULT INFO
+   ========================================================================== */
+
+.product-result{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:20px;
+
+  margin-bottom:30px;
+
+  flex-wrap:wrap;
+
+}
+
+.product-result p{
+
+  color:var(--color-muted);
+
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media(max-width:768px){
+
+  .filter-bar{
+
+    flex-direction:column;
+
+    align-items:stretch;
+
+  }
+
+  .sort-box{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+  }
+
+  .sort-select{
+
+    width:100%;
+
+  }
+
+  .filter-group{
+
+    flex-wrap:nowrap;
+
+    overflow-x:auto;
+
+    padding-bottom:8px;
+
+    scrollbar-width:none;
+
+    -webkit-overflow-scrolling:touch;
+
+  }
+
+  .filter-group::-webkit-scrollbar{
+
+    display:none;
+
+  }
+
+}
+
+@media(max-width:576px){
+
+  .product-grid{
+
+    grid-template-columns:1fr;
+
+  }
+
+}
+/* ==========================================================================
+   PRODUCT CARD
+   ========================================================================== */
+
+.product-card{
+
+  display:flex;
+
+  flex-direction:column;
+
+  height:100%;
+
+  overflow:hidden;
+
+  background:var(--color-surface);
+
+  border:1px solid var(--color-border);
+
+  border-radius:var(--radius-xl);
+
+  box-shadow:var(--shadow-sm);
+
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+
+}
+
+@media(hover:hover){
+
+  .product-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:var(--shadow-lg);
+
+    border-color:var(--color-primary-light);
+
+  }
+
+}
+
+
+/* ==========================================================================
+   PRODUCT IMAGE
+   ========================================================================== */
+
+.product-image{
+
+  position:relative;
+
+  overflow:hidden;
+
+  aspect-ratio:1/1;
+
+  background:var(--color-background);
+
+}
+
+.product-image img{
+
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+
+  transition:transform var(--transition);
+
+}
+
+@media(hover:hover){
+
+  .product-card:hover .product-image img{
+
+    transform:scale(1.08);
+
+  }
+
+}
+
+
+/* ==========================================================================
+   PRODUCT BADGE
+   ========================================================================== */
+
+.product-badge{
+
+  position:absolute;
+
+  top:16px;
+
+  left:16px;
+
+  padding:8px 16px;
+
+  border-radius:var(--radius-full);
+
+  background:var(--color-primary);
+
+  color:var(--color-white);
+
+  font-size:.8rem;
+
+  font-weight:700;
+
+}
+
+
+/* ==========================================================================
+   PRODUCT CONTENT
+   ========================================================================== */
+
+.product-content{
+
+  display:flex;
+
+  flex-direction:column;
+
+  flex:1;
+
+  padding:24px;
+
+}
+
+.product-category{
+
+  margin-bottom:10px;
+
+  color:var(--color-primary);
+
+  font-size:.85rem;
+
+  font-weight:700;
+
+}
+
+.product-title{
+
+  margin-bottom:14px;
+
+  color:var(--color-text);
+
+  line-height:1.5;
+
+}
+
+.product-title a{
+
+  color:inherit;
+
+}
+
+@media(hover:hover){
+
+  .product-title a:hover{
+
+    color:var(--color-primary);
+
+  }
+
+}
+
+
+/* ==========================================================================
+   PRICE
+   ========================================================================== */
+
+.product-price{
+
+  margin-bottom:18px;
+
+  color:var(--color-primary);
+
+  font-size:1.5rem;
+
+  font-weight:800;
+
+}
+
+
+/* ==========================================================================
+   PRODUCT META
+   ========================================================================== */
+
+.product-meta{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:12px;
+
+  margin-bottom:14px;
+
+  color:var(--color-muted);
+
+  font-size:.9rem;
+
 }
 
 .product-location,
-.product-store {
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 8px;
+.product-store{
+
+  color:var(--color-muted);
+
+  font-size:.9rem;
+
 }
 
-.product-store {
-  margin-bottom: 20px;
-}
+.product-store{
 
-/* Tombol aksi (Beli / Keranjang) */
-.product-action {
-  display: flex;
-  gap: 12px;
-  margin-top: auto;
-}
+  margin-bottom:22px;
 
-.product-action .btn {
-  flex: 1;
-  justify-content: center;
 }
 
 
-/* ==========================================
-  SKELETON LOADING
-  Animasi placeholder saat produk sedang dimuat.
-========================================== */
+/* ==========================================================================
+   PRODUCT ACTION
+   ========================================================================== */
 
-.skeleton-card {
-  pointer-events: none;
+.product-action{
+
+  display:flex;
+
+  gap:12px;
+
+  margin-top:auto;
+
 }
 
-/* Animasi shimmer kiri-ke-kanan */
-.skeleton {
-  border-radius: 12px;
-  background: linear-gradient(
+.product-action .btn{
+
+  flex:1;
+
+}
+
+@media(max-width:576px){
+
+  .product-action{
+
+    flex-direction:column;
+
+  }
+
+}
+/* ==========================================================================
+   SKELETON LOADING
+   ========================================================================== */
+
+.skeleton-card{
+  pointer-events:none;
+}
+
+.skeleton{
+  overflow:hidden;
+  border-radius:var(--radius-md);
+  background:linear-gradient(
     90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
+    var(--color-background) 25%,
+    var(--color-border) 50%,
+    var(--color-background) 75%
   );
-  background-size: 200% 100%;
-  animation: skeletonShimmer 1.4s infinite linear;
+  background-size:200% 100%;
+  animation:skeleton-loading 1.4s linear infinite;
 }
 
-.skeleton-image {
-  width: 100%;
-  aspect-ratio: 1 / 1;
+.skeleton-image{
+  width:100%;
+  aspect-ratio:1/1;
 }
 
-.skeleton-title {
-  width: 80%;
-  height: 22px;
-  margin-bottom: 15px;
+.skeleton-title{
+  width:75%;
+  height:24px;
+  margin-bottom:16px;
 }
 
-.skeleton-text {
-  width: 100%;
-  height: 14px;
-  margin-bottom: 10px;
+.skeleton-text{
+  width:100%;
+  height:14px;
+  margin-bottom:10px;
 }
 
-.skeleton-price {
-  width: 45%;
-  height: 24px;
-  margin: 18px 0;
+.skeleton-price{
+  width:45%;
+  height:24px;
+  margin:20px 0;
 }
 
-.skeleton-button {
-  flex: 1;
-  height: 45px;
-  border-radius: 12px;
+.skeleton-button{
+  flex:1;
+  height:46px;
+  border-radius:var(--radius-md);
 }
 
-@keyframes skeletonShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+@keyframes skeleton-loading{
 
-/* Kurangi animasi jika pengguna preferensikan gerakan minimal */
-@media (prefers-reduced-motion: reduce) {
-  .skeleton {
-    animation: none;
-    background: #e5e7eb;
-  }
-}
-
-
-/* ==========================================
-  EMPTY STATE
-  Ditampilkan jika tidak ada produk yang cocok.
-========================================== */
-
-.empty-state {
-  text-align: center;
-  padding: 80px 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.empty-icon {
-  font-size: 70px;
-  margin-bottom: 25px;
-}
-
-.empty-state h2 {
-  font-size: 2rem;
-  margin-bottom: 18px;
-  color: var(--color-heading);
-}
-
-.empty-state p {
-  color: var(--color-text);
-  line-height: 1.8;
-  margin-bottom: 35px;
-}
-
-
-/* ==========================================
-  PAGINATION
-  Navigasi antar halaman produk.
-========================================== */
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 40px;
-}
-
-.page-btn {
-  width: 46px;
-  height: 46px;
-  border: none;
-  border-radius: 12px;
-  background: #fff;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.95rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  transition: background 0.2s, color 0.2s;
-}
-
-.page-btn:hover,
-.page-btn.active {
-  background: var(--color-primary);
-  color: #fff;
-}
-
-.page-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Titik "..." antar nomor halaman */
-.page-dots {
-  padding: 0 8px;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-
-/* ==========================================
-  CALL TO ACTION
-  Banner ajakan daftar UMKM di bawah grid.
-========================================== */
-
-.cta {
-  padding: 70px 40px;
-  border-radius: 30px;
-  text-align: center;
-  background: linear-gradient(135deg, #16a34a, #22c55e);
-  color: #fff;
-}
-
-.cta-icon {
-  font-size: 55px;
-  margin-bottom: 20px;
-}
-
-.cta h2 {
-  font-size: 2.2rem;
-  margin-bottom: 20px;
-  color: #fff;
-}
-
-.cta p {
-  max-width: 650px;
-  margin: 0 auto 35px;
-  line-height: 1.8;
-  opacity: 0.95;
-}
-
-.cta-action {
-  display: flex;
-  justify-content: center;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
-
-/* ==========================================
-  RESPONSIVE
-  Breakpoint penyesuaian layout untuk layar kecil.
-========================================== */
-
-/* Tablet landscape (≤ 992px) */
-@media (max-width: 992px) {
-  .hero-page {
-    padding: 120px 0 70px;
+  from{
+    background-position:200% 0;
   }
 
-  .hero-page h1 {
-    font-size: 2.6rem;
+  to{
+    background-position:-200% 0;
   }
 
-  .hero-stat {
-    gap: 20px;
-  }
-
-  .hero-stat-item {
-    min-width: 140px;
-  }
-
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
-/* Tablet potrait (≤ 768px) */
-@media (max-width: 768px) {
-  .hero-page h1 {
-    font-size: 2.2rem;
-  }
 
-  /* Pencarian jadi vertikal */
-  .hero-search {
-    flex-direction: column;
-    align-items: center;
-  }
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
 
-  .hero-search button {
-    width: 100%;
-    max-width: 560px;
-  }
+.empty-state{
 
-  /* Dropdown urutan jadi vertikal */
-  .sort-box {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  max-width:620px;
 
-  /* Grid satu kolom */
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
+  margin:80px auto;
 
-  /* Filter bisa di-scroll horizontal di mobile */
-  .filter-bar {
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-  }
+  text-align:center;
 
-  .filter-bar::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
-  }
-
-  .cta {
-    padding: 50px 25px;
-  }
 }
 
-/* Mobile (≤ 576px) */
-@media (max-width: 576px) {
-  /* Statistik hero jadi vertikal */
-  .hero-stat {
-    flex-direction: column;
-    align-items: center;
+.empty-icon{
+
+  font-size:4rem;
+
+  margin-bottom:24px;
+
+}
+
+.empty-state h2{
+
+  margin-bottom:18px;
+
+  color:var(--color-text);
+
+}
+
+.empty-state p{
+
+  margin-bottom:32px;
+
+  line-height:1.8;
+
+}
+
+
+/* ==========================================================================
+   PAGINATION
+   ========================================================================== */
+
+.pagination{
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  gap:12px;
+
+  flex-wrap:wrap;
+
+  margin-top:60px;
+
+}
+
+.page-btn{
+
+  width:46px;
+
+  height:46px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border:1px solid var(--color-border);
+
+  border-radius:var(--radius-md);
+
+  background:var(--color-surface);
+
+  color:var(--color-text);
+
+  font-weight:700;
+
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition);
+
+}
+
+.page-btn.active{
+
+  background:var(--color-primary);
+
+  color:var(--color-white);
+
+  border-color:var(--color-primary);
+
+}
+
+.page-btn:disabled{
+
+  opacity:.5;
+
+  cursor:not-allowed;
+
+}
+
+@media(hover:hover){
+
+  .page-btn:hover:not(:disabled){
+
+    background:var(--color-primary);
+
+    color:var(--color-white);
+
+    border-color:var(--color-primary);
+
   }
 
-  .hero-stat-item {
-    width: 100%;
+}
+
+.page-dots{
+
+  padding:0 6px;
+
+  color:var(--color-muted);
+
+}
+
+
+/* ==========================================================================
+   PRODUCT CTA
+   ========================================================================== */
+
+.product-cta{
+
+  margin-top:90px;
+
+  padding:70px 40px;
+
+  text-align:center;
+
+  border-radius:var(--radius-xl);
+
+  background:linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
+
+}
+
+.product-cta h2{
+
+  color:var(--color-white);
+
+  margin-bottom:20px;
+
+}
+
+.product-cta p{
+
+  max-width:650px;
+
+  margin:0 auto 35px;
+
+  color:rgba(255,255,255,.92);
+
+}
+
+.product-cta .btn-secondary{
+
+  background:var(--color-white);
+
+  color:var(--color-primary);
+
+  border:none;
+
+}
+
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+.product-card:focus-visible,
+.page-btn:focus-visible{
+
+  outline:2px solid var(--color-primary);
+
+  outline-offset:4px;
+
+}
+
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+  .product-card,
+  .product-image img,
+  .page-btn,
+  .filter-btn,
+  .skeleton{
+
+    transition:none;
+
+    animation:none;
+
+    transform:none;
+
   }
 
-  /* Tombol aksi kartu jadi vertikal */
-  .product-action {
-    flex-direction: column;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media(max-width:768px){
+
+  .product-cta{
+
+    padding:55px 24px;
+
   }
 
-  /* Tombol pagination lebih kecil */
-  .page-btn {
-    width: 42px;
-    height: 42px;
+}
+
+@media(max-width:576px){
+
+  .pagination{
+
+    gap:8px;
+
   }
+
+  .page-btn{
+
+    width:42px;
+
+    height:42px;
+
+  }
+
+  .product-cta{
+
+    padding:45px 20px;
+
+  }
+
+  .product-cta h2{
+
+    font-size:1.8rem;
+
+  }
+
 }
