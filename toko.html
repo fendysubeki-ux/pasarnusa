@@ -1,67 +1,211 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Toko UMKM - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><meta name="description" content="Profil UMKM PasarNusa"></head><body><section class="shop-header"><img
-id="bannerToko"
-src="https://picsum.photos/1200/350"
-class="shop-banner-img"
-alt="Banner Toko">
+<!DOCTYPE html>
+<html lang="id">
 
-<div class="shop-profile"><img
-id="logoToko"
-src="https://picsum.photos/200"
-class="shop-logo"
-alt="Logo Toko">
+<head>
+  <!-- ============================================================
+       META & CHARSET
+       ============================================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Profil toko UMKM di PasarNusa – marketplace lokal Indonesia." />
 
-<h1 id="namaToko">
-Memuat Toko...
-</h1><p id="deskripsiToko">
-Memuat informasi toko...
-</p><div class="shop-badges"><span>
-⭐ <span id="ratingMini">0</span>
-</span><span>
-🔥 <span id="totalTerjualMini">0</span> Terjual
-</span></div><div class="shop-actions"><a
-id="waToko"
-target="_blank"
-class="btn-primary">
+  <title>Toko UMKM – PasarNusa</title>
 
-💬 WhatsApp
+  <!-- ============================================================
+       FONT: Plus Jakarta Sans (preconnect agar lebih cepat dimuat)
+       ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
 
-</a><button
-id="shareToko"
-class="btn-secondary">
+  <!-- ============================================================
+       STYLESHEET UTAMA
+       ============================================================ -->
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-📤 Bagikan
+<body>
 
-</button><a
-href="produk.html"
-class="btn-secondary">
+  <!-- ============================================================
+       HEADER TOKO
+       Menampilkan banner, logo, nama, deskripsi, badge, dan aksi.
+       Semua nilai diisi secara dinamis oleh toko.js.
+       ============================================================ -->
+  <section class="shop-header">
 
-🛍 Produk
+    <!-- Banner toko (full-width) -->
+    <img
+      id="bannerToko"
+      src="https://picsum.photos/1200/350"
+      class="shop-banner-img"
+      alt="Banner Toko"
+    />
 
-</a><a
-href="index.html"
-class="btn-secondary">
+    <!-- Profil toko -->
+    <div class="shop-profile">
 
-🏠 Beranda
+      <!-- Logo toko -->
+      <img
+        id="logoToko"
+        src="https://picsum.photos/200"
+        class="shop-logo"
+        alt="Logo Toko"
+      />
 
-</a></div></div></section><section class="dashboard"><div class="dashboard-grid"><div class="dashboard-card"><h3 id="totalProduk">0</h3><p>Total Produk</p></div><div class="dashboard-card"><h3 id="produkAktif">0</h3><p>Produk Aktif</p></div><div class="dashboard-card"><h3 id="totalTerjual">0</h3><p>Total Terjual</p></div><div class="dashboard-card"><h3 id="ratingToko">0</h3><p>Rating Toko</p></div></div></section><section class="dashboard"><h2>ℹ️ Informasi Toko</h2><div class="dashboard-grid"><div class="dashboard-card"><h3>📍 Alamat</h3><p id="alamatToko">-</p></div><div class="dashboard-card"><h3>📱 WhatsApp</h3><p id="nomorToko">-</p></div><div class="dashboard-card"><h3>📅 Bergabung</h3><p id="tanggalGabung">-</p></div><div class="dashboard-card"><h3>🏦 Bank</h3><p id="namaBank">-</p></div><div class="dashboard-card"><h3>💳 Nomor Rekening</h3><p id="nomorRekening">-</p></div><div class="dashboard-card"><h3>👤 Atas Nama</h3><p id="atasNama">-</p></div></div></section><section class="products"><div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:15px;
-flex-wrap:wrap;
-margin-bottom:20px;
-"><h2>🛍 Produk Toko</h2><input
-type="text"
-id="searchProduk"
-placeholder="Cari produk..."
-class="search-box">
+      <!-- Nama toko -->
+      <h1 id="namaToko">Memuat Toko…</h1>
 
-</div><div
-id="tokoContainer"
-class="product-grid"><div class="dashboard-card"><h3>Memuat Produk...</h3><p>Mohon tunggu...</p></div></div></section><footer><div class="copyright">© 2026 PasarNusa
+      <!-- Deskripsi singkat toko -->
+      <p id="deskripsiToko">Memuat informasi toko…</p>
 
-</div></footer><script type="module" src="toko.js"></script></body>
+      <!-- Badge ringkasan: rating & total terjual -->
+      <div class="shop-badges">
+        <span>⭐ <span id="ratingMini">0</span></span>
+        <span>🔥 <span id="totalTerjualMini">0</span> Terjual</span>
+      </div>
+
+      <!-- Tombol aksi utama -->
+      <div class="shop-actions">
+        <!-- Tautan ke WhatsApp; href diisi oleh toko.js -->
+        <a id="waToko" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary">
+          💬 WhatsApp
+        </a>
+
+        <!-- Tombol berbagi halaman -->
+        <button id="shareToko" class="btn-secondary" type="button">
+          📤 Bagikan
+        </button>
+
+        <!-- Navigasi ke halaman produk & beranda -->
+        <a href="produk.html" class="btn-secondary">🛍 Produk</a>
+        <a href="index.html" class="btn-secondary">🏠 Beranda</a>
+      </div>
+
+    </div><!-- /shop-profile -->
+  </section><!-- /shop-header -->
+
+
+  <!-- ============================================================
+       STATISTIK TOKO
+       Empat kartu ringkasan yang diisi oleh toko.js.
+       ============================================================ -->
+  <section class="dashboard" aria-label="Statistik Toko">
+    <div class="dashboard-grid">
+
+      <div class="dashboard-card">
+        <h3 id="totalProduk">0</h3>
+        <p>Total Produk</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3 id="produkAktif">0</h3>
+        <p>Produk Aktif</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3 id="totalTerjual">0</h3>
+        <p>Total Terjual</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3 id="ratingToko">0</h3>
+        <p>Rating Toko</p>
+      </div>
+
+    </div>
+  </section><!-- /dashboard statistik -->
+
+
+  <!-- ============================================================
+       INFORMASI TOKO
+       Detail kontak, tanggal bergabung, dan rekening bank.
+       ============================================================ -->
+  <section class="dashboard" aria-label="Informasi Toko">
+    <h2>ℹ️ Informasi Toko</h2>
+
+    <div class="dashboard-grid">
+
+      <div class="dashboard-card">
+        <h3>📍 Alamat</h3>
+        <p id="alamatToko">-</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>📱 WhatsApp</h3>
+        <p id="nomorToko">-</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>📅 Bergabung</h3>
+        <p id="tanggalGabung">-</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>🏦 Bank</h3>
+        <p id="namaBank">-</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>💳 Nomor Rekening</h3>
+        <p id="nomorRekening">-</p>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>👤 Atas Nama</h3>
+        <p id="atasNama">-</p>
+      </div>
+
+    </div>
+  </section><!-- /informasi toko -->
+
+
+  <!-- ============================================================
+       DAFTAR PRODUK
+       Grid produk yang dirender secara dinamis oleh toko.js.
+       Kolom pencarian memfilter produk tanpa reload halaman.
+       ============================================================ -->
+  <section class="products" aria-label="Produk Toko">
+
+    <!-- Bar judul + pencarian -->
+    <div class="products-header">
+      <h2>🛍 Produk Toko</h2>
+      <input
+        type="search"
+        id="searchProduk"
+        placeholder="Cari produk…"
+        class="search-box"
+        aria-label="Cari produk"
+      />
+    </div>
+
+    <!-- Kontainer produk; diisi oleh toko.js -->
+    <div id="tokoContainer" class="product-grid" aria-live="polite">
+      <!-- Placeholder saat data belum tersedia -->
+      <div class="dashboard-card">
+        <h3>Memuat Produk…</h3>
+        <p>Mohon tunggu sebentar.</p>
+      </div>
+    </div>
+
+  </section><!-- /products -->
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer>
+    <div class="copyright">© 2026 PasarNusa</div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT UTAMA (type="module" agar ES Modules bekerja)
+       Dimuat di akhir body supaya DOM sudah siap sebelum diakses.
+       ============================================================ -->
+  <script type="module" src="toko.js"></script>
+
+</body>
 </html>
