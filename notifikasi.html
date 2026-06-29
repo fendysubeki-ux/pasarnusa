@@ -1,522 +1,232 @@
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <!-- SEO & PWA Meta -->
+  <title>Notifikasi | PasarNusa</title>
+  <meta name="description" content="Lihat seluruh notifikasi akun Anda di PasarNusa — pesanan, pembayaran, pengiriman, dan info terbaru.">
+  <meta name="theme-color" content="#16a34a">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/logo.png">
 
-<title>Notifikasi | PasarNusa</title>
+  <!-- Fonts: Plus Jakarta Sans (preconnect dulu agar lebih cepat) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<meta
-name="description"
-content="Lihat seluruh notifikasi akun Anda">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="notifikasi.css">
-
+  <!-- Stylesheet utama & halaman notifikasi -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="notifikasi.css">
 </head>
 
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>
-
-PasarNusa
-
-</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a
-href="notifikasi.html"
-class="active">
-
-Notifikasi
-
-</a>
-
-<a href="profil.html">
-
-Akun
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="profil.html"
-class="btn btn-primary">
-
-👤 Akun
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-🔔 Notifikasi
-
-</div>
-
-<h1>
-
-Pusat Notifikasi
-
-</h1>
-
-<p>
-
-Lihat semua aktivitas akun, pesanan, pembayaran, dan informasi terbaru.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/</span>
-
-<span>
-
-Notifikasi
-
-</span>
-
-</div>
-
-</section>
-<section class="section">
-
-<div class="container">
-
-<div class="notification-layout">
-
-<div class="notification-content">
-<div class="form-card">
-
-<h2>
-
-📊 Ringkasan
-
-</h2>
-
-<div class="summary-item">
-
-<span>
-
-Total Notifikasi
-
-</span>
-
-<b id="totalNotif">
-
-0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Belum Dibaca
-
-</span>
-
-<b id="belumDibaca">
-
-0
-
-</b>
-
-</div>
-
-<div class="summary-item">
-
-<span>
-
-Sudah Dibaca
-
-</span>
-
-<b id="sudahDibaca">
-
-0
-
-</b>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-🔔 Daftar Notifikasi
-
-</h2>
-
-<div
-
-id="notifContainer">
-
-<div class="loading-card">
-
-Memuat notifikasi...
-
-</div>
-
-</div>
-
-</div>
-<div class="form-card">
-
-<h2>
-
-⚡ Aksi
-
-</h2>
-
-<div class="action-box">
-
-<button
-
-id="readAllBtn"
-
-class="btn btn-primary">
-
-✅ Tandai Semua Dibaca
-
-</button>
-
-<button
-
-id="deleteAllBtn"
-
-class="btn btn-secondary">
-
-🗑 Hapus Semua
-
-</button>
-
-</div>
-
-</div>
-<div class="notification-summary">
-
-<div class="summary-card">
-
-<h2>
-
-📌 Informasi
-
-</h2>
-
-<p>
-
-Notifikasi akan muncul secara otomatis ketika ada aktivitas pada akun Anda.
-
-</p>
-
-<ul class="summary-list">
-
-<li>
-
-🛒 Pesanan Baru
-
-</li>
-
-<li>
-
-💳 Pembayaran
-
-</li>
-
-<li>
-
-🚚 Pengiriman
-
-</li>
-
-<li>
-
-⭐ Review
-
-</li>
-
-<li>
-
-💰 Affiliate
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<div
-
-id="emptyNotif"
-
-class="empty-state"
-
-style="display:none;">
-
-<div class="empty-icon">
-
-🔔
-
-</div>
-
-<h2>
-
-Belum Ada Notifikasi
-
-</h2>
-
-<p>
-
-Semua pemberitahuan akan muncul di halaman ini.
-
-</p>
-
-<a
-
-href="index.html"
-
-class="btn btn-primary">
-
-Kembali ke Beranda
-
-</a>
-
-</div>
-<template id="loadingNotif">
-
-<div class="form-card skeleton">
-
-<div class="content-skeleton">
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-<div></div>
-
-</div>
-
-</div>
-
-</template>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-
-🌿 PasarNusa
-
-</h3>
-
-<p>
-
-Marketplace UMKM Indonesia yang membantu produk lokal berkembang ke seluruh Indonesia.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>
-
-Menu
-
-</h4>
-
-<ul>
-
-<li><a href="index.html">Beranda</a></li>
-
-<li><a href="produk.html">Produk</a></li>
-
-<li><a href="pesanan-saya.html">Pesanan Saya</a></li>
-
-<li><a href="notifikasi.html">Notifikasi</a></li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>
-
-Bantuan
-
-</h4>
-
-<ul>
-
-<li><a href="faq.html">FAQ</a></li>
-
-<li><a href="kontak.html">Kontak</a></li>
-
-<li><a href="kebijakan.html">Privasi</a></li>
-
-<li><a href="syarat.html">Syarat</a></li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-
-<script src="script.js"></script>
-
-<script
-
-type="module"
-
-src="notifikasi.js">
-
-</script>
+  <!-- =====================
+       HEADER / NAVIGASI
+       ===================== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <!-- Menu Navigasi Desktop -->
+        <nav class="navbar-menu" aria-label="Navigasi utama">
+          <a href="index.html">Beranda</a>
+          <a href="notifikasi.html" class="active" aria-current="page">Notifikasi</a>
+          <a href="profil.html">Akun</a>
+        </nav>
+
+        <!-- Aksi Kanan: Toggle Tema & Tombol Akun -->
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti tema">🌙</button>
+          <a href="profil.html" class="btn btn-primary">👤 Akun</a>
+        </div>
+
+        <!-- Tombol Menu Mobile -->
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================
+       HERO / JUDUL HALAMAN
+       ===================== -->
+  <section class="hero-page" aria-labelledby="heroTitle">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">🔔 Notifikasi</div>
+        <h1 id="heroTitle">Pusat Notifikasi</h1>
+        <p>Lihat semua aktivitas akun, pesanan, pembayaran, dan informasi terbaru.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================
+       BREADCRUMB
+       ===================== -->
+  <nav class="breadcrumb" aria-label="Lokasi halaman">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span aria-hidden="true"> / </span>
+      <span aria-current="page">Notifikasi</span>
+    </div>
+  </nav>
+
+  <!-- =====================
+       KONTEN UTAMA
+       ===================== -->
+  <main class="section">
+    <div class="container">
+      <div class="notification-layout">
+        <div class="notification-content">
+
+          <!-- Kartu Ringkasan Statistik -->
+          <div class="form-card">
+            <h2>📊 Ringkasan</h2>
+            <div class="summary-item">
+              <span>Total Notifikasi</span>
+              <b id="totalNotif">0</b>
+            </div>
+            <div class="summary-item">
+              <span>Belum Dibaca</span>
+              <b id="belumDibaca">0</b>
+            </div>
+            <div class="summary-item">
+              <span>Sudah Dibaca</span>
+              <b id="sudahDibaca">0</b>
+            </div>
+          </div>
+
+          <!-- Kartu Daftar Notifikasi (diisi oleh notifikasi.js) -->
+          <div class="form-card">
+            <h2>🔔 Daftar Notifikasi</h2>
+            <div id="notifContainer" role="list" aria-live="polite" aria-label="Daftar notifikasi">
+              <!-- State loading awal; diganti oleh JS setelah data dimuat -->
+              <div class="loading-card" role="status">Memuat notifikasi…</div>
+            </div>
+          </div>
+
+          <!-- Kartu Aksi Massal -->
+          <div class="form-card">
+            <h2>⚡ Aksi</h2>
+            <div class="action-box">
+              <button id="readAllBtn" class="btn btn-primary">✅ Tandai Semua Dibaca</button>
+              <button id="deleteAllBtn" class="btn btn-secondary">🗑 Hapus Semua</button>
+            </div>
+          </div>
+
+          <!-- Kartu Informasi Jenis Notifikasi -->
+          <div class="notification-summary">
+            <div class="summary-card">
+              <h2>📌 Informasi</h2>
+              <p>Notifikasi muncul otomatis saat ada aktivitas pada akun Anda.</p>
+              <ul class="summary-list">
+                <li>🛒 Pesanan Baru</li>
+                <li>💳 Pembayaran</li>
+                <li>🚚 Pengiriman</li>
+                <li>⭐ Ulasan</li>
+                <li>💰 Afiliasi</li>
+              </ul>
+            </div>
+          </div>
+
+        </div><!-- /.notification-content -->
+      </div><!-- /.notification-layout -->
+    </div><!-- /.container -->
+  </main>
+
+  <!-- =====================
+       EMPTY STATE
+       Ditampilkan oleh JS jika tidak ada notifikasi
+       ===================== -->
+  <div id="emptyNotif" class="empty-state" hidden aria-hidden="true">
+    <div class="empty-icon" aria-hidden="true">🔔</div>
+    <h2>Belum Ada Notifikasi</h2>
+    <p>Semua pemberitahuan akan muncul di halaman ini.</p>
+    <a href="index.html" class="btn btn-primary">Kembali ke Beranda</a>
+  </div>
+
+  <!-- =====================
+       TEMPLATE SKELETON LOADING
+       Digunakan oleh JS untuk menampilkan placeholder saat data dimuat
+       ===================== -->
+  <template id="loadingNotif">
+    <div class="form-card skeleton" aria-hidden="true">
+      <div class="content-skeleton">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- =====================
+       FOOTER
+       ===================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+
+        <!-- Tentang PasarNusa -->
+        <div>
+          <h3>🌿 PasarNusa</h3>
+          <p>Marketplace UMKM Indonesia yang membantu produk lokal berkembang ke seluruh nusantara.</p>
+        </div>
+
+        <!-- Navigasi Cepat -->
+        <nav aria-label="Menu footer">
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="produk.html">Produk</a></li>
+            <li><a href="pesanan-saya.html">Pesanan Saya</a></li>
+            <li><a href="notifikasi.html">Notifikasi</a></li>
+          </ul>
+        </nav>
+
+        <!-- Tautan Bantuan -->
+        <nav aria-label="Bantuan footer">
+          <h4>Bantuan</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+            <li><a href="kebijakan.html">Privasi</a></li>
+            <li><a href="syarat.html">Syarat</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun dengan ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =====================
+       TOMBOL KEMBALI KE ATAS
+       ===================== -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke atas">↑</button>
+
+  <!-- =====================
+       SKRIP
+       script.js: utilitas global (tema, scroll, menu)
+       notifikasi.js: logika khusus halaman notifikasi (module)
+       ===================== -->
+  <script src="script.js"></script>
+  <script type="module" src="notifikasi.js"></script>
 
 </body>
-
 </html>
