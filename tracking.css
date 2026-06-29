@@ -1,527 +1,389 @@
-/* ==========================================
-HERO
-========================================== */
+/* =============================================================
+   tracking.css — Gaya khusus halaman Tracking Pesanan
+   PasarNusa © 2026
+   Urutan: Variabel → Hero → Breadcrumb → Layout →
+           Info/Summary → Timeline → Aksi → Animasi →
+           Skeleton → Scrollbar → Responsive
+   ============================================================= */
 
-.hero-page{
 
-padding:150px 0 80px;
-
-background:linear-gradient(
-135deg,
-#f0fdf4,
-#ffffff
-);
-
-text-align:center;
-
+/* =============================================================
+   VARIABEL LOKAL
+   Referensikan var() dari style.css; tambahkan yang spesifik
+   halaman ini saja di sini agar mudah diubah dari satu tempat.
+   ============================================================= */
+:root {
+  --track-gap:        24px;
+  --track-radius:     24px;
+  --track-shadow:     0 12px 30px rgba(0, 0, 0, 0.06);
+  --track-border:     #f3f4f6;
+  --track-muted:      #6b7280;
+  --track-heading:    #111827;
+  --track-green:      #16a34a;
+  --track-green-bg:   #dcfce7;
+  --track-green-text: #166534;
+  --track-line:       #e5e7eb;
+  --track-icon-bg:    #d1d5db;
+  --track-sticky-top: 110px; /* sesuaikan jika tinggi navbar berubah */
 }
 
-.hero-page-content{
 
-max-width:800px;
-
-margin:auto;
-
+/* =============================================================
+   HERO
+   ============================================================= */
+.hero-page {
+  padding: 150px 0 80px;
+  background: linear-gradient(135deg, #f0fdf4, #ffffff);
+  text-align: center;
 }
 
-.hero-page h1{
-
-font-size:3rem;
-
-font-weight:800;
-
-margin:20px 0;
-
-color:var(--color-heading);
-
+.hero-page-content {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.hero-page p{
-
-max-width:650px;
-
-margin:auto;
-
-line-height:1.8;
-
-color:#6b7280;
-
+.hero-page h1 {
+  margin: 20px 0;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-heading); /* dari style.css */
 }
 
-.badge{
-
-display:inline-flex;
-
-align-items:center;
-
-padding:12px 24px;
-
-border-radius:999px;
-
-background:#dcfce7;
-
-color:#166534;
-
-font-weight:700;
-
-}
-/* ==========================================
-BREADCRUMB
-========================================== */
-
-.breadcrumb{
-
-padding:18px 0;
-
-background:#fff;
-
-border-bottom:1px solid #eee;
-
+.hero-page p {
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.8;
+  color: var(--track-muted);
 }
 
-.breadcrumb .container{
-
-display:flex;
-
-gap:12px;
-
-align-items:center;
-
-flex-wrap:wrap;
-
+/* Badge "📦 Tracking Pesanan" */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: var(--track-green-bg);
+  color: var(--track-green-text);
+  font-weight: 700;
 }
 
-.breadcrumb a{
 
-text-decoration:none;
-
-font-weight:600;
-
-color:#16a34a;
-
-}
-/* ==========================================
-LAYOUT
-========================================== */
-
-.tracking-layout{
-
-display:grid;
-
-grid-template-columns:2fr 1fr;
-
-gap:30px;
-
-align-items:start;
-
+/* =============================================================
+   BREADCRUMB
+   Elemen <nav> + <ol> (sesuai tracking.html yang baru)
+   ============================================================= */
+.breadcrumb {
+  padding: 18px 0;
+  background: #fff;
+  border-bottom: 1px solid #eee;
 }
 
-.tracking-content{
-
-display:flex;
-
-flex-direction:column;
-
-gap:24px;
-
+/* Gunakan flexbox pada <ol> langsung, bukan .container */
+.breadcrumb ol {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.tracking-summary{
-
-position:sticky;
-
-top:110px;
-
-}
-/* ==========================================
-INFO
-========================================== */
-
-.info-item{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:14px 0;
-
-border-bottom:1px solid #f3f4f6;
-
-gap:15px;
-
+/* Pemisah "/" antar item breadcrumb */
+.breadcrumb li[aria-hidden="true"] {
+  color: var(--track-muted);
+  user-select: none;
 }
 
-.info-item:last-child{
-
-border-bottom:none;
-
+.breadcrumb a {
+  font-weight: 600;
+  color: var(--track-green);
+  text-decoration: none;
 }
 
-.info-item span{
-
-font-weight:500;
-
-color:#6b7280;
-
+.breadcrumb a:hover,
+.breadcrumb a:focus-visible {
+  text-decoration: underline;
 }
 
-.info-item b{
-
-font-weight:700;
-
-color:#111827;
-
-text-align:right;
-
-}
-/* ==========================================
-TIMELINE
-========================================== */
-
-.timeline{
-
-position:relative;
-
-margin-top:20px;
-
-padding-left:30px;
-
+/* Item aktif (halaman saat ini) */
+.breadcrumb li[aria-current="page"] {
+  color: var(--track-heading);
+  font-weight: 500;
 }
 
-.timeline::before{
 
-content:"";
-
-position:absolute;
-
-left:20px;
-
-top:0;
-
-bottom:0;
-
-width:3px;
-
-background:#e5e7eb;
-
+/* =============================================================
+   LAYOUT — dua kolom (konten + ringkasan)
+   ============================================================= */
+.tracking-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: start;
 }
 
-.timeline-item{
-
-position:relative;
-
-padding-left:45px;
-
-padding-bottom:35px;
-
+.tracking-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--track-gap);
 }
 
-.timeline-item:last-child{
-
-padding-bottom:0;
-
+/* Ringkasan kanan tetap terlihat saat scroll */
+.tracking-summary {
+  position: sticky;
+  top: var(--track-sticky-top);
 }
 
-.timeline-icon{
 
-position:absolute;
+/* =============================================================
+   INFO LIST — <dl><dt><dd> (label–nilai)
+   Berlaku untuk .info-item di dalam .form-card maupun
+   .summary-item di dalam .summary-card
+   ============================================================= */
 
-left:0;
-
-width:40px;
-
-height:40px;
-
-border-radius:50%;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-background:#d1d5db;
-
-font-size:18px;
-
-z-index:2;
-
+/* Baris info */
+.info-item,
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--track-border);
 }
 
-.timeline-item.active .timeline-icon{
-
-background:#22c55e;
-
-color:#fff;
-
+.info-item:last-child,
+.summary-item:last-child {
+  border-bottom: none;
 }
 
-.timeline-content h3{
-
-margin:0;
-
-font-size:1rem;
-
-font-weight:700;
-
+/* <dt> — label */
+.info-item dt,
+.summary-item dt {
+  font-weight: 500;
+  color: var(--track-muted);
 }
 
-.timeline-content p{
-
-margin:6px 0 0;
-
-color:#6b7280;
-
-line-height:1.6;
-
-}
-/* ==========================================
-SUMMARY
-========================================== */
-
-.summary-card{
-
-background:#fff;
-
-padding:28px;
-
-border-radius:24px;
-
-box-shadow:
-
-0 12px 30px rgba(0,0,0,.06);
-
+/* <dd> — nilai */
+.info-item dd,
+.summary-item dd {
+  margin: 0; /* reset margin default <dd> */
+  font-weight: 700;
+  color: var(--track-heading);
+  text-align: right;
 }
 
-.summary-item{
 
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin:16px 0;
-
-gap:15px;
-
+/* =============================================================
+   TIMELINE — status pengiriman
+   ============================================================= */
+.timeline {
+  position: relative;
+  margin-top: 20px;
+  padding-left: 30px;
 }
 
-.summary-item span{
-
-color:#6b7280;
-
-font-weight:500;
-
+/* Garis vertikal penghubung */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--track-line);
+  border-radius: 999px;
 }
 
-.summary-item b{
-
-font-weight:700;
-
-color:#111827;
-
-}
-/* ==========================================
-ACTION
-========================================== */
-
-.action-box{
-
-display:flex;
-
-flex-direction:column;
-
-gap:14px;
-
+/* Satu langkah timeline */
+.timeline-item {
+  position: relative;
+  padding-left: 45px;
+  padding-bottom: 35px;
 }
 
-.action-box .btn{
-
-width:100%;
-
-text-align:center;
-
-}
-/* ==========================================
-RESPONSIVE
-========================================== */
-
-@media(max-width:992px){
-
-.tracking-layout{
-
-grid-template-columns:1fr;
-
+.timeline-item:last-child {
+  padding-bottom: 0;
 }
 
-.tracking-summary{
-
-position:static;
-
+/* Ikon bulat di kiri */
+.timeline-icon {
+  position: absolute;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--track-icon-bg);
+  font-size: 18px;
+  z-index: 2;
+  /* Transisi saat status berubah aktif */
+  transition: background 0.25s ease;
 }
 
+/* Status aktif/terkini */
+.timeline-item.active .timeline-icon {
+  background: #22c55e;
+  color: #fff;
 }
 
-@media(max-width:768px){
-
-.hero-page{
-
-padding:120px 0 70px;
-
+.timeline-content h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
-.hero-page h1{
-
-font-size:2rem;
-
+.timeline-content p {
+  margin: 6px 0 0;
+  color: var(--track-muted);
+  line-height: 1.6;
 }
 
-.info-item{
 
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:8px;
-
+/* =============================================================
+   SUMMARY CARD — kolom kanan
+   ============================================================= */
+.summary-card {
+  background: #fff;
+  padding: 28px;
+  border-radius: var(--track-radius);
+  box-shadow: var(--track-shadow);
 }
 
-.timeline{
 
-padding-left:20px;
-
+/* =============================================================
+   AKSI CEPAT — tombol vertikal penuh
+   ============================================================= */
+.action-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.timeline::before{
-
-left:15px;
-
+.action-box .btn {
+  width: 100%;
+  text-align: center;
 }
 
-.timeline-item{
 
-padding-left:40px;
-
+/* =============================================================
+   ANIMASI MASUK — kartu muncul dari bawah
+   Hormati preferensi reduced motion pengguna
+   ============================================================= */
+@media (prefers-reduced-motion: no-preference) {
+  .form-card,
+  .summary-card {
+    animation: fadeUp 0.4s ease both;
+  }
 }
 
-.timeline-icon{
-
-width:34px;
-
-height:34px;
-
-font-size:16px;
-
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-}
-/* ==========================================
-ANIMATION
-========================================== */
 
-.form-card,
-
-.summary-card{
-
-animation:fadeUp .4s ease;
-
+/* =============================================================
+   SKELETON LOADER — placeholder saat data dimuat
+   ============================================================= */
+.skeleton {
+  animation: skeletonPulse 1.5s ease-in-out infinite;
 }
 
-@keyframes fadeUp{
-
-from{
-
-opacity:0;
-
-transform:translateY(20px);
-
+.content-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
+.content-skeleton div {
+  height: 16px;
+  border-radius: 999px;
+  background: var(--track-line);
 }
 
-}
-/* ==========================================
-SKELETON
-========================================== */
+/* Variasi lebar agar terlihat lebih alami */
+.content-skeleton div:nth-child(2) { width: 80%; }
+.content-skeleton div:nth-child(3) { width: 65%; }
+.content-skeleton div:nth-child(4) { width: 45%; }
 
-.skeleton{
-
-animation:pulse 1.5s infinite;
-
-}
-
-.content-skeleton{
-
-display:flex;
-
-flex-direction:column;
-
-gap:14px;
-
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
 }
 
-.content-skeleton div{
 
-height:16px;
+/* =============================================================
+   SCROLLBAR — tampilan kustom (Webkit/Blink)
+   ============================================================= */
+::-webkit-scrollbar         { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb   { background: var(--track-green); border-radius: 999px; }
+::-webkit-scrollbar-track   { background: var(--track-border); }
 
-border-radius:999px;
 
-background:#e5e7eb;
+/* =============================================================
+   RESPONSIVE
+   ============================================================= */
 
+/* Tablet — kolom tunggal, ringkasan tidak lagi sticky */
+@media (max-width: 992px) {
+  .tracking-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tracking-summary {
+    position: static;
+  }
 }
 
-@keyframes pulse{
+/* Mobile — tipografi lebih kecil, info stack vertikal */
+@media (max-width: 768px) {
+  .hero-page {
+    padding: 120px 0 70px;
+  }
 
-0%{
+  .hero-page h1 {
+    font-size: 2rem;
+  }
 
-opacity:.5;
+  /* Label dan nilai masing-masing satu baris */
+  .info-item,
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
 
-}
+  .info-item dd,
+  .summary-item dd {
+    text-align: left;
+  }
 
-50%{
+  /* Timeline lebih kompak */
+  .timeline {
+    padding-left: 20px;
+  }
 
-opacity:1;
+  .timeline::before {
+    left: 15px;
+  }
 
-}
+  .timeline-item {
+    padding-left: 40px;
+  }
 
-100%{
-
-opacity:.5;
-
-}
-
-}
-/* ==========================================
-SCROLLBAR
-========================================== */
-
-::-webkit-scrollbar{
-
-width:8px;
-
-height:8px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-background:#16a34a;
-
-border-radius:999px;
-
-}
-
-::-webkit-scrollbar-track{
-
-background:#f3f4f6;
-
+  .timeline-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
 }
