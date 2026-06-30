@@ -30,16 +30,30 @@ const db  = getFirestore(app);
 
 
 // -----------------------------------------------------------------------------
+// KONFIGURASI HALAMAN
+// POPULAR_LIMIT — jumlah kartu "Kategori Populer" yang ditampilkan.
+// Disamakan dengan jumlah kategori unggulan yang ditampilkan di Beranda
+// (saat ini Beranda menampilkan 4 kategori unggulan).
+// Ubah angka ini jika jumlah di Beranda berubah, agar kedua halaman tetap konsisten.
+// -----------------------------------------------------------------------------
+
+const POPULAR_LIMIT = 4;
+
+
+// -----------------------------------------------------------------------------
 // REFERENSI ELEMEN DOM
 // Diambil sekali di awal — hindari querySelector berulang di dalam fungsi.
 // -----------------------------------------------------------------------------
 
-const kategoriGrid   = document.getElementById("kategoriGrid");
-const elTotalKategori = document.getElementById("totalKategori");
-const elTotalProduk   = document.getElementById("totalProduk");
-const elTotalUmkm     = document.getElementById("totalUmkm");
-const searchInput    = document.getElementById("kategoriSearch");
-const sortSelect     = document.getElementById("sortKategori");
+const kategoriGrid       = document.getElementById("kategoriGrid");
+const elTotalKategori     = document.getElementById("totalKategori");
+const elTotalProduk       = document.getElementById("totalProduk");
+const elTotalUmkm         = document.getElementById("totalUmkm");
+const searchInput        = document.getElementById("kategoriSearch");
+const sortSelect         = document.getElementById("sortKategori");
+const semuaSubtitleEl    = document.getElementById("semuaKategoriSubtitle");
+const popularSection     = document.getElementById("popularSection");
+const popularGrid        = document.getElementById("popularGrid");
 
 
 // -----------------------------------------------------------------------------
@@ -77,6 +91,8 @@ function showLoading() {
       <div class="skeleton skeleton-text"></div>
     </div>
   `).join("");
+
+  setSubtitle("Memuat kategori...");
 }
 
 
@@ -134,6 +150,7 @@ function generateKategori() {
 
   updateStatistik(umkmSet.size);
   renderKategori(semuaKategori);
+  renderPopular();
 }
 
 
@@ -145,29 +162,58 @@ function updateStatistik(jumlahUmkm) {
   if (elTotalKategori) elTotalKategori.textContent = semuaKategori.length;
   if (elTotalProduk)   elTotalProduk.textContent   = semuaProduk.length;
   if (elTotalUmkm)     elTotalUmkm.textContent     = jumlahUmkm;
-
-  // Tandai Kategori Populer berdasarkan data nyata
-  updatePopularSection();
 }
 
 
 // -----------------------------------------------------------------------------
-// POPULAR SECTION — isi jumlah produk pada kartu kategori populer
-// yang ada di HTML statis (makanan, minuman, fashion, kerajinan).
+// SUBTITLE — perbarui teks header "Semua Kategori" agar selalu sesuai
+// dengan kondisi data saat ini (memuat / terisi / kosong).
 // -----------------------------------------------------------------------------
 
-function updatePopularSection() {
-  // Buat lookup cepat: nama (lowercase) → jumlah
-  const lookup = Object.fromEntries(
-    semuaKategori.map((k) => [k.nama.toLowerCase(), k.jumlah])
-  );
+function setSubtitle(text) {
+  if (semuaSubtitleEl) semuaSubtitleEl.textContent = text;
+}
 
-  // Targetkan setiap paragraf yang punya atribut data-category
-  document.querySelectorAll("[data-category]").forEach((el) => {
-    const key    = el.dataset.category.toLowerCase();
-    const jumlah = lookup[key] ?? 0;
-    el.textContent = `${jumlah} Produk`;
-  });
+function updateSemuaKategoriHeader(jumlahDitampilkan) {
+  if (semuaKategori.length === 0) {
+    setSubtitle("Belum ada kategori yang tersedia saat ini.");
+  } else if (jumlahDitampilkan === semuaKategori.length) {
+    setSubtitle(`Menampilkan ${semuaKategori.length} kategori produk UMKM dari seluruh Indonesia.`);
+  } else {
+    setSubtitle(`Menampilkan ${jumlahDitampilkan} dari ${semuaKategori.length} kategori.`);
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// POPULAR SECTION — render kartu "Kategori Populer" sepenuhnya dari data nyata.
+// Jumlah kartu mengikuti POPULAR_LIMIT (disamakan dengan Beranda).
+// Section disembunyikan total jika tidak ada kategori sama sekali.
+// -----------------------------------------------------------------------------
+
+function renderPopular() {
+  if (!popularSection || !popularGrid) return;
+
+  if (semuaKategori.length === 0) {
+    popularSection.hidden = true;
+    popularGrid.innerHTML = "";
+    return;
+  }
+
+  // Ambil kategori dengan jumlah produk terbanyak, sebanyak POPULAR_LIMIT
+  const top = [...semuaKategori]
+    .sort((a, b) => b.jumlah - a.jumlah)
+    .slice(0, POPULAR_LIMIT);
+
+  popularGrid.innerHTML = top.map((item) => `
+    <div class="popular-category-card">
+      <div class="popular-icon" aria-hidden="true">${getKategoriIcon(item.nama)}</div>
+      <h3>${item.nama}</h3>
+      <p>${item.jumlah} Produk</p>
+    </div>
+  `).join("");
+
+  popularSection.hidden = false;
 }
 
 
@@ -178,6 +224,8 @@ function updatePopularSection() {
 
 function renderKategori(data) {
   kategoriGrid.setAttribute("aria-busy", "false");
+
+  updateSemuaKategoriHeader(data.length);
 
   if (data.length === 0) {
     showEmpty();
@@ -285,14 +333,21 @@ function getKategoriIcon(kategori) {
 
 // -----------------------------------------------------------------------------
 // EMPTY STATE — tampilkan saat pencarian tidak menemukan hasil
+// (atau saat memang belum ada kategori sama sekali).
 // -----------------------------------------------------------------------------
 
 function showEmpty() {
+  const belumAdaData = semuaKategori.length === 0;
+
   kategoriGrid.innerHTML = `
     <div class="empty-state">
       <div class="empty-icon" aria-hidden="true">📂</div>
-      <h2>Kategori Tidak Ditemukan</h2>
-      <p>Coba kata kunci lain atau <a href="produk.html">lihat semua produk</a>.</p>
+      <h2>${belumAdaData ? "Belum Ada Kategori" : "Kategori Tidak Ditemukan"}</h2>
+      <p>
+        ${belumAdaData
+          ? "Belum ada produk yang masuk ke kategori manapun saat ini."
+          : "Coba kata kunci lain atau <a href=\"produk.html\">lihat semua produk</a>."}
+      </p>
     </div>
   `;
 }
@@ -310,4 +365,8 @@ function showError() {
       <p>Gagal mengambil data. Periksa koneksi internet lalu <button onclick="location.reload()">coba lagi</button>.</p>
     </div>
   `;
+
+  setSubtitle("Gagal memuat kategori. Silakan coba lagi.");
+
+  if (popularSection) popularSection.hidden = true;
 }
