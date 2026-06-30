@@ -1,54 +1,74 @@
-<!DOCTYPE html><html lang="id">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Logout - PasarNusa</title><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><div class="register-card"><h1>🚪 Logout</h1><p>
-Mohon tunggu...
-</p></div><script type="module">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logout - PasarNusa</title>
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-import {
-getAuth,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  <div class="register-card">
+    <h1>🚪 Logout</h1>
+    <p id="logout-message">Mohon tunggu, sedang memproses logout...</p>
+  </div>
 
-const firebaseConfig = {
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-projectId:"pasarnusa-18aa0",
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-messagingSenderId:"866998011671",
-appId:"1:866998011671:web:5555115feb82741ab55952"
+    // Konfigurasi Firebase untuk proyek PasarNusa
+    // Catatan: apiKey di sini aman untuk ditaruh di sisi klien,
+    // keamanan sebenarnya diatur lewat Firebase Security Rules & domain restriction.
+    const firebaseConfig = {
+      apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+      authDomain: "pasarnusa-18aa0.firebaseapp.com",
+      projectId: "pasarnusa-18aa0",
+      storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+      messagingSenderId: "866998011671",
+      appId: "1:866998011671:web:5555115feb82741ab55952"
+    };
 
-};
+    // Daftar key localStorage yang dipakai untuk menyimpan sesi pengguna.
+    // Disatukan dalam array supaya mudah ditambah/diubah di satu tempat.
+    const SESSION_KEYS = ["uid", "role", "nama"];
 
-const app =
-initializeApp(firebaseConfig);
+    /**
+     * Membersihkan seluruh data sesi pengguna dari localStorage.
+     */
+    function clearLocalSession() {
+      SESSION_KEYS.forEach((key) => localStorage.removeItem(key));
+    }
 
-const auth =
-getAuth(app);
+    /**
+     * Proses utama logout:
+     * 1. Sign out dari Firebase Auth.
+     * 2. Hapus data sesi lokal (dijalankan walau sign out gagal,
+     *    supaya pengguna tidak "tersangkut" dengan data sesi lama).
+     * 3. Redirect ke halaman utama.
+     */
+    async function handleLogout() {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
 
-try{
+      try {
+        await signOut(auth);
+      } catch (error) {
+        // Logout di Firebase gagal (misal: jaringan bermasalah),
+        // tetap lanjutkan proses agar sesi lokal tidak menggantung.
+        console.error("Gagal sign out dari Firebase:", error);
+      } finally {
+        clearLocalSession();
+        window.location.replace("index.html");
+      }
+    }
 
-await signOut(auth);
+    handleLogout();
+  </script>
 
-}
-catch(error){
-
-console.error(error);
-
-}
-
-localStorage.removeItem("uid");
-localStorage.removeItem("role");
-localStorage.removeItem("nama");
-
-window.location.replace(
-"index.html"
-);
-
-</script></body>
+</body>
 </html>
