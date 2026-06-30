@@ -5,25 +5,44 @@
            Skeleton → Scrollbar → Responsive
 ============================================================= */
 
-/* ── Variabel lokal (melengkapi variabel global di style.css) ── */
-:root {
-  --pay-green:        #16a34a;
-  --pay-green-light:  #f0fdf4;
-  --pay-green-bg:     #dcfce7;
-  --pay-green-text:   #166534;
-  --pay-red:          #dc2626;
-  --pay-border:       #e5e7eb;
-  --pay-border-soft:  #f3f4f6;
-  --pay-text-muted:   #6b7280;
-  --pay-text-body:    #4b5563;
-  --pay-shadow:       0 12px 30px rgba(0, 0, 0, 0.06);
-  --pay-radius-pill:  999px;
-  --pay-radius-card:  24px;
-  --pay-radius-input: 18px;
-  --pay-transition:   0.25s ease;
+.hero-page{
+    padding:150px 0 80px;
+    background:linear-gradient(135deg,var(--color-primary-light),var(--color-surface));
+    text-align:center;
 }
 
-/* ─────────────────────────────────────────────
+.hero-page-content{
+    max-width:800px;
+    margin-inline:auto;
+}
+
+.hero-page h1{
+    margin:20px 0;
+    color:var(--color-text);
+}
+
+.hero-page p{
+    max-width:650px;
+    margin-inline:auto;
+    line-height:1.8;
+    color:var(--color-muted);
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    padding:12px 24px;
+    border-radius:999px;
+    background:var(--color-primary-light);
+    color:var(--color-primary-dark);
+    font-weight:700;
+}
+
+.badge-soon{
+    font-size:.75rem;
+    font-weight:600;
+    color:var(--color-muted);
+} ─────────────────────────────────────────────
    HERO
 ───────────────────────────────────────────── */
 .hero-page {
@@ -37,18 +56,19 @@
   margin: auto;
 }
 
-.hero-page h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  margin: 20px 0;
-  color: var(--color-heading); /* dari style.css global */
+.hero-page h1{
+    margin:20px 0;
+    font-size:clamp(2.2rem,5vw,3.4rem);
+    font-weight:800;
+    line-height:1.15;
+    color:var(--color-text);
 }
 
-.hero-page p {
-  max-width: 650px;
-  margin: auto;
-  line-height: 1.8;
-  color: var(--pay-text-muted);
+.hero-page p{
+    max-width:650px;
+    margin:auto;
+    color:var(--color-muted);
+    line-height:1.8;
 }
 
 /* Badge label kecil (dipakai di hero & label opsi) */
@@ -94,141 +114,141 @@
 /* ─────────────────────────────────────────────
    LAYOUT DUA KOLOM
 ───────────────────────────────────────────── */
-.payment-layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 30px;
-  align-items: start;
+.payment-layout{
+    display:grid;
+    grid-template-columns:minmax(0,2fr) 360px;
+    gap:32px;
+    align-items:start;
 }
 
-/* Kolom kiri */
-.payment-content {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.payment-content{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    min-width:0;
 }
 
-/* Kolom kanan menempel saat scroll */
-.payment-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  position: sticky;
-  top: 110px;
+.payment-sidebar{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    position:sticky;
+    top:110px;
 }
 
 /* ─────────────────────────────────────────────
    KARTU TOTAL (summary-card)
 ───────────────────────────────────────────── */
-.summary-card {
-  background: #fff;
-  padding: 28px;
-  border-radius: var(--pay-radius-card);
-  box-shadow: var(--pay-shadow);
+.summary-card{
+    background:var(--color-surface);
+    padding:28px;
+    border:1px solid var(--color-border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm);
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
 }
 
-/* Angka total — pakai <p> bukan <h1> agar hierarki heading tetap benar */
-.total-amount {
-  font-size: 2.2rem;
-  font-weight: 800;
-  margin: 20px 0;
-  color: var(--pay-green);
+.summary-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-md);
 }
 
 /* ─────────────────────────────────────────────
    BARIS INFO (dl > div > dt + dd)
 ───────────────────────────────────────────── */
 
-/* Dipakai di .info-list dan .summary-item */
 .info-item,
-.summary-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--pay-border-soft);
-  gap: 15px;
+.summary-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:16px 0;
+    border-bottom:1px solid var(--color-border);
 }
 
 .info-item:last-child,
-.summary-item:last-child {
-  border-bottom: none;
+.summary-item:last-child{
+    border-bottom:0;
+    padding-bottom:0;
 }
 
-/* dt = label abu */
 .info-item dt,
 .summary-item dt,
-.info-item span,   /* fallback jika masih pakai span */
-.summary-item span {
-  color: var(--pay-text-muted);
+.info-item span,
+.summary-item span{
+    color:var(--color-muted);
+    font-weight:500;
 }
 
-/* dd = nilai tebal */
 .info-item dd,
 .summary-item dd,
 .info-item b,
-.summary-item b {
-  font-weight: 700;
-  word-break: break-word;
-  margin: 0; /* reset margin default <dd> */
-}
-
-/* ─────────────────────────────────────────────
+.summary-item b{
+    margin:0;
+    font-weight:700;
+    color:var(--color-text);
+    text-align:right;
+    word-break:break-word;
+} ─────────────────────────────────────────────
    METODE PEMBAYARAN (fieldset > label)
 ───────────────────────────────────────────── */
-.form-card fieldset {
-  border: none;
-  padding: 0;
-  margin: 16px 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.form-card fieldset{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    margin-top:20px;
+    padding:0;
+    border:0;
 }
 
-.form-card fieldset label {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px;
-  border: 1px solid var(--pay-border);
-  border-radius: var(--pay-radius-input);
-  cursor: pointer;
-  transition: border-color var(--pay-transition),
-              background  var(--pay-transition);
-  background: #fff;
+.form-card fieldset label{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:18px;
+    background:var(--color-surface);
+    border:1px solid var(--color-border);
+    border-radius:var(--radius-md);
+    cursor:pointer;
+    transition:
+        border-color var(--transition),
+        background var(--transition),
+        transform var(--transition);
 }
 
-.form-card fieldset label:hover {
-  border-color: var(--pay-green);
-  background: var(--pay-green-light);
+.form-card fieldset label:hover{
+    background:var(--color-primary-light);
+    border-color:var(--color-primary);
+    transform:translateY(-2px);
 }
 
-/* Label opsi nonaktif tidak interaktif */
-.form-card fieldset label.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.form-card fieldset label.disabled{
+    opacity:.55;
+    cursor:not-allowed;
 }
 
-.form-card fieldset input[type="radio"] {
-  accent-color: var(--pay-green);
-  transform: scale(1.2);
-  flex-shrink: 0;
+.form-card fieldset input[type="radio"]{
+    accent-color:var(--color-primary);
+    transform:scale(1.15);
+    flex-shrink:0;
 }
-
 /* ─────────────────────────────────────────────
    CATATAN / PETUNJUK
 ───────────────────────────────────────────── */
-.payment-note {
-  margin-top: 18px;
-  padding-left: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.payment-note{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:20px;
+    padding-left:20px;
 }
 
-.payment-note li {
-  line-height: 1.7;
-  color: var(--pay-text-body);
+.payment-note li{
+    color:var(--color-muted);
+    line-height:1.8;
 }
 
 /* ─────────────────────────────────────────────
@@ -236,17 +256,18 @@
 ───────────────────────────────────────────── */
 
 /* Tombol Bayar Sekarang — penuh lebar di dalam summary-card */
-.summary-card .btn {
-  width: 100%;
-  margin-top: 20px;
+.summary-card .btn,
+#copyRekening{
+    width:100%;
 }
 
-/* Tombol Salin Rekening — penuh lebar di bawah daftar rekening */
-#copyRekening {
-  margin-top: 18px;
-  width: 100%;
+.summary-card .btn{
+    margin-top:20px;
 }
 
+#copyRekening{
+    margin-top:16px;
+}
 /* ─────────────────────────────────────────────
    COUNTDOWN / BATAS WAKTU
 ───────────────────────────────────────────── */
@@ -276,86 +297,142 @@
 }
 
 /* Hormati preferensi pengguna yang tidak suka animasi */
-@media (prefers-reduced-motion: reduce) {
-  .form-card,
-  .summary-card {
-    animation: none;
-  }
-}
+@media(prefers-reduced-motion:reduce){
 
+    .form-card,
+    .summary-card,
+    .skeleton{
+        animation:none;
+    }
+
+    .form-card,
+    .summary-card,
+    .form-card fieldset label,
+    .checkout-item img,
+    .btn{
+        transition:none;
+    }
+
+}
 /* ─────────────────────────────────────────────
    SKELETON LOADING
 ───────────────────────────────────────────── */
-.skeleton {
-  animation: pulse 1.4s ease infinite;
+.skeleton{
+    background:linear-gradient(
+        90deg,
+        var(--color-border) 25%,
+        #f3f4f6 50%,
+        var(--color-border) 75%
+    );
+    background-size:200% 100%;
+    animation:skeletonLoading 1.4s linear infinite;
 }
 
-.image-skeleton {
-  width: 100%;
-  height: 180px;
-  background: var(--pay-border);
-  border-radius: 20px;
-  margin-bottom: 20px;
+.image-skeleton{
+    width:100%;
+    height:180px;
+    margin-bottom:20px;
+    border-radius:20px;
 }
 
-.content-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.content-skeleton{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
 }
 
-.content-skeleton div {
-  height: 18px;
-  background: var(--pay-border);
-  border-radius: var(--pay-radius-pill);
+.content-skeleton div{
+    height:18px;
+    border-radius:999px;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1;   }
+@keyframes skeletonLoading{
+    from{
+        background-position:200% 0;
+    }
+    to{
+        background-position:-200% 0;
+    }
 }
 
 /* ─────────────────────────────────────────────
    SCROLLBAR KUSTOM (Webkit)
 ───────────────────────────────────────────── */
-::-webkit-scrollbar       { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: var(--pay-green); border-radius: var(--pay-radius-pill); }
-::-webkit-scrollbar-track { background: var(--pay-border-soft); }
+::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:var(--color-background);
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--color-primary);
+    border-radius:999px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:var(--color-primary-dark);
+}
 
 /* ─────────────────────────────────────────────
    RESPONSIVE
 ───────────────────────────────────────────── */
 
-/* Tablet: satu kolom */
-@media (max-width: 992px) {
-  .payment-layout {
-    grid-template-columns: 1fr;
-  }
+@media (max-width:992px){
 
-  /* Sidebar tidak perlu sticky di layout satu kolom */
-  .payment-sidebar {
-    position: static;
-  }
+    .payment-layout{
+        grid-template-columns:1fr;
+    }
+
+    .payment-sidebar{
+        position:static;
+    }
+
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .hero-page {
-    padding: 120px 0 70px;
-  }
+@media (max-width:768px){
 
-  .hero-page h1 {
-    font-size: 2rem;
-  }
+    .hero-page{
+        padding:120px 0 70px;
+    }
 
-  .total-amount {
-    font-size: 1.8rem;
-  }
+    .hero-page h1{
+        font-size:2rem;
+    }
 
-  /* Baris info susun vertikal di layar kecil */
-  .info-item,
-  .summary-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+    .total-amount{
+        font-size:1.8rem;
+    }
+
+    .info-item,
+    .summary-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+    }
+
+    .voucher-box{
+        flex-direction:column;
+    }
+
+}
+
+@media (max-width:576px){
+
+    .hero-page{
+        padding:110px 0 60px;
+    }
+
+    .summary-card,
+    .form-card{
+        padding:22px;
+    }
+
+    .badge{
+        padding:10px 18px;
+        font-size:.875rem;
+    }
+
 }
