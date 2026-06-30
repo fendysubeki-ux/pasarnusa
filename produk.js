@@ -43,9 +43,15 @@ const elTotalKategori = document.getElementById("totalKategori");
 // STATE GLOBAL
 // ======================================
 
-let semuaProduk  = [];   // semua produk aktif dari Firestore
-let currentPage  = 1;    // halaman pagination aktif
-const ITEM_PER_PAGE = 12; // jumlah produk per halaman
+let semuaProduk = [];
+let hasilFilter = [];
+
+let currentPage = 1;
+const ITEM_PER_PAGE = 12;
+
+let keywordAktif = "";
+let kategoriAktif = "all";
+let sortAktif = "terbaru";
 
 
 // ======================================
@@ -107,8 +113,10 @@ async function loadProduk() {
       semuaProduk.push({ id: doc.id, ...data });
     });
 
-    updateStatistik();
-    renderProduk(semuaProduk);
+hasilFilter = [...semuaProduk];
+
+updateStatistik();
+renderProduk(hasilFilter);
 
   } catch (error) {
     console.error("[PasarNusa] Gagal memuat produk:", error);
@@ -142,7 +150,71 @@ function updateStatistik() {
   }
 }
 
+function applyFilter() {
 
+  let data = [...semuaProduk];
+
+  // ==========================
+  // Filter kategori
+  // ==========================
+  if (kategoriAktif !== "all") {
+    data = data.filter(item =>
+      (item.kategori || "").toLowerCase() === kategoriAktif
+    );
+  }
+
+  // ==========================
+  // Filter pencarian
+  // ==========================
+  if (keywordAktif) {
+    data = data.filter(item => {
+
+      const text = [
+        item.namaProduk,
+        item.namaToko,
+        item.namaUmkm,
+        item.kategori,
+        item.provinsi,
+        item.kabupaten,
+        item.kecamatan
+      ]
+      .join(" ")
+      .toLowerCase();
+
+      return text.includes(keywordAktif);
+    });
+  }
+
+  // ==========================
+  // Sorting
+  // ==========================
+
+  switch (sortAktif) {
+
+    case "termurah":
+      data.sort((a,b)=>Number(a.harga)-Number(b.harga));
+      break;
+
+    case "termahal":
+      data.sort((a,b)=>Number(b.harga)-Number(a.harga));
+      break;
+
+    case "rating":
+      data.sort((a,b)=>Number(b.rating)-Number(a.rating));
+      break;
+
+    case "terlaris":
+      data.sort((a,b)=>Number(b.terjual)-Number(a.terjual));
+      break;
+
+    default:
+      break;
+  }
+
+  hasilFilter = data;
+
+  renderProduk(hasilFilter);
+}
 // ======================================
 // RENDER PRODUK
 // Tampilkan kartu produk sesuai data yang dikirim,
@@ -150,40 +222,49 @@ function updateStatistik() {
 // ======================================
 
 function renderProduk(data) {
-  // Reset ke halaman 1 setiap kali filter/sort/search berubah
-  currentPage = 1;
 
   const emptyState = document.getElementById("emptyState");
+  const pagination = document.querySelector(".pagination");
 
+  // Tidak ada produk
   if (data.length === 0) {
+
+    if (emptyState) {
+      emptyState.style.display = "block";
+
+      emptyState.innerHTML = `
+        <div class="empty-icon">📦</div>
+        <h2>Produk Tidak Ditemukan</h2>
+        <p>
+          Maaf, kami belum menemukan produk yang sesuai dengan pencarian
+          atau filter yang Anda pilih.
+        </p>
+      `;
+    }
+
     productGrid.innerHTML = "";
-    if (emptyState) emptyState.style.display = "block";
-    renderPagination(data);
+
+    // Sembunyikan pagination
+    if (pagination) {
+      pagination.style.display = "none";
+      pagination.innerHTML = "";
+    }
+
     return;
   }
 
-  if (emptyState) emptyState.style.display = "none";
+  // Ada produk
+  if (emptyState) {
+    emptyState.style.display = "none";
+  }
+
+  if (pagination) {
+    pagination.style.display = "flex";
+  }
 
   _renderHalaman(data);
   renderPagination(data);
 }
-
-/** Render kartu untuk halaman currentPage saja (dipanggil internal). */
-function _renderHalaman(data) {
-  const halaman = paginate(data);
-
-  // Gunakan fragment agar hanya satu reflow DOM
-  const fragment = document.createDocumentFragment();
-  const wrapper  = document.createElement("div");
-  wrapper.innerHTML = halaman.map((p) => createCard(p)).join("");
-  while (wrapper.firstChild) fragment.appendChild(wrapper.firstChild);
-
-  productGrid.innerHTML = "";
-  productGrid.appendChild(fragment);
-
-  initLazyImage();
-}
-
 
 // ======================================
 // RENDER PAGINATION
@@ -196,21 +277,31 @@ function renderPagination(data) {
 
   const totalPage = Math.ceil(data.length / ITEM_PER_PAGE);
 
-  // Sembunyikan pagination jika hanya 1 halaman
-  if (totalPage <= 1) {
+  // Tidak ada data atau hanya 1 halaman
+  if (data.length === 0 || totalPage <= 1) {
+    pagination.style.display = "none";
     pagination.innerHTML = "";
     return;
   }
 
+  // Tampilkan pagination
+  pagination.style.display = "flex";
+
   let html = `
-    <button class="page-btn" data-page="${currentPage - 1}"
-      aria-label="Halaman sebelumnya" ${currentPage === 1 ? "disabled" : ""}>←</button>
+    <button class="page-btn"
+      data-page="${currentPage - 1}"
+      aria-label="Halaman sebelumnya"
+      ${currentPage === 1 ? "disabled" : ""}>
+      ←
+    </button>
   `;
 
   for (let i = 1; i <= totalPage; i++) {
     html += `
-      <button class="page-btn ${i === currentPage ? "active" : ""}"
-        data-page="${i}" aria-label="Halaman ${i}"
+      <button
+        class="page-btn ${i === currentPage ? "active" : ""}"
+        data-page="${i}"
+        aria-label="Halaman ${i}"
         ${i === currentPage ? 'aria-current="page"' : ""}>
         ${i}
       </button>
@@ -218,21 +309,28 @@ function renderPagination(data) {
   }
 
   html += `
-    <button class="page-btn" data-page="${currentPage + 1}"
-      aria-label="Halaman berikutnya" ${currentPage === totalPage ? "disabled" : ""}>→</button>
+    <button
+      class="page-btn"
+      data-page="${currentPage + 1}"
+      aria-label="Halaman berikutnya"
+      ${currentPage === totalPage ? "disabled" : ""}>
+      →
+    </button>
   `;
 
   pagination.innerHTML = html;
 
-  // Event listener: klik tombol halaman
   pagination.querySelectorAll(".page-btn:not([disabled])").forEach((btn) => {
     btn.addEventListener("click", () => {
       currentPage = Number(btn.dataset.page);
+
       _renderHalaman(data);
       renderPagination(data);
 
-      // Scroll ke atas grid agar nyaman di mobile
-      productGrid.scrollIntoView({ behavior: "smooth", block: "start" });
+      productGrid.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
     });
   });
 }
@@ -311,37 +409,24 @@ function createCard(produk) {
 // ======================================
 
 function initSearch() {
+
   const searchInput = document.getElementById("searchInput");
+
   if (!searchInput) return;
 
   searchInput.addEventListener("input", debounce((e) => {
-    const keyword = e.target.value.trim().toLowerCase();
 
-    if (!keyword) {
-      renderProduk(semuaProduk);
-      return;
-    }
+    keywordAktif = e.target.value
+      .trim()
+      .toLowerCase();
 
-    const hasil = semuaProduk.filter((produk) => {
-      const fields = [
-        produk.namaProduk,
-        produk.kategori,
-        produk.namaToko,
-        produk.namaUmkm,
-        produk.provinsi,
-        produk.kabupaten,
-        produk.kecamatan,
-      ]
-        .map((v) => (v || "").toLowerCase())
-        .join(" ");
+    currentPage = 1;
 
-      return fields.includes(keyword);
-    });
+    applyFilter();
 
-    renderProduk(hasil);
-  }, 300));
+  },300));
+
 }
-
 
 // ======================================
 // FILTER KATEGORI
@@ -349,32 +434,31 @@ function initSearch() {
 // ======================================
 
 function initKategori() {
+
   const tombol = document.querySelectorAll(".filter-btn");
 
-  tombol.forEach((btn) => {
+  tombol.forEach(btn => {
+
     btn.addEventListener("click", () => {
-      // Update state tombol aktif + aria-pressed
-      tombol.forEach((item) => {
+
+      tombol.forEach(item => {
         item.classList.remove("active");
-        item.setAttribute("aria-pressed", "false");
+        item.setAttribute("aria-pressed","false");
       });
+
       btn.classList.add("active");
-      btn.setAttribute("aria-pressed", "true");
+      btn.setAttribute("aria-pressed","true");
 
-      const kategori = btn.dataset.category;
+      kategoriAktif = btn.dataset.category;
 
-      if (kategori === "all") {
-        renderProduk(semuaProduk);
-        return;
-      }
+      currentPage = 1;
 
-      const hasil = semuaProduk.filter(
-        (p) => (p.kategori || "").toLowerCase() === kategori
-      );
+      applyFilter();
 
-      renderProduk(hasil);
     });
+
   });
+
 }
 
 
@@ -384,31 +468,21 @@ function initKategori() {
 // ======================================
 
 function initSort() {
+
   const sortSelect = document.getElementById("sortSelect");
+
   if (!sortSelect) return;
 
   sortSelect.addEventListener("change", () => {
-    const data = [...semuaProduk];
 
-    switch (sortSelect.value) {
-      case "termurah":
-        data.sort((a, b) => Number(a.harga || 0) - Number(b.harga || 0));
-        break;
-      case "termahal":
-        data.sort((a, b) => Number(b.harga || 0) - Number(a.harga || 0));
-        break;
-      case "rating":
-        data.sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0));
-        break;
-      case "terlaris":
-        data.sort((a, b) => Number(b.terjual || 0) - Number(a.terjual || 0));
-        break;
-      default: // "terbaru" — asumsi urutan Firestore = terbaru
-        break;
-    }
+    sortAktif = sortSelect.value;
 
-    renderProduk(data);
+    currentPage = 1;
+
+    applyFilter();
+
   });
+
 }
 
 
