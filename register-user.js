@@ -3,403 +3,174 @@
 // register-user.js
 // ======================================
 
-// Firebase
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-
-getFirestore,
-
-doc,
-
-setDoc,
-
-serverTimestamp
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-getAuth,
-
-createUserWithEmailAndPassword,
-
-signOut
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 // ======================================
-// FIREBASE
+// FIREBASE CONFIG & INIT
 // ======================================
-
-const firebaseConfig={
-
-apiKey:"AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
-
-authDomain:"pasarnusa-18aa0.firebaseapp.com",
-
-projectId:"pasarnusa-18aa0",
-
-storageBucket:"pasarnusa-18aa0.firebasestorage.app",
-
-messagingSenderId:"866998011671",
-
-appId:"1:866998011671:web:5555115feb82741ab55952"
-
+const firebaseConfig = {
+  apiKey: "AIzaSyDq9vebvgycrR27JMQ4Mlnf5JsgZu5KeQk",
+  authDomain: "pasarnusa-18aa0.firebaseapp.com",
+  projectId: "pasarnusa-18aa0",
+  storageBucket: "pasarnusa-18aa0.firebasestorage.app",
+  messagingSenderId: "866998011671",
+  appId: "1:866998011671:web:5555115feb82741ab55952",
 };
 
-const app=
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-initializeApp(firebaseConfig);
-
-const auth=
-
-getAuth(app);
-
-const db=
-
-getFirestore(app);
 // ======================================
-// ELEMENT
+// ELEMENT REFERENCES
 // ======================================
+const form = document.getElementById("registerForm");
+const nama = document.getElementById("nama");
+const email = document.getElementById("email");
+const whatsapp = document.getElementById("whatsapp");
+const password = document.getElementById("password");
+const btnDaftar = document.getElementById("btnDaftar");
+const togglePassword = document.getElementById("togglePassword");
+const formMessage = document.getElementById("formMessage");
 
-const form=
+// Pola sederhana untuk validasi nomor WhatsApp Indonesia (08xxxxxxxxxx)
+const WHATSAPP_PATTERN = /^08[0-9]{8,11}$/;
 
-document.getElementById(
-"registerForm"
-);
-
-const nama=
-
-document.getElementById(
-"nama"
-);
-
-const email=
-
-document.getElementById(
-"email"
-);
-
-const whatsapp=
-
-document.getElementById(
-"whatsapp"
-);
-
-const password=
-
-document.getElementById(
-"password"
-);
-
-const btnDaftar=
-
-document.getElementById(
-"btnDaftar"
-);
-
-const togglePassword=
-
-document.getElementById(
-"togglePassword"
-);
 // ======================================
-// SHOW PASSWORD
+// SHOW / HIDE PASSWORD
 // ======================================
-
-togglePassword.addEventListener(
-
-"click",
-
-()=>{
-
-if(password.type==="password"){
-
-password.type="text";
-
-togglePassword.innerText="🙈";
-
-}else{
-
-password.type="password";
-
-togglePassword.innerText="👁️";
-
-}
-
+togglePassword.addEventListener("click", () => {
+  const isHidden = password.type === "password";
+  password.type = isHidden ? "text" : "password";
+  togglePassword.innerText = isHidden ? "🙈" : "👁️";
+  togglePassword.setAttribute("aria-pressed", String(isHidden));
 });
+
 // ======================================
-// START
+// FORM SUBMIT
 // ======================================
+form.addEventListener("submit", registerUser);
 
-form.addEventListener(
+/**
+ * Menangani submit form registrasi:
+ * validasi input lalu membuat akun di Firebase Auth.
+ */
+async function registerUser(event) {
+  event.preventDefault();
+  clearMessage();
 
-"submit",
+  const userNama = nama.value.trim();
+  const userEmail = email.value.trim();
+  const userWhatsapp = whatsapp.value.trim();
+  const userPassword = password.value;
 
-registerUser
+  // Validasi kelengkapan data
+  if (!userNama || !userEmail || !userWhatsapp || !userPassword) {
+    return showMessage("Lengkapi semua data.", "error");
+  }
 
-);
-// ======================================
-// REGISTER
-// ======================================
+  // Validasi panjang password
+  if (userPassword.length < 6) {
+    return showMessage("Password minimal 6 karakter.", "error");
+  }
 
-async function registerUser(e){
+  // Validasi format nomor WhatsApp
+  if (!WHATSAPP_PATTERN.test(userWhatsapp)) {
+    return showMessage("Nomor WhatsApp tidak valid. Gunakan format 08xxxxxxxxxx.", "error");
+  }
 
-e.preventDefault();
+  setLoading(true);
 
-const userNama=
-
-nama.value.trim();
-
-const userEmail=
-
-email.value.trim();
-
-const userWhatsapp=
-
-whatsapp.value.trim();
-
-const userPassword=
-
-password.value;
-
-if(
-
-!userNama||
-
-!userEmail||
-
-!userWhatsapp||
-
-!userPassword
-
-){
-
-showToast(
-
-"Lengkapi semua data."
-
-);
-
-return;
-
+  try {
+    const credential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+    await saveUser(credential.user.uid, { userNama, userEmail, userWhatsapp });
+  } catch (error) {
+    console.error(error);
+    showMessage(getErrorMessage(error.code), "error");
+    setLoading(false);
+  }
 }
 
-if(userPassword.length<6){
-
-showToast(
-
-"Password minimal 6 karakter."
-
-);
-
-return;
-
-}
-
-if(
-
-!userWhatsapp.startsWith("08")
-
-){
-
-showToast(
-
-"Nomor WhatsApp harus diawali 08."
-
-);
-
-return;
-
-}
-
-btnDaftar.disabled=true;
-
-btnDaftar.innerText=
-
-"Mendaftarkan...";
-
-try{
-
-const credential=
-
-await createUserWithEmailAndPassword(
-
-auth,
-
-userEmail,
-
-userPassword
-
-);
-
-const user=
-
-credential.user;
-
-saveUser(user.uid);
-
-}catch(error){
-
-console.error(error);
-
-showError(error.code);
-
-btnDaftar.disabled=false;
-
-btnDaftar.innerText="Daftar Sekarang";
-
-}
-
-}
 // ======================================
-// SAVE USER
+// SAVE USER TO FIRESTORE
 // ======================================
 
-async function saveUser(uid){
+/**
+ * Menyimpan data profil user ke Firestore, lalu sign out
+ * (karena user baru harus login ulang secara eksplisit)
+ * dan mengarahkan ke halaman login.
+ */
+async function saveUser(uid, { userNama, userEmail, userWhatsapp }) {
+  try {
+    await setDoc(doc(db, "users", uid), {
+      uid,
+      nama: userNama,
+      email: userEmail,
+      whatsapp: userWhatsapp,
+      role: "user",
+      status: "aktif",
+      createdAt: serverTimestamp(),
+    });
 
-try{
+    await signOut(auth);
+    showMessage("Pendaftaran berhasil. Mengarahkan ke halaman login...", "success");
 
-await setDoc(
-
-doc(db,"users",uid),
-
-{
-
-uid:uid,
-
-nama:nama.value.trim(),
-
-email:email.value.trim(),
-
-whatsapp:whatsapp.value.trim(),
-
-role:"user",
-
-status:"aktif",
-
-createdAt:serverTimestamp()
-
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 1500);
+  } catch (error) {
+    console.error(error);
+    showMessage("Gagal menyimpan data. Silakan coba lagi.", "error");
+    setLoading(false);
+  }
 }
 
-);
-
-await signOut(auth);
-
-showToast(
-
-"Pendaftaran berhasil."
-
-);
-
-setTimeout(()=>{
-
-window.location.href=
-
-"login.html";
-
-},1500);
-
-}catch(error){
-
-console.error(error);
-
-showToast(
-
-"Gagal menyimpan data."
-
-);
-
-btnDaftar.disabled=false;
-
-btnDaftar.innerText="Daftar Sekarang";
-
-}
-
-}
 // ======================================
-// ERROR
+// HELPERS: UI STATE
 // ======================================
 
-function showError(code){
-
-let message="Pendaftaran gagal.";
-
-switch(code){
-
-case "auth/email-already-in-use":
-
-message="Email sudah digunakan.";
-
-break;
-
-case "auth/invalid-email":
-
-message="Format email tidak valid.";
-
-break;
-
-case "auth/weak-password":
-
-message="Password terlalu lemah.";
-
-break;
-
-case "auth/network-request-failed":
-
-message="Periksa koneksi internet.";
-
-break;
-
-default:
-
-message="Terjadi kesalahan.";
-
+/** Mengaktifkan/menonaktifkan tombol submit beserta teksnya. */
+function setLoading(isLoading) {
+  btnDaftar.disabled = isLoading;
+  btnDaftar.innerText = isLoading ? "Mendaftarkan..." : "Daftar Sekarang";
 }
 
-showToast(message);
-btnDaftar.disabled=false;
-
-btnDaftar.innerText="Daftar Sekarang";
+/** Menampilkan pesan error/sukses pada elemen #formMessage. */
+function showMessage(message, type = "error") {
+  formMessage.textContent = message;
+  formMessage.classList.remove("error", "success");
+  formMessage.classList.add(type);
 }
+
+/** Mengosongkan pesan sebelumnya sebelum validasi baru dijalankan. */
+function clearMessage() {
+  formMessage.textContent = "";
+  formMessage.classList.remove("error", "success");
+}
+
 // ======================================
-// TOAST
+// HELPERS: ERROR MAPPING
 // ======================================
 
-function showToast(message){
+/** Menerjemahkan kode error Firebase Auth ke pesan berbahasa Indonesia. */
+function getErrorMessage(code) {
+  const messages = {
+    "auth/email-already-in-use": "Email sudah digunakan.",
+    "auth/invalid-email": "Format email tidak valid.",
+    "auth/weak-password": "Password terlalu lemah.",
+    "auth/network-request-failed": "Periksa koneksi internet.",
+  };
 
-const toast=
-
-document.createElement("div");
-
-toast.className="toast";
-
-toast.innerText=message;
-
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.classList.add("show");
-
-},100);
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-setTimeout(()=>{
-
-toast.remove();
-
-},300);
-
-},3000);
-
+  return messages[code] || "Terjadi kesalahan. Silakan coba lagi.";
 }
