@@ -1,436 +1,414 @@
 /* ==========================================================================
-   review.css — PasarNusa
-   Stylesheet khusus halaman Review Produk.
-   Bergantung pada variabel dan utilitas dari style.css (global).
-   ========================================================================== */
-
-
-/* ==========================================================================
    HERO
-   ========================================================================== */
+========================================================================== */
 
-.hero-page {
-  padding: 150px 0 80px;
-  background: linear-gradient(135deg, #f0fdf4, #ffffff);
-  text-align: center;
+.hero-page{
+    padding:150px 0 80px;
+    background:linear-gradient(135deg,#f0fdf4 0%,#ffffff 100%);
+    text-align:center;
+    overflow:hidden;
 }
 
-.hero-page-content {
-  max-width: 800px;
-  margin: auto;
+.hero-page-content{
+    max-width:800px;
+    margin-inline:auto;
 }
 
-.hero-page h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  margin: 20px 0;
-  color: var(--color-heading);
+.hero-page h1{
+    margin:20px 0;
+    font-size:clamp(2.2rem,5vw,3.4rem);
+    font-weight:800;
+    line-height:1.15;
+    color:var(--color-text);
 }
 
-.hero-page p {
-  max-width: 650px;
-  margin: auto;
-  line-height: 1.8;
-  color: #6b7280;
+.hero-page p{
+    max-width:650px;
+    margin-inline:auto;
+    color:var(--color-muted);
+    line-height:1.8;
 }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 12px 24px;
-  border-radius: 999px;
-  background: #dcfce7;
-  color: #166534;
-  font-weight: 700;
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 24px;
+    border-radius:999px;
+    background:var(--color-primary-light);
+    color:var(--color-primary);
+    font-weight:700;
 }
-
 
 /* ==========================================================================
    BREADCRUMB
-   ========================================================================== */
+========================================================================== */
 
-.breadcrumb {
-  padding: 18px 0;
-  background: #fff;
-  border-bottom: 1px solid #eee;
+.breadcrumb{
+    padding:18px 0;
+    background:var(--color-surface);
+    border-bottom:1px solid var(--color-border);
 }
 
-.breadcrumb .container {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
+.breadcrumb .container{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
 }
 
-.breadcrumb a {
-  text-decoration: none;
-  font-weight: 600;
-  color: #16a34a;
+.breadcrumb a{
+    font-weight:600;
+    color:var(--color-primary);
+    transition:color var(--transition);
 }
 
+.breadcrumb a:hover{
+    color:var(--color-primary-dark);
+}
 
 /* ==========================================================================
-   LAYOUT UTAMA
-   ========================================================================== */
+   LAYOUT
+========================================================================== */
 
-/* Grid dua kolom: konten (kiri) + ringkasan sticky (kanan) */
-.review-layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 30px;
-  align-items: start;
+.review-layout{
+    display:grid;
+    grid-template-columns:minmax(0,2fr) 360px;
+    gap:32px;
+    align-items:start;
 }
 
-.review-content {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.review-content{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    min-width:0;
 }
 
-/* Ringkasan mengikuti scroll hingga batas atas yang nyaman */
-.review-summary {
-  position: sticky;
-  top: 110px;
+.review-summary{
+    position:sticky;
+    top:110px;
 }
-
-
 /* ==========================================================================
    KARTU PRODUK
-   ========================================================================== */
+========================================================================== */
 
-.produk-card {
-  display: flex;
-  gap: 20px;
-  align-items: center;
+.produk-card{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    padding:24px;
+    background:var(--color-surface);
+    border:1px solid var(--color-border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm);
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
 }
 
-.produk-card img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 18px;
-  background: #f3f4f6; /* fallback saat gambar belum dimuat */
+.produk-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-md);
 }
 
-.produk-info {
-  flex: 1;
+.produk-card img{
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    flex-shrink:0;
+    border-radius:var(--radius-md);
+    background:var(--color-background);
+    transition:transform var(--transition);
 }
 
-.produk-info h3 {
-  margin-bottom: 8px;
-  font-size: 1.2rem;
+.produk-card:hover img{
+    transform:scale(1.04);
 }
 
-.produk-info p {
-  margin: 4px 0;
-  color: #6b7280;
+.produk-info{
+    flex:1;
+    min-width:0;
 }
 
+.produk-info h3{
+    margin-bottom:8px;
+    font-size:1.25rem;
+    font-weight:700;
+    color:var(--color-text);
+}
+
+.produk-info p{
+    margin:6px 0;
+    color:var(--color-muted);
+    line-height:1.7;
+}
 
 /* ==========================================================================
    RATING BINTANG
-   ========================================================================== */
+========================================================================== */
 
-.rating-box {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 20px;
+.rating-box{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:14px;
+    margin-top:24px;
+    flex-wrap:wrap;
 }
 
-.star {
-  font-size: 48px;
-  cursor: pointer;
-  color: #d1d5db;           /* abu — belum dipilih */
-  transition: color 0.25s, transform 0.25s;
-  user-select: none;
+.star{
+    font-size:3rem;
+    color:var(--color-border);
+    cursor:pointer;
+    user-select:none;
+    transition:
+        color var(--transition-fast),
+        transform var(--transition-fast);
 }
 
-.star:hover {
-  transform: scale(1.15);
+.star:hover{
+    color:#facc15;
+    transform:scale(1.15);
 }
 
-/* Fokus keyboard: penting untuk aksesibilitas (role="radio") */
-.star:focus-visible {
-  outline: 3px solid #16a34a;
-  outline-offset: 4px;
-  border-radius: 4px;
+.star.active{
+    color:#facc15;
 }
 
-.star.active {
-  color: #facc15;           /* kuning — sudah dipilih */
+.star:focus-visible{
+    outline:2px solid var(--color-primary);
+    outline-offset:4px;
+    border-radius:6px;
 }
 
-#ratingText {
-  margin-top: 15px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #374151;
+#ratingText{
+    margin-top:16px;
+    text-align:center;
+    font-weight:700;
+    color:var(--color-text);
 }
-
-
 /* ==========================================================================
-   FORM TEXTAREA
-   ========================================================================== */
+   FORM REVIEW
+========================================================================== */
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
 }
 
-.form-group label {
-  font-weight: 700;
-  color: #111827;
+.form-group label{
+    font-weight:700;
+    color:var(--color-text);
 }
 
-.form-group textarea {
-  width: 100%;
-  min-height: 170px;
-  padding: 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 16px;
-  font-family: inherit;
-  font-size: 15px;
-  resize: vertical;
-  outline: none;
-  transition: border-color 0.25s, box-shadow 0.25s;
-  /* box-sizing: border-box diperlukan agar padding tidak overflow */
-  box-sizing: border-box;
+.form-group textarea{
+    width:100%;
+    min-height:170px;
+    padding:16px 18px;
+    resize:vertical;
+    font:inherit;
+    line-height:1.8;
+    color:var(--color-text);
+    background:var(--color-surface);
+    border:1px solid var(--color-border);
+    border-radius:var(--radius-md);
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
 }
 
-.form-group textarea:focus {
-  border-color: #16a34a;
-  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
+.form-group textarea:focus{
+    outline:none;
+    border-color:var(--color-primary);
+    box-shadow:0 0 0 4px rgba(22,163,74,.12);
 }
 
-.form-group small {
-  color: #6b7280;
+.form-group small{
+    color:var(--color-muted);
 }
-
 
 /* ==========================================================================
    UPLOAD FOTO
-   ========================================================================== */
+========================================================================== */
 
-.upload-box {
-  margin-top: 20px;
+.upload-box{
+    margin-top:24px;
 }
 
-/* Input file disembunyikan; label bertindak sebagai tombol visual */
-.upload-box input[type="file"] {
-  display: none;
+.upload-box input[type=file]{
+    display:none;
 }
 
-.upload-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  border: 2px dashed #d1d5db;
-  border-radius: 20px;
-  cursor: pointer;
-  text-align: center;
-  transition: border-color 0.25s, background 0.25s;
+.upload-area{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:42px 24px;
+    text-align:center;
+    cursor:pointer;
+    background:var(--color-surface);
+    border:2px dashed var(--color-border);
+    border-radius:var(--radius-lg);
+    transition:
+        border-color var(--transition),
+        background var(--transition),
+        transform var(--transition);
 }
 
 .upload-area:hover,
-.upload-area:focus-within {
-  border-color: #16a34a;
-  background: #f0fdf4;
+.upload-area:focus-within{
+    background:var(--color-primary-light);
+    border-color:var(--color-primary);
+    transform:translateY(-2px);
 }
 
-.upload-icon {
-  font-size: 52px;
+.upload-icon{
+    font-size:3.2rem;
+    color:var(--color-primary);
 }
 
-.upload-area h3 {
-  margin: 15px 0 8px;
+.upload-area h3{
+    color:var(--color-text);
 }
 
-.upload-area p {
-  color: #6b7280;
+.upload-area p{
+    color:var(--color-muted);
 }
-
 
 /* ==========================================================================
-   PRATINJAU FOTO
-   ========================================================================== */
+   PREVIEW FOTO
+========================================================================== */
 
-.preview-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
+.preview-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+    gap:16px;
+    margin-top:24px;
 }
 
-.preview-grid img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 18px;
-  border: 1px solid #e5e7eb;
+.preview-grid img{
+    width:100%;
+    aspect-ratio:1;
+    object-fit:cover;
+    border-radius:var(--radius-md);
+    border:1px solid var(--color-border);
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
 }
 
-
-/* ==========================================================================
-   KARTU RINGKASAN
-   ========================================================================== */
-
-.summary-card {
-  background: #fff;
-  padding: 28px;
-  border-radius: 24px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+.preview-grid img:hover{
+    transform:scale(1.04);
+    box-shadow:var(--shadow-sm);
 }
-
-.summary-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin: 18px 0;
-}
-
-.summary-item span {
-  color: #6b7280;
-}
-
-.summary-item b {
-  font-weight: 700;
-}
-
-.summary-note {
-  margin-top: 20px;
-  padding: 14px;
-  border-radius: 16px;
-  background: #f0fdf4;
-  color: #166534;
-  line-height: 1.7;
-  font-size: 14px;
-}
-
-
-/* ==========================================================================
-   STATE KOSONG
-   ========================================================================== */
-
-/* .hidden dikontrol JS; lebih bersih dari inline style="display:none" */
-.hidden {
-  display: none !important;
-}
-
-
-/* ==========================================================================
-   ANIMASI
-   ========================================================================== */
-
-.form-card,
-.summary-card {
-  animation: fadeUp 0.35s ease both;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Matikan animasi untuk pengguna yang memilih reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .form-card,
-  .summary-card {
-    animation: none;
-  }
-}
-
-
-/* ==========================================================================
-   SKELETON LOADING
-   ========================================================================== */
-
-.skeleton {
-  animation: pulse 1.4s ease-in-out infinite;
-}
-
-.image-skeleton {
-  width: 100%;
-  height: 180px;
-  border-radius: 20px;
-  background: #e5e7eb;
-  margin-bottom: 20px;
-}
-
-.content-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.content-skeleton div {
-  height: 18px;
-  border-radius: 999px;
-  background: #e5e7eb;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1;   }
-}
-
-
-/* ==========================================================================
-   SCROLLBAR KUSTOM (Webkit)
-   ========================================================================== */
-
-::-webkit-scrollbar       { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 999px; }
-::-webkit-scrollbar-track { background: #f3f4f6; }
-
-
 /* ==========================================================================
    RESPONSIVE
-   ========================================================================== */
+========================================================================== */
 
-/* Tablet — layout jadi satu kolom, ringkasan tidak sticky */
-@media (max-width: 992px) {
-  .review-layout {
-    grid-template-columns: 1fr;
-  }
+@media (max-width:992px){
 
-  .review-summary {
-    position: static;
-  }
+    .review-layout{
+        grid-template-columns:1fr;
+    }
+
+    .review-summary{
+        position:static;
+    }
+
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .hero-page {
-    padding: 120px 0 70px;
-  }
+@media (max-width:768px){
 
-  .hero-page h1 {
-    font-size: 2rem;
-  }
+    .hero-page{
+        padding:120px 0 70px;
+    }
 
-  .produk-card {
-    flex-direction: column;
-    text-align: center;
-  }
+    .hero-page h1{
+        font-size:2rem;
+    }
 
-  .produk-card img {
-    width: 170px;
-    height: 170px;
-  }
+    .produk-card{
+        flex-direction:column;
+        text-align:center;
+        padding:22px;
+    }
 
-  .star {
-    font-size: 38px;
-  }
+    .produk-card img{
+        width:170px;
+        height:170px;
+    }
+
+    .produk-info{
+        width:100%;
+    }
+
+    .rating-box{
+        gap:10px;
+    }
+
+    .star{
+        font-size:2.4rem;
+    }
+
+    .summary-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+    }
+
+    .preview-grid{
+        grid-template-columns:repeat(auto-fill,minmax(100px,1fr));
+    }
+
+}
+
+@media (max-width:576px){
+
+    .hero-page{
+        padding:110px 0 60px;
+    }
+
+    .hero-page h1{
+        font-size:1.8rem;
+    }
+
+    .badge{
+        padding:10px 18px;
+        font-size:.875rem;
+    }
+
+    .produk-card{
+        padding:20px;
+    }
+
+    .produk-card img{
+        width:140px;
+        height:140px;
+    }
+
+    .upload-area{
+        padding:32px 20px;
+    }
+
+    .upload-icon{
+        font-size:2.6rem;
+    }
+
+    .preview-grid{
+        gap:12px;
+    }
+
+    .summary-card,
+    .form-card{
+        padding:22px;
+    }
+
+    .star{
+        font-size:2rem;
+    }
+
 }
