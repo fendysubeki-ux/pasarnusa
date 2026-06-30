@@ -142,7 +142,9 @@
       <header class="section-header">
         <div class="section-title">
           <h2 id="semuaKategoriHeading">Semua Kategori</h2>
-          <p>Jelajahi berbagai kategori produk UMKM dari seluruh Indonesia.</p>
+          <!-- Teks ini sekarang diisi/diubah secara dinamis oleh kategori.js
+               agar selalu sesuai dengan kondisi data (loading/terisi/kosong). -->
+          <p id="semuaKategoriSubtitle">Memuat kategori...</p>
         </div>
       </header>
 
@@ -206,10 +208,12 @@
 
 
   <!-- =============================================
-    KATEGORI POPULER — 4 kategori unggulan
-    Catatan: jumlah produk diisi ulang oleh kategori.js
+    KATEGORI POPULER — kartu unggulan
+    Catatan: sekarang dirender SEPENUHNYA oleh kategori.js dari data nyata.
+    - Jumlah kartu disamakan dengan halaman Beranda (lihat POPULAR_LIMIT di kategori.js).
+    - Section ini disembunyikan total (hidden) jika tidak ada kategori sama sekali.
   ============================================= -->
-  <section class="section" aria-labelledby="popularHeading">
+  <section class="section" id="popularSection" aria-labelledby="popularHeading" hidden>
     <div class="container">
 
       <header class="section-header">
@@ -219,33 +223,8 @@
         </div>
       </header>
 
-      <div class="popular-category-grid">
+      <div id="popularGrid" class="popular-category-grid"></div>
 
-        <div class="popular-category-card">
-          <div class="popular-icon" aria-hidden="true">🍜</div>
-          <h3>Makanan</h3>
-          <p data-category="makanan">0 Produk</p>
-        </div>
-
-        <div class="popular-category-card">
-          <div class="popular-icon" aria-hidden="true">🥤</div>
-          <h3>Minuman</h3>
-          <p data-category="minuman">0 Produk</p>
-        </div>
-
-        <div class="popular-category-card">
-          <div class="popular-icon" aria-hidden="true">👕</div>
-          <h3>Fashion</h3>
-          <p data-category="fashion">0 Produk</p>
-        </div>
-
-        <div class="popular-category-card">
-          <div class="popular-icon" aria-hidden="true">🧺</div>
-          <h3>Kerajinan</h3>
-          <p data-category="kerajinan">0 Produk</p>
-        </div>
-
-      </div>
     </div>
   </section>
 
