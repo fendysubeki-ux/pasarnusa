@@ -26,13 +26,16 @@
   ========================================================= -->
   <section class="dashboard">
 
-    <!-- Header: judul halaman + tombol kembali ke beranda -->
+    <!-- Header: judul halaman + tombol navigasi -->
     <div class="dashboard-header">
       <div>
         <h1>👤 Profil Saya</h1>
         <p>Kelola akun PasarNusa Anda</p>
       </div>
-      <a href="index.html" class="btn-secondary">🏠 Beranda</a>
+      <div style="display: flex; gap: 10px;">
+        <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
+        <a href="index.html" class="btn-secondary">🏠 Beranda</a>
+      </div>
     </div>
 
     <!-- Kartu ringkasan: nama, email, role, status -->
@@ -69,6 +72,10 @@
     <h2 style="margin-top: 30px;">⚡ Menu Cepat</h2>
 
     <div class="dashboard-grid">
+      <a href="dashboard.html" class="dashboard-card">
+        <h3>📊 Dashboard</h3>
+        <p>Ringkasan akun &amp; aktivitas</p>
+      </a>
       <a href="pesanan-saya.html" class="dashboard-card">
         <h3>📦 Pesanan Saya</h3>
         <p>Lihat seluruh pesanan</p>
