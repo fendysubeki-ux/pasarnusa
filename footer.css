@@ -1,4 +1,6 @@
-/* footer.css */
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
 
 .footer{
   margin-top:80px;
@@ -7,6 +9,11 @@
   border-top:1px solid var(--color-border);
 }
 
+
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+
 .footer-top{
   display:grid;
   grid-template-columns:2fr 1fr 1fr 1fr;
@@ -14,22 +21,40 @@
   margin-bottom:50px;
 }
 
+
+/* ==========================================================================
+   LOGO
+   ========================================================================== */
+
 .footer-logo{
   display:flex;
   align-items:center;
   gap:10px;
   margin-bottom:18px;
-  flex-shrink:0;
   font-size:1.8rem;
   font-weight:800;
   color:var(--color-primary);
 }
+
+.footer-logo span{
+  color:var(--color-text);
+}
+
+
+/* ==========================================================================
+   DESKRIPSI
+   ========================================================================== */
 
 .footer-desc{
   max-width:360px;
   line-height:1.8;
   color:var(--color-muted);
 }
+
+
+/* ==========================================================================
+   JUDUL
+   ========================================================================== */
 
 .footer-title{
   margin-bottom:18px;
@@ -38,6 +63,11 @@
   color:var(--color-text);
 }
 
+
+/* ==========================================================================
+   LINK
+   ========================================================================== */
+
 .footer-links{
   display:flex;
   flex-direction:column;
@@ -45,9 +75,14 @@
 }
 
 .footer-links a{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  text-decoration:none;
   color:var(--color-muted);
-  transition:color var(--transition),
-             padding-left var(--transition);
+  transition:
+    color var(--transition),
+    padding-left var(--transition);
 }
 
 @media (hover:hover){
@@ -61,12 +96,19 @@
 
 .footer-links a:focus-visible{
   color:var(--color-primary);
+  outline:none;
 }
+
+
+/* ==========================================================================
+   SOSIAL MEDIA
+   ========================================================================== */
 
 .social{
   display:flex;
+  align-items:center;
   gap:14px;
-  margin-top:18px;
+  margin-top:20px;
 }
 
 .social a{
@@ -78,9 +120,11 @@
   border-radius:var(--radius-full);
   background:var(--color-background);
   color:var(--color-text);
-  transition:background var(--transition),
-             color var(--transition),
-             transform var(--transition);
+  text-decoration:none;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    transform var(--transition);
 }
 
 @media (hover:hover){
@@ -96,7 +140,13 @@
 .social a:focus-visible{
   background:var(--color-primary);
   color:var(--color-white);
+  outline:none;
 }
+
+
+/* ==========================================================================
+   PEMBATAS
+   ========================================================================== */
 
 .footer-divider{
   height:1px;
@@ -104,17 +154,31 @@
   background:var(--color-border);
 }
 
+
+/* ==========================================================================
+   BAGIAN BAWAH
+   ========================================================================== */
+
 .footer-bottom{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   flex-wrap:wrap;
   gap:20px;
   font-size:.9rem;
   color:var(--color-muted);
 }
 
-@media(max-width:900px){
+.footer-bottom p{
+  margin:0;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width:900px){
 
   .footer-top{
     grid-template-columns:repeat(2,1fr);
@@ -122,10 +186,15 @@
 
 }
 
-@media(max-width:600px){
+@media (max-width:600px){
+
+  .footer{
+    padding:60px 0 30px;
+  }
 
   .footer-top{
     grid-template-columns:1fr;
+    gap:35px;
   }
 
   .footer-bottom{
