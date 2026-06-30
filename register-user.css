@@ -1,594 +1,374 @@
 /* ==========================================
-HERO
-========================================== */
-
-.hero-page{
-
-padding:150px 0 90px;
-
-background:
-linear-gradient(
-135deg,
-#f0fdf4 0%,
-#ffffff 100%
-);
-
-text-align:center;
-
-overflow:hidden;
-
+   HERO
+   ========================================== */
+.hero-page {
+  padding: 150px 0 90px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+  text-align: center;
+  overflow: hidden;
 }
 
-.hero-page-content{
-
-max-width:760px;
-
-margin:auto;
-
+.hero-page-content {
+  max-width: 760px;
+  margin: auto;
 }
 
-.hero-page h1{
-
-font-size:3rem;
-
-font-weight:800;
-
-line-height:1.2;
-
-margin:25px 0;
-
-color:var(--color-heading);
-
+.hero-page h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 25px 0;
+  color: var(--color-heading);
 }
 
-.hero-page p{
-
-max-width:650px;
-
-margin:auto;
-
-font-size:1.1rem;
-
-line-height:1.8;
-
-color:var(--color-text);
-
+.hero-page p {
+  max-width: 650px;
+  margin: auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text);
 }
 
-.badge{
-
-display:inline-flex;
-
-align-items:center;
-
-gap:8px;
-
-padding:12px 24px;
-
-border-radius:999px;
-
-background:#dcfce7;
-
-color:#166534;
-
-font-weight:700;
-
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
 }
+
 /* ==========================================
-BREADCRUMB
-========================================== */
-
-.breadcrumb{
-
-padding:25px 0;
-
-background:#fafafa;
-
-border-bottom:1px solid var(--color-border);
-
+   BREADCRUMB
+   ========================================== */
+.breadcrumb {
+  padding: 25px 0;
+  background: #fafafa;
+  border-bottom: 1px solid var(--color-border);
 }
 
-.breadcrumb .container{
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-font-size:.95rem;
-
-flex-wrap:wrap;
-
+.breadcrumb .container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .95rem;
+  flex-wrap: wrap;
 }
 
-.breadcrumb a{
-
-text-decoration:none;
-
-font-weight:600;
-
-color:var(--color-primary);
-
+.breadcrumb a {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--color-primary);
 }
+
 /* ==========================================
-REGISTER
-========================================== */
-
-.register-wrapper{
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
+   REGISTER CARD
+   ========================================== */
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.register-card{
-
-width:100%;
-
-max-width:600px;
-
-background:#fff;
-
-padding:45px;
-
-border-radius:28px;
-
-box-shadow:0 10px 35px rgba(0,0,0,.08);
-
-border:1px solid rgba(0,0,0,.05);
-
-animation:fadeUp .5s ease;
-
+.register-card {
+  width: 100%;
+  max-width: 600px;
+  background: #fff;
+  padding: 45px;
+  border-radius: 28px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, .08);
+  border: 1px solid rgba(0, 0, 0, .05);
+  animation: fadeUp .5s ease;
+  transition: box-shadow .3s;
 }
+
+/* Bayangan sedikit lebih besar saat kartu di-hover */
+.register-card:hover {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .10);
+}
+
 /* ==========================================
-REGISTER HEADER
-========================================== */
-
-.register-header{
-
-text-align:center;
-
-margin-bottom:35px;
-
+   REGISTER HEADER
+   ========================================== */
+.register-header {
+  text-align: center;
+  margin-bottom: 35px;
 }
 
-.register-icon{
-
-width:90px;
-
-height:90px;
-
-margin:auto;
-
-margin-bottom:20px;
-
-border-radius:50%;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:2.5rem;
-
-background:#dcfce7;
-
+.register-icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  background: #dcfce7;
 }
 
-.register-header h2{
-
-font-size:2rem;
-
-font-weight:800;
-
-margin-bottom:12px;
-
-color:var(--color-heading);
-
+.register-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--color-heading);
 }
 
-.register-header p{
-
-line-height:1.8;
-
-color:var(--color-text);
-
+.register-header p {
+  line-height: 1.8;
+  color: var(--color-text);
 }
+
 /* ==========================================
-FORM
-========================================== */
-
-.form-group{
-
-display:flex;
-
-flex-direction:column;
-
-gap:10px;
-
-margin-bottom:22px;
-
+   FORM
+   ========================================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
 }
 
-.form-group label{
-
-font-weight:700;
-
-color:var(--color-heading);
-
+.form-group label {
+  font-weight: 700;
+  color: var(--color-heading);
 }
 
-.form-group input{
-
-width:100%;
-
-padding:16px 18px;
-
-border:1px solid var(--color-border);
-
-border-radius:14px;
-
-font-size:1rem;
-
-transition:.3s;
-
+.form-group input {
+  width: 100%;
+  padding: 16px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  font-size: 1rem;
+  transition: .3s;
 }
 
-.form-group input:focus{
-
-outline:none;
-
-border-color:var(--color-primary);
-
-box-shadow:
-
-0 0 0 5px rgba(34,197,94,.15);
-
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 5px rgba(34, 197, 94, .15);
 }
 
-.form-group small{
-
-color:#6b7280;
-
-font-size:.85rem;
-
+.form-group small {
+  color: #6b7280;
+  font-size: .85rem;
 }
+
+/* Pesan error/sukses hasil validasi form (diisi oleh register-user.js) */
+.form-message {
+  display: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: .9rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.form-message:not(:empty) {
+  display: block;
+}
+
+.form-message.error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.form-message.success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
 /* ==========================================
-PASSWORD
-========================================== */
-
-.password-box{
-
-position:relative;
-
-display:flex;
-
-align-items:center;
-
+   PASSWORD
+   ========================================== */
+.password-box {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.password-box input{
-
-padding-right:55px;
-
+.password-box input {
+  padding-right: 55px;
 }
 
-.password-toggle{
-
-position:absolute;
-
-right:12px;
-
-border:none;
-
-background:none;
-
-cursor:pointer;
-
-font-size:1.2rem;
-
-color:#6b7280;
-
-padding:8px;
-
-transition:.3s;
-
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #6b7280;
+  padding: 8px;
+  transition: .3s;
 }
 
-.password-toggle:hover{
-
-color:var(--color-primary);
-
+.password-toggle:hover {
+  color: var(--color-primary);
 }
+
 /* ==========================================
-REGISTER BUTTON
-========================================== */
-
-.register-btn{
-
-width:100%;
-
-justify-content:center;
-
-padding:16px;
-
-font-size:1rem;
-
-font-weight:700;
-
-border-radius:14px;
-
-margin-top:10px;
-
-transition:.3s;
-
+   REGISTER BUTTON
+   ========================================== */
+.register-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 14px;
+  margin-top: 10px;
+  transition: .3s;
 }
 
-.register-btn:hover{
-
-transform:translateY(-2px);
-
+.register-btn:hover {
+  transform: translateY(-2px);
 }
+
 /* ==========================================
-LOGIN BOX
-========================================== */
-
-.login-box{
-
-margin-top:30px;
-
-padding-top:25px;
-
-border-top:1px solid var(--color-border);
-
-text-align:center;
-
+   LOGIN BOX
+   ========================================== */
+.login-box {
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
 }
 
-.login-box p{
-
-margin-bottom:15px;
-
-font-weight:600;
-
-color:var(--color-text);
-
+.login-box p {
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
-.login-box .btn{
-
-justify-content:center;
-
+.login-box .btn {
+  justify-content: center;
+  transition: .3s;
 }
+
+.login-box .btn:hover {
+  transform: translateY(-2px);
+}
+
 /* ==========================================
-REGISTER OPTION
-========================================== */
-
-.register-option{
-
-margin-top:30px;
-
-text-align:center;
-
+   REGISTER OPTION (Pilih Tipe Akun Lain)
+   ========================================== */
+.register-option {
+  margin-top: 30px;
+  text-align: center;
 }
 
-.register-option p{
-
-margin-bottom:18px;
-
-font-weight:600;
-
-color:var(--color-text);
-
+.register-option p {
+  margin-bottom: 18px;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
-.register-action{
-
-display:flex;
-
-gap:12px;
-
-justify-content:center;
-
-flex-wrap:wrap;
-
+.register-action {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.register-action .btn{
-
-justify-content:center;
-
-transition:.3s;
-
+.register-action .btn {
+  justify-content: center;
+  transition: .3s;
 }
 
-.register-action .btn:hover{
-
-transform:translateY(-2px);
-
+.register-action .btn:hover {
+  transform: translateY(-2px);
 }
+
 /* ==========================================
-REGISTER FOOTER
-========================================== */
-
-.register-footer{
-
-margin-top:30px;
-
-text-align:center;
-
+   REGISTER FOOTER
+   ========================================== */
+.register-footer {
+  margin-top: 30px;
+  text-align: center;
 }
 
-.register-footer a{
-
-text-decoration:none;
-
-font-weight:700;
-
-color:var(--color-primary);
-
-transition:.3s;
-
+.register-footer a {
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--color-primary);
+  transition: .3s;
 }
 
-.register-footer a:hover{
-
-opacity:.8;
-
+.register-footer a:hover {
+  opacity: .8;
 }
+
 /* ==========================================
-ANIMATION
-========================================== */
-
-.register-card{
-
-animation:fadeUp .5s ease;
-
+   ANIMATION
+   ========================================== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes fadeUp{
-
-from{
-
-opacity:0;
-
-transform:translateY(25px);
-
-}
-
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
-}
-
-}
 /* ==========================================
-HOVER
-========================================== */
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 992px) {
+  .hero-page {
+    padding: 120px 0 70px;
+  }
 
-.register-card:hover{
-
-box-shadow:
-
-0 18px 45px rgba(0,0,0,.10);
-
+  .hero-page h1 {
+    font-size: 2.5rem;
+  }
 }
 
-.register-action .btn{
+@media (max-width: 768px) {
+  .hero-page h1 {
+    font-size: 2rem;
+  }
 
-transition:.3s;
+  .register-card {
+    padding: 35px 25px;
+  }
 
+  .register-action {
+    flex-direction: column;
+  }
+
+  .login-box .btn,
+  .register-action .btn {
+    width: 100%;
+  }
 }
 
-.register-action .btn:hover{
+@media (max-width: 576px) {
+  .hero-page {
+    padding: 110px 0 60px;
+  }
 
-transform:translateY(-2px);
+  .hero-page p {
+    font-size: 1rem;
+  }
 
-}
+  .register-header h2 {
+    font-size: 1.7rem;
+  }
 
-.login-box .btn{
+  .register-icon {
+    width: 75px;
+    height: 75px;
+    font-size: 2rem;
+  }
 
-transition:.3s;
-
-}
-
-.login-box .btn:hover{
-
-transform:translateY(-2px);
-
-}
-/* ==========================================
-RESPONSIVE
-========================================== */
-
-@media(max-width:992px){
-
-.hero-page{
-
-padding:120px 0 70px;
-
-}
-
-.hero-page h1{
-
-font-size:2.5rem;
-
-}
-
-}
-
-@media(max-width:768px){
-
-.hero-page h1{
-
-font-size:2rem;
-
-}
-
-.register-card{
-
-padding:35px 25px;
-
-}
-
-.register-action{
-
-flex-direction:column;
-
-}
-
-.login-box .btn,
-
-.register-action .btn{
-
-width:100%;
-
-}
-
-}
-
-@media(max-width:576px){
-
-.hero-page{
-
-padding:110px 0 60px;
-
-}
-
-.hero-page p{
-
-font-size:1rem;
-
-}
-
-.register-header h2{
-
-font-size:1.7rem;
-
-}
-
-.register-icon{
-
-width:75px;
-
-height:75px;
-
-font-size:2rem;
-
-}
-
-.form-group input{
-
-padding:15px;
-
-}
-
+  .form-group input {
+    padding: 15px;
+  }
 }
