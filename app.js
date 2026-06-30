@@ -1,9 +1,8 @@
 /* =====================================================
- * PASARNUSA APP v1
- * Deskripsi : Core JavaScript untuk seluruh halaman
- * Struktur  : Module pattern — setiap fitur dalam
- *             objek/fungsi tersendiri agar mudah
- *             di-maintain dan di-debug.
+ * PASARNUSA APP — Gabungan app.js + script.js
+ * Deskripsi : Core JavaScript untuk seluruh halaman.
+ * Struktur  : Setiap fitur dipisah dalam fungsi/objek
+ *             tersendiri agar mudah di-maintain.
  * ===================================================== */
 
 "use strict";
@@ -12,11 +11,6 @@
  * UTILITAS UMUM
  * ───────────────────────────────────────────────────── */
 
-/**
- * Tunda eksekusi fungsi hingga jeda tertentu usai.
- * @param {Function} fn    - Fungsi yang akan dipanggil
- * @param {number}   delay - Jeda dalam milidetik
- */
 function debounce(fn, delay) {
   let timer;
   return (...args) => {
@@ -25,25 +19,12 @@ function debounce(fn, delay) {
   };
 }
 
-/**
- * Kembalikan Promise yang selesai setelah `ms` milidetik.
- * @param {number} ms
- */
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/**
- * Buat ID acak 8-karakter (alfanumerik).
- * @returns {string}
- */
 function uid() {
   return Math.random().toString(36).substring(2, 10);
 }
 
-/**
- * Format angka ke format mata uang Rupiah.
- * @param   {number} nilai
- * @returns {string} contoh: "Rp 10.000"
- */
 function rupiah(nilai) {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -52,11 +33,6 @@ function rupiah(nilai) {
   }).format(nilai);
 }
 
-/**
- * Format tanggal ke format lokal Indonesia.
- * @param   {string|Date} date
- * @returns {string} contoh: "1 Januari 2025"
- */
 function tanggal(date) {
   return new Date(date).toLocaleDateString("id-ID", {
     day: "numeric",
@@ -70,20 +46,9 @@ function tanggal(date) {
  * ───────────────────────────────────────────────────── */
 
 const Storage = {
-  /**
-   * Simpan nilai ke localStorage sebagai JSON.
-   * @param {string} key
-   * @param {*}      value
-   */
   set(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   },
-
-  /**
-   * Ambil nilai dari localStorage; kembalikan `[]` jika kosong.
-   * @param   {string} key
-   * @returns {*}
-   */
   get(key) {
     try {
       return JSON.parse(localStorage.getItem(key)) ?? [];
@@ -91,8 +56,6 @@ const Storage = {
       return [];
     }
   },
-
-  /** Hapus item dari localStorage. */
   remove(key) {
     localStorage.removeItem(key);
   },
@@ -104,50 +67,32 @@ const Storage = {
 
 const Cart = {
   key: "cart",
-
-  /** Ambil semua item di keranjang. */
   all() {
     return Storage.get(this.key);
   },
-
-  /** Simpan array item ke storage. */
   save(data) {
     Storage.set(this.key, data);
   },
-
-  /**
-   * Tambah produk ke keranjang.
-   * @param {Object} product - Data produk
-   */
   add(product) {
     const cart = this.all();
     cart.push(product);
     this.save(cart);
     showToast("Produk masuk keranjang");
   },
-
-  /** Jumlah item di keranjang. */
   count() {
     return this.all().length;
   },
 };
 
 /* ─────────────────────────────────────────────────────
- * WISHLIST — Toggle produk favorit
+ * WISHLIST — Toggle produk favorit (data layer)
  * ───────────────────────────────────────────────────── */
 
 const Wishlist = {
   key: "wishlist",
-
-  /**
-   * Tambah jika belum ada, hapus jika sudah ada.
-   * @param {string|number} id - ID produk
-   */
   toggle(id) {
     let list = Storage.get(this.key);
-    list = list.includes(id)
-      ? list.filter((x) => x !== id)
-      : [...list, id];
+    list = list.includes(id) ? list.filter((x) => x !== id) : [...list, id];
     Storage.set(this.key, list);
   },
 };
@@ -156,12 +101,6 @@ const Wishlist = {
  * API — Fetch helper dengan error handling
  * ───────────────────────────────────────────────────── */
 
-/**
- * Ambil data dari URL; tampilkan toast jika gagal.
- * @param   {string}  url
- * @param   {Object}  [options] - fetch options (opsional)
- * @returns {Promise<*|null>}
- */
 async function api(url, options = {}) {
   try {
     const res = await fetch(url, options);
@@ -178,18 +117,12 @@ async function api(url, options = {}) {
  * TOAST — Notifikasi pop-up sementara
  * ───────────────────────────────────────────────────── */
 
-/**
- * Tampilkan notifikasi toast selama 3 detik.
- * @param {string} message         - Pesan yang ditampilkan
- * @param {"success"|"error"|"warning"} [type="success"]
- */
 function showToast(message, type = "success") {
   const toast = document.createElement("div");
   toast.className = `toast toast-${type}`;
   toast.textContent = message;
   document.body.appendChild(toast);
 
-  // Delay kecil agar transisi CSS berjalan
   requestAnimationFrame(() => toast.classList.add("show"));
 
   setTimeout(() => {
@@ -199,7 +132,7 @@ function showToast(message, type = "success") {
 }
 
 /* ─────────────────────────────────────────────────────
- * NAVBAR — Tambah class "scrolled" saat halaman di-scroll
+ * NAVBAR — Tambah class "scrolled" saat halaman discroll
  * ───────────────────────────────────────────────────── */
 
 function initNavbar() {
@@ -207,7 +140,7 @@ function initNavbar() {
   if (!navbar) return;
 
   const onScroll = debounce(
-    () => navbar.classList.toggle("scrolled", window.scrollY > 30),
+    () => navbar.classList.toggle("scrolled", window.scrollY > 40),
     50
   );
   window.addEventListener("scroll", onScroll, { passive: true });
@@ -218,15 +151,17 @@ function initNavbar() {
  * ───────────────────────────────────────────────────── */
 
 function initReveal() {
-  const items = document.querySelectorAll(".reveal");
+  const items = document.querySelectorAll(
+    ".reveal, .section, .feature-card, .category-card, .product-card, .roadmap-card"
+  );
   if (!items.length) return;
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("active");
-          observer.unobserve(entry.target); // cukup sekali
+          entry.target.classList.add("active", "show");
+          observer.unobserve(entry.target);
         }
       });
     },
@@ -241,8 +176,7 @@ function initReveal() {
  * ───────────────────────────────────────────────────── */
 
 function initRipple() {
-  // Gunakan event delegation agar tombol yang ditambah
-  // secara dinamis juga mendapat efek ripple.
+  // Event delegation: berlaku juga untuk tombol dinamis
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".btn");
     if (!btn) return;
@@ -256,7 +190,7 @@ function initRipple() {
       width:  ${size}px;
       height: ${size}px;
       left:   ${e.clientX - rect.left - size / 2}px;
-      top:    ${e.clientY - rect.top  - size / 2}px;
+      top:    ${e.clientY - rect.top - size / 2}px;
     `;
 
     btn.appendChild(circle);
@@ -277,7 +211,6 @@ function initLoader() {
     loader.addEventListener("transitionend", () => loader.remove(), { once: true });
   };
 
-  // Jika halaman sudah selesai load, langsung sembunyikan
   if (document.readyState === "complete") {
     hide();
   } else {
@@ -290,12 +223,12 @@ function initLoader() {
  * ───────────────────────────────────────────────────── */
 
 function initBackTop() {
-  const btn = document.querySelector(".back-top");
+  const btn = document.querySelector(".back-top, #backTop");
   if (!btn) return;
 
   window.addEventListener(
     "scroll",
-    debounce(() => btn.classList.toggle("show", window.scrollY > 500), 100),
+    debounce(() => btn.classList.toggle("show", window.scrollY > 400), 100),
     { passive: true }
   );
 
@@ -307,10 +240,10 @@ function initBackTop() {
  * ───────────────────────────────────────────────────── */
 
 function initSearch() {
-  const input = document.getElementById("searchHome");
+  const input = document.getElementById("searchHome") || document.querySelector(".hero-search input");
   if (!input) return;
 
-  input.addEventListener("keypress", (e) => {
+  input.addEventListener("keyup", (e) => {
     if (e.key === "Enter" && input.value.trim()) {
       window.location.href = `produk.html?search=${encodeURIComponent(input.value.trim())}`;
     }
@@ -322,11 +255,16 @@ function initSearch() {
  * ───────────────────────────────────────────────────── */
 
 function initMobileMenu() {
-  const toggle = document.querySelector(".menu-toggle");
-  const menu   = document.querySelector(".navbar-menu");
+  const toggle = document.querySelector(".menu-toggle") || document.getElementById("menuToggle");
+  const menu = document.querySelector(".navbar-menu");
   if (!toggle || !menu) return;
 
   toggle.addEventListener("click", () => menu.classList.toggle("active"));
+
+  // Tutup menu saat link diklik
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => menu.classList.remove("active"));
+  });
 
   // Tutup menu saat klik di luar
   document.addEventListener("click", (e) => {
@@ -341,17 +279,23 @@ function initMobileMenu() {
  * ───────────────────────────────────────────────────── */
 
 function initDarkMode() {
-  const btn = document.querySelector(".dark-toggle");
+  const btn = document.querySelector(".dark-toggle") || document.getElementById("themeToggle");
   if (!btn) return;
 
-  // Terapkan tema tersimpan saat halaman dimuat
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-  }
+  const applyLabel = (isDark) => {
+    if (btn.tagName === "BUTTON" && btn.textContent.trim().length <= 2) {
+      btn.textContent = isDark ? "☀️" : "🌙";
+    }
+  };
+
+  const savedDark = localStorage.getItem("theme") === "dark";
+  document.body.classList.toggle("dark", savedDark);
+  applyLabel(savedDark);
 
   btn.addEventListener("click", () => {
     const isDark = document.body.classList.toggle("dark");
     localStorage.setItem("theme", isDark ? "dark" : "light");
+    applyLabel(isDark);
   });
 }
 
@@ -360,21 +304,27 @@ function initDarkMode() {
  * ───────────────────────────────────────────────────── */
 
 function initCounter() {
-  const counters = document.querySelectorAll("[data-counter]");
+  const counters = document.querySelectorAll("[data-counter], .stat-value");
   if (!counters.length) return;
 
   counters.forEach((counter) => {
-    const target = Number(counter.dataset.counter);
+    const target = Number(counter.dataset.counter ?? counter.textContent);
     if (!target) return;
 
     let current = 0;
-    const step  = Math.max(1, Math.ceil(target / 80));
+    const step = Math.max(1, target / 80);
 
-    const timer = setInterval(() => {
+    const update = () => {
       current = Math.min(current + step, target);
-      counter.textContent = current.toLocaleString("id-ID");
-      if (current >= target) clearInterval(timer);
-    }, 20);
+      counter.textContent = Math.floor(current).toLocaleString("id-ID");
+      if (current < target) {
+        requestAnimationFrame(update);
+      } else {
+        counter.textContent = target.toLocaleString("id-ID");
+      }
+    };
+
+    requestAnimationFrame(update);
   });
 }
 
@@ -383,7 +333,6 @@ function initCounter() {
  * ───────────────────────────────────────────────────── */
 
 function initModal() {
-  // Buka modal sesuai atribut data-modal
   document.querySelectorAll("[data-modal]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const modal = document.getElementById(btn.dataset.modal);
@@ -391,7 +340,6 @@ function initModal() {
     });
   });
 
-  // Tutup modal saat klik overlay atau tombol close
   document.querySelectorAll(".modal").forEach((modal) => {
     modal.addEventListener("click", (e) => {
       if (e.target === modal || e.target.classList.contains("close")) {
@@ -406,7 +354,6 @@ function initModal() {
  * ───────────────────────────────────────────────────── */
 
 function initWishlistButtons() {
-  // Gunakan event delegation untuk mendukung produk dinamis
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".favorite");
     if (!btn) return;
@@ -419,7 +366,6 @@ function initWishlistButtons() {
       icon.classList.toggle("fa-solid");
     }
 
-    // Animasi detak jantung
     btn.classList.add("heart");
     btn.addEventListener("animationend", () => btn.classList.remove("heart"), { once: true });
 
@@ -456,11 +402,13 @@ function initShare() {
     if (!btn) return;
 
     if (navigator.share) {
-      navigator.share({
-        title: document.title,
-        text:  "Lihat produk ini",
-        url:   window.location.href,
-      }).catch(() => {}); // abaikan jika user membatalkan
+      navigator
+        .share({
+          title: document.title,
+          text: "Lihat produk ini",
+          url: window.location.href,
+        })
+        .catch(() => {});
     } else {
       navigator.clipboard
         .writeText(window.location.href)
@@ -475,14 +423,13 @@ function initShare() {
  * ───────────────────────────────────────────────────── */
 
 function initRating() {
-  // Delegation: tangani klik pada bintang di mana pun
   document.addEventListener("click", (e) => {
     const star = e.target.closest(".rating i");
     if (!star) return;
 
     const parent = star.closest(".rating");
-    const stars  = [...parent.querySelectorAll("i")];
-    const index  = stars.indexOf(star);
+    const stars = [...parent.querySelectorAll("i")];
+    const index = stars.indexOf(star);
 
     parent.dataset.rating = index + 1;
     stars.forEach((s, i) => s.classList.toggle("active", i <= index));
@@ -536,16 +483,31 @@ function loadMoreProduct() {
 }
 
 /* ─────────────────────────────────────────────────────
+ * BUTTON LOADING — Tampilkan status loading pada tombol
+ * ───────────────────────────────────────────────────── */
+
+function initButtonLoading() {
+  document.querySelectorAll(".btn-loading").forEach((button) => {
+    button.addEventListener("click", () => {
+      const original = button.innerHTML;
+      button.disabled = true;
+      button.innerHTML = "⏳ Memuat...";
+
+      setTimeout(() => {
+        button.disabled = false;
+        button.innerHTML = original;
+      }, 1500);
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────────────
  * CONNECTION STATUS — Notifikasi status koneksi internet
  * ───────────────────────────────────────────────────── */
 
 function initConnectionStatus() {
-  window.addEventListener("offline", () =>
-    showToast("Koneksi internet terputus", "warning")
-  );
-  window.addEventListener("online", () =>
-    showToast("Koneksi kembali normal", "success")
-  );
+  window.addEventListener("offline", () => showToast("Koneksi internet terputus", "warning"));
+  window.addEventListener("online", () => showToast("Koneksi kembali normal", "success"));
 }
 
 /* ─────────────────────────────────────────────────────
@@ -574,6 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initDarkMode();
   initCounter();
   initModal();
+  initButtonLoading();
 
   // Fitur marketplace
   initWishlistButtons();
