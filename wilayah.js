@@ -51,6 +51,9 @@ const elTotalUmkm       = document.getElementById("totalUmkm");
 const elSearchWilayah   = document.getElementById("searchWilayah");
 const formSearch        = document.getElementById("formSearchWilayah");
 
+// Section "Wilayah Populer" — disembunyikan jika tidak ada data provinsi
+const popularSection    = document.getElementById("heading-populer")?.closest("section") || null;
+
 
 // -----------------------------------------------------------------------------
 // STATE APLIKASI
@@ -91,6 +94,10 @@ function showLoading() {
 
   wilayahGrid.setAttribute("aria-busy", "true");
   wilayahGrid.innerHTML = skeletonHTML.repeat(8);
+
+  // Sembunyikan dulu wilayah populer & statistik kosong selama loading
+  setPopularVisible(false);
+  clearStatistikDisplay();
 }
 
 
@@ -181,6 +188,11 @@ function generateWilayah(produkList) {
  * Kedua lokasi (hero + kartu) menggunakan ID berbeda sehingga
  * harus diisi secara terpisah.
  *
+ * Jika tidak ada data sama sekali (totalProv = 0), angka tetap
+ * ditampilkan sebagai "0" alih-alih disembunyikan, karena ini
+ * adalah statistik ringkasan yang valid untuk ditampilkan apa adanya.
+ * Yang disembunyikan hanya bagian "Wilayah Populer" (lihat setPopularVisible).
+ *
  * @param {number} totalKab - Jumlah kabupaten unik
  * @param {number} totalKec - Jumlah kecamatan unik
  * @param {number} totalDes - Jumlah desa unik
@@ -202,6 +214,24 @@ function updateStatistik(totalKab, totalKec, totalDes, totalUser) {
 
   if (elTotalKecamatan) elTotalKecamatan.textContent = totalKec;
   if (elTotalDesa)      elTotalDesa.textContent      = totalDes;
+
+  // Tampilkan/sembunyikan bagian Wilayah Populer berdasarkan ada/tidaknya provinsi
+  setPopularVisible(totalProv > 0);
+}
+
+/**
+ * Mengosongkan tampilan statistik (dipakai sebelum data dimuat),
+ * agar tidak sempat menampilkan "0" yang membingungkan saat loading.
+ */
+function clearStatistikDisplay() {
+  const placeholder = "–";
+  [elTotalProvinsi, elTotalKabupaten, elTotalUmkm, elTotalKecamatan, elTotalDesa]
+    .forEach((el) => { if (el) el.textContent = placeholder; });
+
+  const cardProv = document.getElementById("totalProvinsiCard");
+  const cardKab  = document.getElementById("totalKabupatenCard");
+  if (cardProv) cardProv.textContent = placeholder;
+  if (cardKab)  cardKab.textContent  = placeholder;
 }
 
 
@@ -308,24 +338,49 @@ function initSearch() {
 // -----------------------------------------------------------------------------
 
 /**
- * Mengisi kartu wilayah populer dengan 4 provinsi teratas
- * berdasarkan jumlah produk terbanyak.
- * ID elemen (umkmJatim, dll.) hanya sebagai fallback;
- * nama provinsi diambil dari data Firestore secara dinamis.
+ * Menampilkan atau menyembunyikan section "Wilayah Populer" secara keseluruhan.
+ * Dipanggil setiap kali jumlah provinsi diketahui (0 atau lebih).
+ *
+ * @param {boolean} visible
+ */
+function setPopularVisible(visible) {
+  if (!popularSection) return;
+  popularSection.hidden = !visible;
+}
+
+/**
+ * Mengisi kartu wilayah populer dengan provinsi teratas berdasarkan
+ * jumlah produk terbanyak (maksimal sebanyak kartu yang tersedia).
+ *
+ * Jika tidak ada provinsi sama sekali, section disembunyikan oleh
+ * updateStatistik() → setPopularVisible(false), jadi fungsi ini
+ * tidak perlu menangani kasus kosong secara terpisah.
+ *
+ * Jika jumlah provinsi lebih sedikit dari jumlah kartu (mis. hanya 2
+ * provinsi tapi ada 4 kartu), kartu sisanya disembunyikan satu per satu
+ * agar tidak menampilkan "0 Produk" yang membingungkan.
  */
 function updatePopularWilayah() {
   const cards = document.querySelectorAll(".popular-wilayah-card");
   if (cards.length === 0) return;
 
-  // Ambil 4 provinsi dengan produk terbanyak
+  // Ambil provinsi dengan produk terbanyak, sebanyak kartu yang tersedia
   const topProvinsi = [...semuaProvinsi]
     .sort((a, b) => b.jumlah - a.jumlah)
-    .slice(0, 4);
+    .slice(0, cards.length);
 
   cards.forEach((card, index) => {
-    if (!topProvinsi[index]) return;
+    const data = topProvinsi[index];
 
-    const { nama, jumlah } = topProvinsi[index];
+    // Tidak ada data untuk kartu ini → sembunyikan agar tidak menampilkan "0 Produk"
+    if (!data) {
+      card.hidden = true;
+      return;
+    }
+
+    card.hidden = false;
+
+    const { nama, jumlah } = data;
 
     card.querySelector("h3").textContent = nama;
     card.querySelector("p").textContent  = `${jumlah} Produk`;
@@ -390,4 +445,8 @@ function showError() {
       <h2>Terjadi Kesalahan</h2>
       <p>Gagal mengambil data wilayah. Silakan muat ulang halaman.</p>
     </div>`;
+
+  // Tidak ada data valid → sembunyikan wilayah populer dan kosongkan statistik
+  setPopularVisible(false);
+  clearStatistikDisplay();
 }
