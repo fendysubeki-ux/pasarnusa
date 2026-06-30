@@ -1,449 +1,203 @@
 <!DOCTYPE html>
-
 <html lang="id">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Pembeli | PasarNusa</title>
+  <meta name="description" content="Daftar akun pembeli PasarNusa dan mulai berbelanja produk UMKM Indonesia.">
+  <meta name="theme-color" content="#16a34a">
 
-<meta charset="UTF-8">
+  <!-- Preconnect untuk mempercepat loading font Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <!-- Stylesheet utama dan stylesheet khusus halaman registrasi -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="register-user.css">
 
-<title>Daftar Pembeli | PasarNusa</title>
-
-<meta
-name="description"
-content="Daftar akun pembeli PasarNusa dan mulai berbelanja produk UMKM Indonesia.">
-
-<meta
-name="theme-color"
-content="#16a34a">
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
-<link
-rel="stylesheet"
-href="register-user.css">
-
-<link
-rel="icon"
-href="assets/logo.png">
-
+  <link rel="icon" href="assets/logo.png">
 </head>
-
 <body>
-<header class="navbar">
 
-<div class="container">
-
-<div class="navbar-content">
-
-<a
-href="index.html"
-class="logo">
-
-🌿
-
-<span>PasarNusa</span>
-
-</a>
-
-<nav class="navbar-menu">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<a href="produk.html">
-
-Produk
-
-</a>
-
-<a href="kategori.html">
-
-Kategori
-
-</a>
-
-<a href="wilayah.html">
-
-Wilayah
-
-</a>
-
-<a href="tentang.html">
-
-Tentang
-
-</a>
-
-</nav>
-
-<div class="navbar-action">
-
-<button
-id="themeToggle"
-class="btn btn-secondary">
-
-🌙
-
-</button>
-
-<a
-href="login.html"
-class="btn btn-secondary">
-
-Masuk
-
-</a>
-
-<a
-href="register-user.html"
-class="btn btn-primary">
-
-Daftar
-
-</a>
-
-</div>
-
-<button
-id="menuToggle"
-class="menu-toggle">
-
-☰
-
-</button>
-
-</div>
-
-</div>
-
-</header>
-<section class="hero-page">
-
-<div class="container">
-
-<div class="hero-page-content">
-
-<div class="badge">
-
-🛒 Daftar Pembeli
-
-</div>
-
-<h1>
-
-Buat Akun PasarNusa
-
-</h1>
-
-<p>
-
-Daftarkan akun pembeli untuk mulai berbelanja berbagai produk UMKM Indonesia dengan mudah dan aman.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-<section class="breadcrumb">
-
-<div class="container">
-
-<a href="index.html">
-
-Beranda
-
-</a>
-
-<span>
-
-/
-
-</span>
-
-<span>
-
-Daftar Pembeli
-
-</span>
-
-</div>
-
-</section>
-<!-- ==========================================
-REGISTER
-========================================== -->
-
-<section class="section">
-
-<div class="container">
-
-<div class="register-wrapper">
-
-<div class="register-card">
-
-<div class="register-header">
-
-<div class="register-icon">
-
-🛒
-
-</div>
-
-<h2>
-
-Daftar Sebagai Pembeli
-
-</h2>
-
-<p>
-
-Lengkapi data di bawah ini untuk membuat akun PasarNusa.
-
-</p>
-
-</div>
-<form id="registerForm">
-
-<div class="form-group">
-
-<label for="nama">
-
-Nama Lengkap
-
-</label>
-
-<input
-
-type="text"
-
-id="nama"
-
-placeholder="Masukkan nama lengkap"
-
-required>
-
-</div>
-
-<div class="form-group">
-
-<label for="email">
-
-Email
-
-</label>
-
-<input
-
-type="email"
-
-id="email"
-
-placeholder="Masukkan email"
-
-required>
-
-</div>
-
-<div class="form-group">
-
-<label for="whatsapp">
-
-Nomor WhatsApp
-
-</label>
-
-<input
-
-type="tel"
-
-id="whatsapp"
-
-placeholder="08xxxxxxxxxx"
-
-required>
-
-</div>
-<div class="form-group">
-
-<label for="password">
-
-Password
-
-</label>
-
-<div class="password-box">
-
-<input
-
-type="password"
-
-id="password"
-
-placeholder="Minimal 6 karakter"
-
-required>
-
-<button
-
-type="button"
-
-id="togglePassword"
-
-class="password-toggle">
-
-👁️
-
-</button>
-
-</div>
-
-<small>
-
-Gunakan minimal 6 karakter.
-
-</small>
-
-</div>
-<button
-
-type="submit"
-
-id="btnDaftar"
-
-class="btn btn-primary register-btn">
-
-Daftar Sekarang
-
-</button>
-
-</form>
-<div class="login-box">
-
-<p>
-
-Sudah punya akun?
-
-</p>
-
-<a
-href="login.html"
-class="btn btn-secondary">
-
-🔐 Login Sekarang
-
-</a>
-
-</div>
-
-<div class="register-option">
-
-<p>
-
-Ingin mendaftar sebagai?
-
-</p>
-
-<div class="register-action">
-
-<a
-href="register.html"
-class="btn btn-secondary">
-
-🏪 UMKM
-
-</a>
-
-<a
-href="register-affiliate.html"
-class="btn btn-secondary">
-
-🤝 Affiliate
-
-</a>
-
-</div>
-
-</div>
-<div class="register-footer">
-
-<a
-href="index.html">
-
-← Kembali ke Beranda
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<footer class="footer">
-
-<div class="container">
-
-<div class="footer-bottom">
-
-<p>
-
-© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.
-
-</p>
-
-<p>
-
-Dibangun ❤️ untuk UMKM Indonesia.
-
-</p>
-
-</div>
-
-</div>
-
-</footer>
-<button
-
-id="backTop"
-
-class="back-top"
-
-aria-label="Kembali ke Atas">
-
-↑
-
-</button>
-<script src="script.js"></script>
-
-<script
-type="module"
-src="register-user.js">
-
-</script>
+  <!-- ==========================================
+       NAVBAR
+       ========================================== -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <a href="index.html" class="logo">
+          🌿 <span>PasarNusa</span>
+        </a>
+
+        <nav class="navbar-menu">
+          <a href="index.html">Beranda</a>
+          <a href="produk.html">Produk</a>
+          <a href="kategori.html">Kategori</a>
+          <a href="wilayah.html">Wilayah</a>
+          <a href="tentang.html">Tentang</a>
+        </nav>
+
+        <div class="navbar-action">
+          <button id="themeToggle" class="btn btn-secondary" aria-label="Ganti Tema">🌙</button>
+          <a href="login.html" class="btn btn-secondary">Masuk</a>
+          <a href="register-user.html" class="btn btn-primary" aria-current="page">Daftar</a>
+        </div>
+
+        <button id="menuToggle" class="menu-toggle" aria-label="Buka Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       HERO HALAMAN
+       ========================================== -->
+  <section class="hero-page">
+    <div class="container">
+      <div class="hero-page-content">
+        <div class="badge">🛒 Daftar Pembeli</div>
+        <h1>Buat Akun PasarNusa</h1>
+        <p>Daftarkan akun pembeli untuk mulai berbelanja berbagai produk UMKM Indonesia dengan mudah dan aman.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BREADCRUMB NAVIGASI -->
+  <section class="breadcrumb">
+    <div class="container">
+      <a href="index.html">Beranda</a>
+      <span>/</span>
+      <span>Daftar Pembeli</span>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FORM REGISTRASI PEMBELI
+       ========================================== -->
+  <section class="section">
+    <div class="container">
+      <div class="register-wrapper">
+        <div class="register-card">
+
+          <div class="register-header">
+            <div class="register-icon">🛒</div>
+            <h2>Daftar Sebagai Pembeli</h2>
+            <p>Lengkapi data di bawah ini untuk membuat akun PasarNusa.</p>
+          </div>
+
+          <form id="registerForm" novalidate>
+
+            <!-- Nama Lengkap -->
+            <div class="form-group">
+              <label for="nama">Nama Lengkap</label>
+              <input
+                type="text"
+                id="nama"
+                name="nama"
+                placeholder="Masukkan nama lengkap"
+                autocomplete="name"
+                required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Masukkan email"
+                autocomplete="email"
+                required>
+            </div>
+
+            <!-- Nomor WhatsApp -->
+            <div class="form-group">
+              <label for="whatsapp">Nomor WhatsApp</label>
+              <input
+                type="tel"
+                id="whatsapp"
+                name="whatsapp"
+                placeholder="08xxxxxxxxxx"
+                pattern="^08[0-9]{8,11}$"
+                autocomplete="tel"
+                required>
+            </div>
+
+            <!-- Password dengan tombol tampilkan/sembunyikan -->
+            <div class="form-group">
+              <label for="password">Password</label>
+              <div class="password-box">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Minimal 6 karakter"
+                  minlength="6"
+                  autocomplete="new-password"
+                  required>
+                <button
+                  type="button"
+                  id="togglePassword"
+                  class="password-toggle"
+                  aria-label="Tampilkan/Sembunyikan Password"
+                  aria-pressed="false">
+                  👁️
+                </button>
+              </div>
+              <small>Gunakan minimal 6 karakter.</small>
+            </div>
+
+            <!-- Area pesan error/sukses (diisi oleh register-user.js) -->
+            <div id="formMessage" class="form-message" role="alert" aria-live="polite"></div>
+
+            <button type="submit" id="btnDaftar" class="btn btn-primary register-btn">
+              Daftar Sekarang
+            </button>
+          </form>
+
+          <!-- Tautan ke halaman login -->
+          <div class="login-box">
+            <p>Sudah punya akun?</p>
+            <a href="login.html" class="btn btn-secondary">🔐 Login Sekarang</a>
+          </div>
+
+          <!-- Pilihan mendaftar sebagai tipe akun lain -->
+          <div class="register-option">
+            <p>Ingin mendaftar sebagai?</p>
+            <div class="register-action">
+              <a href="register.html" class="btn btn-secondary">🏪 UMKM</a>
+              <a href="register-affiliate.html" class="btn btn-secondary">🤝 Affiliate</a>
+            </div>
+          </div>
+
+          <div class="register-footer">
+            <a href="index.html">← Kembali ke Beranda</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        <p>Dibangun ❤️ untuk UMKM Indonesia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Tombol kembali ke atas halaman -->
+  <button id="backTop" class="back-top" aria-label="Kembali ke Atas">↑</button>
+
+  <!-- Script umum situs, lalu script khusus halaman registrasi (module agar bisa pakai import/export) -->
+  <script src="script.js" defer></script>
+  <script type="module" src="register-user.js"></script>
 
 </body>
-
 </html>
