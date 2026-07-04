@@ -1,164 +1,189 @@
-/* forms.css */
+/* ==========================================================================
+   PASARNUSA — forms.css
+   ========================================================================== */
 
-input,
-textarea,
-select{
-  width:100%;
-  padding:14px 18px;
-  font:inherit;
-  color:var(--color-text);
-  background:var(--color-surface);
-  border:1px solid var(--color-border);
-  border-radius:var(--radius-md);
-  transition:border-color var(--transition),
-             box-shadow var(--transition),
-             background var(--transition);
+.form-grup {
+  margin-bottom: var(--jarak-4);
 }
 
-select{
-  appearance:none;
-  -webkit-appearance:none;
+.form-label {
+  display: block;
+  font-weight: var(--berat-tebal);
+  font-size: var(--ukuran-sm);
+  margin-bottom: var(--jarak-2);
+  color: var(--warna-teks-utama);
 }
 
-input::placeholder,
-textarea::placeholder{
-  color:var(--color-muted);
+.form-label .wajib {
+  color: var(--warna-bahaya);
 }
 
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible{
-  border-color:var(--color-primary);
-  box-shadow:0 0 0 4px rgba(22,163,74,.12);
+.form-kontrol {
+  width: 100%;
+  padding: var(--jarak-3) var(--jarak-4);
+  border: 1.5px solid var(--warna-garis-gelap);
+  border-radius: var(--radius-kecil);
+  background: var(--warna-putih);
+  font-size: var(--ukuran-md);
+  transition: border-color var(--transisi-cepat), box-shadow var(--transisi-cepat);
 }
 
-input:disabled,
-textarea:disabled,
-select:disabled{
-  opacity:.65;
-  cursor:not-allowed;
-  background:var(--color-background);
+.form-kontrol:focus {
+  outline: none;
+  border-color: var(--warna-hijau-sawah);
+  box-shadow: 0 0 0 3px var(--warna-hijau-sawah-muda);
 }
 
-input.is-invalid,
-textarea.is-invalid,
-select.is-invalid{
-  border-color:var(--color-danger);
-  box-shadow:0 0 0 4px rgba(239,68,68,.1);
+.form-kontrol::placeholder {
+  color: var(--warna-teks-muted);
 }
 
-input.is-valid,
-textarea.is-valid,
-select.is-valid{
-  border-color:var(--color-success);
+.form-kontrol.error {
+  border-color: var(--warna-bahaya);
 }
 
-textarea{
-  min-height:140px;
-  resize:vertical;
+.form-kontrol.error:focus {
+  box-shadow: 0 0 0 3px var(--warna-bahaya-muda);
 }
 
-label{
-  display:block;
-  margin-bottom:8px;
-  font-size:.875rem;
-  font-weight:600;
-  color:var(--color-text);
+textarea.form-kontrol {
+  min-height: 120px;
 }
 
-label .optional{
-  margin-left:4px;
-  font-weight:400;
-  color:var(--color-muted);
+select.form-kontrol {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5D52' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--jarak-4) center;
+  padding-right: var(--jarak-8);
 }
 
-.form-group{
-  margin-bottom:20px;
+.form-pesan {
+  font-size: var(--ukuran-xs);
+  margin-top: var(--jarak-1);
+}
+.form-pesan.error {
+  color: var(--warna-bahaya);
+}
+.form-pesan.bantuan {
+  color: var(--warna-teks-muted);
 }
 
-.form-row{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:20px;
+.form-baris {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--jarak-4);
 }
 
-.form-search{
-  display:flex;
-  align-items:center;
-  overflow:hidden;
-  background:var(--color-surface);
-  border:1px solid var(--color-border);
-  border-radius:var(--radius-lg);
-  box-shadow:var(--shadow-xs);
-}
-
-.form-search input{
-  flex:1;
-  min-width:0;
-  border:none;
-  box-shadow:none;
-  padding:16px 20px;
-}
-
-.form-search input:focus-visible{
-  box-shadow:none;
-}
-
-.form-search button{
-  flex-shrink:0;
-  padding:16px 24px;
-  background:var(--color-primary);
-  color:var(--color-white);
-  white-space:nowrap;
-  transition:background var(--transition);
-}
-
-@media (hover:hover){
-
-  .form-search button:hover{
-    background:var(--color-primary-dark);
+@media (max-width: 560px) {
+  .form-baris {
+    grid-template-columns: 1fr;
   }
-
 }
 
-.checkbox,
-.radio{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  cursor:pointer;
+/* --- Checkbox & radio kustom --- */
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-2);
+  cursor: pointer;
 }
 
-.checkbox input,
-.radio input{
-  width:auto;
-  flex-shrink:0;
-  accent-color:var(--color-primary);
+.form-check input[type="checkbox"],
+.form-check input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--warna-hijau-sawah);
 }
 
-.error-text,
-.success-text,
-.hint-text{
-  margin-top:6px;
-  font-size:.8125rem;
+/* --- Grup input dengan ikon/awalan --- */
+.form-input-group {
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid var(--warna-garis-gelap);
+  border-radius: var(--radius-kecil);
+  overflow: hidden;
 }
 
-.error-text{
-  color:var(--color-danger);
+.form-input-group input {
+  border: none;
+  flex: 1;
+  padding: var(--jarak-3) var(--jarak-4);
 }
 
-.success-text{
-  color:var(--color-success);
+.form-input-group .form-input-awalan {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--jarak-4);
+  background: var(--warna-hijau-sawah-muda);
+  color: var(--warna-teks-sekunder);
+  font-size: var(--ukuran-sm);
 }
 
-.hint-text{
-  color:var(--color-muted);
+/* --- Kotak unggah file/gambar --- */
+.form-upload {
+  border: 2px dashed var(--warna-garis-gelap);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-6);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--transisi-cepat), background var(--transisi-cepat);
 }
 
-@media(max-width:576px){
+.form-upload:hover,
+.form-upload.drag-aktif {
+  border-color: var(--warna-hijau-sawah);
+  background: var(--warna-hijau-sawah-muda);
+}
 
-  .form-row{
-    grid-template-columns:1fr;
-  }
+.form-upload-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--jarak-3);
+  margin-top: var(--jarak-4);
+}
 
+.form-upload-preview .item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-kecil);
+  overflow: hidden;
+  border: 1px solid var(--warna-garis);
+}
+
+.form-upload-preview .item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.form-upload-preview .hapus {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: var(--warna-putih);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* --- Fieldset panel --- */
+.form-panel {
+  background: var(--warna-putih);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-5);
+  margin-bottom: var(--jarak-5);
+}
+
+.form-panel-judul {
+  font-weight: var(--berat-tebal);
+  margin-bottom: var(--jarak-4);
+  padding-bottom: var(--jarak-3);
+  border-bottom: 1px solid var(--warna-garis);
 }
