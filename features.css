@@ -1,120 +1,59 @@
 /* ==========================================================================
-   features.css — Feature Grid Component
-   Project  : PasarNusa
-   Deskripsi: Layout grid dan kartu fitur unggulan produk/layanan PasarNusa.
+   PASARNUSA — features.css
    ========================================================================== */
 
-
-/* --------------------------------------------------------------------------
-   1. Feature Grid — Container Layout
-   -------------------------------------------------------------------------- */
-
-.feature-grid {
+.fitur-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--jarak-5);
 }
 
-
-/* --------------------------------------------------------------------------
-   2. Feature Card — Kartu Individual
-   -------------------------------------------------------------------------- */
-
-.feature-card {
-  padding: 32px 28px;
-  text-align: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
-
-  /* Transisi diterapkan pada properti spesifik agar lebih efisien
-     dibanding "transition: all" yang memicu repaint tidak perlu */
-  transition:
-    transform var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition);
+@media (max-width: 900px) {
+  .fitur-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .fitur-grid { grid-template-columns: 1fr; }
 }
 
-/* State hover: angkat kartu ke atas dan tonjolkan border primer */
-.feature-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-md);
+.fitur-item {
+  padding: var(--jarak-5);
+  background: var(--warna-putih);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
 }
 
-
-/* --------------------------------------------------------------------------
-   3. Feature Icon — Ikon Berbentuk Lingkaran
-   -------------------------------------------------------------------------- */
-
-.feature-icon {
-  /* Ukuran dan bentuk lingkaran */
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-
-  /* Pusatkan ikon secara horizontal dan beri jarak bawah */
+.fitur-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sedang);
+  background: var(--warna-hijau-sawah-muda);
+  color: var(--warna-hijau-sawah);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px;
-
-  /* Warna default: latar terang dengan ikon berwarna primer */
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-size: 36px;
-
-  /* Animasi hanya pada properti yang berubah */
-  transition:
-    background var(--transition),
-    color var(--transition),
-    transform var(--transition);
+  font-size: 24px;
+  margin-bottom: var(--jarak-4);
 }
 
-/* State hover pada ikon: balik warna dan putar sedikit */
-.feature-card:hover .feature-icon {
-  background: var(--color-primary);
-  color: var(--color-white);
-  transform: rotate(8deg) scale(1.08);
+.fitur-judul {
+  font-weight: var(--berat-tebal);
+  margin-bottom: var(--jarak-2);
 }
 
-
-/* --------------------------------------------------------------------------
-   4. Feature Card — Tipografi Judul & Deskripsi
-   -------------------------------------------------------------------------- */
-
-/* Judul kartu */
-.feature-card h3 {
-  margin-bottom: 12px;
-  font-size: 1.25rem;
-  color: var(--color-text);
+.fitur-deskripsi {
+  font-size: var(--ukuran-sm);
+  color: var(--warna-teks-sekunder);
 }
 
-/* Teks deskripsi kartu */
-.feature-card p {
-  font-size: 0.95rem;
-  color: var(--color-muted);
-  line-height: 1.7;
+/* --- Variasi tata letak bersanding (ikon kiri, teks kanan) --- */
+.fitur-item-baris {
+  display: flex;
+  gap: var(--jarak-4);
+  align-items: flex-start;
+  padding: var(--jarak-4) 0;
 }
 
-
-/* --------------------------------------------------------------------------
-   5. Aksesibilitas — Reduced Motion
-   Hormati preferensi pengguna yang sensitif terhadap animasi berlebih.
-   -------------------------------------------------------------------------- */
-
-@media (prefers-reduced-motion: reduce) {
-  .feature-card,
-  .feature-icon {
-    transition: none;
-  }
-
-  .feature-card:hover {
-    transform: none;
-  }
-
-  .feature-card:hover .feature-icon {
-    transform: none;
-  }
+.fitur-item-baris .fitur-icon {
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
