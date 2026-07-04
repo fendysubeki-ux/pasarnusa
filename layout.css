@@ -1,57 +1,127 @@
-/* layout.css */
+/* ==========================================================================
+   PASARNUSA — layout.css
+   Struktur dasar halaman: wadah konten, grid utama, header/footer dasar.
+   ========================================================================== */
 
-html,
-body{
-  width:100%;
-  overflow-x:hidden;
+html, body {
+  overflow-x: hidden;
 }
 
-.container{
-  width:min(var(--container-max),92%);
-  margin-inline:auto;
+#app,
+.app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.container-sm{
-  width:min(1080px,92%);
-  margin-inline:auto;
+main {
+  flex: 1;
+  width: 100%;
 }
 
-.section{
-  position:relative;
-  padding:90px 0;
-  scroll-margin-top:calc(var(--navbar-height) + 20px);
+/* --- Wadah konten utama: membatasi lebar & memberi jarak tepi konsisten --- */
+.wadah {
+  width: 100%;
+  max-width: var(--lebar-konten);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--jarak-4);
+  padding-right: var(--jarak-4);
 }
 
-.section-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  flex-wrap:wrap;
-  gap:24px;
-  margin-bottom:48px;
+.wadah-sempit {
+  width: 100%;
+  max-width: var(--lebar-konten-sempit);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--jarak-4);
+  padding-right: var(--jarak-4);
 }
 
-.section-title{
-  max-width:650px;
+@media (min-width: 768px) {
+  .wadah,
+  .wadah-sempit {
+    padding-left: var(--jarak-6);
+    padding-right: var(--jarak-6);
+  }
 }
 
-.grid{
-  display:grid;
-  gap:24px;
+/* --- Seksi halaman --- */
+.seksi {
+  padding-top: var(--jarak-8);
+  padding-bottom: var(--jarak-8);
 }
 
-.grid-2{
-  grid-template-columns:repeat(2,1fr);
+.seksi-kecil {
+  padding-top: var(--jarak-6);
+  padding-bottom: var(--jarak-6);
 }
 
-.grid-3{
-  grid-template-columns:repeat(3,1fr);
+.seksi-header {
+  margin-bottom: var(--jarak-6);
 }
 
-.grid-4{
-  grid-template-columns:repeat(4,1fr);
+/* --- Tata letak dua kolom (contoh: konten + sidebar) --- */
+.tata-dua-kolom {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--jarak-6);
+  align-items: start;
 }
 
-.grid-auto{
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+@media (max-width: 900px) {
+  .tata-dua-kolom {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Header situs --- */
+header.header-situs {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-navbar);
+  background: var(--warna-putih);
+  border-bottom: 1px solid var(--warna-garis);
+}
+
+/* --- Footer situs --- */
+footer.footer-situs {
+  margin-top: auto;
+  background: var(--warna-hijau-sawah-tua);
+  color: var(--warna-krem);
+}
+
+/* --- Dashboard: sidebar tetap + konten utama --- */
+.tata-dashboard {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.tata-dashboard .sidebar-dashboard {
+  background: var(--warna-putih);
+  border-right: 1px solid var(--warna-garis);
+  padding: var(--jarak-5) var(--jarak-4);
+}
+
+.tata-dashboard .konten-dashboard {
+  padding: var(--jarak-6);
+  background: var(--warna-krem);
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .tata-dashboard {
+    grid-template-columns: 1fr;
+  }
+  .tata-dashboard .sidebar-dashboard {
+    display: none;
+  }
+  .tata-dashboard .sidebar-dashboard.terbuka {
+    display: block;
+    position: fixed;
+    inset: 0 20% 0 0;
+    z-index: var(--z-modal);
+    overflow-y: auto;
+  }
 }
