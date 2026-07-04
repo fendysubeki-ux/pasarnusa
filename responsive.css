@@ -1,60 +1,74 @@
-/* responsive.css */
+/* ==========================================================================
+   PASARNUSA — responsive.css
+   Aturan responsif tambahan lintas komponen (pelengkap media query yang
+   sudah ada di masing-masing file komponen).
+   ========================================================================== */
 
-@media (max-width:1200px){
+/* --- Titik Patah Standar Proyek ---
+   HP kecil   : ≤ 420px
+   HP         : ≤ 640px
+   Tablet     : ≤ 900px
+   Desktop    : ≥ 1024px
+*/
 
-  .container{
-    width:94%;
+@media (max-width: 1024px) {
+  :root {
+    --lebar-konten: 100%;
   }
-
-  .hero-grid{
-    gap:48px;
-  }
-
 }
 
-@media (max-width:992px){
-
-  .section{
-    padding:80px 0;
-  }
-
-  .grid-4,
-  .grid-3,
-  .feature-grid,
-  .category-grid,
-  .wilayah-grid,
-  .product-grid,
-  .stats-grid,
-  .roadmap-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
+@media (max-width: 900px) {
+  .seksi { padding-top: var(--jarak-6); padding-bottom: var(--jarak-6); }
+  h1 { font-size: var(--ukuran-3xl); }
 }
 
-@media (max-width:768px){
-
-  .section{
-    padding:70px 0;
-  }
-
+@media (max-width: 640px) {
+  .wadah, .wadah-sempit { padding-left: var(--jarak-3); padding-right: var(--jarak-3); }
+  .seksi { padding-top: var(--jarak-5); padding-bottom: var(--jarak-5); }
+  h2 { font-size: var(--ukuran-xl); }
+  .btn-besar { padding: var(--jarak-3) var(--jarak-5); font-size: var(--ukuran-md); }
 }
 
-@media (max-width:576px){
+/* --- Bilah aksi tetap di bawah layar HP (checkout, produk-detail) --- */
+.bilah-aksi-hp {
+  display: none;
+}
 
-  .grid-2,
-  .grid-3,
-  .grid-4,
-  .feature-grid,
-  .category-grid,
-  .wilayah-grid,
-  .product-grid,
-  .stats-grid,
-  .roadmap-grid{
-    grid-template-columns:1fr;
+@media (max-width: 768px) {
+  .bilah-aksi-hp {
+    display: flex;
+    gap: var(--jarak-3);
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--warna-putih);
+    border-top: 1px solid var(--warna-garis);
+    padding: var(--jarak-3) var(--jarak-4);
+    z-index: var(--z-navbar);
+    padding-bottom: max(var(--jarak-3), env(safe-area-inset-bottom));
   }
 
-  .btn-block{
-    width:100%;
+  /* beri ruang bawah agar konten tidak tertutup bilah aksi */
+  body.punya-bilah-aksi-hp main {
+    padding-bottom: 80px;
   }
+}
 
+/* --- Tabel yang bisa digulir di layar sempit --- */
+@media (max-width: 768px) {
+  .tabel-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabel-scroll table {
+    min-width: 640px;
+  }
+}
+
+/* --- Sembunyikan kolom sekunder tabel di HP --- */
+@media (max-width: 560px) {
+  .kolom-opsional {
+    display: none;
+  }
 }
