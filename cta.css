@@ -1,131 +1,61 @@
 /* ==========================================================================
-   CTA (Call-to-Action) Component — PasarNusa
-   Komponen banner ajakan bertindak dengan latar gradasi dan efek dekoratif.
+   PASARNUSA — cta.css
    ========================================================================== */
 
-
-/* --------------------------------------------------------------------------
-   Kontainer Utama CTA
-   - Menggunakan position: relative agar pseudo-elemen dekoratif bisa
-     diposisikan secara absolut di dalamnya.
-   - overflow: hidden memastikan lingkaran dekoratif tidak keluar batas.
-   -------------------------------------------------------------------------- */
-.cta {
+.cta-section {
+  background: linear-gradient(135deg, var(--warna-indigo-batik) 0%, var(--warna-indigo-batik-tua) 100%);
+  color: var(--warna-putih);
+  border-radius: var(--radius-besar);
+  padding: var(--jarak-8) var(--jarak-6);
+  text-align: center;
   position: relative;
   overflow: hidden;
-  padding: 60px 40px;
-  text-align: center;
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-primary-dark)
-  );
-  border-radius: var(--radius-xl);
-  color: var(--color-white);
-  box-shadow: var(--shadow-lg);
 }
 
-
-/* --------------------------------------------------------------------------
-   Dekorasi Latar — Lingkaran Kanan Atas
-   Elemen visual halus untuk memberi kedalaman pada latar gradasi.
-   -------------------------------------------------------------------------- */
-.cta::before {
-  content: "";
-  position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 220px;
-  height: 220px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-
-  /* Pastikan dekorasi selalu berada di bawah konten */
-  z-index: 0;
+.cta-section h2 {
+  color: var(--warna-putih);
+  margin-bottom: var(--jarak-3);
 }
 
-
-/* --------------------------------------------------------------------------
-   Dekorasi Latar — Lingkaran Kiri Bawah
-   -------------------------------------------------------------------------- */
-.cta::after {
-  content: "";
-  position: absolute;
-  bottom: -100px;
-  left: -100px;
-  width: 260px;
-  height: 260px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 50%;
-
-  /* Pastikan dekorasi selalu berada di bawah konten */
-  z-index: 0;
+.cta-section p {
+  color: rgba(255,255,255,0.85);
+  max-width: 50ch;
+  margin: 0 auto var(--jarak-6);
 }
 
-
-/* --------------------------------------------------------------------------
-   Judul CTA
-   Semua elemen konten diberi z-index: 1 agar tampil di atas pseudo-elemen.
-   -------------------------------------------------------------------------- */
-.cta h2 {
-  position: relative;
-  z-index: 1;
-  margin-bottom: 16px;
-  color: var(--color-white);
-  font-size: 2.2rem;
-}
-
-
-/* --------------------------------------------------------------------------
-   Paragraf / Deskripsi CTA
-   -------------------------------------------------------------------------- */
-.cta p {
-  position: relative;
-  z-index: 1;
-  max-width: 680px;
-  margin: 0 auto 32px;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.8;
-}
-
-
-/* --------------------------------------------------------------------------
-   Grup Tombol Aksi
-   Menggunakan Flexbox untuk menyusun tombol secara responsif dan terpusat.
-   -------------------------------------------------------------------------- */
-.cta-action {
-  position: relative;
-  z-index: 1;
+.cta-aksi {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 16px;
+  gap: var(--jarak-3);
+  flex-wrap: wrap;
 }
 
-
-/* --------------------------------------------------------------------------
-   Tombol Primer — Tampil terang di atas latar gelap CTA
-   -------------------------------------------------------------------------- */
-.cta .btn-primary {
-  background: var(--color-white);
-  color: var(--color-primary);
+.cta-section .btn-utama {
+  background: var(--warna-kunyit);
+  color: var(--warna-teks-utama);
+}
+.cta-section .btn-utama:hover {
+  background: var(--warna-kunyit-tua);
+  color: var(--warna-putih);
 }
 
-.cta .btn-primary:hover {
-  background: #f1f5f9;
-}
-
-
-/* --------------------------------------------------------------------------
-   Tombol Sekunder — Transparan dengan batas tipis
-   -------------------------------------------------------------------------- */
-.cta .btn-secondary {
+.cta-section .btn-sekunder {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: var(--color-white);
+  color: var(--warna-putih);
+  border-color: rgba(255,255,255,0.4);
+}
+.cta-section .btn-sekunder:hover {
+  background: rgba(255,255,255,0.1);
 }
 
-.cta .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
+/* --- CTA bergaris (versi ringan, dipakai di tengah halaman) --- */
+.cta-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--jarak-4);
+  background: var(--warna-hijau-sawah-muda);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-5) var(--jarak-6);
 }
