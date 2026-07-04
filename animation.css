@@ -1,154 +1,92 @@
-/* animation.css */
+/* ==========================================================================
+   PASARNUSA — animation.css
+   ========================================================================== */
 
-.fade-in{
-  animation:fadeIn .6s ease forwards;
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes fadeIn{
-  from{
-    opacity:0;
-    transform:translateY(20px);
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes putar {
+  to { transform: rotate(360deg); }
+}
+
+.anim-fade-in { animation: fade-in var(--transisi-normal) both; }
+.anim-slide-up { animation: slide-up 0.35s ease both; }
+.anim-slide-down { animation: slide-down 0.25s ease both; }
+.anim-scale-in { animation: scale-in 0.2s ease both; }
+
+/* Efek muncul berurutan untuk grid kartu */
+.anim-stagger > * { animation: slide-up 0.4s ease both; }
+.anim-stagger > *:nth-child(1) { animation-delay: 0.03s; }
+.anim-stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.anim-stagger > *:nth-child(3) { animation-delay: 0.09s; }
+.anim-stagger > *:nth-child(4) { animation-delay: 0.12s; }
+.anim-stagger > *:nth-child(5) { animation-delay: 0.15s; }
+.anim-stagger > *:nth-child(6) { animation-delay: 0.18s; }
+.anim-stagger > *:nth-child(7) { animation-delay: 0.21s; }
+.anim-stagger > *:nth-child(8) { animation-delay: 0.24s; }
+
+/* Spinner pemuat halaman */
+.pemuat-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--warna-garis);
+  border-top-color: var(--warna-hijau-sawah);
+  border-radius: 50%;
+  animation: putar 0.7s linear infinite;
+  margin: 0 auto;
+}
+
+/* Toast notifikasi masuk/keluar */
+.toast {
+  animation: slide-down 0.25s ease both;
+}
+.toast.keluar {
+  animation: fade-in 0.2s ease reverse both;
+}
+
+/* Modal */
+.modal-latar {
+  animation: fade-in 0.2s ease both;
+}
+.modal-kotak {
+  animation: scale-in 0.2s ease both;
+}
+
+/* Sorotan lembut saat elemen baru muncul (mis. item keranjang ditambah) */
+@keyframes sorot-lembut {
+  0% { background-color: var(--warna-hijau-sawah-muda); }
+  100% { background-color: transparent; }
+}
+.anim-sorot {
+  animation: sorot-lembut 1s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-in,
+  .anim-slide-up,
+  .anim-slide-down,
+  .anim-scale-in,
+  .anim-stagger > *,
+  .toast,
+  .modal-latar,
+  .modal-kotak {
+    animation: none !important;
   }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.fade-out{
-  animation:fadeOut .4s ease forwards;
-}
-
-@keyframes fadeOut{
-  from{
-    opacity:1;
-  }
-  to{
-    opacity:0;
-  }
-}
-
-.reveal{
-  opacity:0;
-  transform:translateY(40px);
-  transition:opacity .8s ease,
-             transform .8s ease;
-}
-
-.reveal.show{
-  opacity:1;
-  transform:none;
-}
-
-.float{
-  animation:float 4s ease-in-out infinite;
-}
-
-@keyframes float{
-
-  0%,100%{
-    transform:translateY(0);
-  }
-
-  50%{
-    transform:translateY(-12px);
-  }
-
-}
-
-.pulse{
-  animation:pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse{
-
-  0%,100%{
-    transform:scale(1);
-  }
-
-  50%{
-    transform:scale(1.05);
-  }
-
-}
-
-.spin{
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-
-  to{
-    transform:rotate(360deg);
-  }
-
-}
-
-.hover-up,
-.hover-scale,
-.hover-rotate{
-  transition:transform var(--transition);
-}
-
-@media (hover:hover){
-
-  .hover-up:hover{
-    transform:translateY(-8px);
-  }
-
-  .hover-scale:hover{
-    transform:scale(1.05);
-  }
-
-  .hover-rotate:hover{
-    transform:rotate(5deg);
-  }
-
-}
-
-.shine{
-  position:relative;
-  overflow:hidden;
-}
-
-.shine::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  left:-120%;
-  width:60%;
-  background:linear-gradient(
-    90deg,
-    transparent,
-    rgba(255,255,255,.35),
-    transparent
-  );
-  transform:skewX(-25deg);
-  transition:left .8s ease;
-  pointer-events:none;
-}
-
-@media (hover:hover){
-
-  .shine:hover::after{
-    left:150%;
-  }
-
-}
-
-@media(prefers-reduced-motion:reduce){
-
-  *,
-  *::before,
-  *::after{
-    animation:none!important;
-    transition:none!important;
-    scroll-behavior:auto!important;
-  }
-
-  .reveal{
-    opacity:1;
-    transform:none;
-  }
-
 }
