@@ -1,205 +1,88 @@
 /* ==========================================================================
-   FOOTER
+   PASARNUSA — footer.css
    ========================================================================== */
 
-.footer{
-  margin-top:80px;
-  padding:70px 0 30px;
-  background:var(--color-surface);
-  border-top:1px solid var(--color-border);
+.footer-situs {
+  padding: var(--jarak-8) 0 var(--jarak-5);
 }
 
-
-/* ==========================================================================
-   LAYOUT
-   ========================================================================== */
-
-.footer-top{
-  display:grid;
-  grid-template-columns:2fr 1fr 1fr 1fr;
-  gap:40px;
-  margin-bottom:50px;
+.footer-grid {
+  max-width: var(--lebar-konten);
+  margin: 0 auto;
+  padding: 0 var(--jarak-4);
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: var(--jarak-6);
 }
 
-
-/* ==========================================================================
-   LOGO
-   ========================================================================== */
-
-.footer-logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:18px;
-  font-size:1.8rem;
-  font-weight:800;
-  color:var(--color-primary);
+@media (min-width: 768px) {
+  .footer-grid { padding: 0 var(--jarak-6); }
 }
 
-.footer-logo span{
-  color:var(--color-text);
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-
-/* ==========================================================================
-   DESKRIPSI
-   ========================================================================== */
-
-.footer-desc{
-  max-width:360px;
-  line-height:1.8;
-  color:var(--color-muted);
+.footer-brand {
+  font-family: var(--font-judul);
+  font-weight: var(--berat-tebal);
+  font-size: var(--ukuran-xl);
+  margin-bottom: var(--jarak-3);
 }
 
-
-/* ==========================================================================
-   JUDUL
-   ========================================================================== */
-
-.footer-title{
-  margin-bottom:18px;
-  font-size:1.1rem;
-  font-weight:700;
-  color:var(--color-text);
+.footer-deskripsi {
+  color: rgba(250,247,240,0.75);
+  font-size: var(--ukuran-sm);
+  max-width: 32ch;
 }
 
-
-/* ==========================================================================
-   LINK
-   ========================================================================== */
-
-.footer-links{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+.footer-kolom-judul {
+  font-weight: var(--berat-tebal);
+  margin-bottom: var(--jarak-3);
+  color: var(--warna-krem);
 }
 
-.footer-links a{
-  display:inline-flex;
-  align-items:center;
-  width:max-content;
-  text-decoration:none;
-  color:var(--color-muted);
-  transition:
-    color var(--transition),
-    padding-left var(--transition);
+.footer-kolom ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jarak-2);
 }
 
-@media (hover:hover){
-
-  .footer-links a:hover{
-    color:var(--color-primary);
-    padding-left:6px;
-  }
-
+.footer-kolom a {
+  color: rgba(250,247,240,0.75);
+  font-size: var(--ukuran-sm);
 }
 
-.footer-links a:focus-visible{
-  color:var(--color-primary);
-  outline:none;
+.footer-kolom a:hover {
+  color: var(--warna-kunyit);
 }
 
-
-/* ==========================================================================
-   SOSIAL MEDIA
-   ========================================================================== */
-
-.social{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  margin-top:20px;
+.footer-sosial {
+  display: flex;
+  gap: var(--jarak-3);
+  margin-top: var(--jarak-4);
 }
 
-.social a{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:42px;
-  height:42px;
-  border-radius:var(--radius-full);
-  background:var(--color-background);
-  color:var(--color-text);
-  text-decoration:none;
-  transition:
-    background var(--transition),
-    color var(--transition),
-    transform var(--transition);
+.footer-sosial a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(250,247,240,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (hover:hover){
-
-  .social a:hover{
-    background:var(--color-primary);
-    color:var(--color-white);
-    transform:translateY(-4px);
-  }
-
-}
-
-.social a:focus-visible{
-  background:var(--color-primary);
-  color:var(--color-white);
-  outline:none;
-}
-
-
-/* ==========================================================================
-   PEMBATAS
-   ========================================================================== */
-
-.footer-divider{
-  height:1px;
-  margin:30px 0;
-  background:var(--color-border);
-}
-
-
-/* ==========================================================================
-   BAGIAN BAWAH
-   ========================================================================== */
-
-.footer-bottom{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:20px;
-  font-size:.9rem;
-  color:var(--color-muted);
-}
-
-.footer-bottom p{
-  margin:0;
-}
-
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-
-@media (max-width:900px){
-
-  .footer-top{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
-
-@media (max-width:600px){
-
-  .footer{
-    padding:60px 0 30px;
-  }
-
-  .footer-top{
-    grid-template-columns:1fr;
-    gap:35px;
-  }
-
-  .footer-bottom{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
+.footer-bawah {
+  max-width: var(--lebar-konten);
+  margin: var(--jarak-7) auto 0;
+  padding: var(--jarak-5) var(--jarak-4) 0;
+  border-top: 1px solid rgba(250,247,240,0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--jarak-3);
+  font-size: var(--ukuran-xs);
+  color: rgba(250,247,240,0.6);
 }
