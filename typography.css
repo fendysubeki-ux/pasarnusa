@@ -1,95 +1,126 @@
-/* typography.css */
+/* ==========================================================================
+   PASARNUSA — typography.css
+   Aturan jenis huruf, ukuran, dan jarak baris untuk seluruh teks.
+   ========================================================================== */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6{
-  margin:0;
-  font-weight:700;
-  line-height:1.2;
-  letter-spacing:-0.02em;
-  color:var(--color-text);
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+body {
+  font-family: var(--font-isi);
+  font-size: var(--ukuran-md);
+  font-weight: var(--berat-normal);
+  line-height: var(--tinggi-baris-normal);
+  color: var(--warna-teks-utama);
+  background-color: var(--warna-krem);
 }
 
-h1{
-  font-size:clamp(2.2rem,5vw,3.8rem);
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-judul);
+  font-weight: var(--berat-tebal);
+  line-height: var(--tinggi-baris-rapat);
+  color: var(--warna-teks-utama);
+  letter-spacing: -0.01em;
 }
 
-h2{
-  font-size:clamp(1.8rem,4vw,2.8rem);
+h1 {
+  font-size: var(--ukuran-4xl);
 }
 
-h3{
-  font-size:clamp(1.4rem,3vw,2rem);
+h2 {
+  font-size: var(--ukuran-3xl);
 }
 
-h4{
-  font-size:clamp(1.2rem,2.5vw,1.5rem);
+h3 {
+  font-size: var(--ukuran-2xl);
 }
 
-h5{
-  font-size:1.125rem;
+h4 {
+  font-size: var(--ukuran-xl);
 }
 
-h6{
-  font-size:1rem;
+h5 {
+  font-size: var(--ukuran-lg);
+  font-weight: var(--berat-sedang);
 }
 
-p{
-  margin:0;
-  line-height:1.8;
-  color:var(--color-muted);
+h6 {
+  font-size: var(--ukuran-md);
+  font-weight: var(--berat-sedang);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-small{
-  font-size:.875rem;
-  color:var(--color-muted);
+p {
+  color: var(--warna-teks-sekunder);
+  line-height: var(--tinggi-baris-longgar);
 }
 
-strong{
-  font-weight:700;
+small,
+.teks-kecil {
+  font-size: var(--ukuran-sm);
+  color: var(--warna-teks-muted);
 }
 
-a{
-  color:inherit;
-  transition:color var(--transition);
+strong, b {
+  font-weight: var(--berat-tebal);
+  color: var(--warna-teks-utama);
 }
 
-a:hover{
-  color:var(--color-primary);
+em, i {
+  font-style: italic;
 }
 
-ul,
-ol{
-  margin:0;
-  padding-left:20px;
+a {
+  color: var(--warna-indigo-batik);
+  transition: color var(--transisi-cepat);
 }
 
-li{
-  line-height:1.7;
+a:hover {
+  color: var(--warna-indigo-batik-tua);
 }
 
-blockquote{
-  margin:0;
-  padding-left:20px;
-  border-left:4px solid var(--color-border);
-  font-style:italic;
-  color:var(--color-muted);
+/* Angka penting: harga, statistik, kode pesanan — pakai font monospace
+   agar mudah dipindai dan sejajar */
+.teks-angka,
+.harga,
+.kode-pesanan {
+  font-family: var(--font-angka);
+  font-variant-numeric: tabular-nums;
 }
 
-code{
-  font-family:monospace;
-  font-size:.95em;
+.harga {
+  font-weight: var(--berat-tebal);
+  color: var(--warna-hijau-sawah);
 }
 
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible{
-  outline:2px solid var(--color-primary);
-  outline-offset:3px;
-  border-radius:6px;
+.eyebrow {
+  font-family: var(--font-isi);
+  font-size: var(--ukuran-xs);
+  font-weight: var(--berat-tebal);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--warna-kunyit-tua);
+}
+
+blockquote {
+  font-family: var(--font-judul);
+  font-style: italic;
+  font-size: var(--ukuran-lg);
+  color: var(--warna-teks-sekunder);
+  border-left: 3px solid var(--warna-kunyit);
+  padding-left: var(--jarak-4);
+}
+
+code, pre {
+  font-family: var(--font-angka);
+  font-size: 0.9em;
+  background-color: var(--warna-hijau-sawah-muda);
+  border-radius: var(--radius-kecil);
+  padding: 0.15em 0.4em;
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: var(--ukuran-3xl); }
+  h2 { font-size: var(--ukuran-2xl); }
+  h3 { font-size: var(--ukuran-xl); }
 }
