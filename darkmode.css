@@ -1,97 +1,115 @@
-/* darkmode.css */
+/* ==========================================================================
+   PASARNUSA — darkmode.css
+   Aktif otomatis lewat prefers-color-scheme, atau manual lewat
+   atribut data-tema="gelap" pada <html> (diatur oleh script.js).
+   ========================================================================== */
 
-body.dark{
-  color-scheme:dark;
-
-  --color-background:#0f172a;
-  --color-surface:#1e293b;
-  --color-text:#f8fafc;
-  --color-muted:#94a3b8;
-  --color-border:#334155;
-  --color-primary:#22c55e;
-  --color-primary-dark:#16a34a;
-
-  background:var(--color-background);
-  color:var(--color-text);
+html[data-tema="gelap"],
+html:not([data-tema="terang"]) body.tema-otomatis {
+  color-scheme: dark;
 }
 
-body.dark::selection{
-  background:var(--color-primary);
-  color:#fff;
+/* CSS tidak punya mixin, jadi aturan gelap ditulis eksplisit untuk tiap komponen di bawah. */
+
+html[data-tema="gelap"] body,
+body.tema-gelap {
+  background-color: var(--gelap-latar);
+  color: var(--gelap-teks-utama);
 }
 
-body.dark .navbar{
-  background:rgba(15,23,42,.85);
-  border-color:var(--color-border);
+html[data-tema="gelap"] h1,
+html[data-tema="gelap"] h2,
+html[data-tema="gelap"] h3,
+html[data-tema="gelap"] h4,
+html[data-tema="gelap"] h5,
+html[data-tema="gelap"] h6,
+body.tema-gelap h1,
+body.tema-gelap h2,
+body.tema-gelap h3,
+body.tema-gelap h4,
+body.tema-gelap h5,
+body.tema-gelap h6 {
+  color: var(--gelap-teks-utama);
 }
 
-body.dark .footer,
-body.dark .card,
-body.dark .category-card,
-body.dark .wilayah-card,
-body.dark .feature-card,
-body.dark .roadmap-card,
-body.dark .product-card,
-body.dark .stat-card{
-  background:var(--color-surface);
-  border-color:var(--color-border);
+html[data-tema="gelap"] p,
+body.tema-gelap p {
+  color: var(--gelap-teks-sekunder);
 }
 
-body.dark h1,
-body.dark h2,
-body.dark h3,
-body.dark h4,
-body.dark h5,
-body.dark h6,
-body.dark .logo span{
-  color:var(--color-text);
+html[data-tema="gelap"] .kartu,
+html[data-tema="gelap"] .kartu-produk,
+html[data-tema="gelap"] .form-panel,
+html[data-tema="gelap"] .produk-filter,
+html[data-tema="gelap"] .cart-ringkasan,
+html[data-tema="gelap"] .checkout-ringkasan,
+body.tema-gelap .kartu,
+body.tema-gelap .kartu-produk,
+body.tema-gelap .form-panel,
+body.tema-gelap .produk-filter,
+body.tema-gelap .cart-ringkasan,
+body.tema-gelap .checkout-ringkasan {
+  background-color: var(--gelap-permukaan);
+  border-color: var(--gelap-garis);
 }
 
-body.dark p,
-body.dark small,
-body.dark .stat-label,
-body.dark .footer-links a{
-  color:var(--color-muted);
+html[data-tema="gelap"] .form-kontrol,
+body.tema-gelap .form-kontrol {
+  background-color: var(--gelap-permukaan);
+  border-color: var(--gelap-garis);
+  color: var(--gelap-teks-utama);
 }
 
-body.dark input,
-body.dark textarea,
-body.dark select,
-body.dark .form-search{
-  background:var(--color-surface);
-  color:var(--color-text);
-  border-color:var(--color-border);
+html[data-tema="gelap"] header.header-situs,
+body.tema-gelap header.header-situs {
+  background-color: var(--gelap-permukaan);
+  border-color: var(--gelap-garis);
 }
 
-body.dark input::placeholder,
-body.dark textarea::placeholder{
-  color:var(--color-muted);
+html[data-tema="gelap"] .navbar-menu a,
+html[data-tema="gelap"] .navbar-logo,
+body.tema-gelap .navbar-menu a,
+body.tema-gelap .navbar-logo {
+  color: var(--gelap-teks-utama);
 }
 
-body.dark .btn-secondary{
-  background:var(--color-surface);
-  color:var(--color-text);
-  border-color:var(--color-border);
+html[data-tema="gelap"] .garis-pemisah,
+body.tema-gelap .garis-pemisah {
+  border-color: var(--gelap-garis);
 }
 
-@media (hover:hover){
+/* --- Tombol pengalih tema --- */
+.tema-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-penuh);
+  background: var(--warna-hijau-sawah-muda);
+  color: var(--warna-hijau-sawah);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  body.dark .btn-secondary:hover{
-    background:var(--color-border);
+html[data-tema="gelap"] .tema-toggle,
+body.tema-gelap .tema-toggle {
+  background: var(--gelap-permukaan);
+  color: var(--warna-kunyit);
+}
+
+/* --- Preferensi sistem otomatis (jika pengguna belum memilih manual) --- */
+@media (prefers-color-scheme: dark) {
+  body.tema-otomatis {
+    background-color: var(--gelap-latar);
+    color: var(--gelap-teks-utama);
   }
-
-}
-
-body.dark .social a{
-  background:var(--color-border);
-  color:var(--color-text);
-}
-
-@media (hover:hover){
-
-  body.dark .social a:hover{
-    background:var(--color-primary);
-    color:#fff;
+  body.tema-otomatis .kartu,
+  body.tema-otomatis .kartu-produk,
+  body.tema-otomatis .form-panel {
+    background-color: var(--gelap-permukaan);
+    border-color: var(--gelap-garis);
   }
-
+  body.tema-otomatis header.header-situs {
+    background-color: var(--gelap-permukaan);
+    border-color: var(--gelap-garis);
+  }
 }
