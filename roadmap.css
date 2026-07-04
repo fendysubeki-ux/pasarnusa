@@ -1,157 +1,67 @@
-/* =============================================================
-   roadmap.css — PasarNusa
-   Komponen: Roadmap Grid & Card
-   Terakhir diperbarui: 2026
-   ============================================================= */
+/* ==========================================================================
+   PASARNUSA — roadmap.css
+   ========================================================================== */
 
-
-/* -------------------------------------------------------------
-   1. GRID LAYOUT
-   Susunan kartu roadmap secara responsif.
-   auto-fit + minmax memastikan jumlah kolom menyesuaikan lebar
-   layar tanpa media query tambahan.
-   ------------------------------------------------------------- */
-.roadmap-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
-}
-
-
-/* -------------------------------------------------------------
-   2. KARTU ROADMAP (BASE)
-   Menggunakan will-change hanya pada elemen yang benar-benar
-   beranimasi agar tidak memboroskan memori GPU pada semua kartu.
-   ------------------------------------------------------------- */
-.roadmap-card {
+.roadmap-list {
   position: relative;
-  padding: 32px 24px;
-  text-align: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
-  overflow: hidden;
-
-  /* Animasi efisien: hanya properti yang berubah saat hover */
-  transition:
-    transform var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition);
+  padding-left: var(--jarak-6);
 }
 
-
-/* -------------------------------------------------------------
-   3. KARTU — STATE HOVER
-   translateY menggunakan nilai negatif kecil agar animasi
-   terasa ringan dan tidak terlalu dramatis di layar mobile.
-   ------------------------------------------------------------- */
-.roadmap-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-md);
+.roadmap-list::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--warna-garis);
 }
 
-/* Aksesibilitas: tampilkan fokus yang jelas untuk pengguna keyboard */
-.roadmap-card:focus-within {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+.roadmap-item {
+  position: relative;
+  padding-bottom: var(--jarak-6);
 }
 
+.roadmap-item:last-child {
+  padding-bottom: 0;
+}
 
-/* -------------------------------------------------------------
-   4. IKON KARTU
-   Ukuran ikon ditetapkan lewat CSS custom property lokal
-   --icon-size agar mudah disesuaikan tanpa mengubah banyak baris.
-   ------------------------------------------------------------- */
-.roadmap-icon {
-  --icon-size: 80px;
-
-  width: var(--icon-size);
-  height: var(--icon-size);
-  margin: 0 auto 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.roadmap-item::before {
+  content: '';
+  position: absolute;
+  left: -25px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-size: 36px;
-
-  /* Hanya transform yang berubah — lebih ringan dari transition all */
-  transition:
-    background var(--transition),
-    color var(--transition),
-    transform var(--transition);
+  background: var(--warna-putih);
+  border: 3px solid var(--warna-garis-gelap);
 }
 
-/* Ikon ikut beranimasi saat induk (.roadmap-card) di-hover */
-.roadmap-card:hover .roadmap-icon {
-  background: var(--color-primary);
-  color: var(--color-white);
-  transform: scale(1.08);
+.roadmap-item.selesai::before {
+  background: var(--warna-sukses);
+  border-color: var(--warna-sukses);
 }
 
-
-/* -------------------------------------------------------------
-   5. LABEL TAHUN
-   Pill badge yang menampilkan tahun atau fase roadmap.
-   Menggunakan letter-spacing kecil untuk keterbacaan teks pendek.
-   ------------------------------------------------------------- */
-.roadmap-year {
-  display: inline-block;
-  padding: 6px 16px;
-  margin-bottom: 18px;
-  border-radius: 999px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-size: 0.875rem;   /* 14px — konsisten dengan skala tipografi */
-  font-weight: 700;
-  letter-spacing: 0.02em;
+.roadmap-item.berjalan::before {
+  background: var(--warna-kunyit);
+  border-color: var(--warna-kunyit);
 }
 
-
-/* -------------------------------------------------------------
-   6. JUDUL KARTU
-   Margin-top di-reset ke 0 untuk menghindari konflik dengan
-   reset CSS global yang mungkin berbeda antar browser.
-   ------------------------------------------------------------- */
-.roadmap-card h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 1.25rem;
-  line-height: 1.3;
+.roadmap-item-tanggal {
+  font-size: var(--ukuran-xs);
+  color: var(--warna-teks-muted);
+  font-weight: var(--berat-tebal);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-
-/* -------------------------------------------------------------
-   7. DESKRIPSI KARTU
-   line-height 1.7 memberikan keterbacaan yang baik untuk
-   paragraf pendek di dalam kartu.
-   ------------------------------------------------------------- */
-.roadmap-card p {
-  margin: 0;             /* Reset margin bawaan browser */
-  font-size: 0.9375rem;  /* ~15px — sedikit lebih besar dari 0.95rem yang tidak standar */
-  line-height: 1.7;
-  color: var(--color-muted);
+.roadmap-item-judul {
+  font-weight: var(--berat-tebal);
+  margin: var(--jarak-1) 0;
 }
 
-
-/* -------------------------------------------------------------
-   8. REDUCED MOTION
-   Hormati preferensi pengguna yang sensitif terhadap animasi.
-   ------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .roadmap-card,
-  .roadmap-icon {
-    transition: none;
-  }
-
-  .roadmap-card:hover {
-    transform: none;
-  }
-
-  .roadmap-card:hover .roadmap-icon {
-    transform: none;
-  }
+.roadmap-item-deskripsi {
+  font-size: var(--ukuran-sm);
+  color: var(--warna-teks-sekunder);
 }
