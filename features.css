@@ -2,7 +2,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--jarak-5);
-
 }
 
 @media (max-width: 900px) {
