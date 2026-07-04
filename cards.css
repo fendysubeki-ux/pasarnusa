@@ -1,126 +1,163 @@
-/* cards.css */
+/* ==========================================================================
+   PASARNUSA — cards.css
+   ========================================================================== */
 
-.card{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  height:100%;
-  overflow:hidden;
-  padding:24px;
-  background:var(--color-surface);
-  border:1px solid var(--color-border);
-  border-radius:var(--radius-lg);
-  box-shadow:var(--shadow-xs);
-  transition:transform var(--transition),
-             box-shadow var(--transition);
+.kartu {
+  background: var(--warna-putih);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
+  overflow: hidden;
+  transition: box-shadow var(--transisi-normal), transform var(--transisi-normal);
 }
 
-@media (hover:hover){
-
-  .card:hover{
-    transform:translateY(-6px);
-    box-shadow:var(--shadow-md);
-  }
-
+.kartu:hover {
+  box-shadow: var(--bayangan-sedang);
+  transform: translateY(-2px);
 }
 
-.card-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  margin-bottom:20px;
+.kartu-isi {
+  padding: var(--jarak-4);
 }
 
-.card-title{
-  font-size:1.25rem;
-  font-weight:700;
-  color:var(--color-text);
+/* --- Kartu produk --- */
+.kartu-produk {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.card-body{
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  flex:1;
+.kartu-produk-gambar {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--warna-hijau-sawah-muda);
+  overflow: hidden;
 }
 
-.card-footer{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  margin-top:20px;
+.kartu-produk-gambar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transisi-lambat);
 }
 
-.card-image{
-  width:100%;
-  overflow:hidden;
-  border-radius:var(--radius-md);
+.kartu-produk:hover .kartu-produk-gambar img {
+  transform: scale(1.05);
 }
 
-.card-image img{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transition:transform var(--transition);
+.kartu-produk-wishlist {
+  position: absolute;
+  top: var(--jarak-2);
+  right: var(--jarak-2);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-penuh);
+  background: rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (hover:hover){
-
-  .card:hover .card-image img{
-    transform:scale(1.05);
-  }
-
+.kartu-produk-nama {
+  font-family: var(--font-isi);
+  font-weight: var(--berat-tebal);
+  font-size: var(--ukuran-md);
+  margin-bottom: var(--jarak-1);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.card-icon{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:64px;
-  height:64px;
-  margin:0 auto 20px;
-  flex-shrink:0;
-  border-radius:var(--radius-full);
-  background:var(--color-primary-light);
-  font-size:1.75rem;
+.kartu-produk-toko {
+  font-size: var(--ukuran-sm);
+  color: var(--warna-teks-muted);
+  margin-bottom: var(--jarak-2);
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-1);
 }
 
-.card-badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:6px 12px;
-  border-radius:var(--radius-full);
-  background:var(--color-primary-light);
-  color:var(--color-primary);
-  font-size:.8125rem;
-  font-weight:600;
+.kartu-produk-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.card-outline{
-  background:transparent;
-  border:2px solid var(--color-border);
-  box-shadow:none;
+.kartu-produk-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--ukuran-sm);
+  color: var(--warna-kunyit-tua);
 }
 
-.card-outline:hover{
-  transform:none;
-  box-shadow:none;
+/* --- Kartu toko --- */
+.kartu-toko {
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-4);
+  padding: var(--jarak-4);
 }
 
-.card-flat{
-  border:1px solid var(--color-border);
-  box-shadow:none;
+.kartu-toko-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-penuh);
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--warna-hijau-sawah-muda);
 }
 
-.card-link{
-  color:inherit;
-  text-decoration:none;
+.kartu-toko-nama {
+  font-weight: var(--berat-tebal);
 }
 
-.card-clickable{
-  cursor:pointer;
+.kartu-toko-lokasi {
+  font-size: var(--ukuran-sm);
+  color: var(--warna-teks-muted);
+}
+
+/* --- Kartu ulasan --- */
+.kartu-ulasan {
+  padding: var(--jarak-5);
+}
+
+.kartu-ulasan-header {
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-3);
+  margin-bottom: var(--jarak-3);
+}
+
+.kartu-ulasan-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-penuh);
+  object-fit: cover;
+}
+
+/* --- Kartu statistik --- */
+.kartu-statistik {
+  padding: var(--jarak-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--jarak-2);
+}
+
+.kartu-statistik .angka {
+  font-family: var(--font-angka);
+  font-size: var(--ukuran-3xl);
+  font-weight: var(--berat-tebal);
+  color: var(--warna-hijau-sawah);
+}
+
+.kartu-statistik .label {
+  color: var(--warna-teks-sekunder);
+  font-size: var(--ukuran-sm);
+}
+
+/* --- Kartu rata / minim padding (dipakai di daftar dashboard) --- */
+.kartu-rata {
+  border-radius: var(--radius-kecil);
 }
