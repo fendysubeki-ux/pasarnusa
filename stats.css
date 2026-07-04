@@ -1,108 +1,72 @@
 /* ==========================================================================
-   stats.css — Komponen Statistik untuk PasarNusa
-   Digunakan pada seksi ringkasan angka (misal: total produk, penjual, transaksi).
-   Bergantung pada design token global (custom properties) dari file utama.
+   PASARNUSA — stats.css
    ========================================================================== */
 
+.stats-section {
+  background: var(--warna-hijau-sawah-tua);
+  color: var(--warna-krem);
+  padding: var(--jarak-7) 0;
+}
 
-/* --------------------------------------------------------------------------
-   Grid pembungkus kartu statistik
-   - auto-fit agar kolom menyesuaikan lebar container secara otomatis
-   - minmax(220px, 1fr) menjamin tiap kartu tidak terlalu sempit di layar kecil
-   -------------------------------------------------------------------------- */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
-}
-
-
-/* --------------------------------------------------------------------------
-   Kartu statistik individual
-   - will-change: transform diaktifkan lewat :hover agar browser tidak
-     mengalokasikan layer GPU sebelum dibutuhkan (hemat memori)
-   -------------------------------------------------------------------------- */
-.stat-card {
-  padding: 30px 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--jarak-5);
   text-align: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
-  transition: var(--transition);
 }
 
-.stat-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary);
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+.stats-item .angka {
+  font-family: var(--font-angka);
+  font-size: var(--ukuran-3xl);
+  font-weight: var(--berat-tebal);
+  color: var(--warna-kunyit);
+  display: block;
+  margin-bottom: var(--jarak-1);
+}
 
-/* --------------------------------------------------------------------------
-   Ikon di dalam kartu
-   - transform pada :hover dipisah dari kartu induk agar keduanya
-     bisa bergerak secara independen tanpa konflik
-   -------------------------------------------------------------------------- */
-.stat-icon {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 18px;
+.stats-item .label {
+  font-size: var(--ukuran-sm);
+  color: var(--warna-krem);
+  opacity: 0.85;
+}
+
+/* --- Panel statistik dashboard (grid kartu ringkas) --- */
+.stats-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--jarak-4);
+  margin-bottom: var(--jarak-6);
+}
+
+@media (max-width: 900px) {
+  .stats-dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stats-dashboard-item {
+  background: var(--warna-putih);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-5);
+}
+
+.stats-dashboard-item .header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-size: 32px;
-  transition: var(--transition);
+  justify-content: space-between;
+  margin-bottom: var(--jarak-3);
 }
 
-.stat-card:hover .stat-icon {
-  background: var(--color-primary);
-  color: var(--color-white);
-  transform: scale(1.08);
+.stats-dashboard-item .perubahan {
+  font-size: var(--ukuran-xs);
+  font-weight: var(--berat-tebal);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
 
-
-/* --------------------------------------------------------------------------
-   Nilai / angka utama statistik
-   - line-height: 1 mencegah spasi vertikal berlebih di atas/bawah angka besar
-   -------------------------------------------------------------------------- */
-.stat-value {
-  margin-bottom: 8px;
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: var(--color-primary);
-  line-height: 1;
-}
-
-
-/* --------------------------------------------------------------------------
-   Label deskriptif di bawah angka (misal: "Total Produk", "Penjual Aktif")
-   -------------------------------------------------------------------------- */
-.stat-label {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--color-muted);
-}
-
-
-/* --------------------------------------------------------------------------
-   Aksesibilitas: hormati preferensi pengguna yang mengurangi animasi
-   - Menonaktifkan transform & transition agar tidak memicu mabuk gerak
-   -------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .stat-card,
-  .stat-icon {
-    transition: none;
-  }
-
-  .stat-card:hover {
-    transform: none;
-  }
-
-  .stat-card:hover .stat-icon {
-    transform: none;
-  }
-}
+.stats-dashboard-item .perubahan.naik { color: var(--warna-sukses); }
+.stats-dashboard-item .perubahan.turun { color: var(--warna-bahaya); }
