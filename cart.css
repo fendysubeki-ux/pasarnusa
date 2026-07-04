@@ -1,816 +1,120 @@
 /* ==========================================================================
-   HERO
+   PASARNUSA — cart.css
    ========================================================================== */
 
-.hero-page{
-
-  padding:150px 0 80px;
-
-  text-align:center;
-
-  background:linear-gradient(
-    135deg,
-    var(--color-primary-light),
-    var(--color-surface)
-  );
-
+.cart-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: var(--jarak-4);
+  align-items: center;
+  padding: var(--jarak-4) 0;
+  border-bottom: 1px solid var(--warna-garis);
 }
 
-.hero-page-content{
-
-  max-width:850px;
-
-  margin-inline:auto;
-
+.cart-item:last-child {
+  border-bottom: none;
 }
 
-.hero-page h1{
-
-  margin:20px 0;
-
-  color:var(--color-text);
-
+.cart-item-gambar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-kecil);
+  object-fit: cover;
 }
 
-.hero-page p{
-
-  max-width:650px;
-
-  margin-inline:auto;
-
-  line-height:1.8;
-
+.cart-item-nama {
+  font-weight: var(--berat-tebal);
+  margin-bottom: var(--jarak-1);
 }
 
-.badge{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  gap:8px;
-
-  padding:12px 22px;
-
-  border-radius:999px;
-
-  background:var(--color-primary-light);
-
-  color:var(--color-primary);
-
-  font-weight:700;
-
+.cart-item-toko {
+  font-size: var(--ukuran-xs);
+  color: var(--warna-teks-muted);
 }
 
-
-/* ==========================================================================
-   BREADCRUMB
-   ========================================================================== */
-
-.breadcrumb{
-
-  padding:18px 0;
-
-  background:var(--color-surface);
-
-  border-bottom:1px solid var(--color-border);
-
+.cart-item-kontrol {
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-3);
+  margin-top: var(--jarak-2);
 }
 
-.breadcrumb .container{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
-
-  flex-wrap:wrap;
-
+.cart-item-jumlah {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--warna-garis-gelap);
+  border-radius: var(--radius-kecil);
 }
 
-.breadcrumb a{
-
-  color:var(--color-primary);
-
-  font-weight:600;
-
+.cart-item-jumlah button {
+  width: 30px;
+  height: 30px;
+  font-weight: var(--berat-tebal);
 }
 
-.breadcrumb span{
-
-  color:var(--color-muted);
-
+.cart-item-jumlah span {
+  width: 32px;
+  text-align: center;
+  font-size: var(--ukuran-sm);
 }
 
-
-/* ==========================================================================
-   LAYOUT
-   ========================================================================== */
-
-.cart-layout{
-
-  display:grid;
-
-  grid-template-columns:1fr 360px;
-
-  gap:32px;
-
-  align-items:start;
-
+.cart-item-harga {
+  text-align: right;
+  font-weight: var(--berat-tebal);
+  color: var(--warna-hijau-sawah);
 }
 
-.cart-content{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:20px;
-
+.cart-item-hapus {
+  color: var(--warna-bahaya);
+  font-size: var(--ukuran-xs);
+  margin-top: var(--jarak-2);
 }
 
-.cart-summary{
-
-  position:sticky;
-
-  top:110px;
-
-}
-/* ==========================================================================
-   CART HEADER
-   ========================================================================== */
-
-.cart-header{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  gap:20px;
-
-  flex-wrap:wrap;
-
-  padding:24px;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  box-shadow:var(--shadow-sm);
-
+/* --- Toko dikelompokkan dalam keranjang --- */
+.cart-toko-grup {
+  margin-bottom: var(--jarak-5);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-4);
 }
 
-.cart-header label{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:10px;
-
-  font-weight:600;
-
-  cursor:pointer;
-
+.cart-toko-header {
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-2);
+  font-weight: var(--berat-tebal);
+  margin-bottom: var(--jarak-3);
 }
 
-
-/* ==========================================================================
-   CART ITEM
-   ========================================================================== */
-
-.cart-item{
-
-  display:grid;
-
-  grid-template-columns:40px 120px 1fr;
-
-  gap:24px;
-
-  align-items:center;
-
-  padding:24px;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  box-shadow:var(--shadow-sm);
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition);
-
+/* --- Ringkasan total keranjang --- */
+.cart-ringkasan {
+  background: var(--warna-putih);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-5);
+  position: sticky;
+  top: calc(var(--tinggi-navbar) + var(--jarak-4));
 }
 
-@media(hover:hover){
-
-  .cart-item:hover{
-
-    transform:translateY(-5px);
-
-    box-shadow:var(--shadow-md);
-
-  }
-
+.cart-ringkasan-baris {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--jarak-3);
+  font-size: var(--ukuran-sm);
+  color: var(--warna-teks-sekunder);
 }
 
-
-/* ==========================================================================
-   PRODUCT IMAGE
-   ========================================================================== */
-
-.cart-item img{
-
-  width:120px;
-
-  height:120px;
-
-  display:block;
-
-  object-fit:cover;
-
-  border-radius:var(--radius-md);
-
-  transition:transform var(--transition);
-
+.cart-ringkasan-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: var(--berat-tebal);
+  font-size: var(--ukuran-lg);
+  padding-top: var(--jarak-3);
+  border-top: 1px solid var(--warna-garis);
+  color: var(--warna-teks-utama);
 }
 
-@media(hover:hover){
-
-  .cart-item:hover img{
-
-    transform:scale(1.04);
-
-  }
-
-}
-
-
-/* ==========================================================================
-   PRODUCT INFO
-   ========================================================================== */
-
-.cart-info h3{
-
-  margin-bottom:8px;
-
-}
-
-.cart-info p{
-
-  margin:6px 0;
-
-  color:var(--color-muted);
-
-}
-
-
-/* ==========================================================================
-   PRICE
-   ========================================================================== */
-
-.cart-price{
-
-  font-size:1.25rem;
-
-  font-weight:700;
-
-  color:var(--color-primary);
-
-}
-/* ==========================================================================
-   QUANTITY BOX
-   ========================================================================== */
-
-.qty-box{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
-
-  margin-top:18px;
-
-}
-
-.qty-box button{
-
-  width:42px;
-
-  height:42px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  border-radius:var(--radius-sm);
-
-  background:var(--color-primary);
-
-  color:var(--color-white);
-
-  font-weight:700;
-
-  transition:
-    transform var(--transition),
-    background var(--transition);
-
-}
-
-@media(hover:hover){
-
-  .qty-box button:hover{
-
-    background:var(--color-primary-dark);
-
-    transform:scale(1.05);
-
-  }
-
-}
-
-.qty-box input{
-
-  width:70px;
-
-  height:42px;
-
-  text-align:center;
-
-  font-weight:700;
-
-}
-
-
-/* ==========================================================================
-   CART ACTION
-   ========================================================================== */
-
-.cart-action{
-
-  display:flex;
-
-  gap:12px;
-
-  flex-wrap:wrap;
-
-  margin-top:18px;
-
-}
-
-.cart-action .btn{
-
-  flex:1;
-
-  min-width:140px;
-
-}
-
-@media(hover:hover){
-
-  .cart-action .btn:hover{
-
-    transform:translateY(-2px);
-
-  }
-
-}
-
-
-/* ==========================================================================
-   SUMMARY CARD
-   ========================================================================== */
-
-.summary-card{
-
-  padding:30px;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  box-shadow:var(--shadow-sm);
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition);
-
-}
-
-@media(hover:hover){
-
-  .summary-card:hover{
-
-    transform:translateY(-5px);
-
-    box-shadow:var(--shadow-md);
-
-  }
-
-}
-
-.summary-card h2{
-
-  margin-bottom:24px;
-
-}
-
-
-/* ==========================================================================
-   SUMMARY LIST
-   ========================================================================== */
-
-.summary-list{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:16px;
-
-}
-
-.summary-item{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  color:var(--color-muted);
-
-}
-
-.summary-item dt,
-.summary-item dd{
-
-  margin:0;
-
-}
-
-.summary-total{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  margin:28px 0;
-
-  padding-top:20px;
-
-  border-top:1px solid var(--color-border);
-
-}
-
-.summary-total strong{
-
-  font-size:2rem;
-
-  font-weight:800;
-
-  color:var(--color-primary);
-
-}
-
-.summary-card .btn{
-
-  width:100%;
-
-  margin-bottom:12px;
-
-}
-/* ==========================================================================
-   EMPTY STATE
-   ========================================================================== */
-
-.empty-state{
-
-  padding:70px 30px;
-
-  text-align:center;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  box-shadow:var(--shadow-sm);
-
-}
-
-.empty-icon{
-
-  margin-bottom:20px;
-
-  font-size:4rem;
-
-  color:var(--color-primary);
-
-}
-
-.empty-state h2{
-
-  margin-bottom:14px;
-
-}
-
-.empty-state p{
-
-  margin-bottom:28px;
-
-  color:var(--color-muted);
-
-  line-height:1.8;
-
-}
-
-
-/* ==========================================================================
-   SKELETON
-   ========================================================================== */
-
-.skeleton{
-
-  border-radius:var(--radius-md);
-
-  background:linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
-
-  background-size:200% 100%;
-
-  animation:skeletonLoading 1.5s linear infinite;
-
-}
-
-.image-skeleton{
-
-  width:120px;
-
-  height:120px;
-
-  border-radius:var(--radius-md);
-
-}
-
-.content-skeleton{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:12px;
-
-}
-
-.content-skeleton div{
-
-  height:18px;
-
-  border-radius:8px;
-
-}
-
-.content-skeleton div:nth-child(1){
-
-  width:220px;
-
-}
-
-.content-skeleton div:nth-child(2){
-
-  width:170px;
-
-}
-
-.content-skeleton div:nth-child(3){
-
-  width:120px;
-
-}
-
-@keyframes skeletonLoading{
-
-  from{
-
-    background-position:200% 0;
-
-  }
-
-  to{
-
-    background-position:-200% 0;
-
-  }
-
-}
-
-
-/* ==========================================================================
-   CHECKBOX
-   ========================================================================== */
-
-input[type="checkbox"]{
-
-  width:20px;
-
-  height:20px;
-
-  accent-color:var(--color-primary);
-
-  cursor:pointer;
-
-}
-
-
-/* ==========================================================================
-   SCROLLBAR
-   ========================================================================== */
-
-::-webkit-scrollbar{
-
-  width:8px;
-
-  height:8px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-  background:var(--color-primary);
-
-  border-radius:999px;
-
-}
-
-::-webkit-scrollbar-track{
-
-  background:var(--color-background);
-
-}
-
-
-/* ==========================================================================
-   ACCESSIBILITY
-   ========================================================================== */
-
-.cart-item:focus-within,
-.summary-card:focus-within{
-
-  outline:2px solid var(--color-primary);
-
-  outline-offset:4px;
-
-}
-
-
-/* ==========================================================================
-   REDUCED MOTION
-   ========================================================================== */
-
-@media(prefers-reduced-motion:reduce){
-
-  .cart-item,
-  .summary-card,
-  .qty-box button,
-  .cart-action .btn,
-  .cart-item img{
-
-    animation:none;
-
-    transition:none;
-
-    transform:none;
-
-  }
-
-  .skeleton{
-
-    animation:none;
-
-    background:#e5e7eb;
-
-  }
-
-}
-
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-
-@media(max-width:1100px){
-
-  .cart-layout{
-
-    grid-template-columns:1fr;
-
-  }
-
-  .cart-summary{
-
-    position:static;
-
-  }
-
-}
-
-@media(max-width:768px){
-
-  .hero-page{
-
-    padding:120px 0 70px;
-
-  }
-
-  .cart-item{
-
-    grid-template-columns:1fr;
-
-    text-align:center;
-
-  }
-
-  .cart-item img{
-
-    max-width:220px;
-
-    width:100%;
-
-    margin-inline:auto;
-
-  }
-
-  .cart-header{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-  }
-
-  .summary-total{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:10px;
-
-  }
-
-}
-
-@media(max-width:576px){
-
-  .hero-page{
-
-    padding:110px 0 60px;
-
-  }
-
-  .cart-action{
-
-    flex-direction:column;
-
-  }
-
-  .cart-action .btn{
-
-    width:100%;
-
-  }
-
-  .qty-box{
-
-    justify-content:center;
-
-  }
-
-  .summary-total strong{
-
-    font-size:1.7rem;
-
-  }
-
+.cart-kosong {
+  text-align: center;
+  padding: var(--jarak-9) var(--jarak-4);
 }
