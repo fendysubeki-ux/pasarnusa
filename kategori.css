@@ -1,766 +1,85 @@
 /* ==========================================================================
-   kategori.css
-   Part 1 — Hero, Breadcrumb, Toolbar
+   PASARNUSA — kategori.css
    ========================================================================== */
 
-
-/* ==========================================================================
-   HERO
-   ========================================================================== */
-
-.hero-page{
-  position:relative;
-  overflow:hidden;
-  padding:150px 0 90px;
-  text-align:center;
-  background:linear-gradient(
-    135deg,
-    var(--color-primary-light),
-    var(--color-surface)
-  );
+.kategori-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--jarak-4);
 }
 
-.hero-page-content{
-  max-width:850px;
-  margin-inline:auto;
+@media (max-width: 900px) {
+  .kategori-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 560px) {
+  .kategori-grid { grid-template-columns: repeat(3, 1fr); gap: var(--jarak-3); }
 }
 
-.hero-page h1{
-  margin:24px 0 20px;
-  color:var(--color-text);
+.kategori-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--jarak-2);
+  text-align: center;
+  padding: var(--jarak-4) var(--jarak-2);
+  border-radius: var(--radius-sedang);
+  transition: background var(--transisi-cepat), transform var(--transisi-cepat);
 }
 
-.hero-page p{
-  max-width:700px;
-  margin-inline:auto;
-  line-height:1.8;
+.kategori-item:hover {
+  background: var(--warna-hijau-sawah-muda);
+  transform: translateY(-2px);
 }
 
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 22px;
-  border-radius:var(--radius-full);
-  background:var(--color-primary-light);
-  color:var(--color-primary);
-  font-weight:700;
+.kategori-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-penuh);
+  background: var(--warna-krem);
+  border: 1.5px solid var(--warna-garis);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
 }
 
-
-/* ==========================================================================
-   HERO SEARCH
-   ========================================================================== */
-
-.hero-search{
-  display:flex;
-  justify-content:center;
-  gap:16px;
-  margin-top:36px;
-  flex-wrap:wrap;
+.kategori-item.aktif .kategori-icon {
+  background: var(--warna-hijau-sawah);
+  border-color: var(--warna-hijau-sawah);
+  color: var(--warna-putih);
 }
 
-.hero-search input{
-  width:100%;
-  max-width:520px;
+.kategori-nama {
+  font-size: var(--ukuran-sm);
+  font-weight: var(--berat-sedang);
+  color: var(--warna-teks-utama);
 }
 
-.hero-search button{
-  flex-shrink:0;
+/* --- Chip filter kategori (dipakai di halaman produk) --- */
+.kategori-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--jarak-2);
 }
 
-
-/* ==========================================================================
-   HERO STAT
-   ========================================================================== */
-
-.hero-stat{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:40px;
-  flex-wrap:wrap;
-  margin-top:42px;
+.kategori-chip {
+  padding: var(--jarak-2) var(--jarak-4);
+  border-radius: var(--radius-penuh);
+  border: 1.5px solid var(--warna-garis-gelap);
+  font-size: var(--ukuran-sm);
+  font-weight: var(--berat-sedang);
+  color: var(--warna-teks-sekunder);
+  background: var(--warna-putih);
+  transition: all var(--transisi-cepat);
 }
 
-.hero-stat-item{
-  text-align:center;
+.kategori-chip:hover {
+  border-color: var(--warna-hijau-sawah);
+  color: var(--warna-hijau-sawah);
 }
 
-.hero-stat-item h2{
-  margin-bottom:4px;
-  color:var(--color-primary);
-}
-
-.hero-stat-item span{
-  color:var(--color-muted);
-}
-
-
-/* ==========================================================================
-   BREADCRUMB
-   ========================================================================== */
-
-.breadcrumb{
-  padding:22px 0;
-  background:var(--color-background);
-  border-bottom:1px solid var(--color-border);
-}
-
-.breadcrumb .container{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.breadcrumb a{
-  color:var(--color-primary);
-  font-weight:600;
-}
-
-@media(hover:hover){
-
-  .breadcrumb a:hover{
-    text-decoration:underline;
-  }
-
-}
-
-
-/* ==========================================================================
-   TOOLBAR
-   ========================================================================== */
-
-.category-toolbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:20px;
-  margin:40px 0;
-  flex-wrap:wrap;
-}
-
-.category-toolbar input{
-  flex:1;
-  min-width:260px;
-}
-
-.category-toolbar select{
-  min-width:200px;
-  cursor:pointer;
-}
-
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-
-@media(max-width:992px){
-
-  .hero-page{
-    padding:130px 0 70px;
-  }
-
-}
-
-@media(max-width:768px){
-
-  .hero-search{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  .hero-search button{
-    width:100%;
-  }
-
-  .category-toolbar{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-}
-/* ==========================================================================
-   CATEGORY GRID
-   ========================================================================== */
-
-.category-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:30px;
-}
-
-
-/* ==========================================================================
-   CATEGORY CARD
-   ========================================================================== */
-
-.category-card{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  height:100%;
-  padding:32px 28px;
-  text-align:center;
-  cursor:pointer;
-
-  background:var(--color-surface);
-  border:1px solid var(--color-border);
-  border-radius:var(--radius-xl);
-  box-shadow:var(--shadow-sm);
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    border-color var(--transition);
-}
-
-@media(hover:hover){
-
-  .category-card:hover{
-    transform:translateY(-8px);
-    box-shadow:var(--shadow-lg);
-    border-color:var(--color-primary-light);
-  }
-
-}
-
-
-/* ==========================================================================
-   CATEGORY ICON
-   ========================================================================== */
-
-.category-icon{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  width:90px;
-  height:90px;
-
-  margin-bottom:24px;
-
-  border-radius:var(--radius-full);
-
-  background:var(--color-primary-light);
-
-  color:var(--color-primary);
-
-  font-size:2.3rem;
-
-  transition:
-    transform var(--transition),
-    background var(--transition);
-}
-
-@media(hover:hover){
-
-  .category-card:hover .category-icon{
-    transform:scale(1.08);
-  }
-
-}
-
-
-/* ==========================================================================
-   CATEGORY TITLE
-   ========================================================================== */
-
-.category-card h3{
-  margin-bottom:12px;
-  color:var(--color-text);
-}
-
-
-/* ==========================================================================
-   CATEGORY DESCRIPTION
-   ========================================================================== */
-
-.category-card p{
-  flex:1;
-  margin-bottom:22px;
-  line-height:1.8;
-}
-
-
-/* ==========================================================================
-   CATEGORY COUNT
-   ========================================================================== */
-
-.category-count{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  padding:8px 18px;
-
-  border-radius:var(--radius-full);
-
-  background:var(--color-primary-light);
-
-  color:var(--color-primary);
-
-  font-size:.9rem;
-  font-weight:700;
-}
-
-
-/* ==========================================================================
-   EMPTY STATE
-   ========================================================================== */
-
-.category-empty{
-
-  grid-column:1/-1;
-
-  padding:60px 30px;
-
-  text-align:center;
-
-  border:2px dashed var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  background:var(--color-surface);
-
-}
-
-.category-empty h3{
-
-  margin-bottom:10px;
-
-}
-
-.category-empty p{
-
-  max-width:500px;
-
-  margin-inline:auto;
-
-}
-
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-
-@media(max-width:768px){
-
-  .category-grid{
-
-    grid-template-columns:1fr;
-
-  }
-
-}
-
-@media(max-width:576px){
-
-  .category-card{
-
-    padding:26px 20px;
-
-  }
-
-  .category-icon{
-
-    width:75px;
-    height:75px;
-
-    font-size:2rem;
-
-  }
-
-}
-/* ==========================================================================
-   SKELETON LOADING
-   ========================================================================== */
-
-.skeleton-card{
-  pointer-events:none;
-}
-
-.skeleton{
-  overflow:hidden;
-  border-radius:var(--radius-md);
-  background:linear-gradient(
-    90deg,
-    var(--color-background) 25%,
-    var(--color-border) 50%,
-    var(--color-background) 75%
-  );
-  background-size:200% 100%;
-  animation:skeleton-loading 1.4s linear infinite;
-}
-
-.skeleton-icon{
-  width:90px;
-  height:90px;
-  margin:0 auto 24px;
-  border-radius:var(--radius-full);
-}
-
-.skeleton-title{
-  width:70%;
-  height:24px;
-  margin:0 auto 16px;
-}
-
-.skeleton-text{
-  width:55%;
-  height:14px;
-  margin:0 auto;
-}
-
-@keyframes skeleton-loading{
-
-  from{
-    background-position:200% 0;
-  }
-
-  to{
-    background-position:-200% 0;
-  }
-
-}
-
-
-/* ==========================================================================
-   POPULAR CATEGORY
-   ========================================================================== */
-
-.popular-category-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:30px;
-  margin-top:40px;
-}
-
-
-/* ==========================================================================
-   POPULAR CARD
-   ========================================================================== */
-
-.popular-category-card{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-
-  padding:36px 28px;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  box-shadow:var(--shadow-sm);
-
-  cursor:pointer;
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    border-color var(--transition);
-}
-
-@media(hover:hover){
-
-  .popular-category-card:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:var(--shadow-lg);
-
-    border-color:var(--color-primary-light);
-
-  }
-
-}
-
-
-/* ==========================================================================
-   POPULAR ICON
-   ========================================================================== */
-
-.popular-icon{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  width:90px;
-
-  height:90px;
-
-  margin-bottom:24px;
-
-  border-radius:var(--radius-full);
-
-  background:var(--color-primary-light);
-
-  color:var(--color-primary);
-
-  font-size:2.4rem;
-
-  transition:
-    transform var(--transition),
-    background var(--transition);
-
-}
-
-@media(hover:hover){
-
-  .popular-category-card:hover .popular-icon{
-
-    transform:rotate(8deg) scale(1.08);
-
-  }
-
-}
-
-
-/* ==========================================================================
-   POPULAR CONTENT
-   ========================================================================== */
-
-.popular-category-card h3{
-
-  margin-bottom:12px;
-
-  color:var(--color-text);
-
-}
-
-.popular-category-card p{
-
-  line-height:1.8;
-
-}
-
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-
-@media(max-width:768px){
-
-  .popular-category-grid{
-
-    grid-template-columns:1fr;
-
-  }
-
-}
-
-@media(max-width:576px){
-
-  .popular-category-card{
-
-    padding:26px 20px;
-
-  }
-
-  .popular-icon{
-
-    width:75px;
-    height:75px;
-
-    font-size:2rem;
-
-  }
-
-}
-/* ==========================================================================
-   CATEGORY CTA
-   Tidak bentrok dengan cta.css global
-   ========================================================================== */
-
-.category-cta{
-  margin-top:80px;
-  padding:70px 40px;
-  text-align:center;
-
-  border-radius:var(--radius-xl);
-
-  background:linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-primary-dark)
-  );
-
-  color:var(--color-white);
-
-  overflow:hidden;
-  position:relative;
-}
-
-.category-cta h2{
-  color:var(--color-white);
-  margin-bottom:20px;
-}
-
-.category-cta p{
-  max-width:680px;
-  margin:0 auto 36px;
-  color:rgba(255,255,255,.9);
-  line-height:1.8;
-}
-
-.category-cta .btn-secondary{
-  background:var(--color-white);
-  color:var(--color-primary);
-  border:none;
-}
-
-@media(hover:hover){
-
-  .category-cta .btn-secondary:hover{
-    background:var(--color-background);
-  }
-
-}
-
-
-/* ==========================================================================
-   NO RESULT
-   ========================================================================== */
-
-.no-result{
-
-  grid-column:1/-1;
-
-  padding:80px 20px;
-
-  text-align:center;
-
-}
-
-.no-result h3{
-
-  margin-bottom:12px;
-
-}
-
-.no-result p{
-
-  max-width:500px;
-
-  margin-inline:auto;
-
-}
-
-
-/* ==========================================================================
-   SECTION SPACING
-   ========================================================================== */
-
-.category-section{
-
-  padding:90px 0;
-
-}
-
-
-/* ==========================================================================
-   ACCESSIBILITY
-   ========================================================================== */
-
-.category-card:focus-visible,
-.popular-category-card:focus-visible{
-
-  outline:2px solid var(--color-primary);
-
-  outline-offset:4px;
-
-}
-
-
-/* ==========================================================================
-   REDUCED MOTION
-   ========================================================================== */
-
-@media(prefers-reduced-motion:reduce){
-
-  .category-card,
-  .popular-category-card,
-  .category-icon,
-  .popular-icon,
-  .skeleton{
-
-    animation:none;
-
-    transition:none;
-
-    transform:none;
-
-  }
-
-}
-
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-
-@media(max-width:992px){
-
-  .category-cta{
-
-    padding:60px 30px;
-
-  }
-
-}
-
-@media(max-width:768px){
-
-  .hero-stat{
-
-    gap:24px;
-
-  }
-
-  .category-section{
-
-    padding:70px 0;
-
-  }
-
-  .category-cta{
-
-    padding:50px 24px;
-
-  }
-
-}
-
-@media(max-width:576px){
-
-  .hero-stat{
-
-    flex-direction:column;
-
-    gap:18px;
-
-  }
-
-  .category-toolbar input,
-  .category-toolbar select{
-
-    min-width:100%;
-
-  }
-
-  .category-cta h2{
-
-    font-size:1.8rem;
-
-  }
-
+.kategori-chip.aktif {
+  background: var(--warna-hijau-sawah);
+  border-color: var(--warna-hijau-sawah);
+  color: var(--warna-putih);
 }
