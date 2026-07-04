@@ -1,161 +1,102 @@
-/* =============================================================================
-   gallery.css — PasarNusa Product Gallery
-   Komponen grid produk dan kartu produk untuk halaman katalog.
-   ============================================================================= */
+/* ==========================================================================
+   PASARNUSA — gallery.css
+   ========================================================================== */
 
-
-/* -----------------------------------------------------------------------------
-   1. GRID PRODUK
-   Tata letak responsif otomatis; kolom minimum 280px, maksimum 1fr.
------------------------------------------------------------------------------ */
-
-.product-grid {
+.galeri-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--jarak-3);
 }
 
-
-/* -----------------------------------------------------------------------------
-   2. KARTU PRODUK
-   Kontainer utama dengan efek hover: naik & bayangan lebih dalam.
------------------------------------------------------------------------------ */
-
-.product-card {
-  overflow: hidden;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
-  transition: var(--transition);
-  /* Pastikan konten di dalam kartu tidak meluap saat transformasi */
-  will-change: transform;
+@media (max-width: 640px) {
+  .galeri-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-.product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary);
-}
-
-
-/* -----------------------------------------------------------------------------
-   3. GAMBAR PRODUK
-   Rasio aspek 1:1 dengan efek zoom halus saat hover.
------------------------------------------------------------------------------ */
-
-.product-image {
+.galeri-item {
   position: relative;
-  overflow: hidden;
   aspect-ratio: 1 / 1;
-  background: #f1f5f9; /* Warna placeholder saat gambar belum dimuat */
+  border-radius: var(--radius-sedang);
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.product-image img {
+.galeri-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Durasi eksplisit agar konsisten di semua browser */
-  transition: transform 0.4s ease;
+  transition: transform var(--transisi-normal);
 }
 
-.product-card:hover .product-image img {
-  transform: scale(1.08);
+.galeri-item:hover img {
+  transform: scale(1.06);
 }
 
-
-/* -----------------------------------------------------------------------------
-   4. LENCANA / BADGE PRODUK
-   Label mengambang (mis. "Baru", "Diskon") di pojok kiri atas gambar.
------------------------------------------------------------------------------ */
-
-.product-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  padding: 6px 12px;
-  background: var(--color-primary);
-  color: var(--color-white);
-  border-radius: 999px; /* Pill shape */
-  font-size: 0.8125rem; /* 13px — lebih eksplisit dibanding nilai piksel mentah */
-  font-weight: 600;
-  /* Pastikan badge selalu di atas gambar */
-  z-index: 1;
-  /* Cegah seleksi teks yang tidak disengaja */
-  user-select: none;
-}
-
-
-/* -----------------------------------------------------------------------------
-   5. KONTEN KARTU
-   Area teks dan aksi di bawah gambar.
------------------------------------------------------------------------------ */
-
-.product-content {
-  padding: 22px;
-}
-
-/* Judul produk */
-.product-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: var(--color-text);
-  /* Batasi ke 2 baris agar grid tetap rapi */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+/* --- Mosaik galeri utama (1 besar + beberapa kecil) --- */
+.galeri-mosaik {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 140px);
+  gap: var(--jarak-2);
+  border-radius: var(--radius-besar);
   overflow: hidden;
 }
 
-/* Lokasi asal produk */
-.product-location {
-  font-size: 0.9rem;
-  color: var(--color-muted);
-  margin-bottom: 16px;
+.galeri-mosaik .galeri-item:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
 }
 
-/* Blok harga */
-.product-price {
-  margin-bottom: 20px;
-}
-
-/* Harga setelah diskon / harga utama */
-.new-price {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--color-primary);
-}
-
-
-/* -----------------------------------------------------------------------------
-   6. TOMBOL AKSI
-   Dua tombol berdampingan (mis. "Tambah ke Keranjang" & "Lihat Detail").
------------------------------------------------------------------------------ */
-
-.product-action {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-
-/* -----------------------------------------------------------------------------
-   7. AKSESIBILITAS — REDUCED MOTION
-   Nonaktifkan semua animasi untuk pengguna yang memilih pengurangan gerak.
------------------------------------------------------------------------------ */
-
-@media (prefers-reduced-motion: reduce) {
-  .product-card,
-  .product-image img {
-    transition: none;
+@media (max-width: 640px) {
+  .galeri-mosaik {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 100px);
   }
-
-  .product-card:hover {
-    transform: none;
+  .galeri-mosaik .galeri-item:first-child {
+    grid-column: span 2;
+    grid-row: span 1;
   }
+}
 
-  .product-card:hover .product-image img {
-    transform: none;
-  }
+.galeri-item-lebih {
+  position: absolute;
+  inset: 0;
+  background: rgba(20,23,15,0.6);
+  color: var(--warna-putih);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--berat-tebal);
+  font-size: var(--ukuran-lg);
+}
+
+/* --- Lightbox sederhana --- */
+.galeri-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,23,15,0.92);
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--jarak-5);
+}
+
+.galeri-lightbox img {
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: var(--radius-sedang);
+}
+
+.galeri-lightbox-tutup {
+  position: absolute;
+  top: var(--jarak-5);
+  right: var(--jarak-5);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: var(--warna-putih);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
