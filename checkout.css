@@ -1,846 +1,132 @@
 /* ==========================================================================
-   HERO
+   PASARNUSA — checkout.css
    ========================================================================== */
 
-.hero-page{
-
-  padding:150px 0 80px;
-
-  text-align:center;
-
-  background:linear-gradient(
-    135deg,
-    var(--color-primary-light),
-    var(--color-surface)
-  );
-
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: var(--jarak-6);
+  align-items: start;
 }
 
-.hero-page-content{
-
-  max-width:850px;
-
-  margin-inline:auto;
-
+@media (max-width: 900px) {
+  .checkout-layout { grid-template-columns: 1fr; }
 }
 
-.hero-page h1{
-
-  margin:20px 0;
-
-  color:var(--color-text);
-
+.checkout-langkah {
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-2);
+  margin-bottom: var(--jarak-6);
+  flex-wrap: wrap;
 }
 
-.hero-page p{
-
-  max-width:650px;
-
-  margin-inline:auto;
-
-  line-height:1.8;
-
-  color:var(--color-muted);
-
+.checkout-langkah-item {
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-2);
+  font-size: var(--ukuran-sm);
+  color: var(--warna-teks-muted);
 }
 
-.badge{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  gap:8px;
-
-  padding:12px 22px;
-
-  border-radius:999px;
-
-  background:var(--color-primary-light);
-
-  color:var(--color-primary);
-
-  font-weight:700;
-
+.checkout-langkah-item .nomor {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--warna-garis);
+  color: var(--warna-teks-sekunder);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--berat-tebal);
+  font-size: var(--ukuran-xs);
 }
 
-
-/* ==========================================================================
-   BREADCRUMB
-   ========================================================================== */
-
-.breadcrumb{
-
-  padding:18px 0;
-
-  background:var(--color-surface);
-
-  border-bottom:1px solid var(--color-border);
-
+.checkout-langkah-item.aktif .nomor,
+.checkout-langkah-item.selesai .nomor {
+  background: var(--warna-hijau-sawah);
+  color: var(--warna-putih);
 }
 
-.breadcrumb .container{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
-
-  flex-wrap:wrap;
-
+.checkout-langkah-item.aktif {
+  color: var(--warna-teks-utama);
+  font-weight: var(--berat-tebal);
 }
 
-.breadcrumb a{
-
-  color:var(--color-primary);
-
-  font-weight:600;
-
+.checkout-langkah-garis {
+  width: 32px;
+  height: 1px;
+  background: var(--warna-garis-gelap);
 }
 
-.breadcrumb span{
-
-  color:var(--color-muted);
-
+/* --- Alamat tersimpan --- */
+.checkout-alamat-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jarak-3);
 }
 
-
-/* ==========================================================================
-   LAYOUT
-   ========================================================================== */
-
-.checkout-layout{
-
-  display:grid;
-
-  grid-template-columns:1fr 360px;
-
-  gap:32px;
-
-  align-items:start;
-
+.checkout-alamat-item {
+  border: 1.5px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-4);
+  cursor: pointer;
+  transition: border-color var(--transisi-cepat);
 }
 
-.checkout-content{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:24px;
-
+.checkout-alamat-item.dipilih {
+  border-color: var(--warna-hijau-sawah);
+  background: var(--warna-hijau-sawah-muda);
 }
 
-.checkout-summary{
-
-  position:sticky;
-
-  top:110px;
-
-}
-/* ==========================================================================
-   FORM CARD
-   ========================================================================== */
-
-.form-card{
-
-  padding:30px;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  box-shadow:var(--shadow-sm);
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition);
-
+.checkout-alamat-nama {
+  font-weight: var(--berat-tebal);
+  display: flex;
+  align-items: center;
+  gap: var(--jarak-2);
 }
 
-@media(hover:hover){
-
-  .form-card:hover{
-
-    transform:translateY(-5px);
-
-    box-shadow:var(--shadow-md);
-
-  }
-
+/* --- Pilihan pengiriman --- */
+.checkout-kurir-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-4);
+  margin-bottom: var(--jarak-3);
+  cursor: pointer;
 }
 
-.form-card h2{
-
-  margin-bottom:24px;
-
+.checkout-kurir-item.dipilih {
+  border-color: var(--warna-hijau-sawah);
 }
 
-
-/* ==========================================================================
-   FORM GROUP
-   ========================================================================== */
-
-.form-group{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:10px;
-
-  margin-bottom:20px;
-
+.checkout-kurir-estimasi {
+  font-size: var(--ukuran-xs);
+  color: var(--warna-teks-muted);
 }
 
-.form-group label{
-
-  font-weight:600;
-
-  color:var(--color-text);
-
+/* --- Ringkasan pesanan (kolom kanan, sama gaya dengan cart-ringkasan) --- */
+.checkout-ringkasan {
+  background: var(--warna-putih);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--radius-sedang);
+  padding: var(--jarak-5);
+  position: sticky;
+  top: calc(var(--tinggi-navbar) + var(--jarak-4));
 }
 
-
-/* ==========================================================================
-   FORM FIELD
-   ========================================================================== */
-
-.form-group input,
-.form-group textarea,
-.form-group select{
-
-  width:100%;
-
-  padding:14px 16px;
-
-  font:inherit;
-
-  color:var(--color-text);
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-md);
-
-  transition:
-    border-color var(--transition),
-    box-shadow var(--transition);
-
+.checkout-produk-mini {
+  display: flex;
+  gap: var(--jarak-3);
+  margin-bottom: var(--jarak-3);
+  font-size: var(--ukuran-sm);
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus{
-
-  outline:none;
-
-  border-color:var(--color-primary);
-
-  box-shadow:0 0 0 4px rgba(22,163,74,.12);
-
-}
-
-.form-group textarea{
-
-  min-height:120px;
-
-  resize:vertical;
-
-}
-
-
-/* ==========================================================================
-   CHECKOUT PRODUCT
-   ========================================================================== */
-
-.checkout-product-list{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:20px;
-
-}
-
-.checkout-item{
-
-  display:grid;
-
-  grid-template-columns:90px 1fr;
-
-  gap:20px;
-
-  align-items:center;
-
-  padding:20px;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-lg);
-
-  box-shadow:var(--shadow-xs);
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition);
-
-}
-
-@media(hover:hover){
-
-  .checkout-item:hover{
-
-    transform:translateY(-4px);
-
-    box-shadow:var(--shadow-md);
-
-  }
-
-}
-
-.checkout-item img{
-
-  width:90px;
-
-  height:90px;
-
-  display:block;
-
-  object-fit:cover;
-
-  border-radius:var(--radius-md);
-
-  transition:transform var(--transition);
-
-}
-
-@media(hover:hover){
-
-  .checkout-item:hover img{
-
-    transform:scale(1.05);
-
-  }
-
-}
-
-.checkout-item h3{
-
-  margin-bottom:8px;
-
-}
-
-.checkout-item p{
-
-  margin:6px 0;
-
-  color:var(--color-muted);
-
-}
-/* ==========================================================================
-   VOUCHER
-   ========================================================================== */
-
-.voucher-box{
-
-  display:flex;
-
-  gap:12px;
-
-  margin-bottom:18px;
-
-}
-
-.voucher-box input{
-
-  flex:1;
-
-  padding:14px 16px;
-
-  font:inherit;
-
-  color:var(--color-text);
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-md);
-
-  transition:
-    border-color var(--transition),
-    box-shadow var(--transition);
-
-}
-
-.voucher-box input:focus{
-
-  outline:none;
-
-  border-color:var(--color-primary);
-
-  box-shadow:0 0 0 4px rgba(22,163,74,.12);
-
-}
-
-#voucherInfo{
-
-  margin-top:8px;
-
-  font-size:.95rem;
-
-  color:var(--color-muted);
-
-}
-
-
-/* ==========================================================================
-   SUMMARY CARD
-   ========================================================================== */
-
-.summary-card{
-
-  padding:30px;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  box-shadow:var(--shadow-sm);
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition);
-
-}
-
-@media(hover:hover){
-
-  .summary-card:hover{
-
-    transform:translateY(-5px);
-
-    box-shadow:var(--shadow-md);
-
-  }
-
-}
-
-.summary-card h2{
-
-  margin-bottom:24px;
-
-}
-
-
-/* ==========================================================================
-   SUMMARY
-   ========================================================================== */
-
-.summary-item{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  margin-bottom:16px;
-
-  color:var(--color-muted);
-
-}
-
-.summary-total{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  margin:28px 0;
-
-  padding-top:20px;
-
-  border-top:1px solid var(--color-border);
-
-}
-
-.summary-total h2{
-
-  margin:0;
-
-  font-size:2rem;
-
-  font-weight:800;
-
-  color:var(--color-primary);
-
-}
-
-.summary-card .btn{
-
-  width:100%;
-
-  margin-bottom:12px;
-
-}
-
-
-/* ==========================================================================
-   INCOME BOX
-   ========================================================================== */
-
-.income-box{
-
-  margin-top:28px;
-
-  padding:22px;
-
-  background:var(--color-background);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-lg);
-
-}
-
-.income-box h3{
-
-  margin-bottom:18px;
-
-}
-
-.income-item{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  margin-bottom:12px;
-
-}
-
-.income-item:last-child{
-
-  margin-bottom:0;
-
-}
-
-.income-label{
-
-  color:var(--color-muted);
-
-}
-
-.income-value{
-
-  font-weight:700;
-
-  color:var(--color-primary);
-
-}
-/* ==========================================================================
-   EMPTY STATE
-   ========================================================================== */
-
-.empty-state{
-
-  padding:70px 30px;
-
-  text-align:center;
-
-  background:var(--color-surface);
-
-  border:1px solid var(--color-border);
-
-  border-radius:var(--radius-xl);
-
-  box-shadow:var(--shadow-sm);
-
-}
-
-.empty-icon{
-
-  margin-bottom:20px;
-
-  font-size:4rem;
-
-  color:var(--color-primary);
-
-}
-
-.empty-state h2{
-
-  margin-bottom:14px;
-
-}
-
-.empty-state p{
-
-  margin-bottom:30px;
-
-  line-height:1.8;
-
-  color:var(--color-muted);
-
-}
-
-
-/* ==========================================================================
-   SKELETON
-   ========================================================================== */
-
-.skeleton{
-
-  border-radius:var(--radius-md);
-
-  background:linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
-
-  background-size:200% 100%;
-
-  animation:skeletonLoading 1.5s linear infinite;
-
-}
-
-.image-skeleton{
-
-  width:90px;
-
-  height:90px;
-
-  border-radius:var(--radius-md);
-
-}
-
-.content-skeleton{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:12px;
-
-}
-
-.content-skeleton div{
-
-  height:18px;
-
-  border-radius:8px;
-
-}
-
-.content-skeleton div:nth-child(1){
-
-  width:220px;
-
-}
-
-.content-skeleton div:nth-child(2){
-
-  width:180px;
-
-}
-
-.content-skeleton div:nth-child(3){
-
-  width:120px;
-
-}
-
-@keyframes skeletonLoading{
-
-  from{
-
-    background-position:200% 0;
-
-  }
-
-  to{
-
-    background-position:-200% 0;
-
-  }
-
-}
-
-
-/* ==========================================================================
-   ACCESSIBILITY
-   ========================================================================== */
-
-.form-card:focus-within,
-.summary-card:focus-within,
-.checkout-item:focus-within{
-
-  outline:2px solid var(--color-primary);
-
-  outline-offset:4px;
-
-}
-
-
-/* ==========================================================================
-   REDUCED MOTION
-   ========================================================================== */
-
-@media(prefers-reduced-motion:reduce){
-
-  .form-card,
-  .summary-card,
-  .checkout-item,
-  .checkout-item img{
-
-    animation:none;
-
-    transition:none;
-
-    transform:none;
-
-  }
-
-  .skeleton{
-
-    animation:none;
-
-    background:#e5e7eb;
-
-  }
-
-}
-
-
-/* ==========================================================================
-   SCROLLBAR
-   ========================================================================== */
-
-::-webkit-scrollbar{
-
-  width:8px;
-
-  height:8px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-  background:var(--color-primary);
-
-  border-radius:999px;
-
-}
-
-::-webkit-scrollbar-track{
-
-  background:var(--color-background);
-
-}
-
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-
-@media(max-width:1100px){
-
-  .checkout-layout{
-
-    grid-template-columns:1fr;
-
-  }
-
-  .checkout-summary{
-
-    position:static;
-
-  }
-
-}
-
-@media(max-width:768px){
-
-  .hero-page{
-
-    padding:120px 0 70px;
-
-  }
-
-  .hero-page h1{
-
-    font-size:2rem;
-
-  }
-
-  .voucher-box{
-
-    flex-direction:column;
-
-  }
-
-  .checkout-item{
-
-    grid-template-columns:1fr;
-
-    text-align:center;
-
-  }
-
-  .checkout-item img{
-
-    margin-inline:auto;
-
-  }
-
-  .summary-total{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:10px;
-
-  }
-
-}
-
-@media(max-width:576px){
-
-  .hero-page{
-
-    padding:110px 0 60px;
-
-  }
-
-  .form-card,
-  .summary-card{
-
-    padding:22px;
-
-  }
-
-  .summary-total h2{
-
-    font-size:1.7rem;
-
-  }
-
+.checkout-produk-mini img {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-kecil);
+  object-fit: cover;
 }
