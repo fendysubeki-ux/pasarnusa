@@ -1,474 +1,299 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PasarNusa — Pasar Digital Produk Desa & UMKM Indonesia</title>
+<meta name="description" content="Belanja langsung dari desa. PasarNusa menghubungkan Anda dengan produk asli UMKM dan desa di seluruh Indonesia.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#2F5233">
 
-  <title>PasarNusa | Marketplace UMKM Indonesia</title>
-  <meta name="description" content="Marketplace digital yang menghubungkan UMKM Indonesia dengan pembeli melalui sistem wilayah bertingkat.">
-  <meta name="theme-color" content="#16a34a">
+<!-- ===== DITAMBAHKAN: SEO — Open Graph & Twitter Card untuk pratinjau tautan ===== -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PasarNusa">
+<meta property="og:title" content="PasarNusa — Pasar Digital Produk Desa & UMKM Indonesia">
+<meta property="og:description" content="Belanja langsung dari desa. PasarNusa menghubungkan Anda dengan produk asli UMKM dan desa di seluruh Indonesia.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1595231776515-ddffb1f4eb73?q=80&w=1200&auto=format&fit=crop">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://pasarnusa.id/">
 
-  <!-- Preconnect font sebelum stylesheet agar tidak memblokir render -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- ===== DITAMBAHKAN: preconnect supaya font Google tidak memblokir render ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Favicon: gunakan format .ico atau .svg untuk dukungan lebih luas -->
-  <link rel="icon" href="assets/logo.png" type="image/png">
+<!-- ===== DITAMBAHKAN: favicon (SVG data-URI, tidak perlu file gambar terpisah) ===== -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%BE%3C/text%3E%3C/svg%3E">
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/style.css">
+<!-- ===== DITAMBAHKAN: lapisan animasi & interaktivitas (tidak mengubah desain asli) ===== -->
+<link rel="stylesheet" href="css/interaktif.css">
 </head>
+<body class="app-root">
 
-<body>
+<!-- ============================= NAVBAR ============================= -->
+<header class="header-situs">
+  <nav class="navbar" aria-label="Navigasi utama">
+    <a href="index.html" class="navbar-logo">🌾 PasarNusa</a>
 
-  <!-- =====================================================================
-       NAVBAR
-  ====================================================================== -->
-  <header class="navbar">
-    <div class="container">
-      <div class="navbar-content">
+    <ul class="navbar-menu">
+      <li><a href="index.html" class="aktif">Beranda</a></li>
+      <li><a href="wilayah.html">Wilayah</a></li>
+      <li><a href="kategori.html">Kategori</a></li>
+      <li><a href="produk.html">Produk</a></li>
+      <li><a href="tentang.html">Tentang</a></li>
+    </ul>
 
-        <a href="index.html" class="logo">
-          🌿 <span>PasarNusa</span>
-        </a>
-
-<nav class="navbar-menu" aria-label="Navigasi utama">
-
-  <a href="index.html" class="active">Beranda</a>
-
-  <a href="produk.html">Produk</a>
-
-  <a href="kategori.html">Kategori</a>
-
-  <a href="wilayah.html">Wilayah</a>
-
-  <a href="tentang.html">Tentang</a>
-
-</nav>
-
-        <div class="navbar-action">
-          <button id="themeToggle" class="btn btn-secondary" aria-label="Aktifkan dark mode">
-            🌙
-          </button>
-          <a href="login.html" class="btn btn-secondary">Masuk</a>
-          <a href="register.html" class="btn btn-primary">Daftar</a>
-        </div>
-
-        <!-- Tombol hamburger untuk mobile -->
-        <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" aria-expanded="false" aria-controls="navbar-menu">
-          ☰
-        </button>
-
-      </div>
+    <div class="navbar-aksi">
+      <!-- ===== DITAMBAHKAN: tombol mode gelap (fitur dari versi sebelumnya) ===== -->
+      <button class="tema-toggle navbar-icon-btn hanya-desktop" id="themeToggle" aria-label="Aktifkan mode gelap">🌙</button>
+      <button class="navbar-icon-btn hanya-desktop" aria-label="Wishlist" onclick="location.href='wishlist.html'">♡</button>
+      <button class="navbar-icon-btn" aria-label="Keranjang, 0 barang" onclick="location.href='cart.html'">
+        🛒
+        <span class="navbar-badge" data-badge-keranjang style="display:none;">0</span>
+      </button>
+      <a href="login.html" class="btn btn-utama btn-kecil hanya-desktop">Masuk</a>
+      <button class="navbar-toggle hanya-hp" id="menuToggle" aria-label="Buka menu" aria-expanded="false" aria-controls="navbar-menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-  </header>
+  </nav>
+  <div class="navbar-menu-mobile" id="navbar-menu-mobile">
+    <a href="index.html" class="aktif">Beranda</a>
+    <a href="wilayah.html">Wilayah</a>
+    <a href="kategori.html">Kategori</a>
+    <a href="produk.html">Produk</a>
+    <a href="tentang.html">Tentang</a>
+    <a href="login.html">Masuk</a>
+  </div>
+</header>
 
+<main>
 
-  <!-- =====================================================================
-       HERO
-  ====================================================================== -->
+  <!-- ============================= HERO ============================= -->
   <section class="hero">
-    <div class="container">
-      <div class="hero-grid">
+    <div class="hero-wadah">
+      <div class="hero-teks">
+        <span class="eyebrow hero-eyebrow">🇮🇩 Pasar Digital Desa Nusantara</span>
+        <h1 class="hero-judul">Belanja Langsung dari <span class="sorot">Desa</span>, Dukung UMKM Lokal</h1>
+        <p class="hero-deskripsi">PasarNusa menghubungkan Anda langsung dengan produk asli petani, perajin, dan UMKM dari desa-desa di seluruh Indonesia — tanpa perantara panjang.</p>
 
-        <div class="hero-content fade-in">
-          <div class="hero-badge">🇮🇩 Marketplace Digital UMKM Indonesia</div>
+        <!-- ===== DITAMBAHKAN: role="search" & aria-label untuk pembaca layar ===== -->
+        <form class="hero-pencarian" role="search" onsubmit="event.preventDefault(); location.href='produk.html?cari='+encodeURIComponent(this.q.value);">
+          <span aria-hidden="true">🔍</span>
+          <input type="text" name="q" placeholder="Cari produk, misal: kopi robusta, batik tulis..." aria-label="Cari produk, kategori, atau UMKM">
+          <button type="submit" class="btn btn-utama">Cari</button>
+        </form>
 
-          <h1>Temukan Produk Lokal Terbaik dari Seluruh Indonesia</h1>
+        <div class="hero-aksi">
+          <a href="produk.html" class="btn btn-utama btn-besar">Mulai Belanja</a>
+          <a href="register-affiliate.html" class="btn btn-sekunder btn-besar">Gabung Jadi Mitra UMKM</a>
+        </div>
 
-          <p>
-            PasarNusa membantu masyarakat menemukan produk UMKM berdasarkan provinsi,
-            kabupaten, kecamatan hingga desa dalam satu platform yang mudah digunakan.
-          </p>
-
-          <!-- role="search" membantu screen reader mengidentifikasi form pencarian -->
-          <form class="hero-search" role="search">
-            <input
-              type="search"
-              placeholder="Cari produk, kategori, UMKM atau wilayah..."
-              aria-label="Cari produk">
-            <button type="submit">🔍 Cari</button>
-          </form>
-
-          <div class="hero-action">
-            <a href="produk.html" class="btn btn-primary">🛍️ Jelajahi Produk</a>
-            <a href="register.html" class="btn btn-secondary">🏪 Daftarkan UMKM</a>
+        <!-- ===== DIUBAH: angka diisi REAL-TIME dari Firestore oleh js/beranda.js ===== -->
+        <!-- (bukan angka tetap; skeleton tampil sesaat sebelum data selesai dihitung) -->
+        <div class="hero-statistik" aria-live="polite">
+          <div class="hero-statistik-item">
+            <span class="angka skeleton skeleton-angka" id="stat-desa">&nbsp;</span>
+            <span class="label">Desa Terdaftar</span>
           </div>
-        </div>
-
-        <div class="hero-image float">
-          <img src="assets/hero.webp" alt="Ilustrasi produk UMKM unggulan di PasarNusa" width="600" height="480">
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- =====================================================================
-       KATEGORI PRODUK
-  ====================================================================== -->
-  <section class="section" aria-labelledby="heading-kategori">
-    <div class="container">
-
-      <div class="section-header">
-        <div class="section-title">
-          <h2 id="heading-kategori">Kategori Produk</h2>
-          <p>Temukan berbagai produk UMKM Indonesia berdasarkan kategori.</p>
-        </div>
-        <a href="kategori.html" class="btn btn-secondary">Lihat Semua</a>
-      </div>
-
-      <div id="categoryGrid" class="category-grid">
-        <a href="#" class="category-card"><div class="category-icon">🍜</div><h3>Makanan</h3><p>Makanan khas daerah.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">🥤</div><h3>Minuman</h3><p>Minuman tradisional.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">🌾</div><h3>Pertanian</h3><p>Hasil pertanian.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">🐟</div><h3>Perikanan</h3><p>Produk perikanan.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">🐄</div><h3>Peternakan</h3><p>Produk peternakan.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">🧺</div><h3>Kerajinan</h3><p>Kerajinan lokal.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">👕</div><h3>Fashion</h3><p>Pakaian &amp; aksesoris.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">💄</div><h3>Kecantikan</h3><p>Produk kecantikan.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">🏠</div><h3>Rumah Tangga</h3><p>Kebutuhan rumah.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">🌱</div><h3>Tanaman</h3><p>Tanaman &amp; bibit.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">🎁</div><h3>Souvenir</h3><p>Oleh-oleh khas.</p></a>
-        <a href="#" class="category-card"><div class="category-icon">📦</div><h3>Lainnya</h3><p>Kategori lainnya.</p></a>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- =====================================================================
-       JELAJAHI WILAYAH
-  ====================================================================== -->
-  <section class="section" aria-labelledby="heading-wilayah">
-    <div class="container">
-
-      <div class="section-header">
-        <div class="section-title">
-          <h2 id="heading-wilayah">Jelajahi Berdasarkan Wilayah</h2>
-          <p>Temukan produk UMKM mulai dari tingkat provinsi hingga desa.</p>
-        </div>
-        <a href="wilayah.html" class="btn btn-secondary">Lihat Wilayah</a>
-      </div>
-
-      <div class="wilayah-grid">
-        <div class="wilayah-card"><div class="wilayah-icon">🌍</div><h3>Provinsi</h3><p>Mulai pencarian berdasarkan provinsi.</p></div>
-        <div class="wilayah-card"><div class="wilayah-icon">🏛️</div><h3>Kabupaten</h3><p>Temukan UMKM berdasarkan kabupaten atau kota.</p></div>
-        <div class="wilayah-card"><div class="wilayah-icon">🏘️</div><h3>Kecamatan</h3><p>Jelajahi UMKM di setiap kecamatan.</p></div>
-        <div class="wilayah-card"><div class="wilayah-icon">🏡</div><h3>Desa</h3><p>Temukan produk langsung dari desa.</p></div>
-      </div>
-
-      <!-- Diagram alur wilayah bertingkat -->
-      <div class="roadmap-card mt-5">
-        <h3>Sistem Wilayah Bertingkat</h3>
-        <p class="mt-2">
-          PasarNusa menggunakan sistem wilayah bertingkat agar pencarian produk
-          menjadi lebih cepat, mudah, dan terarah.
-        </p>
-        <div class="wilayah-flow mt-4" aria-label="Alur wilayah: Provinsi ke Produk">
-          <div class="flow-item">🌍 Provinsi</div>
-          <div class="flow-arrow" aria-hidden="true">→</div>
-          <div class="flow-item">🏛️ Kabupaten</div>
-          <div class="flow-arrow" aria-hidden="true">→</div>
-          <div class="flow-item">🏘️ Kecamatan</div>
-          <div class="flow-arrow" aria-hidden="true">→</div>
-          <div class="flow-item">🏡 Desa</div>
-          <div class="flow-arrow" aria-hidden="true">→</div>
-          <div class="flow-item">🛍️ Produk</div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- =====================================================================
-       STATISTIK
-  ====================================================================== -->
-  <section class="section" aria-labelledby="heading-stats">
-    <div class="container">
-
-      <div class="section-header">
-        <div class="section-title">
-          <h2 id="heading-stats">PasarNusa dalam Angka</h2>
-          <p>Data diperbarui secara otomatis dari sistem sehingga pengunjung dapat melihat perkembangan PasarNusa secara real-time.</p>
-        </div>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">🏪</div>
-          <div id="totalUmkm" class="stat-value">0</div>
-          <div class="stat-label">UMKM Terdaftar</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📦</div>
-          <div id="totalProduk" class="stat-value">0</div>
-          <div class="stat-label">Produk</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">👥</div>
-          <div id="totalPengguna" class="stat-value">0</div>
-          <div class="stat-label">Pengguna</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">💳</div>
-          <div id="totalTransaksi" class="stat-value">0</div>
-          <div class="stat-label">Transaksi</div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- =====================================================================
-       PRODUK TERBARU
-  ====================================================================== -->
-  <section class="section" aria-labelledby="heading-produk">
-    <div class="container">
-
-      <div class="section-header">
-        <div class="section-title">
-          <h2 id="heading-produk">Produk Terbaru</h2>
-          <p>Berikut beberapa produk terbaru yang telah dipublikasikan oleh pelaku UMKM.</p>
-        </div>
-        <a href="produk.html" class="btn btn-secondary">Lihat Semua</a>
-      </div>
-
-      <!-- Skeleton ditampilkan JS saat data masih dimuat -->
-      <div id="productGrid" class="product-grid" aria-live="polite" aria-busy="true">
-        <!-- Skeleton cards — diganti JS setelah data tersedia -->
-        <div class="product-card" aria-hidden="true">
-          <div class="product-image"><div class="skeleton skeleton-image"></div></div>
-          <div class="product-content">
-            <div class="skeleton skeleton-title"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="product-action">
-              <div class="skeleton skeleton-text"></div>
-              <div class="skeleton skeleton-text"></div>
-            </div>
+          <div class="hero-statistik-item">
+            <span class="angka skeleton skeleton-angka" id="stat-umkm">&nbsp;</span>
+            <span class="label">UMKM Aktif</span>
           </div>
-        </div>
-        <div class="product-card" aria-hidden="true">
-          <div class="product-image"><div class="skeleton skeleton-image"></div></div>
-          <div class="product-content">
-            <div class="skeleton skeleton-title"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="product-action">
-              <div class="skeleton skeleton-text"></div>
-              <div class="skeleton skeleton-text"></div>
-            </div>
-          </div>
-        </div>
-        <div class="product-card" aria-hidden="true">
-          <div class="product-image"><div class="skeleton skeleton-image"></div></div>
-          <div class="product-content">
-            <div class="skeleton skeleton-title"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="product-action">
-              <div class="skeleton skeleton-text"></div>
-              <div class="skeleton skeleton-text"></div>
-            </div>
-          </div>
-        </div>
-        <div class="product-card" aria-hidden="true">
-          <div class="product-image"><div class="skeleton skeleton-image"></div></div>
-          <div class="product-content">
-            <div class="skeleton skeleton-title"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="product-action">
-              <div class="skeleton skeleton-text"></div>
-              <div class="skeleton skeleton-text"></div>
-            </div>
+          <div class="hero-statistik-item">
+            <span class="angka skeleton skeleton-angka" id="stat-produk">&nbsp;</span>
+            <span class="label">Produk Tersedia</span>
           </div>
         </div>
       </div>
 
-      <div class="text-center mt-5">
-        <a href="produk.html" class="btn btn-primary">Lihat Semua Produk</a>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- =====================================================================
-       MENGAPA PASARNUSA
-  ====================================================================== -->
-  <section class="section" aria-labelledby="heading-fitur">
-    <div class="container">
-
-      <div class="section-header">
-        <div class="section-title">
-          <h2 id="heading-fitur">Mengapa Memilih PasarNusa?</h2>
-          <p>PasarNusa hadir sebagai platform digital yang menghubungkan UMKM dan pembeli dengan sistem yang mudah, aman, dan terus berkembang.</p>
-        </div>
-      </div>
-
-      <div class="feature-grid">
-        <div class="feature-card"><div class="feature-icon">🌿</div><h3>Produk Lokal Berkualitas</h3><p>Menampilkan produk asli dari pelaku UMKM Indonesia dengan kualitas terbaik.</p></div>
-        <div class="feature-card"><div class="feature-icon">🗺️</div><h3>Jelajah Berdasarkan Wilayah</h3><p>Temukan produk melalui sistem Provinsi, Kabupaten, Kecamatan hingga Desa.</p></div>
-        <div class="feature-card"><div class="feature-icon">🔒</div><h3>Aman &amp; Terpercaya</h3><p>Data UMKM dan produk dikelola melalui dashboard sehingga lebih terpercaya.</p></div>
-        <div class="feature-card"><div class="feature-icon">🚀</div><h3>Terus Berkembang</h3><p>Dirancang untuk berkembang menjadi marketplace UMKM berskala nasional.</p></div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- =====================================================================
-       ROADMAP
-  ====================================================================== -->
-  <section class="section" aria-labelledby="heading-roadmap">
-    <div class="container">
-
-      <div class="section-header">
-        <div class="section-title">
-          <h2 id="heading-roadmap">Roadmap Pengembangan</h2>
-          <p>Tahapan pengembangan PasarNusa menuju platform UMKM Indonesia.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-grid">
-        <div class="roadmap-card"><div class="roadmap-icon">🌱</div><div class="roadmap-year">Tahap 1</div><h3>Dimulai</h3><p>Pengembangan platform dan implementasi awal sebagai MVP.</p></div>
-        <div class="roadmap-card"><div class="roadmap-icon">🏡</div><div class="roadmap-year">Tahap 2</div><h3>Desa</h3><p>Digitalisasi UMKM pada tingkat desa sebagai fondasi ekosistem.</p></div>
-        <div class="roadmap-card"><div class="roadmap-icon">🏛️</div><div class="roadmap-year">Tahap 3</div><h3>Kabupaten</h3><p>Memperluas jangkauan ke berbagai kabupaten dan kota.</p></div>
-        <div class="roadmap-card"><div class="roadmap-icon">🇮🇩</div><div class="roadmap-year">Tahap Akhir</div><h3>Indonesia</h3><p>Menjadi marketplace UMKM yang menghubungkan seluruh wilayah Indonesia.</p></div>
-      </div>
-
-      <div class="roadmap-card mt-5 text-center">
-        <h3>Visi Jangka Panjang</h3>
-        <p class="mt-2">
-          PasarNusa dibangun agar dapat berkembang secara bertahap dari satu wilayah
-          menjadi platform nasional yang mendukung digitalisasi UMKM Indonesia.
-        </p>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- =====================================================================
-       CALL TO ACTION
-  ====================================================================== -->
-  <section class="section" aria-labelledby="heading-cta">
-    <div class="container">
-      <div class="cta">
-        <h2 id="heading-cta">Siap Bergabung Bersama PasarNusa?</h2>
-        <p>
-          Mari dukung pertumbuhan UMKM Indonesia dengan menjelajahi produk lokal,
-          membuka toko digital, atau menjadi bagian dari ekosistem PasarNusa.
-        </p>
-        <div class="cta-action">
-          <a href="produk.html" class="btn btn-primary">🛍️ Mulai Belanja</a>
-          <a href="register.html" class="btn btn-secondary">🏪 Buka Toko</a>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1595231776515-ddffb1f4eb73?q=80&w=800&auto=format&fit=crop" alt="Petani dan perajin desa Indonesia" width="800" height="600">
+        <div class="hero-visual-badge">
+          <span style="font-size:22px;" aria-hidden="true">🌱</span>
+          <div>
+            <strong style="display:block; font-size:14px;">100% Produk Asli</strong>
+            <span class="teks-kecil">Langsung dari produsen desa</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-
-  <!-- =====================================================================
-       MITRA & DUKUNGAN
-  ====================================================================== -->
-  <section class="section" aria-labelledby="heading-mitra">
-    <div class="container">
-
-      <div class="section-header">
-        <div class="section-title">
-          <h2 id="heading-mitra">Mitra &amp; Dukungan</h2>
-          <p>PasarNusa dirancang untuk dapat berkolaborasi dengan pemerintah, perguruan tinggi, komunitas, dan berbagai mitra strategis.</p>
-        </div>
-      </div>
-
-      <div class="feature-grid">
-        <div class="feature-card"><div class="feature-icon">🏛️</div><h3>Pemerintah</h3><p>Mendukung digitalisasi UMKM di berbagai daerah Indonesia.</p></div>
-        <div class="feature-card"><div class="feature-icon">🎓</div><h3>Perguruan Tinggi</h3><p>Kolaborasi penelitian, KKN, dan pengembangan UMKM.</p></div>
-        <div class="feature-card"><div class="feature-icon">🤝</div><h3>Komunitas</h3><p>Memberdayakan komunitas lokal untuk memperluas jangkauan UMKM.</p></div>
-        <div class="feature-card"><div class="feature-icon">💼</div><h3>Mitra Bisnis</h3><p>Membuka peluang kerja sama dengan perusahaan dan investor.</p></div>
-      </div>
-
+  <!-- ============================= KATEGORI ============================= -->
+  <section class="seksi wadah">
+    <div class="seksi-header text-tengah">
+      <span class="eyebrow">Jelajahi</span>
+      <h2>Kategori Pilihan</h2>
+    </div>
+    <div class="kategori-grid" id="daftar-kategori" aria-live="polite" aria-busy="true">
+      <!-- Diisi via JS dari Firestore: skeleton -> data / kosong / error (lihat js/beranda.js) -->
     </div>
   </section>
 
-
-  <!-- =====================================================================
-       FOOTER
-  ====================================================================== -->
-  <footer class="footer">
-    <div class="container">
-
-      <div class="footer-top">
-
-        <div>
-          <div class="footer-logo">🌿 <span>PasarNusa</span></div>
-          <p class="footer-desc">
-            Marketplace digital UMKM Indonesia yang menghubungkan produk lokal
-            dengan masyarakat melalui sistem wilayah bertingkat.
-          </p>
-          <div class="social">
-            <a href="#" aria-label="Instagram PasarNusa">📷</a>
-            <a href="#" aria-label="TikTok PasarNusa">🎵</a>
-            <a href="#" aria-label="Facebook PasarNusa">📘</a>
-            <a href="#" aria-label="YouTube PasarNusa">▶️</a>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="footer-title">Marketplace</h3>
-          <div class="footer-links">
-            <a href="produk.html">Produk</a>
-            <a href="kategori.html">Kategori</a>
-            <a href="wilayah.html">Wilayah</a>
-            <a href="affiliate.html">Affiliate</a>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="footer-title">Layanan</h3>
-          <div class="footer-links">
-            <a href="login.html">Masuk</a>
-            <a href="register.html">Daftar</a>
-            <a href="kontak.html">Kontak</a>
-            <a href="bantuan.html">Pusat Bantuan</a>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="footer-title">Perusahaan</h3>
-          <div class="footer-links">
-            <a href="tentang.html">Tentang Kami</a>
-            <a href="faq.html">FAQ</a>
-            <a href="syarat.html">Syarat &amp; Ketentuan</a>
-            <a href="kebijakan.html">Kebijakan Privasi</a>
-          </div>
-        </div>
-
+  <!-- ============================= PRODUK UNGGULAN ============================= -->
+  <section class="seksi wadah" style="background: var(--warna-putih); border-radius: var(--radius-besar);">
+    <div class="seksi-header flex-antara">
+      <div>
+        <span class="eyebrow">Terlaris Minggu Ini</span>
+        <h2>Produk Unggulan Desa</h2>
       </div>
-
-      <div class="footer-divider"></div>
-
-      <div class="footer-bottom">
-        <p>© 2026 <strong>PasarNusa</strong>. Seluruh Hak Cipta Dilindungi.</p>
-        <p>Dibangun ❤️ untuk UMKM Indonesia.</p>
-      </div>
-
+      <a href="produk.html" class="btn btn-teks hanya-desktop">Lihat Semua Produk →</a>
     </div>
-  </footer>
+    <div class="produk-grid anim-stagger" id="daftar-produk-unggulan" aria-live="polite" aria-busy="true">
+      <!-- Diisi via JS dari Firestore: skeleton -> data / kosong / error -->
+    </div>
+    <div class="text-tengah mt-6 hanya-hp">
+      <a href="produk.html" class="btn btn-sekunder">Lihat Semua Produk</a>
+    </div>
+  </section>
 
+  <!-- ============================= WILAYAH ============================= -->
+  <section class="seksi wadah">
+    <div class="seksi-header text-tengah">
+      <span class="eyebrow">Dari Sabang sampai Merauke</span>
+      <h2>Jelajahi Produk Berdasarkan Wilayah</h2>
+    </div>
+    <div class="wilayah-list" id="daftar-wilayah" aria-live="polite" aria-busy="true">
+      <!-- Diisi via JS dari Firestore: skeleton -> data / kosong / error -->
+    </div>
+    <div class="text-tengah mt-6">
+      <a href="wilayah.html" class="btn btn-sekunder">Lihat Semua Wilayah</a>
+    </div>
+  </section>
 
-  <!-- Tombol kembali ke atas -->
-  <button id="backTop" class="back-top" aria-label="Kembali ke atas halaman">↑</button>
+  <!-- ============================= STATISTIK PLATFORM ============================= -->
+  <!-- ===== DIUBAH: angka dihitung REAL-TIME dari Firestore (lihat js/beranda.js), ===== -->
+  <!-- ===== bukan angka tetap — supaya selalu jujur sesuai data yang sebenarnya  ===== -->
+  <section class="stats-section" aria-labelledby="heading-stats-platform">
+    <h2 id="heading-stats-platform" class="sr-only">PasarNusa dalam Angka</h2>
+    <div class="wadah stats-grid" aria-live="polite">
+      <div class="stats-item">
+        <span class="angka skeleton skeleton-angka" id="stat-provinsi">&nbsp;</span>
+        <span class="label">Provinsi Terjangkau</span>
+      </div>
+      <div class="stats-item">
+        <span class="angka skeleton skeleton-angka" id="stat-desa-platform">&nbsp;</span>
+        <span class="label">Desa Terdaftar</span>
+      </div>
+      <div class="stats-item">
+        <span class="angka skeleton skeleton-angka" id="stat-umkm-platform">&nbsp;</span>
+        <span class="label">UMKM Aktif</span>
+      </div>
+      <div class="stats-item">
+        <span class="angka skeleton skeleton-angka" id="stat-kepuasan">&nbsp;</span>
+        <span class="label">Kepuasan Pembeli</span>
+      </div>
+    </div>
+  </section>
 
-  <!-- Script di akhir body agar tidak memblokir render konten -->
-  <script src="script.js"></script>
+  <!-- ============================= KEUNGGULAN ============================= -->
+  <section class="seksi wadah">
+    <div class="seksi-header text-tengah">
+      <span class="eyebrow">Kenapa PasarNusa</span>
+      <h2>Belanja Lebih Bermakna</h2>
+    </div>
+    <div class="fitur-grid">
+      <div class="fitur-item">
+        <div class="fitur-icon">🌾</div>
+        <div class="fitur-judul">Langsung dari Produsen</div>
+        <div class="fitur-deskripsi">Setiap pembelian langsung mendukung petani, perajin, dan UMKM desa tanpa perantara panjang.</div>
+      </div>
+      <div class="fitur-item">
+        <div class="fitur-icon">✅</div>
+        <div class="fitur-judul">UMKM Terverifikasi</div>
+        <div class="fitur-deskripsi">Setiap toko diverifikasi tim PasarNusa agar Anda belanja dengan aman dan percaya.</div>
+      </div>
+      <div class="fitur-item">
+        <div class="fitur-icon">🚚</div>
+        <div class="fitur-judul">Kirim ke Seluruh Indonesia</div>
+        <div class="fitur-deskripsi">Bekerja sama dengan berbagai jasa kirim untuk menjangkau kota hingga pelosok desa.</div>
+      </div>
+      <div class="fitur-item">
+        <div class="fitur-icon">💰</div>
+        <div class="fitur-judul">Harga Adil untuk Desa</div>
+        <div class="fitur-deskripsi">Skema komisi rendah agar lebih banyak keuntungan kembali ke tangan produsen desa.</div>
+      </div>
+      <div class="fitur-item">
+        <div class="fitur-icon">🤝</div>
+        <div class="fitur-judul">Program Mitra Afiliasi</div>
+        <div class="fitur-deskripsi">Bantu promosikan produk desa dan dapatkan komisi dari setiap penjualan yang berhasil.</div>
+      </div>
+      <div class="fitur-item">
+        <div class="fitur-icon">📱</div>
+        <div class="fitur-judul">Mudah Dipakai</div>
+        <div class="fitur-deskripsi">Tampilan sederhana yang ramah untuk semua usia, dirancang khusus untuk warga desa & UMKM.</div>
+      </div>
+    </div>
+  </section>
 
+  <!-- ============================= CTA ============================= -->
+  <section class="wadah" style="margin-bottom: var(--jarak-8);">
+    <div class="cta-section">
+      <h2>Punya Produk Desa untuk Dijual?</h2>
+      <p>Daftarkan toko UMKM Anda sekarang dan jangkau pembeli dari seluruh Indonesia bersama PasarNusa.</p>
+      <div class="cta-aksi">
+        <a href="register-user.html" class="btn btn-utama btn-besar">Daftar Sebagai UMKM</a>
+        <a href="tentang.html" class="btn btn-sekunder btn-besar">Pelajari Lebih Lanjut</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================= FOOTER ============================= -->
+<footer class="footer-situs">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">🌾 PasarNusa</div>
+      <p class="footer-deskripsi">Pasar digital yang menghubungkan pembeli dengan produk asli desa dan UMKM di seluruh Indonesia.</p>
+      <div class="footer-sosial">
+        <a href="#" aria-label="Instagram">📷</a>
+        <a href="#" aria-label="Facebook">📘</a>
+        <a href="#" aria-label="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="footer-kolom">
+      <div class="footer-kolom-judul">Jelajahi</div>
+      <ul>
+        <li><a href="produk.html">Semua Produk</a></li>
+        <li><a href="kategori.html">Kategori</a></li>
+        <li><a href="wilayah.html">Wilayah</a></li>
+        <li><a href="desa-list.html">Daftar Desa</a></li>
+      </ul>
+    </div>
+    <div class="footer-kolom">
+      <div class="footer-kolom-judul">Untuk Mitra</div>
+      <ul>
+        <li><a href="register-user.html">Daftar UMKM</a></li>
+        <li><a href="register-affiliate.html">Jadi Afiliasi</a></li>
+        <li><a href="affiliate.html">Program Afiliasi</a></li>
+      </ul>
+    </div>
+    <div class="footer-kolom">
+      <div class="footer-kolom-judul">Bantuan</div>
+      <ul>
+        <li><a href="tentang.html">Tentang Kami</a></li>
+        <li><a href="#">Pusat Bantuan</a></li>
+        <li><a href="#">Syarat & Ketentuan</a></li>
+        <li><a href="#">Kebijakan Privasi</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bawah">
+    <span>© 2026 PasarNusa. Seluruh hak cipta dilindungi.</span>
+    <span>Dibuat dengan 💚 untuk desa Indonesia</span>
+  </div>
+</footer>
+
+<!-- ===== DITAMBAHKAN: tombol kembali ke atas (fitur dari versi sebelumnya) ===== -->
+<button id="backTop" class="back-top" aria-label="Kembali ke atas halaman">↑</button>
+
+<!-- ============================= SKRIP ============================= -->
+<!-- ===== DIUBAH: logika Firestore lengkap (loading/kosong/error) dipindah -->
+<!-- ===== ke js/beranda.js — sumber data utama HANYA Firestore, tanpa dummy ===== -->
+<script src="js/script.js"></script>
+<script src="js/interaktif.js"></script>
+<script type="module" src="js/beranda.js"></script>
 </body>
 </html>
